@@ -7,48 +7,117 @@ function identify(name) {
   if (/^(?:node|nodejs)(?:\.exe)?$/i.test(value)) return "unknown";
   return null;
 }
+function groupProcesses(rows) {
+  const byId = new Map(rows.map((row) => [row.pid, row]));
+  const top = { claude: 0, codex: 0 };
+  for (const row of rows) {
+    const kind = identify(row.name);
+    if (!["claude", "codex"].includes(kind)) continue;
+    let parent = byId.get(row.ppid);
+    const visited = new Set([row.pid]);
+    let child = false;
+    while (parent && !visited.has(parent.pid)) {
+      visited.add(parent.pid);
+      if (["claude", "codex"].includes(identify(parent.name))) {
+        child = true;
+        break;
+      }
+      parent = byId.get(parent.ppid);
+    }
+    if (!child) top[kind]++;
+  }
+  return top;
+}
 function processSnapshot({
   platform = process.platform,
   run = execFile,
   details = false,
 } = {}) {
   return new Promise((resolve) => {
-    const win = platform === "win32";
-    const args = win
+    const windows = platform === "win32";
+    const args = windows
       ? [
           "-NoProfile",
           "-NonInteractive",
           "-Command",
-          "$ErrorActionPreference='Stop'; Get-CimInstance Win32_Process -Property Name | Select-Object -ExpandProperty Name",
+          details
+            ? "$ErrorActionPreference='Stop'; @(Get-CimInstance Win32_Process -Property Name,ProcessId,ParentProcessId | Select-Object Name,ProcessId,ParentProcessId) | ConvertTo-Json -Compress"
+            : "$ErrorActionPreference='Stop'; Get-CimInstance Win32_Process -Property Name | Select-Object -ExpandProperty Name",
         ]
-      : ["-e", "-o", "comm="];
+      : details
+        ? ["-e", "-o", "pid=,ppid=,comm="]
+        : ["-e", "-o", "comm="];
     run(
-      win ? "powershell.exe" : "ps",
+      windows ? "powershell.exe" : "ps",
       args,
       { windowsHide: true, timeout: 2000, maxBuffer: 512 * 1024 },
       (error, stdout) => {
         if (error || typeof stdout !== "string") return resolve(null);
-        const counts = { claude: 0, codex: 0, unknown: 0 };
-        for (const line of stdout.split(/\r?\n/)) {
-          const kind = identify(line);
-          if (kind === "claude" || kind === "codex") counts[kind]++;
-          else if (kind === "unknown") counts.unknown++;
+        let rows = [];
+        try {
+          if (details && windows) {
+            const parsed = JSON.parse(stdout);
+            rows = (Array.isArray(parsed) ? parsed : [parsed]).map((row) => ({
+              name: row.Name,
+              pid: row.ProcessId,
+              ppid: row.ParentProcessId,
+            }));
+          } else if (details) {
+            rows = stdout
+              .trim()
+              .split(/\r?\n/)
+              .filter(Boolean)
+              .map((line) => {
+                const match = /^\s*(\d+)\s+(\d+)\s+(.+)$/.exec(line);
+                if (!match) throw Error("Invalid process metadata");
+                return {
+                  pid: Number(match[1]),
+                  ppid: Number(match[2]),
+                  name: match[3],
+                };
+              });
+          } else rows = stdout.split(/\r?\n/).map((name) => ({ name }));
+          if (
+            details &&
+            rows.some(
+              (row) =>
+                typeof row.name !== "string" ||
+                !Number.isSafeInteger(row.pid) ||
+                !Number.isSafeInteger(row.ppid),
+            )
+          )
+            return resolve(null);
+        } catch {
+          return resolve(null);
         }
-        const agents = ["claude", "codex"]
-          .filter((kind) => counts[kind] > 0)
-          .map((kind) => ({
-            name: kind,
-            count: counts[kind],
-            folder: null,
-            elapsedSeconds: null,
-          }));
-        if (counts.unknown) {
+        const counts = { claude: 0, codex: 0, unknown: 0 };
+        for (const row of rows) {
+          const kind = identify(row.name);
+          if (kind) counts[kind]++;
+        }
+        const top = details ? groupProcesses(rows) : null;
+        if (counts.unknown && !details) {
           counts.claude = null;
           counts.codex = null;
         }
-        resolve(details ? { ...counts, agents } : counts);
+        resolve(
+          details
+            ? {
+                ...counts,
+                top,
+                agents: ["claude", "codex"]
+                  .filter((name) => top[name] > 0)
+                  .map((name) => ({
+                    name,
+                    count: top[name],
+                    folder: null,
+                    elapsedSeconds: null,
+                  })),
+              }
+            : counts,
+        );
       },
     );
   });
 }
-module.exports = { identify, processSnapshot };
+module.exports = { identify, processSnapshot, groupProcesses };

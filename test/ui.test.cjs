@@ -208,7 +208,7 @@ test("readable roots without usage metadata show unknown in cards and history", 
     a.equal(u.nodes.get("sessions-ring").firstElementChild.textContent, "?");
     a.equal(
       u.nodes.get("process-note").textContent,
-      "? running agent processes",
+      "? top-level agent sessions",
     );
     u.nodes.get("claude-metric").onclick();
     a.match(drawerText(u), /\? observed tokens/);
@@ -256,7 +256,10 @@ test("valid measured zero is shown and process uncertainty has a Portuguese expl
   const u = ui(d);
   await u.ready();
   a.equal(u.nodes.get("claude-note").textContent, "0 observed tokens");
-  a.equal(u.nodes.get("process-note").textContent, "0 running agent processes");
+  a.equal(
+    u.nodes.get("process-note").textContent,
+    "0 top-level agent sessions",
+  );
   u.nodes.get("claude-metric").onclick();
   a.match(drawerText(u), /fixture-zero · 0 observed tokens/);
   u.nodes.get("language").value = "pt";
@@ -326,4 +329,41 @@ test("workspace queue view is preserved and missing live readings are explicit",
   await panel.ready();
   a.equal(panel.nodes.get("claude-ring").firstElementChild.textContent, "?");
   a.match(panel.nodes.get("now").children[0].textContent, /not available/);
+});
+
+test("large observed token counts fit the ring and stay exact in details", async () => {
+  const data = example();
+  data.example = false;
+  data.configured = false;
+  data.tasks = [];
+  data.queue = [];
+  data.usage.updated = "2030-01-02T12:00:00Z";
+  data.usage.claude.windows = [];
+  data.usage.claude.tokens = 130409306;
+  data.usage.daily = [{ day: "2030-01-02", tokens: 130409306 }];
+  data.usage.processes = {
+    claude: 44,
+    codex: 2,
+    unknown: 10,
+    top: { claude: 1, codex: 1 },
+    agents: [
+      { name: "claude", count: 1 },
+      { name: "codex", count: 1 },
+    ],
+  };
+  const panel = ui(data);
+  await panel.ready();
+  a.equal(panel.nodes.get("total-percent").textContent, "2");
+  a.equal(
+    panel.nodes.get("claude-ring").firstElementChild.textContent,
+    "130.4M",
+  );
+  panel.nodes.get("claude-metric").onclick();
+  a.match(drawerText(panel), /130,409,306/);
+  panel.nodes.get("language").value = "pt";
+  panel.nodes.get("language").onchange();
+  a.match(
+    panel.nodes.get("claude-ring").firstElementChild.textContent,
+    /130,4.*mi/,
+  );
 });

@@ -73,10 +73,10 @@ test("detailed process results retain native agents without reading arguments", 
     platform: "linux",
     details: true,
     run(command, args, options, callback) {
-      callback(null, "claude\ncodex\nnode\n");
+      callback(null, "1 0 claude\n2 0 codex\n3 0 node\n");
     },
   });
-  a.equal(result.claude, null);
+  a.equal(result.top.claude, 1);
   a.deepEqual(
     result.agents.map((agent) => [agent.name, agent.count]),
     [
@@ -88,5 +88,19 @@ test("detailed process results retain native agents without reading arguments", 
     result.agents.every(
       (agent) => agent.folder === null && agent.elapsedSeconds === null,
     ),
+  );
+});
+
+test("native child agents and intermediary helpers count as one top-level session", () => {
+  const { groupProcesses } = require("../src/lib/processes.cjs");
+  a.deepEqual(
+    groupProcesses([
+      { pid: 1, ppid: 0, name: "claude" },
+      { pid: 2, ppid: 1, name: "node" },
+      { pid: 3, ppid: 2, name: "claude" },
+      { pid: 4, ppid: 0, name: "codex" },
+      { pid: 5, ppid: 4, name: "codex" },
+    ]),
+    { claude: 1, codex: 1 },
   );
 });

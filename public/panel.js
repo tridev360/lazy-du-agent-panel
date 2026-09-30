@@ -46,7 +46,7 @@ const words = {
     partial: "Reading recent files. Counts are partial.",
     complete:
       "Recent files scanned. Older unchanged files are outside this view.",
-    running: "running agent processes",
+    running: "top-level agent sessions",
     processLimit:
       "Only executable names are read. Node processes cannot be assigned to an agent.",
     saved: "Example choice saved",
@@ -159,6 +159,14 @@ const t = (k) => words[lang][k] || k,
 function measured(value) {
   return numeric(value) && value >= 0 ? value.toLocaleString(lang) : "?";
 }
+function compact(value) {
+  return numeric(value) && value >= 0
+    ? new Intl.NumberFormat(lang === "pt" ? "pt-BR" : "en-US", {
+        notation: "compact",
+        maximumFractionDigits: 1,
+      }).format(value)
+    : "?";
+}
 function sessionCount(usage) {
   return usage.sessions.length || null;
 }
@@ -169,7 +177,7 @@ function processCount(counts) {
 }
 function processDetails(usage) {
   return [
-    el("p", measured(processCount(usage.processes)) + " " + t("running")),
+    el("p", measured(processCount(usage.processes?.top || usage.processes)) + " " + t("running")),
     el(
       "p",
       "CLAUDE: " +
@@ -404,7 +412,7 @@ function renderUsageHero(usage) {
     ["claude", "codex"]
       .filter((name) => numeric(processes?.[name]) && processes[name] > 0)
       .map((name) => ({ name, count: processes[name] }));
-  const count = processCount(processes);
+  const count = processCount(processes?.top || processes);
   const detected = agents.reduce((sum, agent) => sum + agent.count, 0);
   $("hero-title").textContent = t("usageHero");
   $("total-percent").textContent = numeric(count)
@@ -456,7 +464,7 @@ function renderUsageHero(usage) {
     $("pipeline").append(segment);
   }
   $("claude-summary-title").textContent = t("today") + " · " + t("tokens");
-  $("claude-ring").firstElementChild.textContent = measured(today);
+  $("claude-ring").firstElementChild.textContent = compact(today);
   $("claude-note").textContent =
     measured(today) +
     " " +
@@ -587,7 +595,9 @@ function render() {
   );
   $("sessions-ring").style.setProperty("--amount", "100%");
   $("process-note").textContent =
-    measured(processCount(usage.processes)) + " " + t("running");
+    measured(processCount(usage.processes?.top || usage.processes)) +
+    " " +
+    t("running");
   $("status").textContent = demo
     ? t("example")
     : usage.scanning
