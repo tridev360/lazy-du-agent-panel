@@ -7,7 +7,11 @@ function identify(name) {
   if (/^(?:node|nodejs)(?:\.exe)?$/i.test(value)) return "unknown";
   return null;
 }
-function processSnapshot({ platform = process.platform, run = execFile } = {}) {
+function processSnapshot({
+  platform = process.platform,
+  run = execFile,
+  details = false,
+} = {}) {
   return new Promise((resolve) => {
     const win = platform === "win32";
     const args = win
@@ -30,11 +34,19 @@ function processSnapshot({ platform = process.platform, run = execFile } = {}) {
           if (kind === "claude" || kind === "codex") counts[kind]++;
           else if (kind === "unknown") counts.unknown++;
         }
+        const agents = ["claude", "codex"]
+          .filter((kind) => counts[kind] > 0)
+          .map((kind) => ({
+            name: kind,
+            count: counts[kind],
+            folder: null,
+            elapsedSeconds: null,
+          }));
         if (counts.unknown) {
           counts.claude = null;
           counts.codex = null;
         }
-        resolve(counts);
+        resolve(details ? { ...counts, agents } : counts);
       },
     );
   });

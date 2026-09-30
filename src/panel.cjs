@@ -7,7 +7,9 @@ const { processSnapshot } = require("./lib/processes.cjs");
 const { workspace, init } = require("./lib/workspace.cjs");
 function createServer({
   base = path.join(__dirname, ".."),
-  metrics = new Metrics(os.homedir(), { processReader: processSnapshot }),
+  metrics = new Metrics(os.homedir(), {
+    processReader: () => processSnapshot({ details: true }),
+  }),
   demoOnly = false,
 } = {}) {
   const example = JSON.parse(

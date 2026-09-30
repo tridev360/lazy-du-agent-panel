@@ -277,3 +277,53 @@ test("a pending bounded scan uses the existing first-read retry", async () => {
   a.equal(u.nodes.get("codex-ring").firstElementChild.textContent, "90%");
   a.ok(u.timers.some((x) => x.delay === 1000));
 });
+
+test("without a workspace the hero shows usage and detected agents", async () => {
+  const data = example();
+  data.example = false;
+  data.configured = false;
+  data.tasks = [];
+  data.queue = [];
+  data.usage.updated = "2030-01-02T12:00:00Z";
+  data.usage.claude.windows = [];
+  data.usage.claude.tokens = 160;
+  data.usage.daily = [
+    { day: "2030-01-02", tokens: 100 },
+    { day: "2030-01-01", tokens: 60 },
+  ];
+  data.usage.processes = { claude: 1, codex: 2, unknown: 0 };
+  const panel = ui(data);
+  await panel.ready();
+  a.equal(panel.nodes.get("total-percent").textContent, "3");
+  a.equal(panel.nodes.get("pipeline").children.length, 2);
+  a.equal(panel.nodes.get("claude-ring").firstElementChild.textContent, "100");
+  a.match(
+    panel.nodes.get("claude-note").textContent,
+    /100 today · 160 last 7 days/,
+  );
+  a.equal(panel.nodes.get("now").children.length, 2);
+  a.match(panel.nodes.get("next").children[0].href, /example=1/);
+  panel.nodes.get("pipeline").children[0].onclick();
+  a.ok(panel.nodes.get("drawer").open);
+  panel.nodes.get("language").value = "pt";
+  panel.nodes.get("language").onchange();
+  a.match(panel.nodes.get("claude-note").textContent, /100 hoje/);
+});
+
+test("workspace queue view is preserved and missing live readings are explicit", async () => {
+  const configured = example();
+  configured.example = false;
+  configured.configured = true;
+  const board = ui(configured);
+  await board.ready();
+  a.equal(board.nodes.get("pipeline").children.length, 40);
+  const missing = unknownUsage();
+  missing.example = false;
+  missing.configured = false;
+  missing.tasks = [];
+  missing.queue = [];
+  const panel = ui(missing);
+  await panel.ready();
+  a.equal(panel.nodes.get("claude-ring").firstElementChild.textContent, "?");
+  a.match(panel.nodes.get("now").children[0].textContent, /not available/);
+});

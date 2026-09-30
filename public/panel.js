@@ -10,6 +10,12 @@ const words = {
     onPC: "ON YOUR PC. YOUR AGENTS.",
     queue: "THE QUEUE IS MOVING.",
     usageHero: "YOUR AGENTS, AT A GLANCE.",
+    today: "today",
+    week: "last 7 days",
+    buildBoard: "Build your task board",
+    processesUnavailable: "Agent process names are not available yet.",
+    detected: "detected agents",
+    folderUnknown: "Folder and uptime are unavailable from executable names.",
     you: "YOU",
     live: "LIVE",
     now: "NOW",
@@ -69,6 +75,13 @@ const words = {
     onPC: "NO SEU PC. SEUS AGENTES.",
     queue: "A FILA ESTÁ ANDANDO.",
     usageHero: "SEUS AGENTES, NUM OLHAR.",
+    today: "hoje",
+    week: "últimos 7 dias",
+    buildBoard: "Monte seu quadro",
+    processesUnavailable: "Os nomes dos processos ainda não estão disponíveis.",
+    detected: "agentes detectados",
+    folderUnknown:
+      "Pasta e tempo de execução não estão disponíveis nos nomes dos executáveis.",
     you: "VOCÊ",
     live: "NO AR",
     now: "AGORA",
@@ -168,7 +181,7 @@ function processDetails(usage) {
   ];
 }
 function formatTime(value) {
-  if (!value) return t("example");
+  if (!value) return data?.example ? t("example") : "?";
   const d = new Date(value);
   return Number.isFinite(d.getTime())
     ? new Intl.DateTimeFormat(lang, {
@@ -368,6 +381,122 @@ function renderBoard() {
       String(filterExecutor === b.dataset.executor),
     );
 }
+function renderUsageHero(usage) {
+  const daily = usage.daily || [];
+  const date = (usage.updated || new Date().toISOString()).slice(0, 10);
+  const cutoff = new Date(Date.parse(date) - 6 * 86400000)
+    .toISOString()
+    .slice(0, 10);
+  const readable = numeric(usage.claude?.tokens);
+  const today =
+    daily.find((entry) => entry.day === date)?.tokens ?? (readable ? 0 : null);
+  const week = readable
+    ? daily
+        .filter((entry) => entry.day >= cutoff && entry.day <= date)
+        .reduce(
+          (sum, entry) => sum + (numeric(entry.tokens) ? entry.tokens : 0),
+          0,
+        )
+    : null;
+  const processes = usage.processes;
+  const agents =
+    processes?.agents ||
+    ["claude", "codex"]
+      .filter((name) => numeric(processes?.[name]) && processes[name] > 0)
+      .map((name) => ({ name, count: processes[name] }));
+  const count = processCount(processes);
+  const detected = agents.reduce((sum, agent) => sum + agent.count, 0);
+  $("hero-title").textContent = t("usageHero");
+  $("total-percent").textContent = numeric(count)
+    ? String(count)
+    : detected
+      ? detected + "+"
+      : "?";
+  $("progress-note").textContent = t("running");
+  $("traveler").style.setProperty("--amount", "50%");
+  $("pipeline").replaceChildren();
+  $("pipeline").style.setProperty("--segments", 2);
+  const windows = usage.codex?.windows || [];
+  const quota = windows.find((window) => window.minutes >= 10000) || windows[0];
+  for (const [agent, text, amount] of [
+    [
+      "codex",
+      "CODEX · " +
+        (quota
+          ? Math.round(quota.used) +
+            "% · " +
+            t("reset") +
+            " " +
+            formatTime(quota.reset)
+          : "?"),
+      quota?.used,
+    ],
+    [
+      "claude",
+      "CLAUDE · " +
+        measured(today) +
+        " " +
+        t("today") +
+        " · " +
+        measured(week) +
+        " " +
+        t("week"),
+      null,
+    ],
+  ]) {
+    const segment = el(
+      "button",
+      undefined,
+      "segment " + agent + " usage-segment",
+    );
+    const fill = el("div", undefined, "fill");
+    fill.style.setProperty("--amount", (amount || 0) + "%");
+    segment.append(fill, el("span", text, "usage-label"));
+    segment.onclick = () => usageDetail(agent);
+    $("pipeline").append(segment);
+  }
+  $("claude-summary-title").textContent = t("today") + " · " + t("tokens");
+  $("claude-ring").firstElementChild.textContent = measured(today);
+  $("claude-note").textContent =
+    measured(today) +
+    " " +
+    t("today") +
+    " · " +
+    measured(week) +
+    " " +
+    t("week") +
+    " · " +
+    t("tokens");
+  $("now").replaceChildren();
+  for (const agent of agents) {
+    const item = el("button", undefined, "work-item " + agent.name);
+    item.append(
+      el("span", agent.name.toUpperCase(), "actor"),
+      el("strong", String(agent.count) + " " + t("detected")),
+    );
+    item.onclick = () =>
+      drawer(agent.name.toUpperCase(), [
+        el("p", t("folderUnknown")),
+        el("p", t("processLimit")),
+      ]);
+    $("now").append(item);
+  }
+  if (!agents.length)
+    $("now").append(
+      el(
+        "p",
+        numeric(count) && count === 0 ? t("none") : t("processesUnavailable"),
+        "empty",
+      ),
+    );
+  const invitation = el(
+    "a",
+    t("buildBoard") + " · " + t("seeExample"),
+    "work-item",
+  );
+  invitation.href = "/?example=1&lang=" + lang;
+  $("next").replaceChildren(invitation);
+}
 function render() {
   document.documentElement.lang = lang;
   document
@@ -452,6 +581,7 @@ function render() {
           ? t("reset") + " " + formatTime(w.reset)
           : t("unknown");
   }
+  if (!demo && !data.configured) renderUsageHero(usage);
   $("sessions-ring").firstElementChild.textContent = measured(
     sessionCount(usage),
   );

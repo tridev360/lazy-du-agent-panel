@@ -3,6 +3,7 @@
 ## 1.1.0
 
 - One-command launch with npx on Windows, macOS, and Linux.
+- Usage-first dashboard without a configured workspace, with daily and weekly Claude tokens and detected agents.
 - Automatic browser opening with an optional headless launch.
 
 ## 1.0.0

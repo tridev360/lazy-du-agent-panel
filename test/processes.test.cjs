@@ -67,3 +67,26 @@ test("measured absence is zero while process read failure stays unknown", async 
   });
   a.equal(await fixture("win32", "", Error("fixture timeout")).read(), null);
 });
+
+test("detailed process results retain native agents without reading arguments", async () => {
+  const result = await processSnapshot({
+    platform: "linux",
+    details: true,
+    run(command, args, options, callback) {
+      callback(null, "claude\ncodex\nnode\n");
+    },
+  });
+  a.equal(result.claude, null);
+  a.deepEqual(
+    result.agents.map((agent) => [agent.name, agent.count]),
+    [
+      ["claude", 1],
+      ["codex", 1],
+    ],
+  );
+  a.ok(
+    result.agents.every(
+      (agent) => agent.folder === null && agent.elapsedSeconds === null,
+    ),
+  );
+});
