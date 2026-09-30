@@ -1,0 +1,25 @@
+{
+  "name": "lazy-du-agent-panel",
+  "version": "1.0.0",
+  "description": "A private, local dashboard for Claude Code and Codex activity.",
+  "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/tridev360/lazy-du-agent-panel.git"
+  },
+  "homepage": "https://github.com/tridev360/lazy-du-agent-panel#readme",
+  "keywords": [
+    "codex",
+    "claude-code",
+    "dashboard",
+    "local-first",
+    "ai-agents"
+  ],
+  "engines": {
+    "node": ">=20"
+  },
+  "scripts": {
+    "start": "node src/panel.cjs",
+    "test": "node --test --test-concurrency=1 test/*.test.cjs"
+  }
+}

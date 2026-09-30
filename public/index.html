@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <meta name="color-scheme" content="dark" />
+    <title>Lazy Du | Agent panel</title>
+    <link rel="icon" href="/favicon.svg" />
+    <link rel="stylesheet" href="/panel.css" />
+    <script src="/panel.js" defer></script>
+  </head>
+  <body>
+    <div class="shell">
+      <header>
+        <a
+          class="brand"
+          href="https://lazy-du.com"
+          target="_blank"
+          rel="noopener noreferrer"
+          ><img src="/marca.png" width="40" height="40" alt="" /><span
+            >LAZY DU<small data-t="panel">AGENT PANEL</small></span
+          ></a
+        >
+        <nav class="brand-links" aria-label="Lazy Du">
+          <a
+            href="https://lazy-du.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            >lazy-du.com ↗</a
+          ><a
+            href="https://x.com/Lazydunft"
+            target="_blank"
+            rel="noopener noreferrer"
+            >@Lazydunft ↗</a
+          >
+        </nav>
+        <div class="header-actions">
+          <a
+            class="example-toggle"
+            id="example-toggle"
+            href="/?example=1"
+            data-t="example"
+            >Example</a
+          ><select id="language" aria-label="Language">
+            <option value="en">EN</option>
+            <option value="pt">PT</option></select
+          ><button id="fullscreen" data-t="fullscreen">Full screen</button
+          ><button id="refresh" aria-label="Refresh">↻</button>
+        </div>
+      </header>
+      <main>
+        <section class="hero">
+          <div class="hero-heading">
+            <div>
+              <div class="eyebrow" id="eyebrow" data-t="onPC">
+                ON YOUR PC. YOUR AGENTS.
+              </div>
+              <h1 id="hero-title" data-t="queue">THE QUEUE IS MOVING.</h1>
+            </div>
+            <div class="hero-number">
+              <strong id="total-percent">?</strong
+              ><button id="progress-note"></button>
+            </div>
+          </div>
+          <div class="runway">
+            <img
+              class="traveler"
+              id="traveler"
+              src="/du.png"
+              alt=""
+              width="75"
+              height="75"
+            />
+            <div
+              id="pipeline"
+              class="pipeline"
+              aria-label="Queue progress"
+            ></div>
+          </div>
+          <div class="hero-bottom">
+            <div class="legend">
+              <span class="codex">CODEX</span><span class="claude">CLAUDE</span
+              ><span class="owner" data-t="you">YOU</span
+              ><span class="live" data-t="live">LIVE</span>
+            </div>
+            <span id="status" role="status" aria-live="polite"></span>
+          </div>
+          <div class="work-strips">
+            <section class="work-strip">
+              <h2><i class="pulse"></i><span data-t="now">NOW</span></h2>
+              <div id="now" class="strip-items"></div>
+            </section>
+            <section class="work-strip">
+              <h2>
+                <span class="next-arrow">↗</span><span data-t="next">NEXT</span>
+              </h2>
+              <div id="next" class="strip-items"></div>
+            </section>
+          </div>
+        </section>
+        <section class="dashboard-metrics">
+          <button class="metric claude" id="claude-metric">
+            <div id="claude-ring" class="ring"><strong>?</strong></div>
+            <div>
+              <span class="eyebrow">CLAUDE</span>
+              <h2 data-t="remaining">remaining</h2>
+              <p id="claude-note"></p>
+            </div>
+            <span class="metric-arrow">↗</span></button
+          ><button class="metric codex" id="codex-metric">
+            <div id="codex-ring" class="ring"><strong>?</strong></div>
+            <div>
+              <span class="eyebrow">CODEX</span>
+              <h2 data-t="remaining">remaining</h2>
+              <p id="codex-note"></p>
+            </div>
+            <span class="metric-arrow">↗</span></button
+          ><button class="metric owner" id="sessions-metric">
+            <div id="sessions-ring" class="ring"><strong>?</strong></div>
+            <div>
+              <span class="eyebrow" data-t="sessions">SESSIONS</span>
+              <h2 data-t="recent">recent history</h2>
+              <p id="process-note"></p>
+            </div>
+            <span class="metric-arrow">↗</span>
+          </button>
+        </section>
+        <div id="deadline-strip" class="deadline-strip"></div>
+        <div class="workspace">
+          <section class="features">
+            <div class="section-heading">
+              <h2>
+                <span data-t="features">FEATURES</span
+                ><span id="task-count"></span>
+              </h2>
+              <button id="daily" class="chip" data-t="daily">
+                Daily usage
+              </button>
+            </div>
+            <div class="filters" id="filters">
+              <div id="owner-filters" class="filter-group"></div>
+              <div class="filter-group">
+                <button class="filter" data-executor="claude">Claude</button
+                ><button class="filter" data-executor="codex">Codex</button>
+              </div>
+            </div>
+            <div
+              id="phase-tabs"
+              class="phase-tabs"
+              role="tablist"
+              aria-label="Feature phase"
+            ></div>
+            <div id="board" class="board"></div>
+            <div id="empty-workspace" class="empty-workspace" hidden>
+              <h2 data-t="auto">Your usage appears automatically.</h2>
+              <p data-t="optional">
+                Add a workspace when you want a task board. Try the example to
+                see it in motion.
+              </p>
+              <a href="/?example=1" class="session-link" data-t="seeExample"
+                >See the example</a
+              >
+            </div>
+          </section>
+          <aside class="your-moves">
+            <div class="section-heading">
+              <h2 data-t="needsYou">NEEDS YOU</h2>
+              <span id="move-count" class="badge owner"></span>
+            </div>
+            <div id="cards"></div>
+          </aside>
+        </div>
+      </main>
+      <footer>
+        <span data-t="footer">Local. Refreshes every 30 seconds. UTC.</span
+        ><span
+          >made by
+          <a
+            href="https://lazy-du.com"
+            target="_blank"
+            rel="noopener noreferrer"
+            >Lazy Du ↗</a
+          >
+          ·
+          <a
+            href="https://x.com/Lazydunft"
+            target="_blank"
+            rel="noopener noreferrer"
+            >@Lazydunft ↗</a
+          ></span
+        >
+      </footer>
+    </div>
+    <dialog id="drawer" aria-labelledby="drawer-title">
+      <div class="drawer-header">
+        <span class="eyebrow" data-t="details">DETAILS</span
+        ><button id="close-drawer" aria-label="Close">✕</button>
+      </div>
+      <h2 id="drawer-title"></h2>
+      <div id="drawer-body"></div>
+    </dialog>
+    <div id="toast" role="status" hidden></div>
+    <span id="example-badge" class="example-badge" hidden data-t="example"
+      >Example</span
+    >
+  </body>
+</html>

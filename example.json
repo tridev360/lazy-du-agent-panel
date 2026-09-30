@@ -1,0 +1,604 @@
+{
+  "usage": {
+    "codex": {
+      "windows": [
+        {
+          "used": 28,
+          "minutes": 10080,
+          "reset": null
+        }
+      ],
+      "source": "example"
+    },
+    "claude": {
+      "windows": [
+        {
+          "used": 46,
+          "minutes": 10080,
+          "reset": null
+        }
+      ],
+      "tokens": 184500,
+      "source": "example"
+    },
+    "sessions": [
+      {
+        "id": "alpha",
+        "agent": "codex",
+        "tokens": 65400,
+        "updated": null,
+        "recent": true
+      },
+      {
+        "id": "beta",
+        "agent": "claude",
+        "tokens": 48300,
+        "updated": null,
+        "recent": true
+      }
+    ],
+    "daily": [
+      {
+        "day": "Example day",
+        "tokens": 184500
+      }
+    ],
+    "processes": {
+      "codex": 2,
+      "claude": 3
+    },
+    "complete": true,
+    "discovered": {
+      "codex": 6,
+      "claude": 8
+    },
+    "available": {
+      "claude": true,
+      "codex": true
+    }
+  },
+  "tasks": [
+    {
+      "id": "example-0",
+      "title": "Sound pack",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Pacote de sons"
+    },
+    {
+      "id": "example-1",
+      "title": "Mobile polish",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Ajustes no celular"
+    },
+    {
+      "id": "example-2",
+      "title": "New leaderboard",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": 180,
+      "titlePT": "Novo leaderboard"
+    },
+    {
+      "id": "example-3",
+      "title": "Rare alerts",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": true,
+      "deadlineIn": null,
+      "titlePT": "Alertas de raros"
+    },
+    {
+      "id": "example-4",
+      "title": "Wallet report",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "released",
+        "percent": 90
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Relatório da carteira"
+    },
+    {
+      "id": "example-5",
+      "title": "Profile refresh",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "live",
+        "percent": 100
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Novo perfil"
+    },
+    {
+      "id": "example-6",
+      "title": "Clean typography",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Tipografia limpa"
+    },
+    {
+      "id": "example-7",
+      "title": "Faster search",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Busca mais rápida"
+    },
+    {
+      "id": "example-8",
+      "title": "Collection view",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Visão das coleções"
+    },
+    {
+      "id": "example-9",
+      "title": "Daily recap",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": true,
+      "deadlineIn": null,
+      "titlePT": "Resumo diário"
+    },
+    {
+      "id": "example-10",
+      "title": "Language switch",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "released",
+        "percent": 90
+      },
+      "needsOwner": false,
+      "deadlineIn": 660,
+      "titlePT": "Troca de idioma"
+    },
+    {
+      "id": "example-11",
+      "title": "Custom themes",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "live",
+        "percent": 100
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Temas personalizados"
+    },
+    {
+      "id": "example-12",
+      "title": "Activity history",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Histórico de atividade"
+    },
+    {
+      "id": "example-13",
+      "title": "Smart filters",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Filtros inteligentes"
+    },
+    {
+      "id": "example-14",
+      "title": "Better onboarding",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Primeiros passos"
+    },
+    {
+      "id": "example-15",
+      "title": "Public guide",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": true,
+      "deadlineIn": null,
+      "titlePT": "Guia público"
+    },
+    {
+      "id": "example-16",
+      "title": "Quick actions",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "released",
+        "percent": 90
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Ações rápidas"
+    },
+    {
+      "id": "example-17",
+      "title": "Compact mode",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "live",
+        "percent": 100
+      },
+      "needsOwner": false,
+      "deadlineIn": 1080,
+      "titlePT": "Modo compacto"
+    },
+    {
+      "id": "example-18",
+      "title": "Fresh animations",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Novas animações"
+    },
+    {
+      "id": "example-19",
+      "title": "Notification settings",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Configurar avisos"
+    },
+    {
+      "id": "example-20",
+      "title": "Accessibility pass",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Acessibilidade"
+    },
+    {
+      "id": "example-21",
+      "title": "Offline help",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Ajuda offline"
+    },
+    {
+      "id": "example-22",
+      "title": "Session timeline",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "released",
+        "percent": 90
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Linha das sessões"
+    },
+    {
+      "id": "example-23",
+      "title": "Agent overview",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "live",
+        "percent": 100
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Visão dos agentes"
+    },
+    {
+      "id": "example-24",
+      "title": "Clearer buttons",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Botões mais claros"
+    },
+    {
+      "id": "example-25",
+      "title": "Responsive cards",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Cards responsivos"
+    },
+    {
+      "id": "example-26",
+      "title": "Project labels",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Nomes de projetos"
+    },
+    {
+      "id": "example-27",
+      "title": "Queue sorting",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Ordenar a fila"
+    },
+    {
+      "id": "example-28",
+      "title": "Usage summary",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "released",
+        "percent": 90
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Resumo de uso"
+    },
+    {
+      "id": "example-29",
+      "title": "Focus mode",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "live",
+        "percent": 100
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Modo foco"
+    },
+    {
+      "id": "example-30",
+      "title": "Reading list",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Lista de leitura"
+    },
+    {
+      "id": "example-31",
+      "title": "Keyboard shortcuts",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Atalhos do teclado"
+    },
+    {
+      "id": "example-32",
+      "title": "Status badges",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Selos de estado"
+    },
+    {
+      "id": "example-33",
+      "title": "Simple exports",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Exportação simples"
+    },
+    {
+      "id": "example-34",
+      "title": "Empty states",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "released",
+        "percent": 90
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Telas vazias"
+    },
+    {
+      "id": "example-35",
+      "title": "Local workspace",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "live",
+        "percent": 100
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Pasta local"
+    },
+    {
+      "id": "example-36",
+      "title": "Theme preview",
+      "owner": "SITE",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Prévia do tema"
+    },
+    {
+      "id": "example-37",
+      "title": "Daily progress",
+      "owner": "BOT",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Progresso diário"
+    },
+    {
+      "id": "example-38",
+      "title": "Task notes",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Notas da tarefa"
+    },
+    {
+      "id": "example-39",
+      "title": "Demo gallery",
+      "owner": "GAMES",
+      "executor": "claude",
+      "phase": {
+        "key": "review",
+        "percent": 80
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "titlePT": "Galeria de exemplos"
+    }
+  ],
+  "queue": [],
+  "cards": [
+    {
+      "title": "Choose the next theme",
+      "options": ["Midnight", "Soft light"],
+      "titlePT": "Escolha o próximo tema",
+      "optionsPT": ["Meia-noite", "Luz suave"]
+    },
+    {
+      "title": "Try the compact layout",
+      "options": ["Try it", "Keep spacious"],
+      "titlePT": "Teste o layout compacto",
+      "optionsPT": ["Testar", "Manter espaçoso"]
+    },
+    {
+      "title": "Review the next release",
+      "chat": true,
+      "titlePT": "Revise a próxima versão"
+    }
+  ],
+  "configured": true,
+  "example": true
+}
