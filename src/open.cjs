@@ -1,56 +1,88 @@
-const http = require("node:http"),
-  path = require("node:path"),
-  { spawn } = require("node:child_process");
-const ready = () =>
-  new Promise((resolve) => {
-    const req = http.get("http://127.0.0.1:3251/api/health", (res) => {
-      let data = "";
-      res.on("data", (x) => (data += x));
-      res.on("end", () => {
-        try {
-          resolve(JSON.parse(data).app === "lazy-du-open-panel");
-        } catch {
-          resolve(false);
-        }
-      });
-    });
-    req.on("error", () => resolve(false));
-    req.setTimeout(500, () => {
-      req.destroy();
+#!/usr/bin/env node
+"use strict";
+const http = require("node:http");
+const path = require("node:path");
+const { spawn } = require("node:child_process");
+const { createServer } = require("./panel.cjs");
+
+function isReady(port) {
+  return new Promise((resolve) => {
+    const request = http.get(
+      `http://127.0.0.1:${port}/api/health`,
+      (response) => {
+        let body = "";
+        response.on("data", (chunk) => {
+          body += chunk;
+        });
+        response.on("end", () => {
+          try {
+            resolve(JSON.parse(body).app === "lazy-du-open-panel");
+          } catch {
+            resolve(false);
+          }
+        });
+      },
+    );
+    request.on("error", () => resolve(false));
+    request.setTimeout(500, () => {
+      request.destroy();
       resolve(false);
     });
   });
-(async () => {
-  if (!(await ready()))
-    spawn(process.execPath, [path.join(__dirname, "panel.cjs")], {
-      cwd: __dirname,
-      windowsHide: true,
-      detached: true,
-      stdio: "ignore",
-    }).unref();
-  for (let i = 0; i < 15; i++) {
-    if (await ready()) {
-      const url = "http://127.0.0.1:3251";
-      const command =
-        process.platform === "win32"
-          ? "powershell.exe"
-          : process.platform === "darwin"
-            ? "open"
-            : "xdg-open";
-      const args =
-        process.platform === "win32"
-          ? [
-              "-NoProfile",
-              "-NonInteractive",
-              "-Command",
-              "Start-Process 'http://127.0.0.1:3251'",
-            ]
-          : [url];
-      spawn(command, args, { windowsHide: true, stdio: "ignore" }).unref();
-      return;
-    }
-    await new Promise((r) => setTimeout(r, 100));
+}
+
+function browserCommand(platform, url) {
+  if (platform === "win32") {
+    return {
+      command: "powershell.exe",
+      args: [
+        "-NoProfile",
+        "-NonInteractive",
+        "-Command",
+        `Start-Process '${url}'`,
+      ],
+    };
   }
-  console.error("Could not open the panel. Check port 3251.");
-  process.exitCode = 1;
-})();
+  return { command: platform === "darwin" ? "open" : "xdg-open", args: [url] };
+}
+
+async function launch(args = process.argv.slice(2)) {
+  const portIndex = args.indexOf("--port");
+  const port = portIndex < 0 ? 3251 : Number(args[portIndex + 1]);
+  if (!Number.isInteger(port) || port < 1024 || port > 65535)
+    throw Error("Invalid port");
+  const workspaceIndex = args.indexOf("--workspace");
+  const base =
+    workspaceIndex < 0
+      ? process.cwd()
+      : path.resolve(args[workspaceIndex + 1] || ".");
+  if (!(await isReady(port))) {
+    const server = createServer({ base, demoOnly: args.includes("--demo") });
+    await new Promise((resolve, reject) => {
+      server.once("error", reject);
+      server.listen(port, "127.0.0.1", resolve);
+    });
+  }
+  const url = `http://127.0.0.1:${port}`;
+  console.log(`Lazy Du panel: ${url}`);
+  if (!args.includes("--no-browser")) {
+    const { command, args: browserArgs } = browserCommand(
+      process.platform,
+      url,
+    );
+    const browser = spawn(command, browserArgs, {
+      windowsHide: true,
+      stdio: "ignore",
+    });
+    browser.on("error", () => console.log(`Open ${url} in your browser.`));
+    browser.unref();
+  }
+}
+
+if (require.main === module) {
+  launch().catch(() => {
+    console.error("Could not start the panel. Check that the port is free.");
+    process.exitCode = 1;
+  });
+}
+module.exports = { launch, browserCommand, isReady };

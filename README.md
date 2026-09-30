@@ -18,7 +18,15 @@ A local dashboard for Claude Code and Codex usage, sessions, and work in progres
 
 ## Quick start
 
-Install Node.js 20 or newer and download or clone this repository.
+With Node.js 20 or newer, run:
+
+```sh
+npx github:tridev360/lazy-du-agent-panel
+```
+
+Or ask Claude Code or Codex to start the panel for you.
+
+For a downloaded copy:
 
 **Windows:** double-click `panel.bat`.
 

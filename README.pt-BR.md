@@ -18,7 +18,15 @@ Um painel local para acompanhar uso, sessões e trabalho em andamento do Claude 
 
 ## Início rápido
 
-Instale Node.js 20 ou mais recente e baixe ou clone este repositório.
+Com Node.js 20 ou mais recente, execute:
+
+```sh
+npx github:tridev360/lazy-du-agent-panel
+```
+
+Ou peça ao seu Claude Code ou Codex para abrir o painel.
+
+Para uma cópia baixada:
 
 **Windows:** abra `panel.bat` com dois cliques.
 

@@ -1,6 +1,6 @@
 {
   "name": "lazy-du-agent-panel",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "description": "A private, local dashboard for Claude Code and Codex activity.",
   "license": "MIT",
   "repository": {
@@ -21,5 +21,19 @@
   "scripts": {
     "start": "node src/panel.cjs",
     "test": "node --test --test-concurrency=1 test/*.test.cjs"
-  }
+  },
+  "bin": {
+    "lazy-du-panel": "src/open.cjs"
+  },
+  "files": [
+    "src/",
+    "public/",
+    "docs/",
+    "example.json",
+    "panel.bat",
+    "README.md",
+    "README.pt-BR.md",
+    "LICENSE",
+    "CHANGELOG.md"
+  ]
 }
