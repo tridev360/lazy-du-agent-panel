@@ -43,6 +43,8 @@ The panel stays on this computer. Close panel in the footer stops a launcher wit
 
 This is a local server. Run it once: the launcher keeps the server in the background. If port 3251 already answers with this version, only open http://127.0.0.1:3251. You can close the terminal; use Close panel in the footer to stop the server. Add --lang pt for Portuguese messages or --lang es for Spanish.
 
+To update, close the panel in the footer, run git pull in your panel folder, then open the panel again.
+
 ## What leaves your computer
 
 Metadata and preferences stay local. Author messages are off by default and fetch the public file only after you allow them. Music and external links open only after a click. Feedback opens an issue with fixed text; you decide whether to submit it on GitHub. Check for a new version requests only the official repository's public package.json, on click, without sending metadata. Installation and updates are never automatic. The page blocks external connections outside these permitted features.
@@ -101,7 +103,7 @@ The bell lists version notes and tips made on this computer, what waits for you 
 
 The reader projects a fixed allowlist of metadata from ~/.claude/projects and ~/.codex/sessions: timestamps, hashed session identifiers, known parents, model, effort, project labels, tool names and counts, token counters and available credit windows. Conversation bodies and tool arguments are never decoded. It does not read .env, auth.json or credential files.
 
-The panel stores its own configuration and projected metadata cache in ~/.lazy-du-panel/. Browser choices stay in localStorage. Connecting a task folder lets it read the Markdown task headings and fields documented below. It never edits your AI instruction files: Teach your AI copies a request, and your AI can save those rules only after you approve its file edit.
+The panel stores its acceleration choices in ~/.lazy-du-panel/ and its projected metadata cache in .panel-cache/ inside the panel folder. Browser choices stay in localStorage. Connecting a task folder lets it read the Markdown task headings and fields documented below. It never edits your AI instruction files: Teach your AI copies a request, and your AI can save those rules only after you approve its file edit.
 
 The server binds to 127.0.0.1:3251 and checks Host and Origin; the page uses a Content Security Policy. The server's two public download destinations are the author's news.json (off until enabled or clicked) and package.json (version check on click). Optional music and external links open only on click. No session metadata is sent. Use --offline to disable these features.
 

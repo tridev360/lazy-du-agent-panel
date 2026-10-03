@@ -16,7 +16,7 @@ body:not([data-panel-mounted]) #panel-language{position:fixed;top:16px;right:36p
 #startup-notice{grid-column:1/-1;color:#cfc4ca;font-size:var(--clean-small,14px);line-height:1.6}
 #startup-partial-example{width:max-content;margin-bottom:16px}
 #startup-progress,#startup-message{line-height:1.6}
-@media(max-width:600px){header{flex-wrap:wrap!important}.panel-language{order:2}.clean-actions{order:3;flex-basis:100%;justify-content:flex-end}.panel-language button{font-size:12px!important}body:not([data-panel-mounted]) #panel-language{right:16px}#panel-boot>.brand{padding-right:144px}}
+@media(max-width:600px){header{flex-wrap:wrap!important}.panel-language{order:2}#panel-language{order:4;flex-basis:100%;justify-content:flex-end;margin-left:0}.clean-actions{order:3;flex-basis:100%;justify-content:flex-end}.panel-language button{font-size:12px!important}body:not([data-panel-mounted]) #panel-language{right:16px}#panel-boot>.brand{padding-right:144px}}
 @media(prefers-reduced-motion:reduce){button,a,summary,select,input,textarea{animation:none!important;transition:none!important}}
 
 input[type=checkbox]{accent-color:var(--control-accent);min-width:44px;min-height:44px}

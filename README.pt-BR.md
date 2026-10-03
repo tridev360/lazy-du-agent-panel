@@ -43,6 +43,8 @@ Tudo fica neste computador. Fechar painel no rodapé encerra um atalho que tenha
 
 É um servidor local. Rode uma vez: o atalho mantém o servidor em segundo plano. Se a porta 3251 já responder com esta versão, abra só http://127.0.0.1:3251. Pode fechar o terminal; use Fechar painel no rodapé para encerrar o servidor. Para mensagens em português, acrescente --lang pt; espanhol, --lang es.
 
+Para atualizar, feche o painel no rodapé, rode git pull na pasta do painel e abra o painel de novo.
+
 ## O que sai do seu computador
 
 Metadados e preferências ficam locais. Mensagens do autor vêm desligadas e só buscam o arquivo público quando você permite. Música e links externos só abrem no clique. Feedback abre uma issue com texto fixo; você escolhe se envia no GitHub. Ver se tem versão nova consulta somente o package.json público do repositório oficial, no clique, sem enviar metadados. Nenhuma instalação ou atualização é automática. A página bloqueia conexões externas fora desses recursos permitidos.
@@ -101,7 +103,7 @@ O sino lista as novidades da versão e as dicas feitas neste computador, o que e
 
 O leitor projeta uma lista fixa de metadados de ~/.claude/projects e ~/.codex/sessions: datas, identificadores de sessão resumidos por hash, pais conhecidos, modelo, esforço, nome do projeto, nomes e contagens de ferramentas, contadores de tokens e janelas de crédito disponíveis. Nunca decodifica corpos de conversa nem argumentos de ferramentas. Não lê .env, auth.json nem arquivos de credenciais.
 
-O painel salva sua configuração e o cache de metadados projetados em ~/.lazy-du-panel/. As escolhas do navegador ficam no localStorage. Ligar uma pasta de tarefas permite ler os títulos e campos Markdown documentados abaixo. Ele nunca altera seus arquivos de instrução: Ensinar minha IA copia um pedido, e sua IA pode salvar as regras depois que você permitir a edição do arquivo.
+O painel salva as escolhas do acelerador em ~/.lazy-du-panel/ e o cache de metadados projetados em .panel-cache/ dentro da pasta do painel. As escolhas do navegador ficam no localStorage. Ligar uma pasta de tarefas permite ler os títulos e campos Markdown documentados abaixo. Ele nunca altera seus arquivos de instrução: Ensinar minha IA copia um pedido, e sua IA pode salvar as regras depois que você permitir a edição do arquivo.
 
 O servidor escuta em 127.0.0.1:3251 e confere Host e Origin; a página usa uma Content Security Policy. Os dois destinos públicos de download do servidor são news.json do autor (desligado até você ligar ou clicar) e package.json (conferência de versão no clique). Música opcional e links externos só abrem no clique. Nenhum metadado de sessão sai. Use --offline para desligar esses recursos.
 
