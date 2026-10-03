@@ -11,7 +11,7 @@ test('teach block: 8 to 12 lines, says what it does, and only promises what the 
     const choices=[{mode:'recommended'},...PICKS.map(p=>({mode:'custom',picks:Object.fromEntries(Teach.TASKS.map(t=>[t,p]))}))];
     for(const choice of choices){
       const lines=Teach.lines(choice,lang);assert.ok(lines.length>=8&&lines.length<=12,lang+' '+lines.length);
-      assert.match(lines[0],/^## Lazy Du Agent Panel: .+\((to remove them|para tirar|para quitarlas)/);
+      assert.match(lines[0],/^## Lazy Du Agent Panel: [^()]+$/);assert.doesNotMatch(lines[0],/delete|apague|borra/);
       const ship=lines.find(l=>/production|produção|producción/.test(l));assert.match(ship,/explicit ok|ok explícito/);
       const header=/--- , phase: doing, --- /.test(lines.join(' '))||/---, phase: doing, ---/.test(lines.join(' '));assert.ok(header,'header lines are described');
       const phases=lines.find(l=>/new, open, doing, ready, review, released, done/.test(l));assert.ok(phases);for(const phase of ['new','open','doing','ready','review','released','done'])assert.notEqual(parseTask('---\nphase: '+phase+'\n---\n# T\n','t').phase.percent,null,phase);

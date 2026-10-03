@@ -745,7 +745,7 @@ async function readEdges(file,index,previous,budget){
 class Metrics {
   constructor(
     home,
-    { processReader = async () => null, clock = () => new Date(), limits,cacheDir=path.join(__dirname,'../../.panel-cache') } = {},
+    { processReader = async () => null, clock = () => new Date(), limits,cacheDir=path.join(home,'.lazy-du-panel','metadata') } = {},
   ) {
     this.home = home;
     this.clock = clock;
@@ -931,7 +931,7 @@ class Metrics {
             !this.scanned.get(file.file)?.partial,
         );
       this.last = this.pending ? 0 : Date.now();
-      if(!this.pending){this.readAt=this.clock().toISOString();const now=new Date(this.readAt),snapshot=this.index.snapshot(now,this.processes?.liveSessionKeys??null);this.daily.merge(index.dayContributions);this.published=structuredClone({...snapshot,...this.daily.snapshot(now),scopeDays:this.scopeDays,oldConversations:result.oldConversations,periodSource:'accumulated observed conversation days'});await this.cache?.flush(files);}
+      if(!this.pending){for(const [file,meta]of index.metadata){const read=this.scanned.get(file);meta.metadataComplete=!!read?.done&&!read?.partial&&!read?.errors&&!meta.sampled&&!meta.toolTruncated;}this.readAt=this.clock().toISOString();const now=new Date(this.readAt),snapshot=this.index.snapshot(now,this.processes?.liveSessionKeys??null);this.daily.merge(index.dayContributions);this.published=structuredClone({...snapshot,...this.daily.snapshot(now),scopeDays:this.scopeDays,oldConversations:result.oldConversations,periodSource:'accumulated observed conversation days'});await this.cache?.flush(files);}
     } catch {
       this.index.errors++;
       this.pending = false;

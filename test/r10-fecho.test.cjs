@@ -56,7 +56,7 @@ test('daily progress uses dated real tasks in the delivery UTC day, not helpers,
   writeTask('deadline','phase: doing\ndeadline: 2030-01-07T18:00:00Z','A deadline is not a start');
   writeTask('json','phase: done\ncompleted_at: 2030-01-07T10:00:00Z','{"pageId":null}');
   fs.writeFileSync(path.join(folder,'decisions.md'),'## 1. Choose the music\n');
-  const s=new (require('../src/lib/task-board.cjs').TaskBoard)(home,{clock:()=>now}).connect(folder),R=require('../public/r4-core.js'),agents=[{observedSteps:100,completedSteps:100}];
+  const s=new (require('../src/lib/task-board.cjs').TaskBoard)(home,{profile:home,clock:()=>now}).connect(folder),R=require('../public/r4-core.js'),agents=[{observedSteps:100,completedSteps:100}];
   a.equal(s.deliveries.day,'2030-01-07');a.equal(s.deliveries.items.length,1);
   a.deepEqual(R.dailyTasks(s.tasks,s.deliveries.day).map(x=>x.id).sort(),['doing','done']);
   a.deepEqual(R.progress(s.tasks,agents,s.deliveries.day),{percent:70,method:'tasks',count:2});
@@ -202,7 +202,7 @@ test('a connected task folder shows no empty card and never invents an owner or 
   file('json.md', 'id: json\nphase: done\ncompleted_at: ' + at, '{"pageId":null}');
   file('mine.md', 'id: mine\nphase: doing\nowner: Ana\nexecutor: codex', 'Draw the menu');
   const source = fs.readFileSync(path.join(root, 'src/lib/task-board.cjs'), 'utf8');
-  const s = new (loadBoard(source))(home, { clock: () => now }).connect(folder);
+  const s = new (loadBoard(source))(home, { profile: home, clock: () => now }).connect(folder);
   a.deepEqual(s.tasks.map((x) => x.title).sort(), ['Draw the menu', 'Fix the game jump']);
   const jump = s.tasks.find((x) => x.id === 'jump'), mine = s.tasks.find((x) => x.id === 'mine');
   a.equal(jump.owner, null); a.equal(jump.executor, null);
@@ -211,7 +211,8 @@ test('a connected task folder shows no empty card and never invents an owner or 
   // Negative control, in memory only: the r9 board keeps an empty card and invents TEAM and Claude Code.
   const start = source.indexOf('task.title=title(task.title);if('), mark = 'if(task.title)tasks.push(task);}', end = source.indexOf(mark, start) + mark.length;
   a.ok(start > 0 && end > start);
-  const r9 = new (loadBoard(source.slice(0, start) + 'task.title=title(task.title);tasks.push(task);}' + source.slice(end)))(fixture(t), { clock: () => now }).connect(folder);
+  const negativeProfile = fixture(t);
+  const r9 = new (loadBoard(source.slice(0, start) + 'task.title=title(task.title);tasks.push(task);}' + source.slice(end)))(negativeProfile, { profile: negativeProfile, clock: () => now }).connect(folder);
   a.ok(r9.tasks.some((x) => x.title === ''), 'r9 shows the JSON task as an empty card');
   a.equal(r9.tasks.find((x) => x.id === 'jump').owner, 'TEAM');
   a.equal(r9.tasks.find((x) => x.id === 'jump').executor, 'claude');

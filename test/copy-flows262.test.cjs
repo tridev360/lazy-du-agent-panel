@@ -1,0 +1,127 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path'),vm=require('node:vm');
+const A=require('../public/acelerador.js'),V=require('../public/v21.js'),Copy=require('../public/copy-session.js');
+const source=fs.readFileSync(path.join(__dirname,'../public/acelerador.js'),'utf8'),v21=fs.readFileSync(path.join(__dirname,'../public/v21.js'),'utf8');
+const APPROVED_GEAR_LINES={
+  "en": {
+    "1": "Do one big task at a time. Call a helper only when you need one.",
+    "2": "Up to 2 big tasks at the same time.",
+    "3": "Up to 3 big tasks at the same time.",
+    "4": "Up to 4 big tasks at the same time, with reviews running in parallel.",
+    "5": "Run in parallel any tasks that do not touch the same files. Split big reviews into parts, have my approval question ready early, and if I use more than one AI, share the work with the other one too."
+  },
+  "pt": {
+    "1": "Faça uma tarefa grande por vez. Chame um ajudante só quando precisar.",
+    "2": "Até 2 tarefas grandes ao mesmo tempo.",
+    "3": "Até 3 tarefas grandes ao mesmo tempo.",
+    "4": "Até 4 tarefas grandes ao mesmo tempo, com as revisões em paralelo.",
+    "5": "Rode em paralelo as tarefas que não mexem nos mesmos arquivos. Divida revisões grandes em partes, deixe a minha pergunta de aprovação pronta cedo e, se eu usar mais de uma IA, divida o trabalho com a outra também."
+  },
+  "es": {
+    "1": "Haz una tarea grande a la vez. Llama a un ayudante solo cuando haga falta.",
+    "2": "Hasta 2 tareas grandes al mismo tiempo.",
+    "3": "Hasta 3 tareas grandes al mismo tiempo.",
+    "4": "Hasta 4 tareas grandes al mismo tiempo, con las revisiones en paralelo.",
+    "5": "Ejecuta en paralelo las tareas que no tocan los mismos archivos. Divide las revisiones grandes en partes, deja lista desde el principio mi pregunta de aprobación y, si uso más de una IA, reparte el trabajo con la otra también."
+  }
+};
+const APPROVED_PHASES={
+  "en": {
+    "1": "When I ask how things stand, answer in 6 short lines: completed task, recent activity, blocked by, can we speed up, my next step, credit. Every forecast comes with a time. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "2": "When you finish a step or stop to wait for me, end your message with the status in those 6 lines, without me asking. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "3": "List the kinds of change you could publish on your own once every test and review passes, and wait for my ok on that list. After my ok, publish only those kinds without waiting for my click. Money, keys and anything outside the list still wait for me. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "4": "When one item blocks a delivery, take only that item out, ship the rest with the approvals it already needs and tell me which item came out and why. It comes back only fixed and reviewed. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "5": "Propose a work window for this project: what you may do without asking me, and the time it ends. Publishing, keys and money stay with me. Wait for my ok before using it.",
+    "6": "Before any change is approved, have it reviewed by a new session or helper that did not do the work. Whoever built it never approves it. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "7": "Review before shipping only what everyone sees and anything touching money. Review the rest right after it ships. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "8": "Start every new piece of work from the last approved version, never from another unfinished one. Before a release, compare it with what is live. Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+    "9": "List what is using the most memory and processor on this computer right now, and which of my heavy tests could run on another machine. Close nothing: only the owner closes a program.",
+    "10": "List the work that is waiting on a busy session and say which free session could take each item. Nobody touches another session's folder. Wait for my ok.",
+    "11": "Split my open work into streams that never touch the same files and run them in parallel. One release at a time. Show me the split and wait for my ok."
+  },
+  "pt": {
+    "1": "Quando eu perguntar como está, responda em 6 linhas curtas: tarefa concluída, atividade recente, travado por, dá para acelerar, meu próximo passo, crédito. Toda previsão vem com hora. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "2": "Quando terminar uma etapa ou parar para me esperar, feche a mensagem com o status nessas 6 linhas, sem eu pedir. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "3": "Liste os tipos de mudança que você poderia publicar sozinho quando todo teste e revisão passarem, e espere o meu ok nessa lista. Depois do ok, publique só esses tipos sem esperar o meu clique. Dinheiro, chaves e o que estiver fora da lista continuam esperando por mim. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "4": "Quando um item travar uma entrega, tire só ele, publique o resto com as aprovações de sempre e me diga qual saiu e por quê. Ele só volta consertado e revisado. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "5": "Proponha uma janela de trabalho para este projeto: o que você pode fazer sem me perguntar e a hora em que ela acaba. Publicar, chaves e dinheiro seguem comigo. Espere o meu ok antes de usar.",
+    "6": "Antes de aprovar qualquer mudança, peça a revisão a uma sessão ou ajudante novo, que não fez o trabalho. Quem fez nunca aprova. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "7": "Revise antes de publicar só o que todo mundo vê e o que mexe com dinheiro. O resto, revise logo depois de publicar. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "8": "Comece todo trabalho novo da última versão aprovada, nunca de outro trabalho pela metade. Antes de publicar, compare com o que está no ar. Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+    "9": "Liste o que mais usa memória e processador neste computador agora e quais testes pesados meus poderiam rodar em outra máquina. Não feche nada: só o dono fecha um programa.",
+    "10": "Liste o trabalho que espera uma sessão ocupada e diga qual sessão livre poderia pegar cada item. Ninguém mexe na pasta da outra. Espere o meu ok.",
+    "11": "Divida o meu trabalho aberto em frentes que nunca mexem nos mesmos arquivos e rode em paralelo. Uma publicação por vez. Me mostre a divisão e espere o meu ok."
+  },
+  "es": {
+    "1": "Cuando pregunte cómo va, responde en 6 líneas cortas: tarea terminada, actividad reciente, bloqueado por, podemos acelerar, mi siguiente paso, crédito. Toda previsión viene con hora. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "2": "Cuando termines un paso o te detengas a esperarme, cierra el mensaje con el estado en esas 6 líneas, sin que lo pida. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "3": "Enumera los tipos de cambio que podrías publicar solo cuando pasen todas las pruebas y revisiones, y espera mi visto bueno sobre esa lista. Después, publica solo esos tipos sin esperar mi clic. Dinero, claves y lo que quede fuera de la lista siguen esperándome. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "4": "Cuando un elemento frene una entrega, saca solo ese, publica el resto con las aprobaciones de siempre y dime cuál salió y por qué. Solo vuelve arreglado y revisado. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "5": "Propón una ventana de trabajo para este proyecto: qué puedes hacer sin preguntarme y la hora en que termina. Publicar, claves y dinero siguen conmigo. Espera mi visto bueno antes de usarla.",
+    "6": "Antes de aprobar cualquier cambio, pide la revisión a una sesión o ayudante nuevo, que no hizo el trabajo. Quien lo hizo nunca lo aprueba. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "7": "Revisa antes de publicar solo lo que todos ven y lo que toca dinero. Lo demás, revísalo justo después de publicar. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "8": "Empieza todo trabajo nuevo desde la última versión aprobada, nunca desde otro a medias. Antes de publicar, compáralo con lo que está publicado. Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+    "9": "Enumera lo que más memoria y procesador usa en este ordenador ahora y cuáles de mis pruebas pesadas podrían correr en otra máquina. No cierres nada: solo el dueño cierra un programa.",
+    "10": "Enumera el trabajo que espera a una sesión ocupada y di qué sesión libre podría tomar cada elemento. Nadie toca la carpeta de la otra. Espera mi visto bueno.",
+    "11": "Divide mi trabajo abierto en frentes que nunca tocan los mismos archivos y córrelos en paralelo. Una publicación a la vez. Muéstrame la división y espera mi visto bueno."
+  }
+};
+const APPROVED_AUTO={
+  "en": {
+    "note": "The button copies the plan with the instruction for your AI. Copying starts nothing. Each check uses a little of your AI plan.",
+    "plan": "Set up a routine that repeats this check every hour while this chat is open: check the current work, then give me blockers and my next step in 6 short lines. Work within my approved scope. Ask before publishing, changing credentials or spending money. Use only this tool's own repeat feature: no system task, no script, nothing that keeps running after this chat closes. If this tool cannot repeat on its own, tell me in 1 line and do the check once now."
+  },
+  "pt": {
+    "note": "O botão copia o plano já com a instrução para a sua IA. Copiar não inicia nada. Cada conferência gasta um pouco do plano da sua IA.",
+    "plan": "Monte uma rotina que repita esta conferência a cada 1 hora enquanto esta conversa estiver aberta: confira o trabalho atual e me dê as travas e o meu próximo passo em 6 linhas curtas. Trabalhe no escopo que aprovei. Peça antes de publicar, mudar credenciais ou gastar dinheiro. Use só o recurso de repetir da própria ferramenta: nada de tarefa do sistema, script ou algo que siga rodando depois que esta conversa fechar. Se esta ferramenta não consegue repetir sozinha, me diga em 1 linha e faça a conferência uma vez agora."
+  },
+  "es": {
+    "note": "El botón copia el plan ya con la instrucción para tu IA. Copiar no inicia nada. Cada revisión usa un poco del plan de tu IA.",
+    "plan": "Arma una rutina que repita esta revisión cada 1 hora mientras esta conversación esté abierta: revisa el trabajo actual y dame los bloqueos y mi siguiente paso en 6 líneas cortas. Trabaja dentro del alcance aprobado. Pregunta antes de publicar, cambiar credenciales o gastar dinero. Usa solo la función de repetir de la propia herramienta: nada de tareas del sistema, scripts ni algo que siga corriendo después de cerrar esta conversación. Si esta herramienta no puede repetir sola, dímelo en 1 línea y haz la revisión una vez ahora."
+  }
+};
+class Node{
+  constructor(tag,document){this.tagName=tag;this.nodeType=1;this.document=document;this.children=[];this.dataset={};this.attributes={};this.className='';this.style={};this.hidden=false;this.open=false;this.classList={add:(...names)=>{this.className=[...new Set([...this.className.split(' ').filter(Boolean),...names])].join(' ');},remove:(...names)=>{this.className=this.className.split(' ').filter(n=>!names.includes(n)).join(' ');},toggle:(name,force)=>{const yes=force===undefined?!this.className.split(' ').includes(name):force;this.classList[yes?'add':'remove'](name);return yes;}};}
+  append(...nodes){for(const n of nodes){if(n.parentNode)n.remove();n.parentNode=this;this.children.push(n);}}
+  replaceChildren(...nodes){for(const n of this.children)n.parentNode=null;this.children=[];this.append(...nodes);}
+  setAttribute(k,v){this.attributes[k]=String(v);if(k==='open')this.open=true;}
+  getAttribute(k){return this.attributes[k]??null;}
+  hasAttribute(k){return k in this.attributes;}
+  removeAttribute(k){delete this.attributes[k];if(k==='open')this.open=false;}
+  addEventListener(k,fn){this.listeners??={};(this.listeners[k]??=[]).push(fn);}
+  removeEventListener(){}
+  click(){let result=this.onclick?.();for(const fn of this.listeners?.click||[])result=fn({target:this});return result;}
+  focus(){this.document.activeElement=this;}
+  remove(){if(this.parentNode)this.parentNode.children=this.parentNode.children.filter(n=>n!==this);this.parentNode=null;}
+  contains(node){return node===this||this.children.some(n=>n.contains(node));}
+  showModal(){this.open=true;}
+  close(){this.open=false;for(const fn of this.listeners?.close||[])fn();}
+  get isConnected(){return !!this.parentNode||this===this.document.body;}
+  querySelectorAll(selector){const result=[],match=n=>selector.startsWith('.')?n.className.split(' ').includes(selector.slice(1)):selector.startsWith('#')?n.id===selector.slice(1):selector==='[data-foco]'?!!n.dataset.foco:n.tagName===selector;for(const n of this.children){if(match(n))result.push(n);result.push(...n.querySelectorAll(selector));}return result;}
+  querySelector(selector){return this.querySelectorAll(selector)[0]||null;}
+  set innerHTML(value){assert.fail('Public copy flows must use text nodes');}
+}
+function browser(options={}){
+  const document={readyState:'loading',documentElement:{lang:'en'},activeElement:null,addEventListener(){},removeEventListener(){},querySelector:()=>null};document.body=new Node('body',document);document.createElement=tag=>new Node(tag,document);document.createElementNS=(_,tag)=>new Node(tag,document);document.getElementById=id=>document.body.querySelector('#'+id);
+  let state={ok:true,token:'fixture-token',modo:'publico',fases:{},marchasTexto:{},marcha:{n:1,em:'2030-01-01T00:00:00Z'}};const requests=[],copied=[];
+  const fetch=async(url,init={})=>{requests.push({url,method:init.method||'GET',body:init.body&&JSON.parse(init.body)});if(init.method==='POST'&&url.endsWith('/ligar'))state={...state,fases:{...state.fases,[JSON.parse(init.body).fase]:{em:'2030-01-01T00:00:00Z'}}};return {ok:true,json:async()=>state};};
+  const window={document,fetch,navigator:{clipboard:{writeText:async text=>{if(options.denied)throw Error('blocked');copied.push(text);}}},matchMedia:q=>({matches:q.includes('prefers-reduced-motion'),addEventListener(){},removeEventListener(){}}),addEventListener(){},removeEventListener(){},location:{hash:''}};
+  window.PanelCopySession={create:config=>Copy.create({...config,runtime:window})};
+  const host=new Node('div',document);host.setAttribute('data-acel-manual','true');document.body.append(host);
+  vm.runInNewContext(source,{window,fetch,setTimeout:()=>1,clearTimeout(){},URLSearchParams});
+  const instance=window.PainelAcelerador.montar(host,{lang:'en'});return {window,document,instance,requests,copied,state};
+}
+const groups=b=>b.document.body.querySelectorAll('.copy-session'),phaseGroup=(b,id)=>groups(b).find(g=>g.dataset.acelCopy==='phase-'+id),gearGroup=(b,n)=>groups(b).find(g=>g.dataset.acelCopy==='gear-'+n);
+for(const lang of ['en','pt','es']){
+  test('approved phase and automate instructions are exact in '+lang,()=>{for(let id=1;id<=11;id++)assert.equal(A.phaseText(id,lang),APPROVED_PHASES[lang][id]);const auto=V.automateText(lang);assert.equal(auto.note,APPROVED_AUTO[lang].note);assert.equal(auto.plan,APPROVED_AUTO[lang].plan);assert.ok(!/[\u2013\u2014]/.test(auto.plan));});
+  test('all phases copy only on click, keep their rule phrase and selected tool in '+lang,async()=>{const b=browser();await b.instance.recarregar();const baseline=b.requests.length;for(let id=1;id<=11;id++){const phases=Object.fromEntries(Array.from({length:id-1},(_,i)=>[i+1,{em:'2030-01-01T00:00:00Z'}]));b.instance.atualizar({...b.state,fases:phases},lang);const group=phaseGroup(b,id);assert.ok(group,'Phase '+id+' has its own copy');assert.equal(group.phrase.textContent,Copy.phrase(lang,'claude',A.phaseWritesFile(id)));await group.button.click();assert.equal(b.copied.at(-1),APPROVED_PHASES[lang][id]);group.switcher.click();assert.equal(group.getTarget(),'codex');assert.equal(group.phrase.textContent,Copy.phrase(lang,'codex',A.phaseWritesFile(id)));await group.button.click();assert.equal(b.copied.at(-1),APPROVED_PHASES[lang][id]);}assert.equal(b.requests.length,baseline,'Copying never records a phase or starts a task');b.instance.destroy();});
+  test('all gears copy their visible line and rule without selecting the gear in '+lang,async()=>{const b=browser();await b.instance.recarregar();b.instance.atualizar(b.state,lang);const baseline=b.requests.length;for(let n=1;n<=5;n++){const group=gearGroup(b,n);assert.ok(group);assert.equal(group.phrase.textContent,Copy.phrase(lang,'claude',true));await group.button.click();const visible=group.parentNode.parentNode.querySelector('.acel-opcao-linha').textContent;assert.equal(visible,APPROVED_GEAR_LINES[lang][n]);assert.equal(A.TEXTOS[lang].marchas[n].linha,APPROVED_GEAR_LINES[lang][n]);assert.equal(b.copied.at(-1),A.COPY_TEXT[lang].gear.replace('<n>',String(n)).replace('<nome>',A.TEXTOS[lang].marchas[n].nome).replace('<linha>',APPROVED_GEAR_LINES[lang][n])+' '+A.COPY_TEXT[lang].rule);assert.equal(group.parentNode.parentNode.querySelector('.acel-opcao').querySelectorAll('button').length,0,'No nested button');}assert.equal(b.requests.length,baseline);assert.equal(b.document.body.querySelector('.acel-opcao').getAttribute('aria-pressed'),'true','Selected style contract stays intact');assert.equal(b.document.body.querySelector('p').tagName,'p');assert.equal(b.document.body.querySelectorAll('p').some(n=>n.dataset.acelProvisional),false);assert.equal(A.COPY_TEXT[lang].provisional,undefined);b.instance.destroy();});
+}
+test('file-writing phrases apply only to rule phases; invalid phase or gear never copies an accidental instruction',()=>{assert.deepEqual(Array.from({length:11},(_,i)=>i+1).filter(A.phaseWritesFile),[1,2,3,4,6,7,8]);for(const id of [0,12,null,'bad'])assert.equal(A.phaseText(id,'en'),'');for(const n of [0,6,'bad',null])assert.equal(A.gearText(n,'en'),'');});
+test('Mark as done keeps the old POST and moves the existing copy control into the completed phase',async()=>{const b=browser();await b.instance.recarregar();const group=phaseGroup(b,1);group.switcher.click();await b.document.body.querySelector('.acel-ligar').click();assert.ok(b.requests.some(r=>r.method==='POST'&&r.url.endsWith('/ligar')&&r.body.fase===1));assert.equal(phaseGroup(b,1),group,'Existing copy state survives marking');assert.equal(group.getTarget(),'codex');assert.equal(phaseGroup(b,2).getTarget(),'claude');b.instance.destroy();});
+test('changing language retains the tool choice, and a current visible gear override stays plain text',async()=>{const b=browser();await b.instance.recarregar();phaseGroup(b,1).switcher.click();gearGroup(b,3).switcher.click();b.instance.atualizar({...b.state,marchasTexto:{3:{es:'<b>Visible fixture line</b>'}}},'es');assert.equal(phaseGroup(b,1).getTarget(),'codex');const group=gearGroup(b,3);assert.equal(group.getTarget(),'codex');await group.button.click();assert.equal(b.copied.at(-1),A.gearText(3,'es','<b>Visible fixture line</b>'));assert.ok(b.document.body.querySelectorAll('span').some(n=>n.textContent==='<b>Visible fixture line</b>'));b.instance.destroy();});
+test('owner mode keeps the original question and has no public copy or provisional controls',async()=>{const b=browser();await b.instance.recarregar();b.instance.atualizar({...b.state,modo:'dono',fases:{1:{em:'2030-01-01T00:00:00Z'}}},'en');assert.equal(groups(b).length,0);assert.equal(b.document.body.querySelector('.acel-pergunta').textContent,A.TEXTOS.en.fases[2].pergunta);assert.equal(b.document.body.querySelectorAll('p').some(n=>n.dataset.acelProvisional),false);b.instance.destroy();});
+test('blocked clipboard exposes the exact phase text instead of pretending that it was copied',async()=>{const b=browser({denied:true});await b.instance.recarregar();const group=phaseGroup(b,1),baseline=b.requests.length;assert.equal(await group.button.click(),false);assert.equal(group.fallback.hidden,false);assert.equal(group.fallback.textContent,APPROVED_PHASES.en[1]);assert.equal(group.status.textContent,Copy.T.en.failed);assert.equal(b.copied.length,0);assert.equal(b.requests.length,baseline);b.instance.destroy();});
+test('Automate uses the shared plain copy group and opens the exact read-only plan without starting work',async()=>{const start=v21.indexOf('  const auto=button(w().automate,'),end=v21.indexOf('  const hook=',start);assert.ok(start>=0&&end>start);for(const lang of ['en','pt','es']){const document={createElement:tag=>new Node(tag,document)};let opened,copies=[];const root={document,navigator:{clipboard:{writeText:async text=>copies.push(text)}},PanelCopySession:{create:config=>Copy.create({...config,runtime:root})},panelDrawer:(title,content)=>{opened={title,content};}};const texts=V.automateText(lang),context={lang,root,w:()=>({automatic:'Routine',automate:'Automate',copy:texts.label,plan:texts.plan,autoNote:texts.note}),el:(tag,text,cls)=>{const n=new Node(tag,document);n.textContent=text;n.className=cls||'';return n;},button:(text,action)=>{const n=new Node('button',document);n.textContent=text;n.onclick=action;return n;}};vm.runInNewContext(v21.slice(start,end)+';auto.click();',context);assert.equal(copies.length,0);const [note,area,group]=opened.content;assert.equal(note.textContent,APPROVED_AUTO[lang].note);assert.equal(area.readOnly,true);assert.equal(group.phrase.textContent,Copy.phrase(lang,'claude',false));await group.button.click();assert.equal(copies[0],APPROVED_AUTO[lang].plan);group.switcher.click();assert.equal(group.phrase.textContent,Copy.phrase(lang,'codex',false));}});
+
+test('final approved gear lines replace provisional text and markup entirely',()=>{assert.doesNotMatch(source,/notaProvisoria|acelProvisional|Gear text is provisional|Texto da marcha provisório|Texto de marcha provisional/);for(const lang of ['en','pt','es'])for(let n=1;n<=5;n++){assert.equal(A.TEXTOS[lang].marchas[n].linha,APPROVED_GEAR_LINES[lang][n]);assert.ok(A.gearText(n,lang).includes(APPROVED_GEAR_LINES[lang][n]));assert.ok(A.gearText(n,lang).endsWith(A.COPY_TEXT[lang].rule));}});

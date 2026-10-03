@@ -16,7 +16,26 @@ body:not([data-panel-mounted]) #panel-language{position:fixed;top:16px;right:36p
 #startup-notice{grid-column:1/-1;color:#cfc4ca;font-size:var(--clean-small,14px);line-height:1.6}
 #startup-partial-example{width:max-content;margin-bottom:16px}
 #startup-progress,#startup-message{line-height:1.6}
-@media(max-width:600px){header{flex-wrap:wrap!important}.panel-language{order:2}#panel-language{order:4;flex-basis:100%;justify-content:flex-end;margin-left:0}.clean-actions{order:3;flex-basis:100%;justify-content:flex-end}.panel-language button{font-size:12px!important}body:not([data-panel-mounted]) #panel-language{right:16px}#panel-boot>.brand{padding-right:144px}}
+@media(max-width:600px){header{flex-wrap:wrap!important}.panel-language{order:2}.clean-actions{order:3;flex-basis:100%;justify-content:flex-end}.panel-language button{font-size:12px!important}body:not([data-panel-mounted]) #panel-language{right:16px}#panel-boot>.brand{padding-right:144px}}
 @media(prefers-reduced-motion:reduce){button,a,summary,select,input,textarea{animation:none!important;transition:none!important}}
 
 input[type=checkbox]{accent-color:var(--control-accent);min-width:44px;min-height:44px}
+
+@media(max-width:600px){body[data-panel-mounted] #panel-language{margin-right:104px}}
+
+:where(button,a[data-button],summary[data-button]):not([data-button=primary]):is([aria-pressed=true],[aria-checked=true],[aria-selected=true]){background:#362030!important;border-color:var(--control-accent)!important;color:#ffb6d1!important;box-shadow:inset 0 -2px 0 var(--control-accent)!important}
+
+#panel-boot>.live-badge{display:none!important}
+@media(max-width:600px){
+  html[data-look=today] header{display:grid!important;grid-template-columns:minmax(0,1fr) 104px;grid-template-rows:repeat(3,44px);height:auto;align-items:center}
+  html[data-look=today] header>.brand{grid-column:1/-1;grid-row:1;justify-self:start}
+  html[data-look=today] header>#panel-language{grid-column:1/-1;grid-row:2;justify-self:end;margin-left:0}
+  html[data-look=today] header>.clean-actions{grid-column:1/-1;grid-row:3;min-width:0;min-height:44px}
+  #view-tabs{flex-wrap:nowrap!important}
+  #view-tabs .clean-tablist{min-width:0}
+  #view-tabs .clean-tablist>[role=tab],#view-tabs .clean-more>summary{padding:10px 8px!important;min-height:44px;min-width:44px}
+}
+@media(max-width:375px){
+  html[data-look=today] header>.clean-actions{grid-template-columns:auto minmax(0,1.2fr) minmax(0,1.15fr)}
+  html[data-look=today] .clean-actions>#clean-auto{padding:10px 8px!important;text-overflow:clip;min-height:44px}
+}

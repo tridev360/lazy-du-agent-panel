@@ -73,6 +73,7 @@
     if(feedback)feedback.textContent=t.feedback;if(contact)contact.textContent=t.contact;
     // feed your AI: the teach card sits on top
     if(root.PanelTeach)root.PanelTeach.card($('view-tips'),lang);
+    root.PanelGuidance?.update?.(snapshot,lang);
     root.PanelBell?.update?.(snapshot,lang);
   }
   const render=P.render.bind(P),select=P.select.bind(P),loading=P.loading.bind(P),failure=P.failure.bind(P);

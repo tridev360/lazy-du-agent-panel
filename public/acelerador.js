@@ -90,7 +90,7 @@
         semFaseSomar: 'Ligue uma fase antes de somar minutos.'
       },
       publico: {
-        lista: 'Uma lista para a sua rotina. Marcar uma fase não muda nada nos seus agentes.',
+        lista: 'Cada fase tem um texto para a sua IA aplicar. Marcar aqui só registra neste painel.',
         semFase: 'Marque a primeira fase para começar a somar.',
         ligar: 'Marcar como feito',
         ligando: 'Marcando...',
@@ -101,11 +101,11 @@
         semFaseSomar: 'Marque uma fase antes de somar minutos.'
       },
       marchas: {
-        1: { nome: 'Econômica', linha: '1 frente pesada por vez; ajudante só quando precisa.' },
-        2: { nome: 'Calma', linha: '2 frentes pesadas por vez.' },
-        3: { nome: 'Normal', linha: 'Até 3 frentes pesadas por vez.' },
-        4: { nome: 'Rápida', linha: '4 frentes pesadas, revisões em paralelo.' },
-        5: { nome: 'Máxima', linha: 'Tudo em paralelo onde não há disputa: revisões em metades, quem aprova adiantado, outro agente junto.' }
+        1: { nome: 'Econômica', linha: 'Faça uma tarefa grande por vez. Chame um ajudante só quando precisar.' },
+        2: { nome: 'Calma', linha: 'Até 2 tarefas grandes ao mesmo tempo.' },
+        3: { nome: 'Normal', linha: 'Até 3 tarefas grandes ao mesmo tempo.' },
+        4: { nome: 'Rápida', linha: 'Até 4 tarefas grandes ao mesmo tempo, com as revisões em paralelo.' },
+        5: { nome: 'Máxima', linha: 'Rode em paralelo as tarefas que não mexem nos mesmos arquivos. Divida revisões grandes em partes, deixe a minha pergunta de aprovação pronta cedo e, se eu usar mais de uma IA, divida o trabalho com a outra também.' }
       },
       fases: {
         1: { nome: 'Status curto', pergunta: 'Você lê um textão para saber como está? Quer o estado em 6 linhas curtas, sempre com hora?', ganho: 'Você decide em segundos.', nuncaCorta: 'A previsão sempre vem com hora.' },
@@ -174,7 +174,7 @@
         semFaseSomar: 'Turn on a step before adding minutes.'
       },
       publico: {
-        lista: 'A checklist for your own routine. Marking a step changes nothing in your agents.',
+        lista: 'Each step has a text your AI can apply. Marking it here only records it on this panel.',
         semFase: 'Mark the first step to start adding.',
         ligar: 'Mark as done',
         ligando: 'Marking...',
@@ -185,11 +185,11 @@
         semFaseSomar: 'Mark a step before adding minutes.'
       },
       marchas: {
-        1: { nome: 'Economy', linha: '1 heavy workstream at a time; a helper only when needed.' },
-        2: { nome: 'Calm', linha: '2 heavy workstreams at a time.' },
-        3: { nome: 'Normal', linha: 'Up to 3 heavy workstreams at a time.' },
-        4: { nome: 'Fast', linha: '4 heavy workstreams, reviews in parallel.' },
-        5: { nome: 'Max', linha: 'Everything in parallel where nothing collides: split reviews, approval lined up early, another agent alongside.' }
+        1: { nome: 'Economy', linha: 'Do one big task at a time. Call a helper only when you need one.' },
+        2: { nome: 'Calm', linha: 'Up to 2 big tasks at the same time.' },
+        3: { nome: 'Normal', linha: 'Up to 3 big tasks at the same time.' },
+        4: { nome: 'Fast', linha: 'Up to 4 big tasks at the same time, with reviews running in parallel.' },
+        5: { nome: 'Max', linha: 'Run in parallel any tasks that do not touch the same files. Split big reviews into parts, have my approval question ready early, and if I use more than one AI, share the work with the other one too.' }
       },
       fases: {
         1: { nome: 'Short status', pergunta: 'Do you read a wall of text to know where things stand? Want the state in 6 short lines, always with a time?', ganho: 'You decide in seconds.', nuncaCorta: 'The forecast always comes with a time.' },
@@ -258,7 +258,7 @@
         semFaseSomar: 'Activa una fase antes de sumar minutos.'
       },
       publico: {
-        lista: 'Una lista para tu rutina. Marcar una fase no cambia nada en tus agentes.',
+        lista: 'Cada fase tiene un texto para que tu IA lo aplique. Marcar aquí solo lo registra en este panel.',
         semFase: 'Marca la primera fase para empezar a sumar.',
         ligar: 'Marcar como hecho',
         ligando: 'Marcando...',
@@ -269,11 +269,11 @@
         semFaseSomar: 'Marca una fase antes de sumar minutos.'
       },
       marchas: {
-        1: { nome: 'Económica', linha: '1 frente pesado a la vez; ayudante solo cuando hace falta.' },
-        2: { nome: 'Tranquila', linha: '2 frentes pesados a la vez.' },
-        3: { nome: 'Normal', linha: 'Hasta 3 frentes pesados a la vez.' },
-        4: { nome: 'Rápida', linha: '4 frentes pesados, revisiones en paralelo.' },
-        5: { nome: 'Máxima', linha: 'Todo en paralelo donde no hay disputa: revisiones en mitades, quien aprueba adelantado, otro agente al lado.' }
+        1: { nome: 'Económica', linha: 'Haz una tarea grande a la vez. Llama a un ayudante solo cuando haga falta.' },
+        2: { nome: 'Tranquila', linha: 'Hasta 2 tareas grandes al mismo tiempo.' },
+        3: { nome: 'Normal', linha: 'Hasta 3 tareas grandes al mismo tiempo.' },
+        4: { nome: 'Rápida', linha: 'Hasta 4 tareas grandes al mismo tiempo, con las revisiones en paralelo.' },
+        5: { nome: 'Máxima', linha: 'Ejecuta en paralelo las tareas que no tocan los mismos archivos. Divide las revisiones grandes en partes, deja lista desde el principio mi pregunta de aprobación y, si uso más de una IA, reparte el trabajo con la otra también.' }
       },
       fases: {
         1: { nome: 'Estado corto', pergunta: '¿Lees un texto enorme para saber cómo va? ¿Quieres el estado en 6 líneas cortas, siempre con hora?', ganho: 'Decides en segundos.', nuncaCorta: 'La previsión siempre viene con hora.' },
@@ -318,7 +318,176 @@
   function horaDe(iso) { const m = /T(\d{2}):(\d{2})/.exec(String(iso || '')); return m ? m[1] + ':' + m[2] : ''; }
   function numero(n, lang) { try { return new Intl.NumberFormat(lang === 'en' ? 'en-US' : lang === 'es' ? 'es-ES' : 'pt-BR').format(n); } catch { return String(n); } }
 
-  const exportado = { TOTAL, MARCHAS, CREDITO_DA_MARCHA, ESPERA_MARCHA_S, METAS, SOMAS, FASES, TEXTOS, ICONES, ligadasEmOrdem, visiveis, marchaValida, creditoDe, minutosDe, metaDe, passoBarra, lingua, diaDe, horaDe, numero };
+  const COPY_TEXT = {
+    "en": {
+      "label": "Copy for my AI",
+      "question2": "Do you keep asking how things stand? Want the status on its own at the end of each step?",
+      "rule": "Save it as a rule for the project of this chat (ask me which project if it is not clear). If a rule on the same topic is already there, replace it. Change nothing else and show me the change before saving.",
+      "gear": "Work in gear <n>, <nome>: <linha> Always keep: money review, secrets, whoever builds never approves, my approval to publish.",
+      "phases": {
+        "1": {
+          "text": "When I ask how things stand, answer in 6 short lines: completed task, recent activity, blocked by, can we speed up, my next step, credit. Every forecast comes with a time.",
+          "writesFile": true
+        },
+        "2": {
+          "text": "When you finish a step or stop to wait for me, end your message with the status in those 6 lines, without me asking.",
+          "writesFile": true
+        },
+        "3": {
+          "text": "List the kinds of change you could publish on your own once every test and review passes, and wait for my ok on that list. After my ok, publish only those kinds without waiting for my click. Money, keys and anything outside the list still wait for me.",
+          "writesFile": true
+        },
+        "4": {
+          "text": "When one item blocks a delivery, take only that item out, ship the rest with the approvals it already needs and tell me which item came out and why. It comes back only fixed and reviewed.",
+          "writesFile": true
+        },
+        "5": {
+          "text": "Propose a work window for this project: what you may do without asking me, and the time it ends. Publishing, keys and money stay with me. Wait for my ok before using it.",
+          "writesFile": false
+        },
+        "6": {
+          "text": "Before any change is approved, have it reviewed by a new session or helper that did not do the work. Whoever built it never approves it.",
+          "writesFile": true
+        },
+        "7": {
+          "text": "Review before shipping only what everyone sees and anything touching money. Review the rest right after it ships.",
+          "writesFile": true
+        },
+        "8": {
+          "text": "Start every new piece of work from the last approved version, never from another unfinished one. Before a release, compare it with what is live.",
+          "writesFile": true
+        },
+        "9": {
+          "text": "List what is using the most memory and processor on this computer right now, and which of my heavy tests could run on another machine. Close nothing: only the owner closes a program.",
+          "writesFile": false
+        },
+        "10": {
+          "text": "List the work that is waiting on a busy session and say which free session could take each item. Nobody touches another session's folder. Wait for my ok.",
+          "writesFile": false
+        },
+        "11": {
+          "text": "Split my open work into streams that never touch the same files and run them in parallel. One release at a time. Show me the split and wait for my ok.",
+          "writesFile": false
+        }
+      }
+    },
+    "pt": {
+      "label": "Copiar para a minha IA",
+      "question2": "Você pergunta toda hora como está? Quer o status sozinho no fim de cada etapa?",
+      "rule": "Guarde isso como regra do projeto desta conversa (me pergunte qual, se não estiver claro). Se já houver uma regra sobre o mesmo assunto, troque-a. Não mude mais nada e me mostre a mudança antes de salvar.",
+      "gear": "Trabalhe na marcha <n>, <nome>: <linha> Nunca corte: revisão de dinheiro, segredo, quem faz não aprova, a minha aprovação para publicar.",
+      "phases": {
+        "1": {
+          "text": "Quando eu perguntar como está, responda em 6 linhas curtas: tarefa concluída, atividade recente, travado por, dá para acelerar, meu próximo passo, crédito. Toda previsão vem com hora.",
+          "writesFile": true
+        },
+        "2": {
+          "text": "Quando terminar uma etapa ou parar para me esperar, feche a mensagem com o status nessas 6 linhas, sem eu pedir.",
+          "writesFile": true
+        },
+        "3": {
+          "text": "Liste os tipos de mudança que você poderia publicar sozinho quando todo teste e revisão passarem, e espere o meu ok nessa lista. Depois do ok, publique só esses tipos sem esperar o meu clique. Dinheiro, chaves e o que estiver fora da lista continuam esperando por mim.",
+          "writesFile": true
+        },
+        "4": {
+          "text": "Quando um item travar uma entrega, tire só ele, publique o resto com as aprovações de sempre e me diga qual saiu e por quê. Ele só volta consertado e revisado.",
+          "writesFile": true
+        },
+        "5": {
+          "text": "Proponha uma janela de trabalho para este projeto: o que você pode fazer sem me perguntar e a hora em que ela acaba. Publicar, chaves e dinheiro seguem comigo. Espere o meu ok antes de usar.",
+          "writesFile": false
+        },
+        "6": {
+          "text": "Antes de aprovar qualquer mudança, peça a revisão a uma sessão ou ajudante novo, que não fez o trabalho. Quem fez nunca aprova.",
+          "writesFile": true
+        },
+        "7": {
+          "text": "Revise antes de publicar só o que todo mundo vê e o que mexe com dinheiro. O resto, revise logo depois de publicar.",
+          "writesFile": true
+        },
+        "8": {
+          "text": "Comece todo trabalho novo da última versão aprovada, nunca de outro trabalho pela metade. Antes de publicar, compare com o que está no ar.",
+          "writesFile": true
+        },
+        "9": {
+          "text": "Liste o que mais usa memória e processador neste computador agora e quais testes pesados meus poderiam rodar em outra máquina. Não feche nada: só o dono fecha um programa.",
+          "writesFile": false
+        },
+        "10": {
+          "text": "Liste o trabalho que espera uma sessão ocupada e diga qual sessão livre poderia pegar cada item. Ninguém mexe na pasta da outra. Espere o meu ok.",
+          "writesFile": false
+        },
+        "11": {
+          "text": "Divida o meu trabalho aberto em frentes que nunca mexem nos mesmos arquivos e rode em paralelo. Uma publicação por vez. Me mostre a divisão e espere o meu ok.",
+          "writesFile": false
+        }
+      }
+    },
+    "es": {
+      "label": "Copiar para mi IA",
+      "question2": "¿Preguntas a cada rato cómo va? ¿Quieres el estado solo al final de cada paso?",
+      "rule": "Guárdalo como regla del proyecto de esta conversación (pregúntame cuál si no está claro). Si ya hay una regla sobre el mismo tema, reemplázala. No cambies nada más y muéstrame el cambio antes de guardar.",
+      "gear": "Trabaja en la marcha <n>, <nome>: <linha> Nunca recortes: revisión de dinero, secretos, quien hace no aprueba, mi aprobación para publicar.",
+      "phases": {
+        "1": {
+          "text": "Cuando pregunte cómo va, responde en 6 líneas cortas: tarea terminada, actividad reciente, bloqueado por, podemos acelerar, mi siguiente paso, crédito. Toda previsión viene con hora.",
+          "writesFile": true
+        },
+        "2": {
+          "text": "Cuando termines un paso o te detengas a esperarme, cierra el mensaje con el estado en esas 6 líneas, sin que lo pida.",
+          "writesFile": true
+        },
+        "3": {
+          "text": "Enumera los tipos de cambio que podrías publicar solo cuando pasen todas las pruebas y revisiones, y espera mi visto bueno sobre esa lista. Después, publica solo esos tipos sin esperar mi clic. Dinero, claves y lo que quede fuera de la lista siguen esperándome.",
+          "writesFile": true
+        },
+        "4": {
+          "text": "Cuando un elemento frene una entrega, saca solo ese, publica el resto con las aprobaciones de siempre y dime cuál salió y por qué. Solo vuelve arreglado y revisado.",
+          "writesFile": true
+        },
+        "5": {
+          "text": "Propón una ventana de trabajo para este proyecto: qué puedes hacer sin preguntarme y la hora en que termina. Publicar, claves y dinero siguen conmigo. Espera mi visto bueno antes de usarla.",
+          "writesFile": false
+        },
+        "6": {
+          "text": "Antes de aprobar cualquier cambio, pide la revisión a una sesión o ayudante nuevo, que no hizo el trabajo. Quien lo hizo nunca lo aprueba.",
+          "writesFile": true
+        },
+        "7": {
+          "text": "Revisa antes de publicar solo lo que todos ven y lo que toca dinero. Lo demás, revísalo justo después de publicar.",
+          "writesFile": true
+        },
+        "8": {
+          "text": "Empieza todo trabajo nuevo desde la última versión aprobada, nunca desde otro a medias. Antes de publicar, compáralo con lo que está publicado.",
+          "writesFile": true
+        },
+        "9": {
+          "text": "Enumera lo que más memoria y procesador usa en este ordenador ahora y cuáles de mis pruebas pesadas podrían correr en otra máquina. No cierres nada: solo el dueño cierra un programa.",
+          "writesFile": false
+        },
+        "10": {
+          "text": "Enumera el trabajo que espera a una sesión ocupada y di qué sesión libre podría tomar cada elemento. Nadie toca la carpeta de la otra. Espera mi visto bueno.",
+          "writesFile": false
+        },
+        "11": {
+          "text": "Divide mi trabajo abierto en frentes que nunca tocan los mismos archivos y córrelos en paralelo. Una publicación a la vez. Muéstrame la división y espera mi visto bueno.",
+          "writesFile": false
+        }
+      }
+    }
+  };
+  function phaseWritesFile(id) { return !!COPY_TEXT.en.phases[id]?.writesFile; }
+  function phaseText(id, lang) {
+    const t = COPY_TEXT[lingua(lang)], phase = t.phases[id];
+    return phase ? phase.text + (phase.writesFile ? ' ' + t.rule : '') : '';
+  }
+  function gearText(n, lang, line) {
+    if (!marchaValida(n)) return '';
+    const L = lingua(lang), t = COPY_TEXT[L], gear = TEXTOS[L].marchas[n];
+    return t.gear.replace('<n>', String(n)).replace('<nome>', gear.nome).replace('<linha>', line === undefined ? gear.linha : String(line)) + ' ' + t.rule;
+  }
+
+  const exportado = { COPY_TEXT, phaseWritesFile, phaseText, gearText, TOTAL, MARCHAS, CREDITO_DA_MARCHA, ESPERA_MARCHA_S, METAS, SOMAS, FASES, TEXTOS, ICONES, ligadasEmOrdem, visiveis, marchaValida, creditoDe, minutosDe, metaDe, passoBarra, lingua, diaDe, horaDe, numero };
   if (typeof module !== 'undefined' && module.exports) module.exports = exportado;
   if (!root.document || root.PainelAcelerador) return;
 
@@ -364,12 +533,27 @@
     const s = { dados: null, falhou: false, carregando: null, langPedida: opcoes.lang || null, ocupado: false, vivo: true, abertas: new Set(), origemAberta: false, novaFase: null, marchaNova: false, avisoTimer: null, desfazer: null, pendente: null, abrirDepois: false, voltar: null, assinatura: '' };
     const lang = () => linguaDaTela(s.langPedida);
     const w = () => { const t = TEXTOS[lang()]; return estado().modo === 'publico' ? Object.assign({}, t.ui, t.publico) : t.ui; };
-    const f = id => TEXTOS[lang()].fases[id];
+    const f = id => estado().modo === 'publico' && id === 2 ? Object.assign({}, TEXTOS[lang()].fases[id], { pergunta: COPY_TEXT[lang()].question2 }) : TEXTOS[lang()].fases[id];
     const estado = () => s.dados || normalizar(null);
     const salva = () => (s.dados && s.dados.marcha ? s.dados.marcha.n : null);
     const efetiva = () => (s.pendente ? s.pendente.n : salva());
     const nomeMarcha = n => TEXTOS[lang()].marchas[n].nome;
     const linhaMarcha = n => textoEm(estado().marchasTexto[String(n)], lang()) || TEXTOS[lang()].marchas[n].linha;
+    const gruposCopia = new Map();
+    function copia(chave, texto, writesFile) {
+      if (estado().modo !== 'publico') return null;
+      const L = lang(), anterior = gruposCopia.get(chave);
+      if (anterior && anterior.lang === L) { anterior.group.refresh(); return anterior.group; }
+      const group = root.PanelCopySession.create({
+        lang: L, label: COPY_TEXT[L].label, text: () => texto(L), writesFile,
+        target: anterior ? anterior.group.getTarget() : 'claude', className: 'acel-copy'
+      });
+      group.dataset.acelCopy = chave;
+      group.button.dataset.foco = 'copy-' + chave;
+      group.switcher.dataset.foco = 'target-' + chave;
+      gruposCopia.set(chave, { lang: L, group });
+      return group;
+    }
 
     const controles = el('div', 'acel-controls');
     controles.setAttribute('data-acelerador', '');
@@ -416,8 +600,10 @@
       const cred = el('span', 'acel-opcao-credito');
       b.append(num, meio, cred);
       b.addEventListener('click', () => escolherMarcha(n));
-      seletor.append(b);
-      botoesMarcha.set(n, { b, nome, linha, cred });
+      const item = el('div', 'acel-marcha-item'), copySlot = el('div');
+      item.append(b, copySlot);
+      seletor.append(item);
+      botoesMarcha.set(n, { b, nome, linha, cred, copySlot });
     }
     const nunca = el('p', 'acel-nunca');
     secMarcha.append(titulo, sub, notaLista, seletor, nunca);
@@ -490,6 +676,8 @@
         o.b.setAttribute('aria-label', W.marchaNome(n, nomeMarcha(n)) + '. ' + linhaMarcha(n) + ' ' + W.creditoRotulo + ': ' + credito + '.');
         o.b.classList.toggle('is-pendente', !!s.pendente && s.pendente.n === n);
         o.b.disabled = s.ocupado === 'marcha';
+        const group = copia('gear-' + n, language => gearText(n, language, linhaMarcha(n)), true);
+        o.copySlot.replaceChildren(...(group ? [group] : []));
       }
       nunca.hidden = !s.dados;
       nunca.replaceChildren(el('strong', null, W.nuncaCorta), el('span', null, textoEm(estado().nuncaCorta, L) || W.nuncaCortaMarcha));
@@ -577,7 +765,10 @@
       ligarB.addEventListener('click', () => ligar(id));
       const linhas = el('dl', 'acel-linhas');
       linhas.append(par(g.medido ? W.ganhoMedido : W.ganho, g.texto), par(W.nuncaCorta, t.nuncaCorta));
-      card.append(cabeca, q, ligarB, linhas);
+      const actions = el('div', 'acel-fase-actions'), group = copia('phase-' + id, language => phaseText(id, language), phaseWritesFile(id));
+      actions.append(ligarB);
+      if (group) actions.append(group);
+      card.append(cabeca, q, actions, linhas);
       const partes = [rot, card];
       if (v.escondidas > 0) partes.push(el('p', 'acel-escondidas', W.escondidas(v.escondidas)));
       secProx.replaceChildren(...partes);
@@ -606,6 +797,8 @@
         const linhas = el('dl', 'acel-linhas');
         linhas.append(par(g.medido ? W.ganhoMedido : W.ganho, g.texto), par(W.nuncaCorta, t.nuncaCorta));
         detalhe.append(el('p', 'acel-pergunta', t.pergunta), linhas);
+        const group = copia('phase-' + id, language => phaseText(id, language), phaseWritesFile(id));
+        if (group) detalhe.append(group);
         det.append(resumo, detalhe);
         li.append(det);
         lista.append(li);

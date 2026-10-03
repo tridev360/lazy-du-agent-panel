@@ -12,13 +12,7 @@
     },
     "claude": {
       "source": "example",
-      "windows": [
-        {
-          "used": 24,
-          "minutes": 10080,
-          "reset": "2026-10-05T12:00:00Z"
-        }
-      ]
+      "windows": []
     },
     "sessions": [
       {

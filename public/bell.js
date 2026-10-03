@@ -3,7 +3,7 @@
   // The bell: version notes and tips made on this computer, what waits for you, decisions asked by your AIs,
   // and, only when you ask, the author's public messages. Read marks and usage marks stay in this browser.
   // This version sends no usage data anywhere.
-  const VERSION='2.1.1';
+  const VERSION='2.2.0';
   const REPO='https://github.com/tridev360/lazy-du-agent-panel';
   const NEWS_SOURCE='https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json';
   const CONTACTS=[{text:'github.com/tridev360',url:'https://github.com/tridev360'},{text:'X @hallstrid',url:'https://x.com/hallstrid'}];
@@ -14,7 +14,7 @@
       origin:{panel:'Panel tip',author:'Author message',you:'Waiting for you',claude:'Asked by Claude Code',codex:'Asked by Codex'},
       version:{title:'What is new in 2.1',text:'A new look, Teach your AI with who does what, and this bell. Read marks stay on this computer.'},
       recs:{title:'The panel has new usage recommendations',text:'See who does what in Teach your AI: one AI coordinates, the other reviews, production waits for your ok.'},
-      tip:{wen:['Try WEN','The six short lines of where things stand, in one place.'],accelerate:['Try ACCELERATE','A checklist to cut waiting in your own routine.'],team:['Try Team','See which session started which.'],projects:['Try Sessions','Every session, side by side.'],usage:['Try Usage','Tokens, credit and a playful water estimate.'],teach:['Try Teach your AI','Optional rules you can paste into your project file.'],automate:['Try AUTOMATE','A plan you can copy into your AI chat.'],tips:['Try Feed your AI','Short prompts you can copy.']},
+      tip:{wen:['Try WEN','The six short lines of where things stand, in one place.'],accelerate:['Try ACCELERATE','Steps to cut waiting, each with a text for your AI.'],team:['Try Team','See which session started which.'],projects:['Try Sessions','Every session, side by side.'],usage:['Try Usage','Tokens, credit and a playful water estimate.'],teach:['Try Teach your AI','Rules for your AI, copied with the instruction to save them.'],automate:['Try AUTOMATE','A routine plan, copied with the instruction for your AI.'],tips:['Try Feed your AI','Short prompts you can copy.']},
       waiting:name=>name+' is waiting for you',decision:'Decision for you',
       author:'Author messages',authorAuto:'Receive author messages',authorNow:'See author messages now',authorOff:'Off. Nothing is fetched until you turn it on or press the button.',authorWhat:'What is fetched: '+NEWS_SOURCE+' with a plain GET, once a day when on, or when you press the button. Nothing about you or your sessions is sent; GitHub sees your IP address like any download.',authorFail:'Could not check now.',authorNone:'No author messages.',authorChecked:at=>'Checked '+at+' UTC.',
       usage:'This version sends no usage data.',
@@ -24,7 +24,7 @@
       origin:{panel:'Dica do painel',author:'Mensagem do autor',you:'Esperando você',claude:'Pedido do Claude Code',codex:'Pedido do Codex'},
       version:{title:'O que há de novo na 2.1',text:'Visual novo, Ensinar minha IA com quem faz o quê, e este sino. As marcas de lido ficam neste computador.'},
       recs:{title:'O painel tem novas recomendações de uso',text:'Veja quem faz o quê em Ensinar minha IA: uma IA coordena, a outra revisa, a produção espera o seu ok.'},
-      tip:{wen:['Experimente o WEN','As seis linhas curtas de em que pé estamos, num lugar só.'],accelerate:['Experimente o ACELERAR','Uma lista para cortar espera na sua rotina.'],team:['Experimente a Equipe','Veja qual sessão começou qual.'],projects:['Experimente Sessões','Todas as sessões, lado a lado.'],usage:['Experimente o Consumo','Tokens, crédito e uma estimativa lúdica de água.'],teach:['Experimente Ensinar minha IA','Regras opcionais para colar no arquivo do seu projeto.'],automate:['Experimente o AUTOMATIZAR','Um plano para copiar no chat da sua IA.'],tips:['Experimente Alimente sua IA','Prompts curtos para copiar.']},
+      tip:{wen:['Experimente o WEN','As seis linhas curtas de em que pé estamos, num lugar só.'],accelerate:['Experimente o ACELERAR','Fases para cortar espera, cada uma com um texto para a sua IA.'],team:['Experimente a Equipe','Veja qual sessão começou qual.'],projects:['Experimente Sessões','Todas as sessões, lado a lado.'],usage:['Experimente o Consumo','Tokens, crédito e uma estimativa lúdica de água.'],teach:['Experimente Ensinar minha IA','Regras para a sua IA, copiadas já com a instrução para salvar.'],automate:['Experimente o AUTOMATIZAR','Um plano de rotina, copiado já com a instrução para a sua IA.'],tips:['Experimente Alimente sua IA','Prompts curtos para copiar.']},
       waiting:name=>name+' está esperando você',decision:'Decisão para você',
       author:'Mensagens do autor',authorAuto:'Receber mensagens do autor',authorNow:'Ver mensagens do autor agora',authorOff:'Desligado. Nada é buscado até você ligar ou apertar o botão.',authorWhat:'O que é buscado: '+NEWS_SOURCE+' com um GET simples, uma vez por dia quando ligado, ou quando você aperta o botão. Nada sobre você ou suas sessões é enviado; o GitHub vê o seu IP como em qualquer download.',authorFail:'Não deu para conferir agora.',authorNone:'Nenhuma mensagem do autor.',authorChecked:at=>'Conferido às '+at+' UTC.',
       usage:'Esta versão não manda dado de uso.',
@@ -34,7 +34,7 @@
       origin:{panel:'Consejo del panel',author:'Mensaje del autor',you:'Esperándote',claude:'Pedido de Claude Code',codex:'Pedido de Codex'},
       version:{title:'Novedades de la 2.1',text:'Un aspecto nuevo, Enseña a tu IA con quién hace qué, y esta campana. Las marcas de leído quedan en este ordenador.'},
       recs:{title:'El panel tiene nuevas recomendaciones de uso',text:'Mira quién hace qué en Enseña a tu IA: una IA coordina, la otra revisa, producción espera tu ok.'},
-      tip:{wen:['Prueba WEN','Las seis líneas cortas de dónde estamos, en un solo lugar.'],accelerate:['Prueba ACELERAR','Una lista para recortar esperas en tu rutina.'],team:['Prueba Equipo','Mira qué sesión empezó cuál.'],projects:['Prueba Sesiones','Todas las sesiones, lado a lado.'],usage:['Prueba Uso','Tokens, crédito y una estimación ilustrativa de agua.'],teach:['Prueba Enseña a tu IA','Reglas opcionales para pegar en el archivo de tu proyecto.'],automate:['Prueba AUTOMATIZAR','Un plan para copiar en el chat de tu IA.'],tips:['Prueba Alimenta tu IA','Prompts cortos para copiar.']},
+      tip:{wen:['Prueba WEN','Las seis líneas cortas de dónde estamos, en un solo lugar.'],accelerate:['Prueba ACELERAR','Fases para recortar esperas, cada una con un texto para tu IA.'],team:['Prueba Equipo','Mira qué sesión empezó cuál.'],projects:['Prueba Sesiones','Todas las sesiones, lado a lado.'],usage:['Prueba Uso','Tokens, crédito y una estimación ilustrativa de agua.'],teach:['Prueba Enseña a tu IA','Reglas para tu IA, copiadas ya con la instrucción para guardarlas.'],automate:['Prueba AUTOMATIZAR','Un plan de rutina, copiado ya con la instrucción para tu IA.'],tips:['Prueba Alimenta tu IA','Prompts cortos para copiar.']},
       waiting:name=>name+' te está esperando',decision:'Decisión para ti',
       author:'Mensajes del autor',authorAuto:'Recibir mensajes del autor',authorNow:'Ver mensajes del autor ahora',authorOff:'Desactivado. No se busca nada hasta que lo actives o pulses el botón.',authorWhat:'Lo que se busca: '+NEWS_SOURCE+' con un GET simple, una vez al día si está activado, o cuando pulsas el botón. No se envía nada sobre ti ni tus sesiones; GitHub ve tu dirección IP como en cualquier descarga.',authorFail:'No se pudo comprobar ahora.',authorNone:'No hay mensajes del autor.',authorChecked:at=>'Comprobado a las '+at+' UTC.',
       usage:'Esta versión no envía datos de uso.',
@@ -56,6 +56,7 @@
     for(const s of sessions)if(s?.state==='waiting'&&NAMES[s.agent])out.push({id:'waiting-'+(s.sessionKey||s.id),origin:s.agent,title:t.waiting(NAMES[s.agent]),text:(lang==='pt'&&s.projectNamePT)||(lang==='es'&&s.projectNameES)||s.projectName||'',action:'team'});
     const decisions=snapshot?snapshot.example?(snapshot.cards||[]):(snapshot.tasks||[]).filter(x=>x.needsOwner):[];
     for(const c of decisions.slice(0,6)){const who=NAMES[c.executor]&&c.source!=='task-board'?c.executor:null;out.push({id:'decision-'+(c.id||c.title),origin:who||'you',title:(lang==='pt'&&(c.questionPT||c.titlePT))||(lang==='es'&&(c.questionES||c.titleES))||c.question||c.title||t.decision,text:who?'':t.decision,action:'decision'});}
+    if(root.PanelGuidance)out.push(...root.PanelGuidance.bellItems(snapshot,lang));
     for(const n of author||[])out.push({id:'author-'+n.id,origin:'author',title:n.title?.[lingua(lang)]||n.title?.en||'',text:n.text?.[lingua(lang)]||n.text?.en||'',link:n.link||null,date:n.date||null});
     return out;
   }
@@ -81,7 +82,8 @@
   function used(id){if(!FEATURES.includes(id))return;const u=get(KEYS.used,{});if(!u[id]){u[id]=true;put(KEYS.used,u);paint();}}
   function act(item){
     const P=root.PanelV2;
-    if(item.action==='teach'){root.PanelTeach?.open(lang,snapshot);used('teach');}
+    if(item.action==='guidance')root.PanelGuidance?.open?.(item.guidanceId);
+    else if(item.action==='teach'){root.PanelTeach?.open(lang,snapshot);used('teach');}
     else if(item.action==='decision')P?.openDecision?.();
     else if(item.action==='team'||item.action==='projects'||item.action==='usage'||item.action==='tips'){d.getElementById('drawer')?.close?.();P?.select?.(item.action,true);}
     else if(item.action==='wen'){d.getElementById('drawer')?.close?.();d.getElementById('clean-wen')?.click();}

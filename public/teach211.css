@@ -16,3 +16,5 @@
 #drawer .teach-simple button:hover,#drawer .teach-simple summary:hover{filter:brightness(1.12)}
 #drawer .teach-simple [hidden]{display:none}
 @media(max-width:480px){#drawer .teach-simple>.teach-copy{font-size:14px}.teach-option-label{flex-wrap:wrap}}
+
+.teach-remove{min-height:44px;padding:8px 0;background:transparent;border:0;color:var(--muted,#a2a4b3);font:inherit;text-decoration:underline;cursor:pointer}.teach-remove:focus-visible{outline:2px solid var(--accent,#fb257f);outline-offset:3px}

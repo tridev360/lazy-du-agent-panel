@@ -1,4 +1,4 @@
-# Lazy Du Agent Panel 2.1.1
+# Lazy Du Agent Panel 2.2.0
 
 ## What the panel solves
 
@@ -43,7 +43,7 @@ The panel stays on this computer. Close panel in the footer stops a launcher wit
 
 This is a local server. Run it once: the launcher keeps the server in the background. If port 3251 already answers with this version, only open http://127.0.0.1:3251. You can close the terminal; use Close panel in the footer to stop the server. Add --lang pt for Portuguese messages or --lang es for Spanish.
 
-To update, close the panel in the footer, run git pull in your panel folder, then open the panel again.
+Close the panel in the footer before updating it, then run git pull in your panel folder and open it again.
 
 ## What leaves your computer
 
@@ -73,18 +73,18 @@ Team shows you on top and Claude Code and Codex side by side, with each session 
 
 Sessions shows one column per session with metadata only: state, current action, tools, model, tokens and project. It does not read or send messages. Usage starts with a one-line summary, then the week total, cups, the playful water estimate and credit rings; How we calculate explains every number.
 
-WEN opens the current overview. AUTOMATE prepares a plan you can copy into your own AI chat. Copying the plan does not start a background agent. ACCELERATE contains a reusable work checklist, selectable gears, sequential steps and waits you mark yourself. Marking a step or picking a gear only saves it on this panel: it does not publish code, change an AI account or tell your agents anything. Minutes are self-reported waits, not a measured speed increase.
+AUTOMATE copies a routine plan with the instruction for your AI. Copying the plan does not start a background agent. ACCELERATE has gears and steps; each one copies a text your AI can apply. Marking a step only records it on this panel.
 
 ## Teach your AI and the bell
 
-Teach your AI starts with one button: Copy and paste into Claude Code. I use Codex switches the copied request to Codex. Paste it into a chat running on your computer, in the app or terminal. The panel only copies a request; your AI saves the rules if you approve its file edit. A cloud chat must stop if it cannot reach your home folder. The rules apply to all projects through ~/.claude/CLAUDE.md or ~/.codex/AGENTS.md. Other options stays closed and includes a project-only choice and who does what.
+Teach your AI copies optional working rules with the instruction for your AI, which saves them in your global ~/.claude/CLAUDE.md or ~/.codex/AGENTS.md and confirms in one line. Another button copies the text to remove them.
 
 ### Exact copied rules (Claude Code, all projects)
 
 ~~~text
 Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my projects. Put them in a section that starts with the title "## Lazy Du Agent Panel". If that section already exists, replace only that section: its title line and the lines starting with "- " right below it. Create the file if it does not exist. Do not delete or change anything else. Then confirm in one line. If you cannot reach my home folder from here (for example, in a cloud session), say so in one line and stop.
 
-## Lazy Du Agent Panel: my working rules (to remove them, delete this section)
+## Lazy Du Agent Panel: my working rules
 - Coordinate: the AI where I start the work coordinates and splits it into tasks; the other AI checks the plan.
 - Write code: Claude Code and Codex in parallel on independent tasks (tasks that touch the same files go one after another), with the strongest model and high effort.
 - Review: the other AI reviews each change; nobody reviews its own work.
@@ -94,6 +94,7 @@ Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my pr
 - In projects that have a tasks/ folder, keep one Markdown file per task there.
 - Phases: new, open, doing, ready, review, released, done. When a task is finished, set phase: done and add completed_at: with the ISO date and time.
 - Questions that need my decision go in tasks/decisions.md as numbered headings, like ## 1. Which music fits the menu? Add DONE once I answer.
+- When you start a helper, pick its model and effort by this table, when this tool lets you: coordinate, the strongest model, high or extra high effort; write code, the strongest model, high effort; review security or money, the strongest model, extra high effort, in a clean session, never the one that wrote it; review text, the strongest model, high effort; measure and count, a smaller model, low effort; mechanical task, the smallest model, low effort.
 ~~~
 
 
@@ -101,21 +102,27 @@ The bell lists version notes and tips made on this computer, what waits for you 
 
 ## Security
 
+If npx asks "Ok to proceed? (y)", it is asking permission to download and run this package. Check the repository and version first. "npm warn skipping integrity check for git dependency" is a warning for a package fetched directly from GitHub. To stay on a chosen version, use its tag. A command pinned to a commit or tag keeps that version until you change the command.
+
 The reader projects a fixed allowlist of metadata from ~/.claude/projects and ~/.codex/sessions: timestamps, hashed session identifiers, known parents, model, effort, project labels, tool names and counts, token counters and available credit windows. Conversation bodies and tool arguments are never decoded. It does not read .env, auth.json or credential files.
 
-The panel stores its acceleration choices in ~/.lazy-du-panel/ and its projected metadata cache in .panel-cache/ inside the panel folder. Browser choices stay in localStorage. Connecting a task folder lets it read the Markdown task headings and fields documented below. It never edits your AI instruction files: Teach your AI copies a request, and your AI can save those rules only after you approve its file edit.
+The panel stores its own configuration and projected metadata cache in ~/.lazy-du-panel/. Browser choices stay in localStorage. Connecting a task folder lets it read the Markdown task headings and fields documented below. It never edits your AI instruction files: Teach your AI copies a request, and your AI can save those rules only after you approve its file edit.
 
 The server binds to 127.0.0.1:3251 and checks Host and Origin; the page uses a Content Security Policy. The server's two public download destinations are the author's news.json (off until enabled or clicked) and package.json (version check on click). Optional music and external links open only on click. No session metadata is sent. Use --offline to disable these features.
 
-To stay on this version, use a tagged checkout or run npx github:tridev360/lazy-du-agent-panel#v2.1.1 after that tag is published. Updating is always your choice.
+To stay on this version, use a tagged checkout or run npx github:tridev360/lazy-du-agent-panel#v2.2.0 after that tag is published. Updating is always your choice.
 
 ## Privacy
 
-The server binds to localhost. It reads permitted metadata from the standard .codex/sessions and .claude/projects directories in your own profile: identifiers, known parent identifiers, timestamps, model, effort, tool names and token counters. It projects those fields without decoding conversation bodies or tool arguments. Session identifiers are hashed. Project folder names can appear; full paths stay private. There is no telemetry or credential requirement: this version sends no usage data.
+To find task folders, it also checks whether a tasks folder exists in the project folders of your sessions. It reads only the .md files of the folder you connect.
 
-Usage and preferences stay local. The panel cache contains projected metadata; upgrading to this version invalidates the older conversation cache. Acceleration preferences are stored in .lazy-du-panel/acceleration.json under your profile. A corrupt saved file displays an error without overwriting it.
+To check off First steps, it also opens ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md only to see whether a line starts with "## Lazy Du Agent Panel". It keeps only yes or no and never shows or sends the rest.
 
-An optional task folder can be connected with Connect my task folder, for example in Queue. The panel reads .md files that start with a short header:
+The server binds to localhost. It reads permitted metadata from the standard .codex/sessions and .claude/projects directories in your own profile: identifiers, known parent identifiers, timestamps, model, effort, tool names and token counters. It projects those fields without decoding conversation bodies or tool arguments. Session identifiers are hashed. Project folder names can appear; full paths stay private in the profile cache so Connect this project can find an already observed task folder. They never appear in the browser snapshot or leave this computer. There is no telemetry or credential requirement: this version sends no usage data.
+
+Usage and preferences stay local. Guidance preferences are stored in ~/.lazy-du-panel/guidance.json; dismissing a notice type and First steps progress stay in browser localStorage. The panel cache contains projected metadata; upgrading to this version invalidates the older conversation cache. Acceleration preferences are stored in .lazy-du-panel/acceleration.json under your profile. A corrupt saved file displays an error without overwriting it.
+
+Connect my task folder, in Queue, copies a text that has your AI create the tasks folder in your project. The panel reads its .md files. Reference format:
 
 ~~~md
 ---

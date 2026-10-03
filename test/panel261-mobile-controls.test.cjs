@@ -1,0 +1,2 @@
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs');
+test('mobile language controls reserve the bell and preferences area; validation uses real hit tests',()=>{const css=fs.readFileSync(require.resolve('../public/controls211.css'),'utf8'),runner=fs.readFileSync(require.resolve('../tools/validate-211-delta.cjs'),'utf8');assert.match(css,/body\[data-panel-mounted\] #panel-language\{margin-right:104px/);assert.ok(runner.includes('elementFromPoint'));assert.ok(runner.includes('for(const width of [375,390,1280])'));});

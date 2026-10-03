@@ -1,12 +1,12 @@
 'use strict';
 function exampleFor(base,size){
-  const sample=structuredClone(base);sample.example=true;sample.exampleSize=size==='solo'?'solo':'large';
+  const sample=structuredClone(base);sample.example=true;sample.exampleSize=size==='solo'?'solo':'large';sample.usage.claude={...sample.usage.claude,windows:[]};
   if(size==='solo'){
     sample.usage.sessions=sample.usage.sessions.slice(0,2);const ids=new Set(sample.usage.sessions.map(x=>x.id));
     if(sample.usage.previewSessions)sample.usage.previewSessions=sample.usage.previewSessions.filter(x=>ids.has(x.id));
     for(const a of sample.usage.sessions){if(!ids.has(a.parentKey))delete a.parentKey;if(!ids.has(a.parentId))delete a.parentId;}
     if(sample.tasks)sample.tasks=sample.tasks.filter(x=>!x.helper).slice(0,3);sample.queue=(sample.queue||[]).slice(0,2);sample.cards=(sample.cards||[]).slice(0,1);
-    sample.usage.codex={source:'example',windows:[{used:18,minutes:10080,reset:'2026-10-05T12:00:00Z'}]};sample.usage.claude={source:'example',windows:[{used:24,minutes:10080,reset:'2026-10-05T12:00:00Z'}]};
+    sample.usage.codex={source:'example',windows:[{used:18,minutes:10080,reset:'2026-10-05T12:00:00Z'}]};sample.usage.claude={...sample.usage.claude,source:'example',windows:[]};
   }
   if(size!=='solo'){
     const base=sample.usage.sessions[0],make=(id,role,title,titlePT,titleES,parentKey,action,actionPT,actionES)=>({...structuredClone(base),id,sessionKey:id,parentKey,role,title,titlePT,titleES,taskTitle:title,taskTitlePT:titlePT,taskTitleES:titleES,action,actionPT,actionES,state:'working',tokens:12000,weightedTokens:9000});

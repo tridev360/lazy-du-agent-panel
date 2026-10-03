@@ -223,7 +223,7 @@ function meter(value) {
 function drawer(title, nodes) {
   const modal=$('drawer');
   if(!modal.open)modal.panelReturnFocus=document.activeElement;
-  if(!modal.dataset.focusCycle){modal.dataset.focusCycle='on';modal.addEventListener?.('keydown',event=>{if(event.key!=='Tab')return;const controls=[...modal.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(n=>!n.hidden&&n.getClientRects().length);if(!controls.length){event.preventDefault();modal.focus();return;}const first=controls[0],last=controls.at(-1);if(controls.length===1||event.shiftKey&&document.activeElement===first||!event.shiftKey&&document.activeElement===last){event.preventDefault();(event.shiftKey?last:first).focus();}});modal.addEventListener?.('close',()=>{const previous=modal.panelReturnFocus;if(previous?.getClientRects?.().length)previous.focus();else document.querySelector('.clean-more > summary')?.focus();});}
+  if(!modal.dataset.focusCycle){modal.dataset.focusCycle='on';modal.addEventListener?.('keydown',event=>{if(event.key!=='Tab')return;const controls=[...modal.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(n=>!n.hidden&&n.getClientRects().length);if(!controls.length){event.preventDefault();modal.focus();return;}const first=controls[0],last=controls.at(-1);if(controls.length===1||event.shiftKey&&document.activeElement===first||!event.shiftKey&&document.activeElement===last){event.preventDefault();(event.shiftKey?last:first).focus();}});modal.addEventListener?.('close',()=>{const active=document.activeElement;if(modal.open||active&&active!==document.body&&!modal.contains(active))return;const previous=modal.panelReturnFocus;if(previous?.getClientRects?.().length)previous.focus();else document.querySelector('.clean-more > summary')?.focus();});}
 
   $("drawer-title").textContent = title;
   $("drawer-body").replaceChildren(...nodes);
@@ -650,7 +650,16 @@ for (const b of document.querySelectorAll("[data-executor]"))
       filterExecutor === b.dataset.executor ? "" : b.dataset.executor;
     renderBoard();
   };
+function connectObservedTasks() {
+  if (window.PanelConnect22) return window.PanelConnect22.open();
+  $("drawer")?.close();
+  const entry = $("first-steps-menu");
+  if (entry) entry.click();
+  else window.PanelV2?.select?.("home", true);
+}
 if (typeof window !== "undefined") {
+  window.panelConnectTasks = connectObservedTasks;
+  if (window.PanelR4) window.PanelR4.connect = connectObservedTasks;
   window.panelDrawer = drawer;
   window.panelDetail = detail;
   window.panelProject = (id) => { filterProject = id; renderBoard(); };

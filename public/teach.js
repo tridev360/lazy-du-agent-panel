@@ -1,6 +1,6 @@
 (function(root){
   'use strict';
-  // Teach your AI: optional working rules the person copies into CLAUDE.md or AGENTS.md.
+  // Teach your AI: optional working rules copied with the instruction for the local AI.
   // The panel only shows and copies this text; it never writes rule files or makes a network request.
   // The copied instruction asks the person's local AI to save the rules if the person approves.
   // The "who does what" choice stays in this browser (localStorage) on the person's computer.
@@ -15,11 +15,11 @@
       both:'Both',saved:'Saved on this computer.',current:'Current: ',currentRecommended:'the recommendation',
       tasks:{coordinate:'Coordinate',code:'Write code',review:'Review',analyze:'Analyze and measure',ship:'Ship to production',text:'Write public text'},
       signature:'Analysis by Claude, an AI model by Anthropic, October 2026. It may favor Claude; compare it with your own results.',
-      intro:'Paste these lines into your project rules: CLAUDE.md for Claude Code or AGENTS.md for Codex.',
-      promise:'The panel only copies this text. It does not write to your files and makes no network request. To remove the rules, delete these lines from your rules file.',
-      folder:'To see the tasks here, connect the tasks folder with Connect my task folder.',
-      copy:'Copy the lines',copied:'Copied. Paste them into your rules file.',select:'Select the lines above and copy them.',
-      header:'## Lazy Du Agent Panel: working rules for this project (to remove them, delete this section)',
+      intro:'Copy the rules and paste them into any Claude Code chat running on your computer.',
+      promise:'The panel only copies. Your AI saves the rules and confirms in one line.',
+      folder:'To see these tasks on the panel, use Connect my task folder in Queue.',
+      copy:'Copy the lines',copied:'Copied.',select:'Select the lines above and copy them.',
+      header:'## Lazy Du Agent Panel: my working rules',
       folderLines:[
         '- Keep one Markdown file per task in tasks/. Start it with the lines ---, phase: doing, --- and then # Task title.',
         '- Phases: new, open, doing, ready, review, released, done. When a task is finished, set phase: done and add completed_at: with the ISO date and time.',
@@ -61,11 +61,11 @@
       both:'Os dois',saved:'Salvo neste computador.',current:'Atual: ',currentRecommended:'a recomendação',
       tasks:{coordinate:'Coordenar',code:'Escrever código',review:'Revisar',analyze:'Analisar e medir',ship:'Subir para produção',text:'Escrever texto público'},
       signature:'Análise feita pelo Claude, um modelo de IA da Anthropic, outubro de 2026. Pode favorecer o Claude; compare com os seus resultados.',
-      intro:'Cole estas linhas nas regras do seu projeto: CLAUDE.md no Claude Code ou AGENTS.md no Codex.',
-      promise:'O painel só copia este texto. Ele não escreve nos seus arquivos e não faz pedido de rede. Para tirar as regras, apague estas linhas do arquivo de regras.',
-      folder:'Para ver as tarefas aqui, ligue a pasta tasks em Ligar minha pasta de tarefas.',
-      copy:'Copiar as linhas',copied:'Copiado. Cole no seu arquivo de regras.',select:'Selecione as linhas acima e copie.',
-      header:'## Lazy Du Agent Panel: regras de trabalho deste projeto (para tirar, apague esta seção)',
+      intro:'Copie as regras e cole em qualquer conversa do Claude Code que roda no seu computador.',
+      promise:'O painel só copia. Quem salva as regras é a sua IA, e ela confirma em 1 linha.',
+      folder:'Para ver essas tarefas no painel, use Conectar minha pasta de tarefas na Fila.',
+      copy:'Copiar as linhas',copied:'Copiado.',select:'Selecione as linhas acima e copie.',
+      header:'## Lazy Du Agent Panel: minhas regras de trabalho',
       folderLines:[
         '- Mantenha um arquivo Markdown por tarefa em tasks/. Comece com as linhas ---, phase: doing, --- e depois # Título da tarefa.',
         '- Fases: new, open, doing, ready, review, released, done. Quando a tarefa terminar, use phase: done e acrescente completed_at: com a data e a hora em ISO.',
@@ -107,11 +107,11 @@
       both:'Los dos',saved:'Guardado en este ordenador.',current:'Actual: ',currentRecommended:'la recomendación',
       tasks:{coordinate:'Coordinar',code:'Escribir código',review:'Revisar',analyze:'Analizar y medir',ship:'Subir a producción',text:'Escribir texto público'},
       signature:'Análisis hecho por Claude, un modelo de IA de Anthropic, octubre de 2026. Puede favorecer a Claude; compáralo con tus resultados.',
-      intro:'Pega estas líneas en las reglas de tu proyecto: CLAUDE.md en Claude Code o AGENTS.md en Codex.',
-      promise:'El panel solo copia este texto. No escribe en tus archivos y no hace peticiones de red. Para quitar las reglas, borra estas líneas de tu archivo de reglas.',
-      folder:'Para ver las tareas aquí, conecta la carpeta tasks con Conectar mi carpeta de tareas.',
-      copy:'Copiar las líneas',copied:'Copiado. Pégalo en tu archivo de reglas.',select:'Selecciona las líneas de arriba y cópialas.',
-      header:'## Lazy Du Agent Panel: reglas de trabajo de este proyecto (para quitarlas, borra esta sección)',
+      intro:'Copia las reglas y pégalas en cualquier conversación de Claude Code que corra en tu ordenador.',
+      promise:'El panel solo copia. Quien guarda las reglas es tu IA, y lo confirma en 1 línea.',
+      folder:'Para ver esas tareas en el panel, usa Conectar mi carpeta de tareas en Cola.',
+      copy:'Copiar las líneas',copied:'Copiado.',select:'Selecciona las líneas de arriba y cópialas.',
+      header:'## Lazy Du Agent Panel: mis reglas de trabajo',
       folderLines:[
         '- Mantén un archivo Markdown por tarea en tasks/. Empiézalo con las líneas ---, phase: doing, --- y después # Título de la tarea.',
         '- Fases: new, open, doing, ready, review, released, done. Cuando una tarea termine, usa phase: done y añade completed_at: con la fecha y la hora en ISO.',
@@ -164,10 +164,21 @@
   const text=(choice,lang)=>lines(choice,lang).join('\n');
 
   const SIMPLE={
-    en:{copy:'Copy and paste into Claude Code',switchCodex:'I use Codex',switchClaude:'I use Claude Code',other:'Other options',global:'For all my projects',project:'Only this project',afterClaude:'Paste it into a Claude Code chat running on your computer (the desktop app or the terminal). If it asks to edit the file, allow it. Done.',afterCodex:'Paste it into a Codex chat running on your computer (the app or the terminal). If it asks to edit the file, allow it. Done.',instruction:'Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my projects. Put them in a section that starts with the title "## Lazy Du Agent Panel". If that section already exists, replace only that section: its title line and the lines starting with "- " right below it. Create the file if it does not exist. Do not delete or change anything else. Then confirm in one line. If you cannot reach my home folder from here (for example, in a cloud session), say so in one line and stop.',header:'## Lazy Du Agent Panel: my working rules (to remove them, delete this section)',folderLine:'- In projects that have a tasks/ folder, keep one Markdown file per task there.',cloud:'Using Claude Code or Codex in the cloud? A cloud session cannot reach the file on your computer: paste it in a chat on your computer.',old:'Already pasted the old rules in a project? Delete that section there.'},
-    pt:{copy:'Copiar e colar no Claude Code',switchCodex:'Uso o Codex',switchClaude:'Uso o Claude Code',other:'Outras opções',global:'Para todos os meus projetos',project:'Só este projeto',afterClaude:'Cole numa conversa do Claude Code que roda no seu computador (o app ou o terminal). Se ela pedir para editar o arquivo, permita. Pronto.',afterCodex:'Cole numa conversa do Codex que roda no seu computador (o app ou o terminal). Se ela pedir para editar o arquivo, permita. Pronto.',instruction:'Salve as regras abaixo no meu ~/.claude/CLAUDE.md global, para valerem em todos os meus projetos. Coloque numa seção que começa com o título "## Lazy Du Agent Panel". Se essa seção já existir, troque só ela: a linha do título e as linhas que começam com "- " logo abaixo. Crie o arquivo se ele não existir. Não apague nem mude mais nada. Depois confirme em 1 linha. Se daqui você não alcança a minha pasta pessoal (por exemplo, numa sessão na nuvem), diga isso em 1 linha e pare.',header:'## Lazy Du Agent Panel: minhas regras de trabalho (para tirar, apague esta seção)',folderLine:'- Nos projetos que têm uma pasta tasks/, mantenha ali um arquivo Markdown por tarefa.',cloud:'Usa o Claude Code ou o Codex na nuvem? A sessão na nuvem não alcança o arquivo do seu computador: cole numa conversa no seu computador.',old:'Já colou as regras antigas num projeto? Apague a seção de lá.'},
-    es:{copy:'Copiar y pegar en Claude Code',switchCodex:'Uso Codex',switchClaude:'Uso Claude Code',other:'Otras opciones',global:'Para todos mis proyectos',project:'Solo este proyecto',afterClaude:'Pégalo en una conversación de Claude Code que corra en tu ordenador (la app o la terminal). Si pide editar el archivo, permítelo. Listo.',afterCodex:'Pégalo en una conversación de Codex que corra en tu ordenador (la app o la terminal). Si pide editar el archivo, permítelo. Listo.',instruction:'Guarda las reglas de abajo en mi ~/.claude/CLAUDE.md global, para que valgan en todos mis proyectos. Ponlas en una sección que empiece con el título "## Lazy Du Agent Panel". Si esa sección ya existe, reemplaza solo esa sección: la línea del título y las líneas que empiezan con "- " justo debajo. Crea el archivo si no existe. No borres ni cambies nada más. Después confirma en 1 línea. Si desde aquí no llegas a mi carpeta personal (por ejemplo, en una sesión en la nube), dilo en 1 línea y detente.',header:'## Lazy Du Agent Panel: mis reglas de trabajo (para quitarlas, borra esta sección)',folderLine:'- En los proyectos que tienen una carpeta tasks/, guarda ahí un archivo Markdown por tarea.',cloud:'¿Usas Claude Code o Codex en la nube? Una sesión en la nube no llega al archivo de tu ordenador: pégalo en una conversación en tu ordenador.',old:'¿Ya pegaste las reglas antiguas en un proyecto? Borra esa sección de ahí.'}
+    en:{copy:'Copy and paste into Claude Code',switchCodex:'I use Codex',switchClaude:'I use Claude Code',other:'Other options',global:'For all my projects',project:'Only this project',afterClaude:'Paste it into any Claude Code chat running on your computer. If it asks to edit the file, allow it. Done.',afterCodex:'Paste it into any Codex chat running on your computer. If it asks to edit the file, allow it. Done.',instruction:'Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my projects. Put them in a section that starts with the title "## Lazy Du Agent Panel". If that section already exists, replace only that section: its title line and the lines starting with "- " right below it. Create the file if it does not exist. Do not delete or change anything else. Then confirm in one line. If you cannot reach my home folder from here (for example, in a cloud session), say so in one line and stop.',header:'## Lazy Du Agent Panel: my working rules',folderLine:'- In projects that have a tasks/ folder, keep one Markdown file per task there.',cloud:'Using Claude Code or Codex in the cloud? A cloud session cannot reach the file on your computer: paste it in a chat on your computer.',old:'Already pasted the old rules in a project? Copy the removal request and paste it into a chat in that project.'},
+    pt:{copy:'Copiar e colar no Claude Code',switchCodex:'Uso o Codex',switchClaude:'Uso o Claude Code',other:'Outras opções',global:'Para todos os meus projetos',project:'Só este projeto',afterClaude:'Cole em qualquer conversa do Claude Code que roda no seu computador. Se ela pedir para editar o arquivo, permita. Pronto.',afterCodex:'Cole em qualquer conversa do Codex que roda no seu computador. Se ela pedir para editar o arquivo, permita. Pronto.',instruction:'Salve as regras abaixo no meu ~/.claude/CLAUDE.md global, para valerem em todos os meus projetos. Coloque numa seção que começa com o título "## Lazy Du Agent Panel". Se essa seção já existir, troque só ela: a linha do título e as linhas que começam com "- " logo abaixo. Crie o arquivo se ele não existir. Não apague nem mude mais nada. Depois confirme em 1 linha. Se daqui você não alcança a minha pasta pessoal (por exemplo, numa sessão na nuvem), diga isso em 1 linha e pare.',header:'## Lazy Du Agent Panel: minhas regras de trabalho',folderLine:'- Nos projetos que têm uma pasta tasks/, mantenha ali um arquivo Markdown por tarefa.',cloud:'Usa o Claude Code ou o Codex na nuvem? A sessão na nuvem não alcança o arquivo do seu computador: cole numa conversa no seu computador.',old:'Já colou as regras antigas num projeto? Copie o pedido de remoção e cole numa conversa desse projeto.'},
+    es:{copy:'Copiar y pegar en Claude Code',switchCodex:'Uso Codex',switchClaude:'Uso Claude Code',other:'Otras opciones',global:'Para todos mis proyectos',project:'Solo este proyecto',afterClaude:'Pégalo en cualquier conversación de Claude Code que corra en tu ordenador. Si pide editar el archivo, permítelo. Listo.',afterCodex:'Pégalo en cualquier conversación de Codex que corra en tu ordenador. Si pide editar el archivo, permítelo. Listo.',instruction:'Guarda las reglas de abajo en mi ~/.claude/CLAUDE.md global, para que valgan en todos mis proyectos. Ponlas en una sección que empiece con el título "## Lazy Du Agent Panel". Si esa sección ya existe, reemplaza solo esa sección: la línea del título y las líneas que empiezan con "- " justo debajo. Crea el archivo si no existe. No borres ni cambies nada más. Después confirma en 1 línea. Si desde aquí no llegas a mi carpeta personal (por ejemplo, en una sesión en la nube), dilo en 1 línea y detente.',header:'## Lazy Du Agent Panel: mis reglas de trabajo',folderLine:'- En los proyectos que tienen una carpeta tasks/, guarda ahí un archivo Markdown por tarea.',cloud:'¿Usas Claude Code o Codex en la nube? Una sesión en la nube no llega al archivo de tu ordenador: pégalo en una conversación en tu ordenador.',old:'¿Ya pegaste las reglas antiguas en un proyecto? Copia la petición de retirada y pégala en una conversación de ese proyecto.'}
   };
+  const MODEL_EFFORT={
+  "en": "- When you start a helper, pick its model and effort by this table, when this tool lets you: coordinate, the strongest model, high or extra high effort; write code, the strongest model, high effort; review security or money, the strongest model, extra high effort, in a clean session, never the one that wrote it; review text, the strongest model, high effort; measure and count, a smaller model, low effort; mechanical task, the smallest model, low effort.",
+  "pt": "- Quando abrir um ajudante, escolha modelo e esforço por esta tabela, se esta ferramenta deixar: coordenar, o modelo mais forte, esforço alto ou extra alto; escrever código, o modelo mais forte, esforço alto; revisar segurança ou dinheiro, o modelo mais forte, esforço extra alto, numa sessão limpa, nunca quem escreveu; revisar texto, o modelo mais forte, esforço alto; medir e contar, um modelo menor, esforço baixo; tarefa mecânica, o menor modelo, esforço baixo.",
+  "es": "- Cuando abras un ayudante, elige modelo y esfuerzo según esta tabla, si esta herramienta lo permite: coordinar, el modelo más fuerte, esfuerzo alto o extra alto; escribir código, el modelo más fuerte, esfuerzo alto; revisar seguridad o dinero, el modelo más fuerte, esfuerzo extra alto, en una sesión limpia, nunca quien lo escribió; revisar texto, el modelo más fuerte, esfuerzo alto; medir y contar, un modelo menor, esfuerzo bajo; tarea mecánica, el modelo más pequeño, esfuerzo bajo."
+};
+  const REMOVE={
+    en:{global:'Remove the section that starts with the title "## Lazy Du Agent Panel" from my global ~/.claude/CLAUDE.md: its title line and the lines starting with "- " right below it. Do not delete or change anything else. Then confirm in one line.',project:'Remove the section that starts with the title "## Lazy Du Agent Panel" from CLAUDE.md in the folder of the project of this chat: its title line and the lines starting with "- " right below it. Do not delete or change anything else. Then confirm in one line.',globalLabel:'Copy to remove the rules',projectLabel:'Copy to remove the old rules'},
+    pt:{global:'Tire do meu ~/.claude/CLAUDE.md global a seção que começa com o título "## Lazy Du Agent Panel": a linha do título e as linhas que começam com "- " logo abaixo. Não apague nem mude mais nada. Depois confirme em 1 linha.',project:'Tire do CLAUDE.md da pasta do projeto desta conversa a seção que começa com o título "## Lazy Du Agent Panel": a linha do título e as linhas que começam com "- " logo abaixo. Não apague nem mude mais nada. Depois confirme em 1 linha.',globalLabel:'Copiar para tirar as regras',projectLabel:'Copiar para tirar as regras antigas'},
+    es:{global:'Quita de mi ~/.claude/CLAUDE.md global la sección que empieza con el título "## Lazy Du Agent Panel": la línea del título y las líneas que empiezan con "- " justo debajo. No borres ni cambies nada más. Después confirma en 1 línea.',project:'Quita del CLAUDE.md de la carpeta del proyecto de esta conversación la sección que empieza con el título "## Lazy Du Agent Panel": la línea del título y las líneas que empiezan con "- " justo debajo. No borres ni cambies nada más. Después confirma en 1 línea.',globalLabel:'Copiar para quitar las reglas',projectLabel:'Copiar para quitar las reglas antiguas'}
+  };
+  function removalText(lang,target='claude',scope='global'){const t=REMOVE[lingua(lang)],value=t[scope==='project'?'project':'global'];return target==='codex'?value.replace(scope==='project'?'CLAUDE.md':'~/.claude/CLAUDE.md',scope==='project'?'AGENTS.md':'~/.codex/AGENTS.md'):value;}
   function ruleText(choice,lang,target='claude',scope='global'){
     lang=lingua(lang);const t=SIMPLE[lang],c=normalize(choice);
     if(c.mode==='own')return '';
@@ -178,7 +189,7 @@
       const replacements={en:['my global '+path+' so they apply to all my projects','the '+file+' file at the root of this project so they apply only to this project'],pt:['meu '+path+' global, para valerem em todos os meus projetos','arquivo '+file+' na raiz deste projeto, para valerem só neste projeto'],es:['mi '+path+' global, para que valgan en todos mis proyectos','archivo '+file+' en la raíz de este proyecto, para que valgan solo en este proyecto']};
       instruction=instruction.replace(...replacements[lang]);
     }
-    const rules=lines(c,lang);rules[0]=t.header;rules[1+TASKS.length]=t.folderLine;
+    const rules=lines(c,lang);rules[0]=t.header;rules[1+TASKS.length]=t.folderLine;rules.push(MODEL_EFFORT[lang]);
     return instruction+'\n\n'+rules.join('\n');
   }
   async function copyToClipboard(value,runtime=root){
@@ -196,7 +207,7 @@
     return out;
   }
   function observation(sessions,lang,example=false){const t=T[lingua(lang)],seen=observe(sessions);if(!seen.claude.total&&!seen.codex.total)return t.observedNone;return t[example?'observedExample':'observed'](['claude','codex'].map(f=>seen[f].total?t.observedPart(NAMES[f],t.what[seen[f].top],seen[f].share):t.observedEmpty(NAMES[f])));}
-  const api={TASKS,NAMES,T,STORE,lingua,normalize,lines,text,taskLine,observe,observation,kindOf,SIMPLE,ruleText,copyToClipboard};
+  const api={TASKS,NAMES,T,STORE,lingua,normalize,lines,text,taskLine,observe,observation,kindOf,SIMPLE,MODEL_EFFORT,REMOVE,ruleText,removalText,copyToClipboard};
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document)return;
   const d=root.document;
@@ -207,22 +218,26 @@
   function summary(choice,lang){const t=T[lingua(lang)];if(choice.mode==='own')return t.current+t.keep;if(choice.mode==='recommended')return t.current+t.currentRecommended;return t.current+TASKS.map(task=>t.tasks[task]+' '+(choice.picks[task]==='both'?t.both:NAMES[choice.picks[task]])).join(' · ');}
   function open(lang,snapshot){
     lang=lingua(lang||current());const t=T[lang],simple=SIMPLE[lang],saved=read();let view='recommended',draft=normalize({mode:'recommended',picks:saved?.picks}),target='claude',scope='global';
-    const seen=el('p',observation(snapshot?.usage?.sessions||[],lang,!!snapshot?.example),'summary-note teach-observed'),box=el('div',undefined,'teach teach-simple'),choices=el('div',undefined,'teach-options'),detail=el('div',undefined,'teach-custom'),block=el('pre','','teach-block'),status=el('p','','summary-note teach-status'),copy=el('button',simple.copy,'teach-copy'),switcher=el('button',simple.switchCodex,'teach-switch'),advanced=el('details',undefined,'teach-advanced'),scopes=el('div',undefined,'teach-scopes');
-    choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label',t.who);scopes.setAttribute('role','radiogroup');scopes.setAttribute('aria-label',simple.global);block.tabIndex=0;block.setAttribute('aria-label',t.title);status.setAttribute('role','status');status.setAttribute('aria-live','polite');copy.type='button';switcher.type='button';
+    const seen=el('p',observation(snapshot?.usage?.sessions||[],lang,!!snapshot?.example),'summary-note teach-observed'),box=el('div',undefined,'teach teach-simple'),choices=el('div',undefined,'teach-options'),detail=el('div',undefined,'teach-custom'),block=el('pre','','teach-block'),status=el('p','','summary-note teach-status'),advanced=el('details',undefined,'teach-advanced'),scopes=el('div',undefined,'teach-scopes');
+    choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label',t.who);scopes.setAttribute('role','radiogroup');scopes.setAttribute('aria-label',simple.global);block.tabIndex=0;block.hidden=true;block.setAttribute('aria-label',t.title);status.setAttribute('role','status');status.setAttribute('aria-live','polite');
+    const groups=[];
+    function setTarget(value){target=value;for(const group of groups)group.setTarget(value);draw();}
+    function makeCopy(label,text,primary,buttonClass){const group=root.PanelCopySession.create({lang,label,text,writesFile:true,target,primary,status,fallback:block,failed:t.select,onTargetChange:setTarget,onFallback(){advanced.open=true;block.hidden=false;},onCopied({phrase}){status.textContent=phrase;}});group.button.className+=' '+buttonClass;groups.push(group);return group;}
+    const main=makeCopy(value=>value==='claude'?simple.copy:simple.copy.replace('Claude Code','Codex'),value=>ruleText(draft,lang,value,scope),true,'teach-copy');main.switcher.className+=' teach-switch';
+    const removeGlobal=makeCopy(REMOVE[lang].globalLabel,value=>removalText(lang,value,'global'),false,'teach-remove-global');
+    const removeOld=makeCopy(REMOVE[lang].projectLabel,value=>removalText(lang,value,'project'),false,'teach-remove');
     function option(key,label,note,tag){const b=el('button',undefined,'teach-option');b.type='button';b.dataset.option=key;b.setAttribute('role','radio');const head=el('span',label,'teach-option-label');if(tag)head.append(el('span',tag,'teach-tag'));b.append(head,el('span',note,'teach-option-note'));b.onclick=()=>{view=key;draft={...draft,mode:key==='keep'?'own':key};write(draft);status.textContent=t.saved;draw();};return b;}
     function draw(){
       for(const b of choices.querySelectorAll('.teach-option')){const on=b.dataset.option===view;b.setAttribute('aria-checked',String(on));b.tabIndex=on?0:-1;}
       for(const b of scopes.querySelectorAll('button'))b.setAttribute('aria-checked',String(b.dataset.scope===scope));
-      detail.hidden=view!=='custom';detail.replaceChildren();const own=view==='keep';seen.hidden=!own;copy.hidden=own;switcher.hidden=own;block.hidden=own;
+      detail.hidden=view!=='custom';detail.replaceChildren();const own=view==='keep';seen.hidden=!own;main.hidden=own;block.hidden=own;
       if(view==='custom'){for(const task of TASKS){const row=el('div',undefined,'teach-task'),pick=el('div',undefined,'teach-picks');pick.setAttribute('role','radiogroup');pick.setAttribute('aria-label',t.tasks[task]);row.append(el('strong',t.tasks[task],'teach-task-name'),pick);for(const value of PICKS){const b=el('button',value==='both'?t.both:NAMES[value],'teach-pick');b.type='button';b.dataset.family=value;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(draft.picks[task]===value));b.onclick=()=>{draft={...draft,mode:'custom',picks:{...draft.picks,[task]:value}};write(draft);status.textContent=t.saved;draw();};pick.append(b);}for(const family of ['claude','codex']){const note=el('p',undefined,'teach-note');note.dataset.family=family;note.append(el('b',NAMES[family]+': '),d.createTextNode(t.notes[family][task]));row.append(note);}detail.append(row);}detail.append(el('p',t.signature,'summary-note teach-signature'));}
-      copy.textContent=target==='claude'?simple.copy:simple.copy.replace('Claude Code','Codex');switcher.textContent=target==='claude'?simple.switchCodex:simple.switchClaude;block.textContent=ruleText(draft,lang,target,scope);
+      main.refresh();block.textContent=ruleText(draft,lang,target,scope);
     }
     choices.append(option('recommended',t.recommended,t.recommendedNote,t.recommendedTag),option('keep',t.keep,t.keepNote),option('custom',t.custom,t.customNote));
     for(const [value,label]of [['global',simple.global],['project',simple.project]]){const b=el('button',label,'teach-scope');b.type='button';b.dataset.scope=value;b.setAttribute('role','radio');b.onclick=()=>{scope=value;status.textContent='';draw();};scopes.append(b);}
-    switcher.onclick=()=>{target=target==='claude'?'codex':'claude';status.textContent='';draw();};
-    copy.onclick=async()=>{const copiedTarget=target,value=ruleText(draft,lang,target,scope);if(!value)return;const copied=await copyToClipboard(value);if(copied){status.textContent=copiedTarget==='claude'?simple.afterClaude:simple.afterCodex;}else{advanced.open=true;block.textContent=value;block.focus();const range=d.createRange();range.selectNodeContents(block);const selection=root.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent=t.select;}};
-    advanced.append(el('summary',simple.other),el('h3',t.who,'teach-who'),choices,seen,detail,scopes,block,el('p',simple.cloud,'summary-note'),el('p',simple.old,'summary-note'),el('p',t.folder,'summary-note'));
-    box.append(copy,switcher,status,el('p',t.promise,'summary-note teach-promise'),advanced);
+    advanced.append(el('summary',simple.other),el('h3',t.who,'teach-who'),choices,seen,detail,scopes,block,el('p',simple.cloud,'summary-note'),removeGlobal,removeOld,el('p',t.folder,'summary-note'));
+    box.append(main,status,el('p',t.promise,'summary-note teach-promise'),advanced);
     draw();root.panelDrawer(t.title,[box]);
   }
   function card(host,lang){

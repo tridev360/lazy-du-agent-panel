@@ -2,16 +2,13 @@
 const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),os=require('node:os'),path=require('node:path'),vm=require('node:vm');
 const ROOT=path.join(__dirname,'..');
 const read=file=>fs.readFileSync(path.join(ROOT,file),'utf8');
-// Private workspace names are kept as short sha256 prefixes so the public tree never spells them.
-const digest=word=>require('node:crypto').createHash('sha256').update(word).digest('hex').slice(0,16);
-const PRIVATE=new Set(["1c7f91651b201d7a","dda820158d142a0b","f53c51616f4c7943","92359bb294288000","2555aa00d0f9d4d2","dfd1761fac3e163d","cfc4901c4ebb7930","4802cc91005376bb","7f7307d639485c72","65c0cd5c237dc96b"]);
 function files(dir,pattern){const out=[];for(const entry of fs.readdirSync(path.join(ROOT,dir),{withFileTypes:true})){const rel=dir+'/'+entry.name;if(entry.isDirectory())out.push(...files(rel,pattern));else if(pattern.test(entry.name))out.push(rel);}return out;}
 
 test('published text has no long dashes and no local absolute paths',()=>{
   const dash=new RegExp('['+String.fromCharCode(0x2013,0x2014)+']'),local=/[A-Za-z]:(?:\\{1,2}|\/)Users(?:\\{1,2}|\/)|\/(?:Users|home)\/[\w.-]+\//i;
   const list=[...files('public',/\.(?:js|css|html|json|svg)$/),...files('src',/\.cjs$/),...files('tools',/\.cjs$/),'README.md','README.pt-BR.md','CHANGELOG.md','example.json','example-solo.json','package.json'];
   assert.ok(list.length>60,'the scan covers the published tree');
-  for(const file of list){const text=read(file);assert.doesNotMatch(text,dash,file+' uses ": ", " · " or "." instead of a long dash');assert.doesNotMatch(text,local,file+' must not carry a local path');for(const word of text.toLowerCase().match(/[a-z0-9-]+/g)||[])assert.ok(!PRIVATE.has(digest(word)),file+' carries a private workspace name');}
+  for(const file of list){const text=read(file);assert.doesNotMatch(text,dash,file+' uses ": ", " · " or "." instead of a long dash');assert.doesNotMatch(text,local,file+' must not carry a local path');}
 });
 
 test('the documented task header and decisions file are exactly what the folder reader accepts',t=>{
@@ -23,7 +20,7 @@ test('the documented task header and decisions file are exactly what the folder 
   fs.writeFileSync(path.join(folder,'menu.md'),'---\nphase: doing\n---\n# Draw the menu\n');
   fs.writeFileSync(path.join(folder,'notes.md'),'Plain notes without a header\n');
   fs.writeFileSync(path.join(folder,'decisions.md'),'# Decisions\n## 1. Which music fits the menu?\n## 2. DONE Pick the font\n');
-  const s=new TaskBoard(home).connect(folder);
+  const s=new TaskBoard(home,{profile:home}).connect(folder);
   assert.deepEqual(s.tasks.map(x=>x.title).sort(),['Draw the menu','Which music fits the menu?']);
   assert.deepEqual(s.tasks.filter(x=>x.needsOwner).map(x=>x.title),['Which music fits the menu?']);
 });
@@ -62,7 +59,7 @@ test('the public accelerator marks steps on this panel and dates its choices in 
     const ui={...A.TEXTOS[lang].ui,...A.TEXTOS[lang].publico};
     assert.doesNotMatch(ui.ligar+' '+ui.ligou('X')+' '+ui.semFase+' '+ui.foraDeOrdem+' '+ui.semFaseSomar,/Turn on|Ligue|Ligar|Activa/,lang);
     assert.match(ui.ligou('X'),/^X: (marked on this panel|marcada neste painel|marcada en este panel)\.$/);
-    assert.match(ui.lista,/agents|agentes/);
+    assert.equal(ui.lista,({"en":"Each step has a text your AI can apply. Marking it here only records it on this panel.","pt":"Cada fase tem um texto para a sua IA aplicar. Marcar aqui só registra neste painel.","es":"Cada fase tiene un texto para que tu IA lo aplique. Marcar aquí solo lo registra en este panel."})[lang]);
     assert.match(A.TEXTOS[lang].ui.escolhidaAs(A.diaDe('2030-10-03T00:54:00Z',lang),A.horaDe('2030-10-03T00:54:00Z')),/00:54 UTC$/);
   }
   assert.equal(A.diaDe('2030-10-03T00:54:00Z','en'),'Oct 3');

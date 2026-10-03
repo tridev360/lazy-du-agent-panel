@@ -40,6 +40,7 @@ async function main(){
   if(validation.status!==0)throw Error('Public validation failed: '+validation.status);
   const delta=spawnSync(process.execPath,[path.join(__dirname,'validate-211-delta.cjs'),'--out',out,'--browser',browserPath,...(playwrightPath?['--playwright',playwrightPath]:[])],{cwd:root,stdio:'inherit',env:{...process.env,OUTPUT_DIR:out}});
   if(delta.status!==0)throw Error('2.1.1 interaction validation failed: '+delta.status);
+  if(require('../package.json').version==='2.2.0')for(const tool of ['validate-guidance22.cjs','validate-onboarding22.cjs','validate-session-copy22.cjs','validate-connect22.cjs']){const check=spawnSync(process.execPath,[path.join(__dirname,tool),'--out',out,'--browser',browserPath,...(playwrightPath?['--playwright',playwrightPath]:[])],{cwd:root,stdio:'inherit',env:{...process.env,OUTPUT_DIR:out}});if(check.status!==0)throw Error('2.2 validation failed: '+tool+' '+check.status);}
   const metrics=[],baseline=value('--baseline-gzip');
   if(baseline)for(const mode of ['baseline','candidate'])metrics.push({mode,sample:await cpuSample(mode==='baseline'?baseline:null)});
   fs.writeFileSync(path.join(out,'cpu-server.json'),JSON.stringify({scope:'Synthetic local HTTP workload, server child process only, 50 gzip requests during 5 seconds per sample',baselineRef:value('--baseline-ref'),samples:metrics},null,2)+'\n');

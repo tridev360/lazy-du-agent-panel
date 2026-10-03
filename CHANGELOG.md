@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.0
+
+First steps guides setup with automatic detection, local rules copying and one-click tasks connection. Six metadata-based notices guide context handoffs, separate projects, model and effort choices, idle helpers, parked projects and a three-project priority queue. The model/effort table stays under Teach your AI. Choices stay local and do not run agents or edit instruction files.
+
 ## 2.1.1
 
 - Clearer first reading, language in the header, consistent controls and simple AI rules copying.

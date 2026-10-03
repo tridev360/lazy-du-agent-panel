@@ -105,7 +105,7 @@ test("full UI renders six example game tasks and phase-weighted progress", async
   await u.ready();
   a.equal(u.nodes.get("board").children.flatMap(c=>c.children[1].children).length, 6);
   a.equal(u.nodes.get("pipeline").children.length, 6);
-  a.equal(u.nodes.get("claude-ring").firstElementChild.textContent, "54%");
+  a.equal(u.nodes.get("claude-ring").firstElementChild.textContent, "?");
   a.equal(u.nodes.get("codex-ring").firstElementChild.textContent, "72%");
   a.equal(u.nodes.get("cards").children.length, 2);
 });

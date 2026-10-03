@@ -1,4 +1,4 @@
-# Lazy Du Agent Panel 2.1.1
+# Lazy Du Agent Panel 2.2.0
 
 ## O que o painel resolve
 
@@ -43,7 +43,7 @@ Tudo fica neste computador. Fechar painel no rodapé encerra um atalho que tenha
 
 É um servidor local. Rode uma vez: o atalho mantém o servidor em segundo plano. Se a porta 3251 já responder com esta versão, abra só http://127.0.0.1:3251. Pode fechar o terminal; use Fechar painel no rodapé para encerrar o servidor. Para mensagens em português, acrescente --lang pt; espanhol, --lang es.
 
-Para atualizar, feche o painel no rodapé, rode git pull na pasta do painel e abra o painel de novo.
+Feche o painel no rodapé antes de atualizar. Depois rode git pull na pasta do painel e abra de novo.
 
 ## O que sai do seu computador
 
@@ -73,18 +73,18 @@ Equipe mostra você no topo e o Claude Code e o Codex lado a lado, com cada sess
 
 Sessões mostra uma coluna por sessão só com metadados: estado, ação atual, ferramentas, modelo, tokens e projeto. Não lê nem manda mensagens. Consumo começa com uma linha de resumo, depois o total da semana, os copos, a estimativa lúdica de água e os anéis de crédito; Como calculamos explica cada número.
 
-WEN abre o resumo atual. AUTOMATIZAR prepara um plano para copiar no chat da sua IA. Copiar o plano não inicia um agente. ACELERAR traz uma lista reutilizável, marchas selecionáveis, fases em ordem e esperas que você marca. Marcar uma fase ou escolher uma marcha só salva neste painel: não publica código, não muda sua conta de IA e não avisa seus agentes. Os minutos são esperas informadas por você, sem alegar ganho de velocidade medido.
+AUTOMATIZAR copia um plano de rotina já com a instrução para a sua IA. Copiar o plano não inicia um agente. ACELERAR tem marchas e fases; cada uma copia um texto para a sua IA aplicar. Marcar uma fase só registra neste painel.
 
 ## Ensinar minha IA e o sino
 
-Ensinar minha IA começa com um botão: Copiar e colar no Claude Code. Uso o Codex troca o pedido copiado para o Codex. Cole numa conversa que roda no seu computador, no app ou no terminal. O painel só copia um pedido; sua IA salva as regras se você permitir a edição do arquivo. Uma conversa na nuvem deve parar se não alcançar sua pasta pessoal. As regras valem para todos os projetos por ~/.claude/CLAUDE.md ou ~/.codex/AGENTS.md. Outras opções fica fechado e inclui a escolha só para um projeto e quem faz o quê.
+Ensinar minha IA copia regras de trabalho opcionais já com a instrução para a sua IA, que as salva no seu ~/.claude/CLAUDE.md ou ~/.codex/AGENTS.md global e confirma em 1 linha. Outro botão copia o texto para tirar.
 
 ### Regras copiadas, texto exato (Claude Code, todos os projetos)
 
 ~~~text
 Salve as regras abaixo no meu ~/.claude/CLAUDE.md global, para valerem em todos os meus projetos. Coloque numa seção que começa com o título "## Lazy Du Agent Panel". Se essa seção já existir, troque só ela: a linha do título e as linhas que começam com "- " logo abaixo. Crie o arquivo se ele não existir. Não apague nem mude mais nada. Depois confirme em 1 linha. Se daqui você não alcança a minha pasta pessoal (por exemplo, numa sessão na nuvem), diga isso em 1 linha e pare.
 
-## Lazy Du Agent Panel: minhas regras de trabalho (para tirar, apague esta seção)
+## Lazy Du Agent Panel: minhas regras de trabalho
 - Coordenar: a IA onde eu começo o trabalho coordena e divide em tarefas; a outra IA confere o plano.
 - Escrever código: Claude Code e Codex em paralelo nas tarefas independentes (tarefas que mexem nos mesmos arquivos vão uma depois da outra), com o modelo mais forte e esforço alto.
 - Revisar: a outra IA revisa cada mudança; ninguém revisa o próprio trabalho.
@@ -94,6 +94,7 @@ Salve as regras abaixo no meu ~/.claude/CLAUDE.md global, para valerem em todos 
 - Nos projetos que têm uma pasta tasks/, mantenha ali um arquivo Markdown por tarefa.
 - Fases: new, open, doing, ready, review, released, done. Quando a tarefa terminar, use phase: done e acrescente completed_at: com a data e a hora em ISO.
 - Perguntas que precisam da minha decisão vão em tasks/decisions.md como títulos numerados, como ## 1. Qual música combina com o menu? Acrescente DONE quando eu responder.
+- Quando abrir um ajudante, escolha modelo e esforço por esta tabela, se esta ferramenta deixar: coordenar, o modelo mais forte, esforço alto ou extra alto; escrever código, o modelo mais forte, esforço alto; revisar segurança ou dinheiro, o modelo mais forte, esforço extra alto, numa sessão limpa, nunca quem escreveu; revisar texto, o modelo mais forte, esforço alto; medir e contar, um modelo menor, esforço baixo; tarefa mecânica, o menor modelo, esforço baixo.
 ~~~
 
 
@@ -101,21 +102,29 @@ O sino lista as novidades da versão e as dicas feitas neste computador, o que e
 
 ## Segurança
 
+Se o npx perguntar "Ok to proceed? (y)", está pedindo permissão para baixar e rodar este pacote. Confira o repositório e a versão antes. "npm warn skipping integrity check for git dependency" é um aviso de pacote vindo direto do GitHub. Para manter uma versão, use a tag dela. Um comando preso a commit ou tag mantém essa versão até você mudar o comando.
+
 O leitor projeta uma lista fixa de metadados de ~/.claude/projects e ~/.codex/sessions: datas, identificadores de sessão resumidos por hash, pais conhecidos, modelo, esforço, nome do projeto, nomes e contagens de ferramentas, contadores de tokens e janelas de crédito disponíveis. Nunca decodifica corpos de conversa nem argumentos de ferramentas. Não lê .env, auth.json nem arquivos de credenciais.
 
-O painel salva as escolhas do acelerador em ~/.lazy-du-panel/ e o cache de metadados projetados em .panel-cache/ dentro da pasta do painel. As escolhas do navegador ficam no localStorage. Ligar uma pasta de tarefas permite ler os títulos e campos Markdown documentados abaixo. Ele nunca altera seus arquivos de instrução: Ensinar minha IA copia um pedido, e sua IA pode salvar as regras depois que você permitir a edição do arquivo.
+As escolhas dos avisos ficam em ~/.lazy-du-panel/guidance.json. O progresso detectado dos Primeiros passos e os tipos de aviso ocultos ficam no localStorage do navegador.
+
+O painel salva sua configuração e o cache de metadados projetados em ~/.lazy-du-panel/. As escolhas do navegador ficam no localStorage. Conectar uma pasta de tarefas permite ler os títulos e campos Markdown documentados abaixo. Ele nunca altera seus arquivos de instrução: Ensinar minha IA copia um pedido, e sua IA pode salvar as regras depois que você permitir a edição do arquivo.
 
 O servidor escuta em 127.0.0.1:3251 e confere Host e Origin; a página usa uma Content Security Policy. Os dois destinos públicos de download do servidor são news.json do autor (desligado até você ligar ou clicar) e package.json (conferência de versão no clique). Música opcional e links externos só abrem no clique. Nenhum metadado de sessão sai. Use --offline para desligar esses recursos.
 
-Para manter esta versão, use uma cópia com tag ou rode npx github:tridev360/lazy-du-agent-panel#v2.1.1 depois que essa tag for publicada. Você escolhe quando atualizar.
+Para manter esta versão, use uma cópia com tag ou rode npx github:tridev360/lazy-du-agent-panel#v2.2.0 depois que essa tag for publicada. Você escolhe quando atualizar.
 
 ## Privacidade
 
-O servidor escuta só no localhost. Lê metadados permitidos de .codex/sessions e .claude/projects no seu perfil: identificadores, origem conhecida, datas, modelo, esforço, nomes de ferramentas e contadores de tokens. Projeta esses campos sem decodificar corpos de conversas ou argumentos de ferramentas. Identificadores de sessão são resumidos por hash. O nome da pasta do projeto pode aparecer; o caminho completo fica privado. Sem telemetria nem credenciais: esta versão não manda dado de uso.
+Para achar pastas de tarefas, ele também confere se existe uma pasta tasks nas pastas de projeto das suas sessões. Só lê os .md da pasta que você conectar.
+
+Para marcar os Primeiros passos, ele também abre o ~/.claude/CLAUDE.md e o ~/.codex/AGENTS.md só para ver se uma linha começa com "## Lazy Du Agent Panel". Guarda só sim ou não e nunca mostra nem manda o resto.
+
+O servidor escuta só no localhost. Lê metadados permitidos de .codex/sessions e .claude/projects no seu perfil: identificadores, origem conhecida, datas, modelo, esforço, nomes de ferramentas e contadores de tokens. Projeta esses campos sem decodificar corpos de conversas ou argumentos de ferramentas. Identificadores de sessão são resumidos por hash. O nome da pasta do projeto pode aparecer; o caminho completo fica privado no cache do perfil, para Conectar as tarefas deste projeto encontrar uma pasta de tarefas já observada. Ele nunca aparece nos dados enviados ao navegador nem sai deste computador. Sem telemetria nem credenciais: esta versão não manda dado de uso.
 
 Consumo e preferências ficam locais. O cache guarda metadados projetados; esta versão invalida o cache anterior de conversas. As preferências do acelerador ficam em .lazy-du-panel/acceleration.json no seu perfil. Arquivo corrompido mostra erro sem ser sobrescrito.
 
-Uma pasta opcional de tarefas pode ser ligada em Ligar minha pasta de tarefas, por exemplo na Fila. O painel lê arquivos .md que começam com um cabeçalho curto:
+Uma pasta opcional de tarefas pode ser conectada em Conectar minha pasta de tarefas, por exemplo na Fila, ou em Conectar as tarefas deste projeto, nos Primeiros passos. O painel lê arquivos .md que começam com um cabeçalho curto:
 
 ~~~md
 ---

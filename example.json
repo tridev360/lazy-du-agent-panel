@@ -11,13 +11,7 @@
       "source": "example"
     },
     "claude": {
-      "windows": [
-        {
-          "used": 46,
-          "minutes": 10080,
-          "reset": "2026-10-05T12:00:00Z"
-        }
-      ],
+      "windows": [],
       "tokens": 486000,
       "source": "example"
     },

@@ -2,8 +2,8 @@
 const fs=require('node:fs'),path=require('node:path'),crypto=require('node:crypto');
 const {DailyUsage}=require('./daily-usage.cjs');
 const digest=value=>crypto.createHash('sha256').update(String(value)).digest('hex');
-const VERSION=21;
-const fields=['kind','id','projectId','projectName','model','effort','role','estimateAt','weightedTokens','startedAt','taskStart','lastTool','lastToolAt','taskSubject','taskDurationsMinutes','taskTitle','taskTitlePT','taskAt','taskWords','action','actionPT','activityAt','finishedAt','closedAt','birthAt','sessionKey','parentKey','helper','helperKey','helperDescriptions','sampled'];
+const VERSION=22;
+const fields=['privateProjectRoots','lastInputTokens','contextWindow','metadataComplete','toolTruncated','kind','id','projectId','projectName','model','effort','role','estimateAt','weightedTokens','startedAt','taskStart','lastTool','lastToolAt','taskSubject','taskDurationsMinutes','taskTitle','taskTitlePT','taskAt','taskWords','action','actionPT','activityAt','finishedAt','closedAt','birthAt','sessionKey','parentKey','helper','helperKey','helperDescriptions','sampled'];
 function pack(index,file){
   const meta=index.metadata.get(file)||{},metadata={};
   for(const field of fields)if(meta[field]!==undefined)metadata[field]=meta[field];
