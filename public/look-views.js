@@ -45,16 +45,32 @@
 
   // Sessions side by side
   const sessions=el('section',undefined,'look-sessions');sessions.id='look-sessions';
-  const sHead=el('div',undefined,'look-view-head'),sTitle=el('h2','','look-view-title'),sNote=el('p','','look-view-note'),chips=el('div',undefined,'look-chips'),cols=el('div',undefined,'look-cols'),sFoot=el('p','','look-view-note');
-  cols.tabIndex=0;cols.setAttribute('role','list');const sText=el('div',undefined,'look-view-text');sText.append(sTitle,sNote);sHead.append(sText);sessions.append(sHead,chips,cols,sFoot);
+  const sHead=el('div',undefined,'look-view-head'),sTitle=el('h2','','look-view-title'),sNote=el('p','','look-view-note'),chips=el('div',undefined,'look-chips'),cols=el('div',undefined,'look-cols'),sFoot=el('p','','look-view-note'),rules=el('div',undefined,'look-project-rules');
+  cols.tabIndex=0;cols.setAttribute('role','list');const sText=el('div',undefined,'look-view-text');sText.append(sTitle,sNote);sHead.append(sText);sessions.append(sHead,chips,rules,cols,sFoot);
   $('view-projects')?.prepend(sessions);
   function tile(label,value,cls){const n=el('div',undefined,'look-tile'+(cls?' '+cls:''));n.append(el('span',label,'look-tile-label'),el('span',value,'look-tile-value'));return n;}
+  function drawProjectRules(all){
+    const focused=d.activeElement?.dataset.rulesProject,projects=new Map();
+    for(const a of all)if(a.projectId)projects.set(a.projectId,{id:a.projectId,name:projectOf(a)||a.projectId});
+    for(const p of snapshot?.projects||[])projects.set(p.id,{id:p.id,name:(lang==='pt'&&p.namePT)||(lang==='es'&&p.nameES)||p.name||p.id});
+    for(const p of snapshot?.guidance?.projects||[])if(!projects.has(p.key))projects.set(p.key,{id:p.key,name:p.name||p.key});
+    rules.replaceChildren();
+    for(const p of projects.values()){
+      if(project&&p.name!==project)continue;
+      const note=root.PanelGuidance?.projectRules?.(snapshot,p,lang);if(!note)continue;
+      const entry=el('article',undefined,'project-rules-entry');entry.dataset.projectKey=p.id;
+      entry.append(el('h3',p.name),note);rules.append(entry);
+    }
+    rules.hidden=!rules.childElementCount;
+    if(focused)[...rules.querySelectorAll('.project-rules-action')].find(b=>b.dataset.rulesProject===focused)?.focus({preventScroll:true});
+  }
   function drawSessions(){
     const w=t(),all=snapshot&&root.PanelCore?.agents?root.PanelCore.agents(snapshot):[],graph=root.PanelR9?.hierarchy?root.PanelR9.hierarchy(all):null;
     sTitle.textContent=w.sessionsTitle;sNote.textContent=w.sessionsNote;cols.setAttribute('aria-label',w.sessionsTitle);
     const projects=[...new Set(all.map(projectOf).filter(Boolean))].slice(0,8);if(project&&!projects.includes(project))project='';
     chips.replaceChildren();chips.hidden=projects.length<2;
     for(const value of ['',...projects]){const b=el('button',value||w.all,'look-chip-btn');b.type='button';b.setAttribute('aria-pressed',String(project===value));b.onclick=()=>{project=value;drawSessions();};chips.append(b);}
+    drawProjectRules(all);
     const list=order(all.filter(a=>!project||projectOf(a)===project)),shown=list.slice(0,30);
     cols.replaceChildren();
     if(!list.length){cols.append(el('p',w.empty,'look-empty'));sFoot.textContent='';return;}

@@ -107,6 +107,19 @@
   function renderQueue(){const host=d.getElementById('view-queue');if(!host)return;let box=d.getElementById('guidance-queue');if(!box){box=el('section',undefined,'guidance-queue');box.id='guidance-queue';host.prepend(box);}const w=T[lang],rows=queueProjects(snapshot),list=el('ol');for(const p of rows){const row=el('li');row.dataset.projectKey=p.key;row.append(el('strong',p.name),button(w.timeline,projectTimeline,'guidance-link'));list.append(row);}if(!rows.length)list.append(el('li',w.emptyQueue));box.replaceChildren(el('h2',w.queue),el('p',w.queueNote,'guidance-note'),list,button(w.pick,selectProjects,'guidance-link'),button(w.settings,settings,'guidance-link'));}
   function teachTable(locale=lang){const details=d.querySelector('#drawer .teach-advanced');if(!details)return;const old=details.querySelector('.guidance-table');if(old)old.remove();const w=T[lingua(locale)],box=el('section',undefined,'guidance-table'),table=el('table'),head=el('thead'),row=el('tr'),body=el('tbody');for(const title of w.tableHead){const th=el('th',title);th.scope='col';row.append(th);}head.append(row);for(const cells of w.tableRows){const tr=el('tr');for(const text of cells)tr.append(el('td',text));body.append(tr);}table.append(head,body);box.append(el('h3',w.tableTitle),table,el('p',w.tableNote,'guidance-note'),el('p',w.tableRule,'guidance-note'));details.append(box);}
   function wrapDrawer(){if(drawerWrapped||typeof root.panelDrawer!=='function')return;const previous=root.panelDrawer;root.panelDrawer=function(...args){const result=previous.apply(this,args);if(d.querySelector('#drawer .teach-advanced'))teachTable(lang);return result;};drawerWrapped=true;}
+  function projectRules(data,project,locale){
+    const copy={
+      en:{found:'Global rules found',missing:'Global rules not found',unknown:'Global rules not read',example:'Rules: example',teach:'Teach my AI'},
+      pt:{found:'Regras globais encontradas',missing:'Regras globais não encontradas',unknown:'Regras globais não lidas',example:'Regras: exemplo',teach:'Ensinar minha IA'},
+      es:{found:'Reglas globales encontradas',missing:'Reglas globales no encontradas',unknown:'Reglas globales no leídas',example:'Reglas: ejemplo',teach:'Enseñar a mi IA'}
+    }[lingua(locale)];
+    const value=data?.guidance?.projects?.find(item=>item.key===project?.id)?.rulesEnabled;
+    const state=data?.example===true?'example':value===true?'found':value===false?'missing':'unknown';
+    const row=el('div',undefined,'project-rule-note'),action=el('button',copy.teach,'project-rules-action');
+    row.dataset.rulesState=state;action.type='button';action.dataset.rulesProject=String(project?.id||'');action.setAttribute('aria-label',copy.teach+': '+String(project?.name||''));
+    action.onclick=()=>root.PanelTeach?.open(lingua(locale),data);
+    row.append(el('p',copy[state]),action);return row;
+  }
   function update(data,locale){snapshot=data||null;lang=lingua(locale||lang);wrapDrawer();renderQueue();}
-  root.PanelGuidance=Object.freeze({...api,update,open,sessionCard,teachTable,settings,dismiss,copyText,hidden,bellItems:(data=snapshot,locale=lang)=>bellItems(data,locale,hidden())});
+  root.PanelGuidance=Object.freeze({...api,update,open,sessionCard,projectRules,teachTable,settings,dismiss,copyText,hidden,bellItems:(data=snapshot,locale=lang)=>bellItems(data,locale,hidden())});
 })(typeof window==='object'?window:globalThis);
