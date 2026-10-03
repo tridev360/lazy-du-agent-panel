@@ -135,11 +135,7 @@ const words = {
     reward: "Agora no ar:",
   },
 };
-let lang = ["en", "pt", "es"].includes(
-  new URLSearchParams(location.search).get("lang"),
-)
-  ? new URLSearchParams(location.search).get("lang")
-  : (() => { try { return localStorage.getItem("agent-panel-language") || "en"; } catch { return "en"; } })();
+let lang = window.PanelLanguageInitial || document.documentElement.lang || 'en';
 if (!words[lang] && lang !== "es") lang = "en";
 const example = new URLSearchParams(location.search).get("example") === "1";
 let data = null,
@@ -583,9 +579,8 @@ async function refresh(force=false) {
   if (busy) return;
   busy = true;
   try {
-    const res = await fetch("/api/status" + (example ? "?example=1&size=" + (new URLSearchParams(location.search).get("size") || "large") : force===true?"?refresh=1":""));
-    if (!res.ok) throw Error();
-    const next = await res.json();
+    const url = "/api/status" + (example ? "?example=1&size=" + (new URLSearchParams(location.search).get("size") || "large") : force===true?"?refresh=1":"");
+    const next = window.PanelStartup ? await window.PanelStartup.readStatus(url) : await fetch(url).then(response => { if (!response.ok) throw Error(); return response.json(); });
     if (previous) {
       const newLive = next.tasks.find(
         (x) =>
@@ -605,8 +600,10 @@ async function refresh(force=false) {
     if (!next.example && (next.usage.scanning || next.usage.pending))
       setTimeout(refresh, 1000);
     render();
-  } catch {
+  } catch (error) {
+    if (error?.message === "READ_TIMEOUT") window.PanelStartup?.failed?.("slow");
     $("status").textContent = t("failure");
+    if (!data || data.usage?.pending || data.usage?.scanning) setTimeout(refresh, 1000);
     if (typeof PanelV2 !== "undefined") PanelV2.failure();
   } finally {
     busy = false;

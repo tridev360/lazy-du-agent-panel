@@ -76,10 +76,10 @@
     root.PanelBell?.update?.(snapshot,lang);
   }
   const render=P.render.bind(P),select=P.select.bind(P),loading=P.loading.bind(P),failure=P.failure.bind(P);
-  P.render=(data,locale)=>{snapshot=data;lang=lingua(locale||lang);render(data,locale);draw();};
+  P.render=(data,locale)=>{try{snapshot=data;lang=lingua(locale||lang);render(data,locale);draw();root.PanelStartup?.rendered?.(data);}catch{root.PanelStartup?.failed?.('broken');}};
   P.select=(value,focus)=>{select(value,focus);draw();try{root.PanelBell?.used?.(value);}catch{}};
   P.loading=locale=>{lang=lingua(locale||lang);loading(locale);draw();};
-  P.failure=()=>{failure();draw();};
+  P.failure=()=>{try{failure();draw();}catch{}root.PanelStartup?.failed?.();};
   root.PanelLook=Object.freeze({...api,draw});
   const cached=P.state?.();if(cached?.snapshot){snapshot=cached.snapshot;lang=lingua(cached.locale||lang);}
   draw();

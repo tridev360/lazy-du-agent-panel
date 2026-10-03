@@ -63,7 +63,7 @@ test('bell lists version notes, one daily tip, waiting items and decisions with 
 
 test('feedback opens a template issue and contact lists only the author links',()=>{
   const url=new URL(Bell.issueURL('pt'));assert.equal(url.origin+url.pathname,'https://github.com/tridev360/lazy-du-agent-panel/issues/new');
-  assert.deepEqual([...url.searchParams.keys()],['title','body']);assert.match(url.searchParams.get('body'),/Versão do painel: 2\.1\.0\nLanguage: pt$/);
+  assert.deepEqual([...url.searchParams.keys()],['title','body']);assert.equal(url.searchParams.get('body').split('\n').at(-2),'Versão do painel: '+Bell.VERSION);assert.equal(url.searchParams.get('body').split('\n').at(-1),'Language: pt');
   assert.deepEqual(Bell.CONTACTS.map(c=>c.text+' '+c.url),['github.com/tridev360 https://github.com/tridev360','X @hallstrid https://x.com/hallstrid']);
 });
 
@@ -167,7 +167,7 @@ test('review fixes: author messages off by default, sessions wording, example la
   assert.equal(Locale.text('Reading local sessions','es'),'Leyendo sesiones locales');assert.equal(Locale.text('Daily usage','es'),'Uso diario');
   assert.match(Teach.observation(example.usage.sessions,'en',true),/^Observed in the example sessions, not a rule: /);
   assert.match(read('public/teach.js'),/observation\(snapshot\?\.usage\?\.sessions\|\|\[\],lang,!!snapshot\?\.example\)/,'the open card passes the example flag');
-  assert.match(read('public/bell.js'),/function update\(data,locale\)\{[^}]*if\(!checking&&shouldFetchAuthor\(get\(KEYS\.author,\{auto:false\}\)\)\)checkAuthor\(\);\}/,'the page only fetches through the rule');
+  assert.match(read('public/bell.js'),/function update\(data,locale\)\{[^}]*if\(!offline\(\)&&!checking&&shouldFetchAuthor\(get\(KEYS\.author,\{auto:false\}\)\)\)checkAuthor\(\);\}/,'the page only fetches through the rule');
   assert.match(Teach.observation(example.usage.sessions,'pt'),/Claude Code na maior parte lê e procura em arquivos/);
 });
 
@@ -191,7 +191,8 @@ test('agent timeline: origin always resolved from the parent link, "?" only for 
   assert.equal(bare[0].at,null,'unknown start time stays unknown');assert.equal(bare[1].detail,'?');assert.equal(bare.find(e=>e.key==='last').detail,'?');assert.equal(bare.find(e=>e.key==='tools').detail,'none read');
   const done=T.timeline({id:'x',agent:'codex',state:'finished',finishedAt:'2030-01-01T11:00:00Z'},{name,parentId:null,hasParentLink:false},'en').at(-1);assert.deepEqual([done.title,done.untimed],['Finished',false]);
   const closed=T.timeline({id:'x',agent:'codex',state:'finished',updated:'2030-01-01T11:00:00Z'},{name,parentId:null,hasParentLink:false},'en').at(-1);assert.deepEqual([closed.title,closed.untimed],['Finished',true],'no fixed ? when the finish has no own time');
-  const {exampleFor}=require('../src/lib/examples.cjs');for(const size of ['solo','large'])for(const s of exampleFor(example,size).usage.sessions){assert.ok(Number.isFinite(Date.parse(s.startedAt))&&Number.isFinite(Date.parse(s.updated)),size+' example has times');assert.equal(s.observedSteps,(s.tools||[]).reduce((n,t)=>n+t.count,0),size+' '+s.id+' steps add up');}
+  const {exampleFor}=require('../src/lib/examples.cjs');for(const size of ['solo','large'])for(const s of exampleFor(example,size).usage.sessions){assert.ok(Number.isFinite(Date.parse(s.startedAt))&&Number.isFinite(Date.parse(s.updated)),size+' example has times');assert.equal(s.observedSteps,(s.tools||[]).reduce((n,t)=>n+t.count,0),size+' '+s.id+' steps add up');assert.ok(s.completedSteps<=s.observedSteps,size+' '+s.id+' completed steps do not exceed observed steps');}
   const team=read('public/look-team.js');assert.match(team,/orphan=!edge\.helper&&!!\(s\?\.parentKey\|\|s\?\.parentId\)/,'no You line for a helper whose parent is outside the reading');
+  assert.match(team,/openTimeline\(edge\.to,orphan\?null:/,'orphan opens without the You line');assert.match(team,/effortWord:e=>H\(\)\?\.effort\?\.\(e,lingua\(lang\)\)\|\|e/,'timeline uses the Sessions effort words');
   assert.doesNotMatch(read('public/look-team.js'),/\.message\b|\.prompt\b|payload\./);
 });

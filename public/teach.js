@@ -1,7 +1,8 @@
 (function(root){
   'use strict';
   // Teach your AI: optional working rules the person copies into CLAUDE.md or AGENTS.md.
-  // The panel only shows and copies this text. It never writes files and makes no network request.
+  // The panel only shows and copies this text; it never writes rule files or makes a network request.
+  // The copied instruction asks the person's local AI to save the rules if the person approves.
   // The "who does what" choice stays in this browser (localStorage) on the person's computer.
   const TASKS=['coordinate','code','review','analyze','ship','text'];
   const NAMES={claude:'Claude Code',codex:'Codex'};
@@ -161,6 +162,32 @@
     return [t.header,...TASKS.map(task=>c.mode==='recommended'?t.recommendedLines[task]:taskLine(task,c.picks[task],lang)),...t.folderLines];
   }
   const text=(choice,lang)=>lines(choice,lang).join('\n');
+
+  const SIMPLE={
+    en:{copy:'Copy and paste into Claude Code',switchCodex:'I use Codex',switchClaude:'I use Claude Code',other:'Other options',global:'For all my projects',project:'Only this project',afterClaude:'Paste it into a Claude Code chat running on your computer (the desktop app or the terminal). If it asks to edit the file, allow it. Done.',afterCodex:'Paste it into a Codex chat running on your computer (the app or the terminal). If it asks to edit the file, allow it. Done.',instruction:'Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my projects. Put them in a section that starts with the title "## Lazy Du Agent Panel". If that section already exists, replace only that section: its title line and the lines starting with "- " right below it. Create the file if it does not exist. Do not delete or change anything else. Then confirm in one line. If you cannot reach my home folder from here (for example, in a cloud session), say so in one line and stop.',header:'## Lazy Du Agent Panel: my working rules (to remove them, delete this section)',folderLine:'- In projects that have a tasks/ folder, keep one Markdown file per task there.',cloud:'Using Claude Code or Codex in the cloud? A cloud session cannot reach the file on your computer: paste it in a chat on your computer.',old:'Already pasted the old rules in a project? Delete that section there.'},
+    pt:{copy:'Copiar e colar no Claude Code',switchCodex:'Uso o Codex',switchClaude:'Uso o Claude Code',other:'Outras opções',global:'Para todos os meus projetos',project:'Só este projeto',afterClaude:'Cole numa conversa do Claude Code que roda no seu computador (o app ou o terminal). Se ela pedir para editar o arquivo, permita. Pronto.',afterCodex:'Cole numa conversa do Codex que roda no seu computador (o app ou o terminal). Se ela pedir para editar o arquivo, permita. Pronto.',instruction:'Salve as regras abaixo no meu ~/.claude/CLAUDE.md global, para valerem em todos os meus projetos. Coloque numa seção que começa com o título "## Lazy Du Agent Panel". Se essa seção já existir, troque só ela: a linha do título e as linhas que começam com "- " logo abaixo. Crie o arquivo se ele não existir. Não apague nem mude mais nada. Depois confirme em 1 linha. Se daqui você não alcança a minha pasta pessoal (por exemplo, numa sessão na nuvem), diga isso em 1 linha e pare.',header:'## Lazy Du Agent Panel: minhas regras de trabalho (para tirar, apague esta seção)',folderLine:'- Nos projetos que têm uma pasta tasks/, mantenha ali um arquivo Markdown por tarefa.',cloud:'Usa o Claude Code ou o Codex na nuvem? A sessão na nuvem não alcança o arquivo do seu computador: cole numa conversa no seu computador.',old:'Já colou as regras antigas num projeto? Apague a seção de lá.'},
+    es:{copy:'Copiar y pegar en Claude Code',switchCodex:'Uso Codex',switchClaude:'Uso Claude Code',other:'Otras opciones',global:'Para todos mis proyectos',project:'Solo este proyecto',afterClaude:'Pégalo en una conversación de Claude Code que corra en tu ordenador (la app o la terminal). Si pide editar el archivo, permítelo. Listo.',afterCodex:'Pégalo en una conversación de Codex que corra en tu ordenador (la app o la terminal). Si pide editar el archivo, permítelo. Listo.',instruction:'Guarda las reglas de abajo en mi ~/.claude/CLAUDE.md global, para que valgan en todos mis proyectos. Ponlas en una sección que empiece con el título "## Lazy Du Agent Panel". Si esa sección ya existe, reemplaza solo esa sección: la línea del título y las líneas que empiezan con "- " justo debajo. Crea el archivo si no existe. No borres ni cambies nada más. Después confirma en 1 línea. Si desde aquí no llegas a mi carpeta personal (por ejemplo, en una sesión en la nube), dilo en 1 línea y detente.',header:'## Lazy Du Agent Panel: mis reglas de trabajo (para quitarlas, borra esta sección)',folderLine:'- En los proyectos que tienen una carpeta tasks/, guarda ahí un archivo Markdown por tarea.',cloud:'¿Usas Claude Code o Codex en la nube? Una sesión en la nube no llega al archivo de tu ordenador: pégalo en una conversación en tu ordenador.',old:'¿Ya pegaste las reglas antiguas en un proyecto? Borra esa sección de ahí.'}
+  };
+  function ruleText(choice,lang,target='claude',scope='global'){
+    lang=lingua(lang);const t=SIMPLE[lang],c=normalize(choice);
+    if(c.mode==='own')return '';
+    const path=target==='codex'?'~/.codex/AGENTS.md':'~/.claude/CLAUDE.md';
+    let instruction=t.instruction.replace('~/.claude/CLAUDE.md',path);
+    if(scope==='project'){
+      const file=target==='codex'?'AGENTS.md':'CLAUDE.md';
+      const replacements={en:['my global '+path+' so they apply to all my projects','the '+file+' file at the root of this project so they apply only to this project'],pt:['meu '+path+' global, para valerem em todos os meus projetos','arquivo '+file+' na raiz deste projeto, para valerem só neste projeto'],es:['mi '+path+' global, para que valgan en todos mis proyectos','archivo '+file+' en la raíz de este proyecto, para que valgan solo en este proyecto']};
+      instruction=instruction.replace(...replacements[lang]);
+    }
+    const rules=lines(c,lang);rules[0]=t.header;rules[1+TASKS.length]=t.folderLine;
+    return instruction+'\n\n'+rules.join('\n');
+  }
+  async function copyToClipboard(value,runtime=root){
+    try{await runtime.navigator.clipboard.writeText(value);return true;}catch{}
+    const doc=runtime.document;if(!doc?.execCommand)return false;
+    const previous=doc.activeElement,field=doc.createElement('textarea');field.value=value;field.setAttribute('readonly','');field.style.position='fixed';field.style.opacity='0';doc.body.append(field);
+    try{field.select();return !!doc.execCommand('copy');}catch{return false;}finally{field.remove();previous?.focus?.();}
+  }
+
   const KIND=[['edit',/^(?:edit|multiedit|write|notebookedit|apply_patch|write_file)$/i],['command',/^(?:bash|powershell|exec_command|shell|local_shell|run_command)$/i],['read',/^(?:read|grep|glob|ls|read_file|list_dir|search_files)$/i],['helper',/^(?:agent|task|spawn_agent|followup_task)$/i],['web',/^(?:websearch|webfetch|web_search|web_fetch)$/i]];
   function kindOf(name){for(const [kind,pattern]of KIND)if(pattern.test(String(name||'')))return kind;return 'other';}
   function observe(sessions){
@@ -169,7 +196,7 @@
     return out;
   }
   function observation(sessions,lang,example=false){const t=T[lingua(lang)],seen=observe(sessions);if(!seen.claude.total&&!seen.codex.total)return t.observedNone;return t[example?'observedExample':'observed'](['claude','codex'].map(f=>seen[f].total?t.observedPart(NAMES[f],t.what[seen[f].top],seen[f].share):t.observedEmpty(NAMES[f])));}
-  const api={TASKS,NAMES,T,STORE,lingua,normalize,lines,text,taskLine,observe,observation,kindOf};
+  const api={TASKS,NAMES,T,STORE,lingua,normalize,lines,text,taskLine,observe,observation,kindOf,SIMPLE,ruleText,copyToClipboard};
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document)return;
   const d=root.document;
@@ -179,19 +206,23 @@
   function current(){return lingua(d.documentElement.lang||'en');}
   function summary(choice,lang){const t=T[lingua(lang)];if(choice.mode==='own')return t.current+t.keep;if(choice.mode==='recommended')return t.current+t.currentRecommended;return t.current+TASKS.map(task=>t.tasks[task]+' '+(choice.picks[task]==='both'?t.both:NAMES[choice.picks[task]])).join(' · ');}
   function open(lang,snapshot){
-    lang=lingua(lang||current());const t=T[lang],saved=read();let view=saved?(saved.mode==='own'?'keep':saved.mode):'recommended',draft=normalize(saved||{mode:'recommended'});const seen=el('p',observation(snapshot?.usage?.sessions||[],lang,!!snapshot?.example),'summary-note teach-observed');
-    const intro=el('p',t.intro,'summary-note'),promise=el('p',t.promise,'summary-note teach-promise'),box=el('div',undefined,'teach'),choices=el('div',undefined,'teach-options'),detail=el('div',undefined,'teach-custom'),block=el('pre','','teach-block'),status=el('p','','summary-note teach-status'),copy=el('button',t.copy,'teach-copy');
-    choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label',t.who);block.tabIndex=0;block.setAttribute('aria-label',t.title);status.setAttribute('role','status');status.setAttribute('aria-live','polite');copy.type='button';
+    lang=lingua(lang||current());const t=T[lang],simple=SIMPLE[lang],saved=read();let view='recommended',draft=normalize({mode:'recommended',picks:saved?.picks}),target='claude',scope='global';
+    const seen=el('p',observation(snapshot?.usage?.sessions||[],lang,!!snapshot?.example),'summary-note teach-observed'),box=el('div',undefined,'teach teach-simple'),choices=el('div',undefined,'teach-options'),detail=el('div',undefined,'teach-custom'),block=el('pre','','teach-block'),status=el('p','','summary-note teach-status'),copy=el('button',simple.copy,'teach-copy'),switcher=el('button',simple.switchCodex,'teach-switch'),advanced=el('details',undefined,'teach-advanced'),scopes=el('div',undefined,'teach-scopes');
+    choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label',t.who);scopes.setAttribute('role','radiogroup');scopes.setAttribute('aria-label',simple.global);block.tabIndex=0;block.setAttribute('aria-label',t.title);status.setAttribute('role','status');status.setAttribute('aria-live','polite');copy.type='button';switcher.type='button';
     function option(key,label,note,tag){const b=el('button',undefined,'teach-option');b.type='button';b.dataset.option=key;b.setAttribute('role','radio');const head=el('span',label,'teach-option-label');if(tag)head.append(el('span',tag,'teach-tag'));b.append(head,el('span',note,'teach-option-note'));b.onclick=()=>{view=key;draft={...draft,mode:key==='keep'?'own':key};write(draft);status.textContent=t.saved;draw();};return b;}
     function draw(){
       for(const b of choices.querySelectorAll('.teach-option')){const on=b.dataset.option===view;b.setAttribute('aria-checked',String(on));b.tabIndex=on?0:-1;}
-      detail.hidden=view!=='custom';detail.replaceChildren();const own=view==='keep';seen.hidden=!own;for(const n of [block,copy,intro,promise])n.hidden=own;
+      for(const b of scopes.querySelectorAll('button'))b.setAttribute('aria-checked',String(b.dataset.scope===scope));
+      detail.hidden=view!=='custom';detail.replaceChildren();const own=view==='keep';seen.hidden=!own;copy.hidden=own;switcher.hidden=own;block.hidden=own;
       if(view==='custom'){for(const task of TASKS){const row=el('div',undefined,'teach-task'),pick=el('div',undefined,'teach-picks');pick.setAttribute('role','radiogroup');pick.setAttribute('aria-label',t.tasks[task]);row.append(el('strong',t.tasks[task],'teach-task-name'),pick);for(const value of PICKS){const b=el('button',value==='both'?t.both:NAMES[value],'teach-pick');b.type='button';b.dataset.family=value;b.setAttribute('role','radio');b.setAttribute('aria-checked',String(draft.picks[task]===value));b.onclick=()=>{draft={...draft,mode:'custom',picks:{...draft.picks,[task]:value}};write(draft);status.textContent=t.saved;draw();};pick.append(b);}for(const family of ['claude','codex']){const note=el('p',undefined,'teach-note');note.dataset.family=family;note.append(el('b',NAMES[family]+': '),d.createTextNode(t.notes[family][task]));row.append(note);}detail.append(row);}detail.append(el('p',t.signature,'summary-note teach-signature'));}
-      block.textContent=own?'':text(draft,lang);
+      copy.textContent=target==='claude'?simple.copy:simple.copy.replace('Claude Code','Codex');switcher.textContent=target==='claude'?simple.switchCodex:simple.switchClaude;block.textContent=ruleText(draft,lang,target,scope);
     }
-    choices.append(option('keep',t.keep,t.keepNote),option('custom',t.custom,t.customNote),option('recommended',t.recommended,t.recommendedNote,t.recommendedTag));
-    copy.onclick=async()=>{try{await root.navigator.clipboard.writeText(block.textContent);status.textContent=t.copied;}catch{const range=d.createRange();range.selectNodeContents(block);const selection=root.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent=t.select;}};
-    box.append(el('h3',t.who,'teach-who'),choices,seen,detail,intro,block,copy,status,promise,el('p',t.folder,'summary-note'));
+    choices.append(option('recommended',t.recommended,t.recommendedNote,t.recommendedTag),option('keep',t.keep,t.keepNote),option('custom',t.custom,t.customNote));
+    for(const [value,label]of [['global',simple.global],['project',simple.project]]){const b=el('button',label,'teach-scope');b.type='button';b.dataset.scope=value;b.setAttribute('role','radio');b.onclick=()=>{scope=value;status.textContent='';draw();};scopes.append(b);}
+    switcher.onclick=()=>{target=target==='claude'?'codex':'claude';status.textContent='';draw();};
+    copy.onclick=async()=>{const copiedTarget=target,value=ruleText(draft,lang,target,scope);if(!value)return;const copied=await copyToClipboard(value);if(copied){status.textContent=copiedTarget==='claude'?simple.afterClaude:simple.afterCodex;}else{advanced.open=true;block.textContent=value;block.focus();const range=d.createRange();range.selectNodeContents(block);const selection=root.getSelection();selection.removeAllRanges();selection.addRange(range);status.textContent=t.select;}};
+    advanced.append(el('summary',simple.other),el('h3',t.who,'teach-who'),choices,seen,detail,scopes,block,el('p',simple.cloud,'summary-note'),el('p',simple.old,'summary-note'),el('p',t.folder,'summary-note'));
+    box.append(copy,switcher,status,el('p',t.promise,'summary-note teach-promise'),advanced);
     draw();root.panelDrawer(t.title,[box]);
   }
   function card(host,lang){

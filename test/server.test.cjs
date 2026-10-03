@@ -8,7 +8,7 @@ const { isReady } = require("../src/open.cjs");
 test("launcher reuses only the same generation, not a legacy panel", async (t) => {
   const base = await start(t, { demoOnly: true });
   const health = await (await fetch(base + "/api/health")).json();
-  a.equal(health.version, "2.1.0");
+  a.equal(health.version, require("../package.json").version);
   a.equal(await isReady(Number(new URL(base).port)), true);
   const old = require("node:http").createServer((req,res) => res.end(JSON.stringify({app:"lazy-du-open-panel",version:1})));
   await new Promise(r => old.listen(0,"127.0.0.1",r));

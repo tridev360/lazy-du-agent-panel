@@ -16,7 +16,7 @@ test('Spanish covers the active views, controls, help and new delivery copy', ()
     'Controls and usage':'Controles y uso', 'Created this work':'Creó este trabajo', 'No proven link':'Sin vínculo comprobado',
     'See delivery':'Ver entrega', 'Delivery recorded':'Entrega registrada',
     'Loading stopped. Try again.':'La carga se detuvo. Inténtalo de nuevo.',
-    'Starting conversation: reading unavailable':'Inicio de conversación: lectura no disponible',
+    'Starting conversation: reading unavailable':'Inicio de sesión: lectura no disponible',
     'Not all work is registered as a dated task.':'No todo el trabajo se registra como una tarea con fecha.'
   };
   for (const [source,expected] of Object.entries(labels)) assert.equal(Locale.text(source,'es'),expected,source);
@@ -55,11 +55,11 @@ test('unknown names, identifiers, prompts, timestamps and arbitrary fragments st
 
 test('reading, team and forecast templates preserve all recorded numbers', () => {
   const cases=[
-    ['Reading your history: 003 of 009 conversations','Leyendo tu historial: 003 de 009 conversaciones'],
+    ['Reading your history: 003 of 009 conversations','Leyendo tu historial: 003 de 009 sesiones'],
     ['Reading today’s sessions: 0 of 82 sessions','Leyendo las sesiones de hoy: 0 de 82 sesiones'],
     ['Reading sessions · 7 days: 18 of 207 sessions','Leyendo sesiones · 7 días: 18 de 207 sesiones'],
-    ['Paused (43)','En pausa (43)'], ['Ended conversations (12)','Conversaciones terminadas (12)'],
-    ['OLDER CONVERSATIONS (508)','CONVERSACIONES ANTIGUAS (508)'],
+    ['Paused (43)','En pausa (43)'], ['Ended conversations (12)','Sesiones terminadas (12)'],
+    ['OLDER CONVERSATIONS (508)','SESIONES ANTIGUAS (508)'],
     ['12 min ago','hace 12 min'], ['2 h ago','hace 2 h'], ['31 days ago','hace 31 días'],
     ['in ~15 min · estimated','en ~15 min · estimada'], ['late by ~4 min','retrasada ~4 min'],
     ['Today’s tasks · UTC: 37.5%','Tareas de hoy · UTC: 37.5%'],
@@ -84,7 +84,7 @@ test('dates, source metadata and usage range survive translated UI prefixes', ()
   assert.equal(Locale.text('7 days · Renews Oct 1, 14:35 UTC · Read 13:05 UTC · local conversation history','es'),
     '7 días · Se renueva Oct 1, 14:35 UTC · Lectura 13:05 UTC · local conversation history');
   const range='2026-09-25 → 2026-10-01 UTC. Days already read; the first reading does not reconstruct older excluded days. Large conversations use only their opening and recent readings.';
-  assert.equal(Locale.text(range,'es'),'2026-09-25 → 2026-10-01 UTC. Días ya leídos; la primera lectura no reconstruye los días antiguos excluidos. Las conversaciones grandes solo usan el inicio y las lecturas recientes.');
+  assert.equal(Locale.text(range,'es'),'2026-09-25 → 2026-10-01 UTC. Días ya leídos; la primera lectura no reconstruye los días antiguos excluidos. Las sesiones grandes solo usan el inicio y las lecturas recientes.');
 });
 
 test('QA is expanded and LOFI includes the music label only at the UI boundary', () => {

@@ -3,7 +3,7 @@
   // The bell: version notes and tips made on this computer, what waits for you, decisions asked by your AIs,
   // and, only when you ask, the author's public messages. Read marks and usage marks stay in this browser.
   // This version sends no usage data anywhere.
-  const VERSION='2.1.0';
+  const VERSION='2.1.1';
   const REPO='https://github.com/tridev360/lazy-du-agent-panel';
   const NEWS_SOURCE='https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json';
   const CONTACTS=[{text:'github.com/tridev360',url:'https://github.com/tridev360'},{text:'X @hallstrid',url:'https://x.com/hallstrid'}];
@@ -89,14 +89,17 @@
     else if(item.action==='accelerate'){d.getElementById('drawer')?.close?.();d.getElementById('acel-trigger')?.click();}
     markRead([item.id]);
   }
+  const offline=()=>root.PanelStartup?.offline?.()===true||d.documentElement.dataset.offline==='true';
+  function offlineNotice(){const copy={en:['Offline mode','External connections are disabled in offline mode.'],pt:['Modo offline','Conexões externas estão desligadas no modo offline.'],es:['Modo sin conexión','Las conexiones externas están desactivadas en el modo sin conexión.']}[lingua(lang)];root.panelDrawer(copy[0],[el('p',copy[1],'summary-note')]);}
   async function checkAuthor(){
+    if(offline()){offlineNotice();return;}
     if(checking)return;checking=true;status='';
     try{const r=await root.fetch('/api/news',{cache:'no-store',credentials:'same-origin',headers:{Accept:'application/json'}});const j=await r.json();
       if(!j||!j.ok){status=T[lingua(lang)].authorFail;}else{const a=get(KEYS.author,{auto:false});put(KEYS.author,{auto:!!a.auto,checkedAt:new Date().toISOString(),items:Array.isArray(j.items)?j.items.slice(0,20):[]});status=j.items?.length?'':T[lingua(lang)].authorNone;}
     }catch{status=T[lingua(lang)].authorFail;}finally{checking=false;paint();if(d.getElementById('drawer')?.open&&d.getElementById('drawer')?.dataset.bell==='true')open();}
   }
-  function contact(){const t=T[lingua(lang)],box=el('div',undefined,'bell-contact');for(const c of CONTACTS){const a=el('a',c.text,'bell-link');a.href=c.url;a.target='_blank';a.rel='noopener noreferrer';box.append(a);}root.panelDrawer(t.contact,[box]);}
-  function feedback(){root.open(issueURL(lang),'_blank','noopener,noreferrer');}
+  function contact(){if(offline()){offlineNotice();return;}const t=T[lingua(lang)],box=el('div',undefined,'bell-contact');for(const c of CONTACTS){const a=el('a',c.text,'bell-link');a.href=c.url;a.target='_blank';a.rel='noopener noreferrer';box.append(a);}root.panelDrawer(t.contact,[box]);}
+  function feedback(){if(offline()){offlineNotice();return;}root.open(issueURL(lang),'_blank','noopener,noreferrer');}
   function open(){
     const t=T[lingua(lang)],s=state(),read=new Set(s.read),all=list(),box=el('div',undefined,'bell'),head=el('div',undefined,'bell-head'),markAll=el('button',t.markAll,'bell-all');
     markAll.type='button';markAll.onclick=()=>{markRead(all.map(x=>x.id));open();};head.append(el('p',t.unread(all.filter(x=>!read.has(x.id)).length),'summary-note'),markAll);box.append(head);
@@ -129,6 +132,6 @@
   function paint(){const n=unread(),t=T[lingua(lang)];count.textContent=n>9?'9+':n?String(n):'';count.hidden=!n;button.title=t.bell;button.setAttribute('aria-label',t.bell+(n?' · '+t.unread(n):''));}
   function mount(){const actions=d.getElementById('clean-actions');if(actions&&!button.isConnected){const gear=d.getElementById('look-gear');if(gear)actions.insertBefore(button,gear);else actions.append(button);}}
   d.addEventListener('click',e=>{const hit=e.target.closest?.('#clean-wen,#clean-auto,#acel-trigger,.teach-open');if(!hit)return;used(hit.id==='clean-wen'?'wen':hit.id==='clean-auto'?'automate':hit.id==='acel-trigger'?'accelerate':'teach');},true);
-  function update(data,locale){snapshot=data||snapshot;lang=lingua(locale||lang);mount();paint();if(!checking&&shouldFetchAuthor(get(KEYS.author,{auto:false})))checkAuthor();}
+  function update(data,locale){snapshot=data||snapshot;lang=lingua(locale||lang);mount();paint();if(!offline()&&!checking&&shouldFetchAuthor(get(KEYS.author,{auto:false})))checkAuthor();}
   root.PanelBell=Object.freeze({...api,update,open,used,feedback,contact,unread});
 })(typeof window==='object'?window:globalThis);

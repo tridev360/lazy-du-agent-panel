@@ -1,4 +1,14 @@
-# Lazy Du Agent Panel 2.1
+# Lazy Du Agent Panel 2.1.1
+
+## What the panel solves
+
+- Took on too much and got lost? See the Claude Code and Codex sessions on this computer side by side, in one place.
+- Can't remember who started what? Team shows who started each session and the helpers of each one.
+- Lost track of an agent? The timeline shows the tools it used and its last activity.
+- Left a session open and forgot? Team separates sessions with recent activity from paused and finished ones.
+- Want to know where things stand right now? WEN opens the current summary in six lines.
+- Spent more than you thought? Usage shows this week's and today's tokens and how much credit has been used.
+- Everything stays on your computer. No account, no key, and it reads only metadata, never your conversations.
 
 Follow your Claude Code and Codex sessions in a local panel. Start small, switch modes whenever you need more detail.
 
@@ -29,6 +39,22 @@ node src/open.cjs --demo
 
 The panel stays on this computer. Close panel in the footer stops a launcher with desktop shutdown enabled. Closing a browser tab alone leaves the server running. Ctrl+C stops a source server.
 
+## If an AI runs the command
+
+This is a local server. Run it once: the launcher keeps the server in the background. If port 3251 already answers with this version, only open http://127.0.0.1:3251. You can close the terminal; use Close panel in the footer to stop the server. Add --lang pt for Portuguese messages or --lang es for Spanish.
+
+## What leaves your computer
+
+Metadata and preferences stay local. Author messages are off by default and fetch the public file only after you allow them. Music and external links open only after a click. Feedback opens an issue with fixed text; you decide whether to submit it on GitHub. Check for a new version requests only the official repository's public package.json, on click, without sending metadata. Installation and updates are never automatic. The page blocks external connections outside these permitted features.
+
+To disable author messages, version checks, music, feedback and external links:
+
+~~~sh
+node src/open.cjs --offline
+~~~
+
+If an online panel already uses that port, close it from its footer before opening offline mode.
+
 ## Three modes
 
 | Mode | Home overview |
@@ -49,9 +75,37 @@ WEN opens the current overview. AUTOMATE prepares a plan you can copy into your 
 
 ## Teach your AI and the bell
 
-Teach your AI, in Feed your AI and in the setup guide, shows optional working rules you can paste into CLAUDE.md or AGENTS.md. First choose who does what: keep your current way (the panel changes nothing and only shows what it observed from tool names in your sessions), a custom choice with short pros and cons for each AI, or the recommendation. The panel only copies the text. It never writes to your files.
+Teach your AI starts with one button: Copy and paste into Claude Code. I use Codex switches the copied request to Codex. Paste it into a chat running on your computer, in the app or terminal. The panel only copies a request; your AI saves the rules if you approve its file edit. A cloud chat must stop if it cannot reach your home folder. The rules apply to all projects through ~/.claude/CLAUDE.md or ~/.codex/AGENTS.md. Other options stays closed and includes a project-only choice and who does what.
+
+### Exact copied rules (Claude Code, all projects)
+
+~~~text
+Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my projects. Put them in a section that starts with the title "## Lazy Du Agent Panel". If that section already exists, replace only that section: its title line and the lines starting with "- " right below it. Create the file if it does not exist. Do not delete or change anything else. Then confirm in one line. If you cannot reach my home folder from here (for example, in a cloud session), say so in one line and stop.
+
+## Lazy Du Agent Panel: my working rules (to remove them, delete this section)
+- Coordinate: the AI where I start the work coordinates and splits it into tasks; the other AI checks the plan.
+- Write code: Claude Code and Codex in parallel on independent tasks (tasks that touch the same files go one after another), with the strongest model and high effort.
+- Review: the other AI reviews each change; nobody reviews its own work.
+- Analyze and measure: a smaller model with low effort.
+- Ship to production: only after my explicit ok, by the AI that runs this project's safest checks.
+- Write public text: one AI writes, the other reviews, and I approve before it goes out.
+- In projects that have a tasks/ folder, keep one Markdown file per task there.
+- Phases: new, open, doing, ready, review, released, done. When a task is finished, set phase: done and add completed_at: with the ISO date and time.
+- Questions that need my decision go in tasks/decisions.md as numbered headings, like ## 1. Which music fits the menu? Add DONE once I answer.
+~~~
+
 
 The bell lists version notes and tips made on this computer, what waits for you and decisions asked by your AIs. Read marks, and the screens you opened (used only to suggest one feature you have not tried, at most one a day), stay in this browser. Author messages are off by default. When you turn them on, or press See author messages, the local server downloads https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json with a plain GET: no identifier, no cookie, a 5 second limit, and at most once a day when on. GitHub sees your IP address like any download. Send feedback opens a new GitHub issue in your browser; nothing is sent until you submit it there.
+
+## Security
+
+The reader projects a fixed allowlist of metadata from ~/.claude/projects and ~/.codex/sessions: timestamps, hashed session identifiers, known parents, model, effort, project labels, tool names and counts, token counters and available credit windows. Conversation bodies and tool arguments are never decoded. It does not read .env, auth.json or credential files.
+
+The panel stores its own configuration and projected metadata cache in ~/.lazy-du-panel/. Browser choices stay in localStorage. Connecting a task folder lets it read the Markdown task headings and fields documented below. It never edits your AI instruction files: Teach your AI copies a request, and your AI can save those rules only after you approve its file edit.
+
+The server binds to 127.0.0.1:3251 and checks Host and Origin; the page uses a Content Security Policy. The server's two public download destinations are the author's news.json (off until enabled or clicked) and package.json (version check on click). Optional music and external links open only on click. No session metadata is sent. Use --offline to disable these features.
+
+To stay on this version, use a tagged checkout or run npx github:tridev360/lazy-du-agent-panel#v2.1.1 after that tag is published. Updating is always your choice.
 
 ## Privacy
 

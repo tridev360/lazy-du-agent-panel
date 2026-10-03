@@ -21,7 +21,7 @@
       now:(to,state,action)=>to+' está '+state+(action?': '+action:'')+'.',last:when=>'Última atividade '+when+'.',
       reply:(from,to)=>from+' terminou e devolveu para '+to+'.',question:from=>from+' está esperando a sua resposta.',idle:(a,b)=>'Sem atividade recente entre '+a+' e '+b+'.',
       source:'Só dos metadados das sessões: horários, vínculo de origem, estado, modelo, nomes e contagens de ferramentas. Nenhum texto de mensagem é lido.',ai:'IA',model:'Modelo',tools:'Ferramentas',tokens:'Tokens',project:'Projeto'},
-    es:{tl:{started:'Inicio',by:p=>'por '+p,direct:ai=>'directamente en '+ai+' · sin sesión de origen',outside:'por una sesión fuera de esta lectura',model:'Modelo y esfuerzo',helper:'Empezó un ayudante',tools:'Herramientas usadas',steps:n=>n===1?'1 paso':n+' pasos',noneRead:'ninguna leída',last:'Última actividad',finished:'Terminada',working:'Trabajando ahora',recent:'Actividad reciente',waiting:'Esperándote',paused:'En pausa',open:'Línea de tiempo',edge:(a,b,what)=>a+' → '+b+' · '+what},title:'Equipo',note:'Quién empezó qué, según los metadatos de las sesiones. Rosa eres tú, naranja es Claude Code, azul es Codex.',you:'Tú',sessions:n=>n===1?'1 sesión':n+' sesiones',none:'Ninguna sesión en esta lectura',state:{working:'trabajando',recent:'reciente',waiting:'esperándote',resting:'en pausa',finished:'terminada'},
+    es:{tl:{started:'Inicio',by:p=>'por '+p,direct:ai=>'directamente en '+ai+' · sin sesión de origen',outside:'por una sesión fuera de esta lectura',model:'Modelo',helper:'Empezó un ayudante',tools:'Herramientas usadas',steps:n=>n===1?'1 paso':n+' pasos',noneRead:'ninguna leída',last:'Última actividad',finished:'Terminada',working:'Trabajando ahora',recent:'Actividad reciente',waiting:'Esperándote',paused:'En pausa',open:'Línea de tiempo',edge:(a,b,what)=>a+' → '+b+' · '+what},title:'Equipo',note:'Quién empezó qué, según los metadatos de las sesiones. Rosa eres tú, naranja es Claude Code, azul es Codex.',you:'Tú',sessions:n=>n===1?'1 sesión':n+' sesiones',none:'Ninguna sesión en esta lectura',state:{working:'trabajando',recent:'reciente',waiting:'esperándote',resting:'en pausa',finished:'terminada'},
       legend:{work:'trabajo enviado',question:'esperándote',reply:'respuesta devuelta',idle:'sin actividad reciente'},hint:'Desplázate de lado para ver todo el equipo.',counts:(p,f)=>'En pausa: '+p+' · Terminadas: '+f,noneWord:'ninguna',
       wireLabel:(a,b,what)=>a+' a '+b+': '+what,kind:{work:'trabajo enviado',question:'esperándote',reply:'respuesta devuelta',idle:'sin actividad reciente'},
       youHub:(ai,n,active)=>'Trabajas con '+ai+' en '+n+(n===1?' sesión':' sesiones')+' en esta lectura; '+(active===0?'ninguna':active)+' activa'+(active>1?'s':'')+' ahora.',
@@ -56,7 +56,8 @@
     }
     return {nodes,edges};
   }
-  function layout(g,{nodeW=212,nodeH=68,gapX=20,rowGap=52,colGap=64,pad=24}={}){
+  function layout(g,{nodeW=212,nodeH=68,gapX=20,rowGap=52,colGap=64,pad=24,maxWidth=null,stacked=false}={}){
+    if(Number.isFinite(maxWidth))return fittedLayout(g,{nodeW,nodeH,gapX,rowGap,colGap,pad,maxWidth,stacked});
     const sessions=g.nodes.filter(n=>n.type==='session'),maxDepth=Math.max(-1,...sessions.map(n=>n.depth)),pos=new Map();
     const levels={claude:[],codex:[]};for(const n of sessions)(levels[n.family][n.depth]||(levels[n.family][n.depth]=[])).push(n);
     const colW={};for(const f of FAMILIES)colW[f]=Math.max(nodeW,...Array.from(levels[f],l=>l?l.length*(nodeW+gapX)-gapX:0));
@@ -70,6 +71,21 @@
       row.forEach((n,i)=>pos.set(n.id,{x:start+i*(nodeW+gapX),y:rowY(2+d),w:nodeW,h:nodeH}));
     }
     return {pos,width,height:rowY(2+maxDepth+1)-rowGap+pad,colX,colW,rowY:rowY(1),nodeH};
+  }
+  function fittedLayout(g,{nodeW,nodeH,gapX,rowGap,colGap,pad,maxWidth,stacked}){
+    const width=Math.max(maxWidth,2*pad+nodeW*(stacked?1:2)+(stacked?0:colGap)),pos=new Map(),colX={},colW={},colY={},colH={},levels={claude:[],codex:[]},step=nodeH+rowGap;
+    for(const n of g.nodes.filter(n=>n.type==='session'))(levels[n.family][n.depth]||(levels[n.family][n.depth]=[])).push(n);
+    for(const f of FAMILIES){colW[f]=(width-2*pad-(stacked?0:colGap))/(stacked?1:2);colX[f]=pad+(f==='codex'&&!stacked?colW.claude+colGap:0);}
+    pos.set('you',{x:(width-nodeW)/2,y:pad,w:nodeW,h:nodeH});
+    const rank={working:0,waiting:1,recent:2,resting:3,finished:4};
+    const rowFor=(f,depth)=>(levels[f][depth]||[]).slice().sort((a,b)=>(pos.get(a.parent)?.x||0)-(pos.get(b.parent)?.x||0)||(rank[a.session.state]??3)-(rank[b.session.state]??3));
+    const capacity=f=>Math.max(1,Math.floor((colW[f]+gapX)/(nodeW+gapX)));
+    const place=(f,row,y)=>{const cap=capacity(f);for(let i=0;i<row.length;i++){const line=Math.floor(i/cap),count=Math.min(cap,row.length-line*cap),span=count*(nodeW+gapX)-gapX;pos.set(row[i].id,{x:colX[f]+(colW[f]-span)/2+(i%cap)*(nodeW+gapX),y:y+line*step,w:nodeW,h:nodeH});}return Math.ceil(row.length/cap);};
+    let cursor=pad+step;
+    const hub=f=>{colY[f]=cursor;pos.set('hub-'+f,{x:colX[f]+(colW[f]-nodeW)/2,y:cursor,w:nodeW,h:nodeH});};
+    if(stacked){for(const f of FAMILIES){hub(f);cursor+=step;for(let depth=0;depth<levels[f].length;depth++)cursor+=place(f,rowFor(f,depth),cursor)*step;colH[f]=cursor-rowGap-colY[f];cursor+=pad;}}
+    else{for(const f of FAMILIES)hub(f);cursor+=step;const depths=Math.max(levels.claude.length,levels.codex.length);for(let depth=0;depth<depths;depth++){let rows=0;for(const f of FAMILIES)rows=Math.max(rows,place(f,rowFor(f,depth),cursor));cursor+=rows*step;}for(const f of FAMILIES)colH[f]=cursor-rowGap-colY[f];}
+    return {pos,width,height:cursor-rowGap+pad,colX,colW,colY,colH,rowY:colY.claude,nodeH,stacked};
   }
   function wire(a,b){const x1=a.x+a.w/2,y1=a.y+a.h,x2=b.x+b.w/2,y2=b.y,dy=Math.max(24,(y2-y1)/2);return {p:[[x1,y1],[x1,y1+dy],[x2,y2-dy],[x2,y2]],d:'M'+x1+' '+y1+' C'+x1+' '+(y1+dy)+' '+x2+' '+(y2-dy)+' '+x2+' '+y2};}
   function point(p,t){const u=1-t,a=u*u*u,b=3*u*u*t,c=3*u*t*t,e=t*t*t;return [a*p[0][0]+b*p[1][0]+c*p[2][0]+e*p[3][0],a*p[0][1]+b*p[1][1]+c*p[2][1]+e*p[3][1]];}
@@ -92,7 +108,12 @@
   const PARTICLES=[0,1,3,5],SPEED=[0,36,64,84];
   const particles=lv=>PARTICLES[Math.max(0,Math.min(3,lv|0))];
   const direction=edge=>edge.kind==='question'||edge.kind==='reply'?-1:1;
-  const api={W,NAMES,FAMILIES,lingua,level,kindOf,graph,layout,wire,point,length,particles,direction,SPEED,timeline};
+  function syncOwnedAnimations(animations,pause,paused){
+    for(const animation of paused)if(animation.playState==='idle'||animation.playState==='finished')paused.delete(animation);
+    if(pause){for(const animation of animations)if(animation.playState==='running'){animation.pause();paused.add(animation);}}
+    else{for(const animation of paused)if(animation.playState==='paused')animation.play();paused.clear();}
+  }
+  const api={syncOwnedAnimations,W,NAMES,FAMILIES,lingua,level,kindOf,graph,layout,wire,point,length,particles,direction,SPEED,timeline};
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document||!root.PanelV2)return;
 
@@ -144,6 +165,8 @@
     if(Number.isFinite(a.tokens))lines.push(w.tokens+': '+compact(a.tokens));if(a.projectName)lines.push(w.project+': '+a.projectName);
     const when=relative(lastAt(a));if(when)lines.push(w.last(when));return lines;
   }
+  const pausedAnimations=new Set();
+  function syncAnimations(){syncOwnedAnimations(section.getAnimations?.({subtree:true})||[],d.hidden||reduced(),pausedAnimations);}
   function stop(){if(frame)root.cancelAnimationFrame(frame);frame=0;lastTime=0;}
   function visible(){return !d.hidden&&view&&!view.hidden&&view.offsetParent!==null&&moving.length>0&&!reduced();}
   function tick(now){
@@ -158,12 +181,12 @@
     legend.replaceChildren();for(const [key,cls]of [['you','you'],['claude','claude'],['codex','codex']]){const i=el('span',undefined,'look-legend-item');const dot=el('i',undefined,'look-legend-dot');dot.dataset.family=cls;i.append(dot,el('span',key==='you'?w.you:NAMES[key]));legend.append(i);}
     for(const kind of ['work','question','reply','idle']){const i=el('span',undefined,'look-legend-item'),line=el('i',undefined,'look-legend-line');line.dataset.kind=kind;i.append(line,el('span',w.legend[kind]));legend.append(i);}
     const list=snapshot&&root.PanelCore?.agents?root.PanelCore.agents(snapshot):[],hier=root.PanelR9?.hierarchy?root.PanelR9.hierarchy(list):{edges:new Map()};
-    const g=graph(list,id=>hier.edges.get(id)||null),compactView=root.matchMedia?.('(max-width:600px)').matches,L=layout(g,compactView?{nodeW:172,nodeH:68,gapX:14,rowGap:44,colGap:36,pad:16}:{});
+    const g=graph(list,id=>hier.edges.get(id)||null),compactView=root.matchMedia?.('(max-width:600px)').matches,L=layout(g,{...(compactView?{nodeW:172,nodeH:68,gapX:14,rowGap:44,colGap:36,pad:16}:{}),maxWidth:scroller.clientWidth||Math.max(240,(root.innerWidth||1280)-48),stacked:!!root.matchMedia?.('(max-width:1099px)').matches});
     current={g,L,list,byId:new Map(list.map(a=>[a.id,a])),parentOf:id=>hier.edges.get(id)||null};
     inner.replaceChildren();inner.style.width=L.width+'px';inner.style.height=L.height+'px';
     const art=svg('svg',{class:'look-graph-svg',width:L.width,height:L.height,viewBox:'0 0 '+L.width+' '+L.height,'aria-hidden':'false',role:'group'});art.setAttribute('aria-label',w.title);
     const panels=svg('g',{class:'look-panels'}),wires=svg('g',{class:'look-wires'}),badges=svg('g',{class:'look-badges'}),dots=svg('g',{class:'look-particles','aria-hidden':'true'});
-    for(const f of FAMILIES)panels.append(svg('rect',{class:'look-panel','data-family':f,x:L.colX[f]-10,y:L.rowY-10,width:L.colW[f]+20,height:L.height-L.rowY-6,rx:18}));
+    for(const f of FAMILIES)panels.append(svg('rect',{class:'look-panel','data-family':f,x:L.colX[f]-10,y:(L.colY?.[f]??L.rowY)-10,width:L.colW[f]+20,height:L.colH?L.colH[f]+20:L.height-L.rowY-6,rx:18}));
     art.append(panels,wires,badges,dots);inner.append(art);
     for(const edge of g.edges){
       const a=L.pos.get(edge.from),b=L.pos.get(edge.to);if(!a||!b)continue;const geo=wire(a,b);
@@ -185,10 +208,10 @@
     }
     const counts=snapshot?.usage?.counts,word=n=>Number.isFinite(n)?(n?String(n):w.noneWord):'?';foot.textContent=counts?w.counts(word(counts.paused),word(counts.finished)):'';
     if(compactView){const you=L.pos.get('you');if(you)scroller.scrollLeft=Math.max(0,you.x+you.w/2-scroller.clientWidth/2);}
-    start();
+    syncAnimations();start();
   }
   d.addEventListener('click',e=>{const row=e.target.closest?.('#home-stage .du-agent[data-agent-id]');if(!row||d.documentElement.dataset.look!=='today')return;if(openTimeline(row.dataset.agentId)){e.stopPropagation();e.preventDefault();}},true);
-  d.addEventListener('visibilitychange',()=>{if(d.hidden)stop();else start();});
+  d.addEventListener('visibilitychange',()=>{syncAnimations();if(d.hidden)stop();else start();});
   root.matchMedia?.('(prefers-reduced-motion: reduce)').addEventListener?.('change',()=>draw());
   new root.MutationObserver(()=>draw()).observe(d.documentElement,{attributes:true,attributeFilter:['data-motion']});
   let resizeTimer=0;root.addEventListener('resize',()=>{clearTimeout(resizeTimer);resizeTimer=setTimeout(draw,150);});

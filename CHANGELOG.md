@@ -1,5 +1,13 @@
 # Changelog
 
+## 2.1.1
+
+- Clearer first reading, language in the header, consistent controls and simple AI rules copying.
+- What the panel solves on Home and in the README; security and pinned-version instructions.
+- Side-by-side Team from 1100 px, paused hidden animations and incremental status reads.
+- Optional version check on click, background launcher reuse and offline mode.
+
+
 ## 2.1.0
 
 - Clean home with a recent-session count, six short lines and four tabs plus More.

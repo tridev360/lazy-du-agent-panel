@@ -1,0 +1,5 @@
+'use strict';
+const test=require('node:test'),assert=require('node:assert/strict'),fs=require('node:fs'),path=require('node:path');
+const {WORDS}=require('../public/resolve211.js');
+test('home card and top README carry identical final copy in EN/PT',()=>{for(const [lang,file]of [['en','README.md'],['pt','README.pt-BR.md']]){const text=fs.readFileSync(path.join(__dirname,'..',file),'utf8');assert.ok(text.indexOf('## '+WORDS[lang].title)<text.indexOf('## '+(lang==='en'?'Open in under':'Abrir em menos')));assert.equal(WORDS[lang].lines.length,7);for(const line of WORDS[lang].lines)assert.ok(text.includes('- '+line));}assert.equal(WORDS.es.lines.length,7);});
+test('public copy avoids a claim about unpublished guiding warnings',()=>{for(const copy of Object.values(WORDS))assert.doesNotMatch(JSON.stringify(copy),/2\.2|coming soon|em breve|próximamente|[\u2013\u2014]/);});

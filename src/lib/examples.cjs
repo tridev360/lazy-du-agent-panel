@@ -18,7 +18,7 @@ function exampleFor(base,size){
       {...make('example-guide','writer','Player guide','Guia do jogador','Guía del jugador',authors[1].id,'Writing the player guide','Escrevendo o guia do jogador','Escribiendo la guía del jugador'),agent:authors[1].agent,model:authors[1].model,effort:authors[1].effort,tools:[{name:'Read',count:5},{name:'Write',count:2}],observedSteps:7},
       make('example-motion','dev','Animation support','Apoio de animação','Apoyo de animación','example-qa','Checking menu motion','Conferindo a animação do menu','Comprobando la animación del menú')];
     const toolsFor={'example-lead':[{name:'exec_command',count:4},{name:'apply_patch',count:1}],'example-qa':[{name:'exec_command',count:9}],'example-review':[{name:'exec_command',count:6},{name:'apply_patch',count:1}],'example-motion':[{name:'exec_command',count:3},{name:'apply_patch',count:2}]};
-    for(const s of sample.usage.sessions)if(toolsFor[s.id]){s.tools=toolsFor[s.id];s.observedSteps=s.tools.reduce((n,t)=>n+t.count,0);}
+    for(const s of sample.usage.sessions){if(toolsFor[s.id]){s.tools=toolsFor[s.id];s.observedSteps=s.tools.reduce((n,t)=>n+t.count,0);}s.completedSteps=Math.min(s.completedSteps||0,s.observedSteps);}
     sample.usage.counts={active:sample.usage.sessions.length,paused:0,finished:0};sample.usage.previewSessions=[];
   }
   const now=Date.now(),iso=min=>new Date(now-min*60000).toISOString();

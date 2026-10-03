@@ -335,3 +335,6 @@ html[data-look=today] #drawer .tl-link{justify-self:start;min-height:32px;paddin
 html[data-look=today] .look-col-foot{display:flex;align-items:center;justify-content:space-between;gap:8px}
 html[data-look=today] .look-col-timeline{flex:none;min-height:36px;padding:0 10px;border:1px solid #34343e;border-radius:9px;background:transparent;color:#fff;font-size:12px;cursor:pointer}
 html[data-look=today] .look-col-timeline:hover{border-color:var(--who)}
+
+html[data-look=today] #check-update{font:inherit;min-height:44px;max-width:100%;padding:0 12px;border:1px solid #34343d;border-radius:10px;background:#111116;color:#b9b9c8;white-space:normal;overflow-wrap:anywhere}
+@media(max-width:600px){html[data-look=today] .look-ai-text{width:100%}}
