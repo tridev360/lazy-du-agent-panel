@@ -1,4 +1,4 @@
-# Lazy Du Agent Panel 2.2.0
+# Lazy Du Agent Panel 2.2.1
 
 ## O que o painel resolve
 
@@ -112,19 +112,21 @@ O painel salva sua configuração e o cache de metadados projetados em ~/.lazy-d
 
 O servidor escuta em 127.0.0.1:3251 e confere Host e Origin; a página usa uma Content Security Policy. Os dois destinos públicos de download do servidor são news.json do autor (desligado até você ligar ou clicar) e package.json (conferência de versão no clique). Música opcional e links externos só abrem no clique. Nenhum metadado de sessão sai. Use --offline para desligar esses recursos.
 
-Para manter esta versão, use uma cópia com tag ou rode npx github:tridev360/lazy-du-agent-panel#v2.2.0 depois que essa tag for publicada. Você escolhe quando atualizar.
+Para manter esta versão, use uma cópia com tag ou rode npx github:tridev360/lazy-du-agent-panel#v2.2.1 depois que essa tag for publicada. Você escolhe quando atualizar.
 
 ## Privacidade
 
-Para achar pastas de tarefas, ele também confere se existe uma pasta tasks nas pastas de projeto das suas sessões. Só lê os .md da pasta que você conectar.
+Para achar pastas de tarefas, ele também confere se existe uma pasta tasks nas pastas de projeto das suas sessões. Só lê os .md da pasta que você conectar. Para identificar o projeto, ele também procura a existência de .git e package.json na pasta da sessão e nas pastas acima dela. Essa busca só confere se existem, sem ler seu conteúdo.
 
-Para marcar os Primeiros passos, ele também abre o ~/.claude/CLAUDE.md e o ~/.codex/AGENTS.md só para ver se uma linha começa com "## Lazy Du Agent Panel". Guarda só sim ou não e nunca mostra nem manda o resto.
+Para marcar os Primeiros passos, ele também abre o ~/.claude/CLAUDE.md e o ~/.codex/AGENTS.md só para ver se uma linha começa com "## Lazy Du Agent Panel". Guarda só sim ou não e nunca mostra nem manda o resto. Guarda também a hora em que o arquivo global mudou, para identificar conversas iniciadas depois dessa mudança.
 
-O servidor escuta só no localhost. Lê metadados permitidos de .codex/sessions e .claude/projects no seu perfil: identificadores, origem conhecida, datas, modelo, esforço, nomes de ferramentas e contadores de tokens. Projeta esses campos sem decodificar corpos de conversas ou argumentos de ferramentas. Identificadores de sessão são resumidos por hash. O nome da pasta do projeto pode aparecer; o caminho completo fica privado no cache do perfil, para Conectar as tarefas deste projeto encontrar uma pasta de tarefas já observada. Ele nunca aparece nos dados enviados ao navegador nem sai deste computador. Sem telemetria nem credenciais: esta versão não manda dado de uso.
+O servidor escuta só no localhost. Lê metadados permitidos de .codex/sessions e .claude/projects no seu perfil: identificadores, origem conhecida, datas, modelo, esforço, nomes de ferramentas e contadores de tokens. Projeta esses campos sem decodificar corpos de conversas ou argumentos de ferramentas. Identificadores de sessão são resumidos por hash. O nome da pasta do projeto pode aparecer; o caminho completo fica privado no cache do perfil, para `Conectar as tarefas de <pasta>` encontrar uma pasta de tarefas já observada. Ele nunca aparece nos dados enviados ao navegador nem sai deste computador. Sem telemetria nem credenciais: esta versão não manda dado de uso.
 
-Consumo e preferências ficam locais. O cache guarda metadados projetados; esta versão invalida o cache anterior de conversas. As preferências do acelerador ficam em .lazy-du-panel/acceleration.json no seu perfil. Arquivo corrompido mostra erro sem ser sobrescrito.
+Consumo e preferências ficam locais. O cache guarda metadados projetados; esta versão invalida o cache anterior de conversas. Se uma versão anterior deixou uma pasta .panel-cache na pasta do painel, você pode apagar esse cache antigo. As preferências do acelerador ficam em .lazy-du-panel/acceleration.json no seu perfil. Arquivo corrompido mostra erro sem ser sobrescrito.
 
-Uma pasta opcional de tarefas pode ser conectada em Conectar minha pasta de tarefas, por exemplo na Fila, ou em Conectar as tarefas deste projeto, nos Primeiros passos. O painel lê arquivos .md que começam com um cabeçalho curto:
+Nos Primeiros passos, `Conectar as tarefas de <pasta>` conecta uma pasta tasks que já existe; `<pasta>` é o nome da pasta do projeto. Cada passo pode levar alguns minutos para marcar porque a leitura e as conferências em cache se atualizam separadamente.
+
+Conectar minha pasta de tarefas, na Fila, copia um texto para a sua IA criar a pasta tasks no seu projeto. O painel lê os .md dela. Formato de referência:
 
 ~~~md
 ---

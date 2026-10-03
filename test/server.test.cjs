@@ -167,12 +167,18 @@ test("public assets remain available after the directory reorganization", async 
     "/",
     "/panel.js",
     "/panel.css",
+    "/buttons221.css",
     "/du.png",
     "/marca.png",
     "/favicon.svg",
   ]) {
     const response = await fetch(base + asset);
     a.equal(response.status, 200, asset);
-    a.ok((await response.arrayBuffer()).byteLength > 0, asset);
+    if (asset === "/buttons221.css") {
+      a.match(response.headers.get("content-type"), /^text\/css\b/);
+      a.equal(await response.text(), fs.readFileSync(path.join(__dirname, "..", "public", "buttons221.css"), "utf8"));
+    } else {
+      a.ok((await response.arrayBuffer()).byteLength > 0, asset);
+    }
   }
 });

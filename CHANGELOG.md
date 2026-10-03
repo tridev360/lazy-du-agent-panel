@@ -1,8 +1,19 @@
 # Changelog
 
+## 2.2.1
+
+- Project-level indicators show whether the team rules were observed, without treating the global setup as proof for each project.
+- Teach your AI shows one instruction after copying, with the selected AI tool.
+- Version 2.1 notes retain their read marks after an update.
+- First steps allows a few minutes for reading and cached checks; the README matches the connection button and explains file timestamps and project discovery.
+- The fallback version and validation checks include this patch release.
+
 ## 2.2.0
 
-First steps guides setup with automatic detection, local rules copying and one-click tasks connection. Six metadata-based notices guide context handoffs, separate projects, model and effort choices, idle helpers, parked projects and a three-project priority queue. The model/effort table stays under Teach your AI. Choices stay local and do not run agents or edit instruction files.
+- First steps guides setup with automatic detection, local rules copying and one-click tasks connection.
+- Six metadata-based notices guide context handoffs, separate projects, model and effort choices, idle helpers, parked projects and a three-project priority queue.
+- The model/effort table stays under Teach your AI.
+- Choices stay local and do not run agents or edit instruction files.
 
 ## 2.1.1
 

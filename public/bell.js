@@ -3,7 +3,7 @@
   // The bell: version notes and tips made on this computer, what waits for you, decisions asked by your AIs,
   // and, only when you ask, the author's public messages. Read marks and usage marks stay in this browser.
   // This version sends no usage data anywhere.
-  const VERSION='2.2.0';
+  const VERSION='2.2.1';
   const REPO='https://github.com/tridev360/lazy-du-agent-panel';
   const NEWS_SOURCE='https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json';
   const CONTACTS=[{text:'github.com/tridev360',url:'https://github.com/tridev360'},{text:'X @hallstrid',url:'https://x.com/hallstrid'}];
@@ -49,7 +49,7 @@
   }
   function items({snapshot=null,used={},closed=[],log=null,today='',author=[]}={},lang='en'){
     const t=T[lingua(lang)],out=[];
-    out.push({id:'version-'+VERSION,origin:'panel',title:t.version.title,text:t.version.text,action:'teach'});
+    out.push({id:'version-2.1',origin:'panel',title:t.version.title,text:t.version.text,action:'teach'});
     out.push({id:'recommendations-'+VERSION,origin:'panel',title:t.recs.title,text:t.recs.text,action:'teach'});
     const tip=pickTip(used,closed,log,today);if(tip)out.push({id:'tip-'+tip,origin:'panel',title:t.tip[tip][0],text:t.tip[tip][1],action:tip,tip:true});
     const sessions=snapshot?.usage?.sessions||[];
@@ -60,9 +60,10 @@
     for(const n of author||[])out.push({id:'author-'+n.id,origin:'author',title:n.title?.[lingua(lang)]||n.title?.en||'',text:n.text?.[lingua(lang)]||n.text?.en||'',link:n.link||null,date:n.date||null});
     return out;
   }
+  function readMarks(ids){const read=new Set(Array.isArray(ids)?ids:[]);if([...read].some(id=>/^version-2\.(?:1|2)\.\d+$/.test(id)))read.add('version-2.1');return [...read];}
   function shouldFetchAuthor(author,now=Date.now()){return !!(author&&author.auto===true)&&(!author.checkedAt||!Number.isFinite(Date.parse(author.checkedAt))||now-Date.parse(author.checkedAt)>86400000);}
   function issueURL(lang){const t=T[lingua(lang)];return REPO+'/issues/new?title='+encodeURIComponent(t.issueTitle)+'&body='+encodeURIComponent([...t.issue,'Language: '+lingua(lang)].join('\n'));}
-  const api={VERSION,REPO,NEWS_SOURCE,CONTACTS,FEATURES,KEYS,T,lingua,pickTip,items,issueURL,shouldFetchAuthor};
+  const api={VERSION,REPO,NEWS_SOURCE,CONTACTS,FEATURES,KEYS,T,lingua,pickTip,items,readMarks,issueURL,shouldFetchAuthor};
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document)return;
   const d=root.document;
@@ -74,11 +75,11 @@
   function state(){
     const used=get(KEYS.used,{}),closed=get(KEYS.closed,[]),author=get(KEYS.author,{auto:false,checkedAt:null,items:[]});let log=get(KEYS.tip,null);
     if(!log||log.date!==today()){const id=pickTip(used,closed,null,today());log={date:today(),id};put(KEYS.tip,log);}
-    return {used,closed,log,author,read:get(KEYS.read,[])};
+    return {used,closed,log,author,read:readMarks(get(KEYS.read,[]))};
   }
   function list(){const s=state();return items({snapshot,used:s.used,closed:s.closed,log:s.log,today:today(),author:s.author.items||[]},lang);}
-  function unread(){const read=new Set(get(KEYS.read,[]));return list().filter(x=>!read.has(x.id)).length;}
-  function markRead(ids){const read=new Set(get(KEYS.read,[]));for(const id of ids)read.add(id);put(KEYS.read,[...read].slice(-300));paint();}
+  function unread(){const read=new Set(readMarks(get(KEYS.read,[])));return list().filter(x=>!read.has(x.id)).length;}
+  function markRead(ids){const read=new Set(readMarks(get(KEYS.read,[])));for(const id of ids)read.add(id);put(KEYS.read,[...read].slice(-300));paint();}
   function used(id){if(!FEATURES.includes(id))return;const u=get(KEYS.used,{});if(!u[id]){u[id]=true;put(KEYS.used,u);paint();}}
   function act(item){
     const P=root.PanelV2;

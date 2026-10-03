@@ -5,6 +5,7 @@ const {spawnSync,fork}=require('node:child_process');
 const args=process.argv.slice(2),value=key=>args.includes(key)?args[args.indexOf(key)+1]:null;
 const root=path.resolve(__dirname,'..');
 const sleep=ms=>new Promise(resolve=>setTimeout(resolve,ms));
+function guidedChecks(version){return /^2\.2\.(?:0|[1-9]\d*)$/.test(version)?['validate-guidance22.cjs','validate-onboarding22.cjs','validate-session-copy22.cjs','validate-connect22.cjs']:[];}
 function serverFactory(baseline){
   if(!baseline)return require('../src/panel.cjs').createServer;
   const Module=require('node:module'),source=require('node:zlib').gunzipSync(Buffer.from(baseline,'base64')).toString('utf8');
@@ -40,7 +41,7 @@ async function main(){
   if(validation.status!==0)throw Error('Public validation failed: '+validation.status);
   const delta=spawnSync(process.execPath,[path.join(__dirname,'validate-211-delta.cjs'),'--out',out,'--browser',browserPath,...(playwrightPath?['--playwright',playwrightPath]:[])],{cwd:root,stdio:'inherit',env:{...process.env,OUTPUT_DIR:out}});
   if(delta.status!==0)throw Error('2.1.1 interaction validation failed: '+delta.status);
-  if(require('../package.json').version==='2.2.0')for(const tool of ['validate-guidance22.cjs','validate-onboarding22.cjs','validate-session-copy22.cjs','validate-connect22.cjs']){const check=spawnSync(process.execPath,[path.join(__dirname,tool),'--out',out,'--browser',browserPath,...(playwrightPath?['--playwright',playwrightPath]:[])],{cwd:root,stdio:'inherit',env:{...process.env,OUTPUT_DIR:out}});if(check.status!==0)throw Error('2.2 validation failed: '+tool+' '+check.status);}
+  for(const tool of guidedChecks(require('../package.json').version)){const check=spawnSync(process.execPath,[path.join(__dirname,tool),'--out',out,'--browser',browserPath,...(playwrightPath?['--playwright',playwrightPath]:[])],{cwd:root,stdio:'inherit',env:{...process.env,OUTPUT_DIR:out}});if(check.status!==0)throw Error('2.2 validation failed: '+tool+' '+check.status);}
   const metrics=[],baseline=value('--baseline-gzip');
   if(baseline)for(const mode of ['baseline','candidate'])metrics.push({mode,sample:await cpuSample(mode==='baseline'?baseline:null)});
   fs.writeFileSync(path.join(out,'cpu-server.json'),JSON.stringify({scope:'Synthetic local HTTP workload, server child process only, 50 gzip requests during 5 seconds per sample',baselineRef:value('--baseline-ref'),samples:metrics},null,2)+'\n');
@@ -57,4 +58,5 @@ async function main(){
   }}finally{await browser.close();await new Promise(resolve=>server.close(resolve));fs.rmSync(profile,{recursive:true,force:true});}
   fs.writeFileSync(path.join(out,'responsive.json'),JSON.stringify({ok:true,layouts},null,2)+'\n');console.log('Runtime validation and responsive captures passed.');
 }
-(value('--cpu-child')!==null||args.includes('--cpu-child')?cpuChild():main()).catch(error=>{console.error(error.stack||error.message);process.exitCode=1;});
+module.exports={guidedChecks};
+if(require.main===module)(value('--cpu-child')!==null||args.includes('--cpu-child')?cpuChild():main()).catch(error=>{console.error(error.stack||error.message);process.exitCode=1;});

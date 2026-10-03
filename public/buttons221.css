@@ -1,0 +1,182 @@
+:root {
+  --button221-radius: 12px;
+  --button221-height: 44px;
+  --button221-accent: var(--who-owner);
+  --button221-fill: var(--control-fill);
+  --button221-border: color-mix(in srgb, var(--muted) 72%, var(--button221-fill));
+  --button221-text: var(--control-text);
+  --button221-on-accent: var(--bg);
+  --button221-hover: var(--line);
+  --button221-variant: secondary;
+  --button221-surface: var(--button221-fill);
+  --button221-edge: var(--button221-border);
+  --button221-edge-style: solid;
+  --button221-label: var(--button221-text);
+  --button221-weight: 600;
+  --button221-padding: 8px 12px;
+  --button221-wrap: normal;
+  --button221-overflow-wrap: anywhere;
+}
+
+html:root body :is(button, [role=button]:not(.look-wire-hit), a[data-button], a.boot-retry, a.session-link, a.look-credit-link, a.bell-open, a.bell-link, .welcome-actions>a, footer a, #drawer-body a, summary, #boot-retry):not(.brand) {
+  appearance: none !important;
+  -webkit-appearance: none !important;
+  box-sizing: border-box !important;
+  min-height: var(--button221-height) !important;
+  min-width: var(--button221-height) !important;
+  border-radius: var(--button221-radius) !important;
+  cursor: pointer;
+  transition: none !important;
+}
+
+html:root body :is(button, [role=button]:not(.look-wire-hit), a[data-button], a.boot-retry, a.session-link, a.look-credit-link, a.bell-open, a.bell-link, .welcome-actions>a, footer a, #drawer-body a, summary, #boot-retry):not(.brand):not(.home-card):not(.look-ai-card):not(.metric):not(.live-metric):not(.du-agent):not(.look-node):not(.feature):not(.project-card):not(.feed-mini) {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  height: auto !important;
+  max-width: 100%;
+  padding: var(--button221-padding) !important;
+  background: var(--button221-surface) !important;
+  border: 1px var(--button221-edge-style) var(--button221-edge) !important;
+  color: var(--button221-label) !important;
+  font-family: inherit !important;
+  font-size: var(--clean-small, 14px);
+  font-weight: var(--button221-weight) !important;
+  line-height: 1.4 !important;
+  letter-spacing: normal !important;
+  white-space: var(--button221-wrap) !important;
+  overflow-wrap: var(--button221-overflow-wrap);
+  text-overflow: clip !important;
+  text-decoration: none !important;
+  box-shadow: none !important;
+  filter: none !important;
+  opacity: 1 !important;
+}
+
+html:root body :is([data-button=link], [role=tab], summary, a[data-button], a.boot-retry, a.session-link, a.look-credit-link, a.bell-open, a.bell-link, .welcome-actions>a, footer a, #drawer-body a, .look-link, .look-how, .look-col-timeline, .tl-link, .card-link, .copy-session-switch, .teach-switch, .teach-codex, .teach-secondary, .teach-remove, .teach-remove-global, .guidance-hide, .bell-all, .bell-close, .bell-mark, .bell-contact-open, .clean-menu button, .clean-setup-actions button, #clean-active, #clean-activity-all, #water-info, #setup-guide, #check-update, #quit-panel):not(.brand) {
+  --button221-variant: discreet;
+  --button221-surface: transparent;
+  --button221-edge: transparent;
+  --button221-label: var(--button221-text);
+  --button221-weight: 500;
+}
+
+html:root body :is(.teach-option, .teach-pick, .teach-scope, .acel-opcao, .acel-trigger, .acel-chip, .acel-ligar, .clean-choices button, .clean-modes button, .look-chip-btn, .filter, .chip, #boot-retry) {
+  --button221-variant: secondary;
+  --button221-surface: var(--button221-fill);
+  --button221-edge: var(--button221-border);
+  --button221-label: var(--button221-text);
+  --button221-weight: 600;
+}
+
+html:root body :is([data-button=primary], [data-primary], .teach-primary, .teach-copy, .teach-open, .first-action:not([data-button=secondary]), .feed-action, .feed-button, #clean-wen, #resolve-start):not(.teach-remove):not(.teach-remove-global) {
+  --button221-variant: primary;
+  --button221-surface: var(--button221-accent);
+  --button221-edge: var(--button221-accent);
+  --button221-label: var(--button221-on-accent);
+  --button221-weight: 700;
+}
+
+html:root body :is(.teach-option, .acel-opcao) {
+  display: grid !important;
+  text-align: left;
+  justify-content: stretch;
+}
+html:root body .teach-option { gap: 4px; }
+html:root body :is(.teach-option-label, .teach-option-note, .acel-opcao-corpo) { min-width: 0; white-space: normal; overflow-wrap: anywhere; }
+html:root body .clean-count #clean-active { font-size: var(--clean-large, 32px) !important; }
+
+html:root body :is(.look-gear, .look-bell, .icon-action, #refresh, #close-drawer, .acel-fechar, .command-head>button, .lofi-head>button, .panel-language button) {
+  --button221-padding: 8px;
+  flex-shrink: 0;
+}
+html:root body :is(.look-gear, .look-bell, .icon-action, #refresh, #close-drawer, .acel-fechar, .command-head>button, .lofi-head>button) { width: var(--button221-icon-width, var(--button221-height)) !important; }
+html:root body #version-trigger { --button221-icon-width: auto; --button221-wrap: nowrap; --button221-overflow-wrap: normal; --button221-padding: 8px 12px; }
+html:root body #acel-trigger { --button221-wrap: nowrap; --button221-overflow-wrap: normal; --button221-padding: 8px; gap: 4px !important; }
+html:root body details>summary::after { content: '⌄'; flex: none; }
+html:root body details[open]>summary::after { content: '⌃'; }
+
+html:root body :is(button, [role=button]:not(.look-wire-hit), a[data-button], a.boot-retry, a.session-link, a.look-credit-link, a.bell-open, a.bell-link, .welcome-actions>a, footer a, #drawer-body a, summary, #boot-retry):not(.brand):not(.home-card):not(.look-ai-card):not(.metric):not(.live-metric):not(.du-agent):not(.look-node):not(.feature):not(.project-card):not(.feed-mini):is([aria-pressed=true], [aria-checked=true], [aria-selected=true]) {
+  border-color: var(--button221-accent) !important;
+  box-shadow: inset 0 -2px 0 var(--button221-accent) !important;
+}
+
+@media (hover: hover) {
+  html:root body :is(button, [role=button]:not(.look-wire-hit), a[data-button], a.boot-retry, a.session-link, a.look-credit-link, a.bell-open, a.bell-link, .welcome-actions>a, footer a, #drawer-body a, summary, #boot-retry):not(.brand):not(.home-card):not(.look-ai-card):not(.metric):not(.live-metric):not(.du-agent):not(.look-node):not(.feature):not(.project-card):not(.feed-mini):hover:not(:disabled):not([aria-disabled=true]) {
+    background: color-mix(in srgb, var(--button221-surface) 88%, var(--button221-hover)) !important;
+    border-color: var(--button221-text) !important;
+    opacity: 1 !important;
+    filter: none !important;
+  }
+}
+
+html:root body :is(button, [role=button], a, summary, input, select, textarea, #boot-retry):focus-visible {
+  outline: 2px solid var(--button221-accent) !important;
+  outline-offset: 3px !important;
+}
+html:root body :is(button, a[data-button], summary, #boot-retry):is(:disabled, [aria-disabled=true]):not(.brand):not(.look-wire-hit):not([data-button=link]) {
+  --button221-variant: secondary;
+  --button221-surface: var(--button221-fill);
+  --button221-edge: var(--button221-border);
+  --button221-edge-style: dashed;
+  --button221-label: var(--button221-text);
+  --button221-weight: 600;
+  opacity: 1 !important;
+  filter: none !important;
+  cursor: not-allowed !important;
+  border-style: dashed !important;
+}
+html:root body :is(button, [role=button], a[data-button], summary, #boot-retry):active:not(.look-node):not(:disabled):not([aria-disabled=true]) { transform: none !important; }
+
+html:root body :is(.home-card, .look-ai-card, .metric, .live-metric, .du-agent, .look-node, .feature, .project-card, .feed-mini):is(button, #waiting-open) {
+  color: var(--button221-text) !important;
+  background: var(--button221-fill) !important;
+  border-color: var(--button221-border) !important;
+  opacity: 1 !important;
+}
+html:root body .look-ai-card {
+  background: linear-gradient(100deg, var(--deep) 0%, var(--button221-fill) 64%) !important;
+}
+html:root body .look-node {
+  border-left: 3px solid var(--who) !important;
+}
+html:root body .look-node[data-type=hub] {
+  background: linear-gradient(100deg, var(--who-codex-deep) 0%, var(--button221-fill) 70%) !important;
+}
+html:root body .look-node[data-type=hub][data-family=claude] {
+  background: linear-gradient(100deg, var(--who-claude-deep) 0%, var(--button221-fill) 70%) !important;
+}
+html:root body .look-node[data-family=you] {
+  background: var(--who-owner-soft) !important;
+  border-color: var(--button221-accent) !important;
+}
+html:root body .clean-home .du-agent { background: transparent !important; }
+html:root body .look-node { padding: 8px 12px !important; }
+html:root body .feature { padding: 12px !important; }
+html:root body .project-card { padding: 24px !important; }
+html:root body .feed-mini { padding: 12px !important; }
+html:root body :is(.home-card, .look-ai-card, .metric, .live-metric, .du-agent, .look-node, .feature, .project-card, .feed-mini):is(button, #waiting-open):hover:not(:disabled) { border-color: var(--button221-accent) !important; opacity: 1 !important; }
+html:root body .clean-home .du-agent:hover { background: var(--button221-fill) !important; }
+html:root body :is(a.look-credit-link, a.session-link, a.bell-link, footer a, #drawer-body a):not(.brand) { text-decoration: underline !important; text-underline-offset: 3px; }
+
+html:root body :is(button, a, summary, #boot-retry)[hidden] { display: none !important; }
+
+@media (max-width: 600px) {
+  html:root[data-look=today] body header { grid-template-rows: 44px 44px minmax(44px,auto) !important; }
+  html:root body .clean-actions { align-items: stretch; }
+  html:root body .clean-actions>:is(button, .acel-controls) { min-width: 0; }
+  html:root body #view-tabs .clean-tablist>[role=tab], html:root body #view-tabs .clean-more>summary { --button221-padding: 8px; }
+  html:root body :is(.copy-session-button, .clean-choices button, .clean-modes button, .clean-preferences button) { min-width: 0; }
+  html:root body .acel-opcao { grid-template-columns: 30px minmax(0,1fr); }
+  html:root body .acel-opcao-credito { grid-column: 2; justify-self: start; white-space: normal; }
+}
+
+@media (forced-colors: active) {
+  html:root body :is(button, [role=button], a[data-button], a.boot-retry, summary, #boot-retry):focus-visible { outline-color: Highlight !important; }
+  html:root body :is(button, [role=button], a[data-button], a.boot-retry, summary, #boot-retry):is([aria-pressed=true], [aria-checked=true], [aria-selected=true]) { border-color: Highlight !important; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html:root body :is(button, [role=button], a[data-button], a.boot-retry, summary, #boot-retry) { transition: none !important; animation: none !important; }
+}

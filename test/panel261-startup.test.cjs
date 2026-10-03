@@ -39,6 +39,8 @@ test('the final guard catches errors from the last render module without exposin
 test('offline also blocks external anchors and new backend offline signals',()=>{
   const app=setup();assert.equal(app.root.PanelStartup.offline(),false);app.root.PanelStartup.received({offline:true,tasks:[],usage:{}});let prevented=false,stopped=false;app.handlers['doc-click']({target:{closest:()=>({})},preventDefault(){prevented=true;},stopPropagation(){stopped=true;}});assert.equal(prevented,true);assert.equal(stopped,true);assert.equal(app.root.PanelStartup.offline(),true);
 });
+test('a failed version check reports the installed release instead of an older fallback',async()=>{const app=setup({fetcher:async()=>{throw Error('offline');}});await app.nodes['check-update'].onclick();assert.ok(app.nodes['startup-message'].children[0].textContent.includes(require('../package.json').version));});
+
 test('versions never show arbitrary response strings',()=>{assert.equal(Start.version('2.1.1'),'2.1.1');assert.equal(Start.version('PRIVATE username'),' ?'.trim());});
 
 test('initial language respects an explicit choice then saved choice then browser locale',()=>{assert.equal(Start.initialLanguage(null,null,'pt-BR'),'pt');assert.equal(Start.initialLanguage(null,'en','es-ES'),'en');assert.equal(Start.initialLanguage('es','pt','en-US'),'es');assert.equal(Start.initialLanguage('x','x','fr-FR'),'en');});

@@ -1,4 +1,4 @@
-# Lazy Du Agent Panel 2.2.0
+# Lazy Du Agent Panel 2.2.1
 
 ## What the panel solves
 
@@ -110,17 +110,19 @@ The panel stores its own configuration and projected metadata cache in ~/.lazy-d
 
 The server binds to 127.0.0.1:3251 and checks Host and Origin; the page uses a Content Security Policy. The server's two public download destinations are the author's news.json (off until enabled or clicked) and package.json (version check on click). Optional music and external links open only on click. No session metadata is sent. Use --offline to disable these features.
 
-To stay on this version, use a tagged checkout or run npx github:tridev360/lazy-du-agent-panel#v2.2.0 after that tag is published. Updating is always your choice.
+To stay on this version, use a tagged checkout or run npx github:tridev360/lazy-du-agent-panel#v2.2.1 after that tag is published. Updating is always your choice.
 
 ## Privacy
 
-To find task folders, it also checks whether a tasks folder exists in the project folders of your sessions. It reads only the .md files of the folder you connect.
+To find task folders, it also checks whether a tasks folder exists in the project folders of your sessions. It reads only the .md files of the folder you connect. To identify the project, it also checks the session folder and folders above it for the existence of .git and package.json. This search only checks whether they exist, without reading their contents.
 
-To check off First steps, it also opens ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md only to see whether a line starts with "## Lazy Du Agent Panel". It keeps only yes or no and never shows or sends the rest.
+To check off First steps, it also opens ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md only to see whether a line starts with "## Lazy Du Agent Panel". It keeps only yes or no and never shows or sends the rest. It also keeps the global file's last modified time to identify chats started after that change.
 
-The server binds to localhost. It reads permitted metadata from the standard .codex/sessions and .claude/projects directories in your own profile: identifiers, known parent identifiers, timestamps, model, effort, tool names and token counters. It projects those fields without decoding conversation bodies or tool arguments. Session identifiers are hashed. Project folder names can appear; full paths stay private in the profile cache so Connect this project can find an already observed task folder. They never appear in the browser snapshot or leave this computer. There is no telemetry or credential requirement: this version sends no usage data.
+The server binds to localhost. It reads permitted metadata from the standard .codex/sessions and .claude/projects directories in your own profile: identifiers, known parent identifiers, timestamps, model, effort, tool names and token counters. It projects those fields without decoding conversation bodies or tool arguments. Session identifiers are hashed. Project folder names can appear; full paths stay private in the profile cache so `Connect the tasks of <folder>` can find an already observed task folder. They never appear in the browser snapshot or leave this computer. There is no telemetry or credential requirement: this version sends no usage data.
 
-Usage and preferences stay local. Guidance preferences are stored in ~/.lazy-du-panel/guidance.json; dismissing a notice type and First steps progress stay in browser localStorage. The panel cache contains projected metadata; upgrading to this version invalidates the older conversation cache. Acceleration preferences are stored in .lazy-du-panel/acceleration.json under your profile. A corrupt saved file displays an error without overwriting it.
+Usage and preferences stay local. Guidance preferences are stored in ~/.lazy-du-panel/guidance.json; dismissing a notice type and First steps progress stay in browser localStorage. The panel cache contains projected metadata; upgrading to this version invalidates the older conversation cache. If an older version left a .panel-cache folder in the panel folder, you can delete that old cache. Acceleration preferences are stored in .lazy-du-panel/acceleration.json under your profile. A corrupt saved file displays an error without overwriting it.
+
+In First steps, `Connect the tasks of <folder>` connects a tasks folder that already exists; `<folder>` is the project folder name. Each step can take a few minutes to check off because reading and cached checks update separately.
 
 Connect my task folder, in Queue, copies a text that has your AI create the tasks folder in your project. The panel reads its .md files. Reference format:
 

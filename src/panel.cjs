@@ -68,6 +68,7 @@ function createServer({
     "/onboarding22.js": ["onboarding22.js","text/javascript"],
     "/onboarding22.css": ["onboarding22.css","text/css"],
     "/controls211.css": ["controls211.css","text/css"],
+    "/buttons221.css": ["buttons221.css","text/css"],
     "/controls211.js": ["controls211.js","text/javascript"],
     "/teach211.css": ["teach211.css","text/css"],
     "/resolve211.css": ["resolve211.css","text/css"],

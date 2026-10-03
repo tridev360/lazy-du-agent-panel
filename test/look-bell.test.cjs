@@ -49,7 +49,7 @@ test('teach, bell and look make no network request of their own and keep choices
 test('bell lists version notes, one daily tip, waiting items and decisions with the color of who asked',()=>{
   const base={snapshot:{example:false,usage:{sessions:[{id:'w1',agent:'codex',state:'waiting',projectName:'tiny-game'}]},tasks:[{id:'d1',title:'Pick the font',needsOwner:true,executor:'claude',source:'tasks'},{id:'d2',title:'Choose music',needsOwner:true,source:'task-board'}]},used:{},closed:[],log:null,today:'2030-01-01'};
   const list=Bell.items(base,'en');
-  assert.deepEqual(list.slice(0,2).map(x=>x.id),['version-'+Bell.VERSION,'recommendations-'+Bell.VERSION]);
+  assert.deepEqual(list.slice(0,2).map(x=>x.id),['version-2.1','recommendations-'+Bell.VERSION]);
   assert.equal(list.filter(x=>x.tip).length,1,'at most one tip');
   assert.equal(list.find(x=>x.id==='waiting-w1').origin,'codex');
   assert.equal(list.find(x=>x.id==='decision-d1').origin,'claude');
