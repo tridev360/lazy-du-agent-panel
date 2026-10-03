@@ -4,8 +4,9 @@ const http = require("node:http");
 const path = require("node:path");
 const { spawn } = require("node:child_process");
 const { createServer } = require("./panel.cjs");
+const { version } = require("../package.json");
 
-function isReady(port) {
+function isReady(port, { desktop = false } = {}) {
   return new Promise((resolve) => {
     const request = http.get(
       `http://127.0.0.1:${port}/api/health`,
@@ -16,7 +17,8 @@ function isReady(port) {
         });
         response.on("end", () => {
           try {
-            resolve(JSON.parse(body).app === "lazy-du-open-panel");
+            const status = JSON.parse(body);
+            resolve(response.statusCode === 200 && status.app === "lazy-du-open-panel" && status.version === version && (!desktop || (status.setup === 1 && status.desktop === true && status.revision === version)));
           } catch {
             resolve(false);
           }

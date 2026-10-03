@@ -8,3 +8,7 @@ Thumbs.db
 *.env
 config.json
 example-workspace/
+dist/
+.panel-cache/
+
+validation-output/

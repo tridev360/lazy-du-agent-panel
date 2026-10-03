@@ -4,6 +4,17 @@ const test = require("node:test"),
   os = require("node:os"),
   path = require("node:path");
 const { createServer } = require("../src/panel.cjs");
+const { isReady } = require("../src/open.cjs");
+test("launcher reuses only the same generation, not a legacy panel", async (t) => {
+  const base = await start(t, { demoOnly: true });
+  const health = await (await fetch(base + "/api/health")).json();
+  a.equal(health.version, "2.1.0");
+  a.equal(await isReady(Number(new URL(base).port)), true);
+  const old = require("node:http").createServer((req,res) => res.end(JSON.stringify({app:"lazy-du-open-panel",version:1})));
+  await new Promise(r => old.listen(0,"127.0.0.1",r));
+  t.after(() => new Promise(r => old.close(r)));
+  a.equal(await isReady(old.address().port), false);
+});
 async function start(t, opts) {
   const server = createServer(opts);
   await new Promise((r) => server.listen(0, "127.0.0.1", r));
@@ -26,7 +37,7 @@ test("example request never asks live readers for data", async (t) => {
   const res = await fetch(base + "/api/status?example=1");
   a.equal(res.status, 200);
   const data = await res.json();
-  a.equal(data.tasks.length, 40);
+  a.equal(data.tasks.length, 6);
   a.equal(data.example, true);
   a.equal(reads, 0);
   a.ok(!/[A-Za-z]:[\\/]/.test(JSON.stringify(data)));

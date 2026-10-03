@@ -229,14 +229,14 @@ test("missing local histories report unavailable", async (t) => {
 test("task phases are explicit, unknown stays null", () => {
   for (const [phase, percent] of [
     ["doing", 40],
-    ["commit no ramo", 60],
-    ["CONFERE", 80],
+    ["pronta", 60],
+    ["Revisão", 80],
     ["released", 90],
     ["done", 100],
     ["mystery", null],
   ]) {
     const item = parseTask(
-      "---\nid: one\nowner: SITE\nexecutor: codex\nphase: " +
+      "---\nid: one\nowner: frontend\nexecutor: codex\nphase: " +
         phase +
         "\n---\n# Mobile\n",
       "a",
@@ -247,7 +247,7 @@ test("task phases are explicit, unknown stays null", () => {
 });
 test("queue honors explicit marks and order", () => {
   const q = parseQueue(
-    "1. FEITO 10:00 Sound\n2. PEGUEI 10:01 Mobile\n3. Wallet report\n",
+    "1. FEITO 10:00 Sound\n2. FAZENDO 10:01 Mobile\n3. Wallet report\n",
   );
   a.deepEqual(
     q.map((x) => x.percent),

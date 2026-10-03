@@ -291,7 +291,7 @@ test("pending rounds share one process read instead of starting a query every ti
   await finish(m);
   a.equal(calls, 1);
 });
-test("a recent Codex quota is visible before a large history finishes scanning", async (t) => {
+test("a recent Codex quota stays hidden until the whole history finishes scanning", async (t) => {
   const dir = home(t),
     line =
       JSON.stringify({
@@ -316,10 +316,11 @@ test("a recent Codex quota is visible before a large history finishes scanning",
     limits: { entries: 128, bytes: 262144, milliseconds: 100 },
   });
   await m.refresh();
-  a.equal(m.snapshot().codex.windows[0].used, 42);
+  a.equal(m.snapshot().codex, null);
   a.equal(m.snapshot().complete, false);
   a.equal(m.snapshot().pending, true);
   await finish(m);
+  a.equal(m.snapshot().codex.windows[0].used,42);
 });
 
 test("unfinished and newline-free records leave no conversation bytes in persistent state", async (t) => {

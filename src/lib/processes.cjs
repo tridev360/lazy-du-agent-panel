@@ -1,4 +1,5 @@
 const { execFile } = require("node:child_process");
+const {key:sessionKey}=require('./session-story.cjs');
 function identify(name) {
   if (typeof name !== "string") return null;
   const value = name.trim();
@@ -32,6 +33,7 @@ function processSnapshot({
   platform = process.platform,
   run = execFile,
   details = false,
+  bindSessions = false,
 } = {}) {
   return new Promise((resolve) => {
     const windows = platform === "win32";
@@ -40,7 +42,9 @@ function processSnapshot({
           "-NoProfile",
           "-NonInteractive",
           "-Command",
-          details
+          bindSessions
+            ? "$ErrorActionPreference='Stop'; @(Get-CimInstance Win32_Process -Filter \"Name='codex.exe' OR Name='claude.exe'\" | ForEach-Object { $match=[regex]::Match($_.CommandLine,'(?:resume|--session-id|--resume)\\s+([a-fA-F0-9]{8}(?:-[a-fA-F0-9]{4}){3}-[a-fA-F0-9]{12})'); [pscustomobject]@{Name=$_.Name;ProcessId=$_.ProcessId;ParentProcessId=$_.ParentProcessId;Session=if($match.Success){$match.Groups[1].Value}else{$null}} }) | ConvertTo-Json -Compress"
+            : details
             ? "$ErrorActionPreference='Stop'; @(Get-CimInstance Win32_Process -Property Name,ProcessId,ParentProcessId | Select-Object Name,ProcessId,ParentProcessId) | ConvertTo-Json -Compress"
             : "$ErrorActionPreference='Stop'; Get-CimInstance Win32_Process -Property Name | Select-Object -ExpandProperty Name",
         ]
@@ -61,6 +65,7 @@ function processSnapshot({
               name: row.Name,
               pid: row.ProcessId,
               ppid: row.ParentProcessId,
+              session: row.Session||null,
             }));
           } else if (details) {
             rows = stdout
@@ -96,6 +101,7 @@ function processSnapshot({
           if (kind) counts[kind]++;
         }
         const top = details ? groupProcesses(rows) : null;
+        const liveSessionKeys=bindSessions?rows.map(r=>sessionKey(r.session)).filter(Boolean):[];
         if (counts.unknown && !details) {
           counts.claude = null;
           counts.codex = null;
@@ -105,6 +111,7 @@ function processSnapshot({
             ? {
                 ...counts,
                 top,
+                ...(bindSessions?{liveSessionKeys}:{}),
                 agents: ["claude", "codex"]
                   .filter((name) => top[name] > 0)
                   .map((name) => ({

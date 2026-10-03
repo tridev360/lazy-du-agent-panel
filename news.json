@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "items": [
+    {
+      "id": "panel-2-1",
+      "date": "2026-10-03",
+      "title": {
+        "en": "Panel 2.1: a new look",
+        "pt": "Painel 2.1: visual novo",
+        "es": "Panel 2.1: un aspecto nuevo"
+      },
+      "text": {
+        "en": "Teach your AI with who does what, and this bell. Author messages stay off until you turn them on.",
+        "pt": "Ensinar minha IA com quem faz o quê, e este sino. As mensagens do autor ficam desligadas até você ligar.",
+        "es": "Enseña a tu IA con quién hace qué, y esta campana. Los mensajes del autor quedan desactivados hasta que los actives."
+      },
+      "link": "https://github.com/tridev360/lazy-du-agent-panel"
+    }
+  ]
+}

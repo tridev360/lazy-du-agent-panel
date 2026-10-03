@@ -5,7 +5,7 @@
         {
           "used": 28,
           "minutes": 10080,
-          "reset": null
+          "reset": "2026-10-05T12:00:00Z"
         }
       ],
       "source": "example"
@@ -15,53 +15,171 @@
         {
           "used": 46,
           "minutes": 10080,
-          "reset": null
+          "reset": "2026-10-05T12:00:00Z"
         }
       ],
-      "tokens": 184500,
+      "tokens": 486000,
       "source": "example"
     },
     "sessions": [
       {
-        "id": "alpha",
+        "id": "game-code",
         "agent": "codex",
-        "tokens": 65400,
+        "title": "Game logic",
+        "titlePT": "Lógica do jogo",
+        "state": "working",
+        "model": "gpt-5.4",
+        "effort": "high",
+        "tokens": 754000,
+        "weightedTokens": 512000,
+        "tools": [
+          {
+            "name": "exec_command",
+            "count": 12
+          },
+          {
+            "name": "apply_patch",
+            "count": 5
+          }
+        ],
+        "projectId": "tiny-game",
+        "projectName": "Little platformer",
+        "recent": true,
         "updated": null,
-        "recent": true
+        "projectNamePT": "Joguinho de plataforma",
+        "role": "dev",
+        "taskDurationsMinutes": [
+          12,
+          16,
+          20
+        ],
+        "observedSteps": 17,
+        "completedSteps": 13,
+        "action": "Fixing the game jump",
+        "actionPT": "Ajustando o pulo do jogo",
+        "titleES": "Lógica del juego",
+        "taskTitleES": "Lógica del juego",
+        "projectNameES": "Pequeño juego de plataformas",
+        "actionES": "Ajustando el salto del juego"
       },
       {
-        "id": "beta",
+        "id": "game-art",
         "agent": "claude",
-        "tokens": 48300,
+        "title": "Art & feel",
+        "titlePT": "Arte e sensação",
+        "state": "working",
+        "model": "claude-sonnet-4-6",
+        "effort": "high",
+        "tokens": 486000,
+        "weightedTokens": 356000,
+        "tools": [
+          {
+            "name": "Read",
+            "count": 8
+          },
+          {
+            "name": "Edit",
+            "count": 4
+          }
+        ],
+        "projectId": "tiny-game",
+        "projectName": "Little platformer",
+        "recent": true,
         "updated": null,
-        "recent": true
+        "projectNamePT": "Joguinho de plataforma",
+        "role": "designer",
+        "taskDurationsMinutes": [
+          8,
+          10,
+          12
+        ],
+        "observedSteps": 12,
+        "completedSteps": 7,
+        "action": "Drawing the game characters",
+        "actionPT": "Desenhando os personagens",
+        "titleES": "Arte y sensación",
+        "taskTitleES": "Arte y sensación",
+        "projectNameES": "Pequeño juego de plataformas",
+        "actionES": "Dibujando los personajes"
+      },
+      {
+        "id": "game-check",
+        "agent": "codex",
+        "title": "Play testing",
+        "titlePT": "Teste do jogo",
+        "state": "resting",
+        "model": "gpt-5.4",
+        "effort": "medium",
+        "tokens": 180000,
+        "weightedTokens": 132000,
+        "tools": [
+          {
+            "name": "exec_command",
+            "count": 6
+          }
+        ],
+        "projectId": "tiny-game",
+        "projectName": "Little platformer",
+        "recent": true,
+        "updated": null,
+        "projectNamePT": "Joguinho de plataforma",
+        "role": "qa",
+        "taskDurationsMinutes": [
+          3,
+          5,
+          7
+        ],
+        "observedSteps": 6,
+        "completedSteps": 5,
+        "titleES": "Pruebas del juego",
+        "taskTitleES": "Pruebas del juego",
+        "projectNameES": "Pequeño juego de plataformas"
       }
     ],
     "daily": [
       {
         "day": "Example day",
-        "tokens": 184500
+        "tokens": 486000
       }
     ],
     "processes": {
       "codex": 2,
-      "claude": 3
+      "claude": 1
     },
     "complete": true,
     "discovered": {
-      "codex": 6,
-      "claude": 8
+      "codex": 2,
+      "claude": 1
     },
     "available": {
-      "claude": true,
-      "codex": true
-    }
+      "codex": true,
+      "claude": true
+    },
+    "periods": [
+      {
+        "key": "today",
+        "from": "2026-09-30",
+        "to": "2026-09-30",
+        "claude": 486000,
+        "codex": 934000,
+        "weightedTokens": 1000000
+      },
+      {
+        "key": "week",
+        "from": "2026-09-24",
+        "to": "2026-09-30",
+        "claude": 972000,
+        "codex": 2802000,
+        "weightedTokens": 2500000
+      }
+    ]
   },
   "tasks": [
     {
-      "id": "example-0",
-      "title": "Sound pack",
-      "owner": "SITE",
+      "id": "game-0",
+      "title": "Player movement",
+      "titlePT": "Movimento do jogador",
+      "owner": "Gameplay",
       "executor": "codex",
       "phase": {
         "key": "new",
@@ -69,12 +187,19 @@
       },
       "needsOwner": false,
       "deadlineIn": null,
-      "titlePT": "Pacote de sons"
+      "projectId": "tiny-game",
+      "summary": "Build and check one playable part of the little platformer.",
+      "summaryPT": "Crie e confira uma parte jogável do jogo de plataforma.",
+      "ownerPT": "Jogabilidade",
+      "titleES": "Movimiento del jugador",
+      "ownerES": "Jugabilidad",
+      "summaryES": "Crea y comprueba una parte jugable del juego de plataformas."
     },
     {
-      "id": "example-1",
-      "title": "Mobile polish",
-      "owner": "BOT",
+      "id": "game-1",
+      "title": "Pixel art",
+      "titlePT": "Arte em pixel",
+      "owner": "Design",
       "executor": "claude",
       "phase": {
         "key": "doing",
@@ -82,12 +207,19 @@
       },
       "needsOwner": false,
       "deadlineIn": null,
-      "titlePT": "Ajustes no celular"
+      "projectId": "tiny-game",
+      "summary": "Make the little platformer feel warm, clear, and fun.",
+      "summaryPT": "Deixe o jogo de plataforma acolhedor, claro e divertido.",
+      "ownerPT": "Arte",
+      "titleES": "Arte en píxeles",
+      "ownerES": "Arte",
+      "summaryES": "Haz que el pequeño juego de plataformas sea claro, agradable y divertido."
     },
     {
-      "id": "example-2",
-      "title": "New leaderboard",
-      "owner": "CONTENT",
+      "id": "game-2",
+      "title": "First level",
+      "titlePT": "Primeira fase",
+      "owner": "Gameplay",
       "executor": "codex",
       "phase": {
         "key": "ready",
@@ -95,12 +227,19 @@
       },
       "needsOwner": false,
       "deadlineIn": 180,
-      "titlePT": "Novo leaderboard"
+      "projectId": "tiny-game",
+      "summary": "Build and check one playable part of the little platformer.",
+      "summaryPT": "Crie e confira uma parte jogável do jogo de plataforma.",
+      "ownerPT": "Jogabilidade",
+      "titleES": "Primer nivel",
+      "ownerES": "Jugabilidad",
+      "summaryES": "Crea y comprueba una parte jugable del juego de plataformas."
     },
     {
-      "id": "example-3",
-      "title": "Rare alerts",
-      "owner": "GAMES",
+      "id": "game-3",
+      "title": "Jump feel",
+      "titlePT": "Sensação do pulo",
+      "owner": "Design",
       "executor": "claude",
       "phase": {
         "key": "review",
@@ -108,12 +247,19 @@
       },
       "needsOwner": true,
       "deadlineIn": null,
-      "titlePT": "Alertas de raros"
+      "projectId": "tiny-game",
+      "summary": "Make the little platformer feel warm, clear, and fun.",
+      "summaryPT": "Deixe o jogo de plataforma acolhedor, claro e divertido.",
+      "ownerPT": "Arte",
+      "titleES": "Sensación del salto",
+      "ownerES": "Arte",
+      "summaryES": "Haz que el pequeño juego de plataformas sea claro, agradable y divertido."
     },
     {
-      "id": "example-4",
-      "title": "Wallet report",
-      "owner": "SITE",
+      "id": "game-4",
+      "title": "Sound pack",
+      "titlePT": "Pacote de sons",
+      "owner": "Gameplay",
       "executor": "codex",
       "phase": {
         "key": "released",
@@ -121,12 +267,19 @@
       },
       "needsOwner": false,
       "deadlineIn": null,
-      "titlePT": "Relatório da carteira"
+      "projectId": "tiny-game",
+      "summary": "Build and check one playable part of the little platformer.",
+      "summaryPT": "Crie e confira uma parte jogável do jogo de plataforma.",
+      "ownerPT": "Jogabilidade",
+      "titleES": "Paquete de sonidos",
+      "ownerES": "Jugabilidad",
+      "summaryES": "Crea y comprueba una parte jugable del juego de plataformas."
     },
     {
-      "id": "example-5",
-      "title": "Profile refresh",
-      "owner": "BOT",
+      "id": "game-5",
+      "title": "Game menu",
+      "titlePT": "Menu do jogo",
+      "owner": "Design",
       "executor": "claude",
       "phase": {
         "key": "live",
@@ -134,469 +287,64 @@
       },
       "needsOwner": false,
       "deadlineIn": null,
-      "titlePT": "Novo perfil"
-    },
-    {
-      "id": "example-6",
-      "title": "Clean typography",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "new",
-        "percent": 0
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Tipografia limpa"
-    },
-    {
-      "id": "example-7",
-      "title": "Faster search",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "doing",
-        "percent": 40
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Busca mais rápida"
-    },
-    {
-      "id": "example-8",
-      "title": "Collection view",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "ready",
-        "percent": 60
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Visão das coleções"
-    },
-    {
-      "id": "example-9",
-      "title": "Daily recap",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "review",
-        "percent": 80
-      },
-      "needsOwner": true,
-      "deadlineIn": null,
-      "titlePT": "Resumo diário"
-    },
-    {
-      "id": "example-10",
-      "title": "Language switch",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "released",
-        "percent": 90
-      },
-      "needsOwner": false,
-      "deadlineIn": 660,
-      "titlePT": "Troca de idioma"
-    },
-    {
-      "id": "example-11",
-      "title": "Custom themes",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "live",
-        "percent": 100
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Temas personalizados"
-    },
-    {
-      "id": "example-12",
-      "title": "Activity history",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "new",
-        "percent": 0
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Histórico de atividade"
-    },
-    {
-      "id": "example-13",
-      "title": "Smart filters",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "doing",
-        "percent": 40
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Filtros inteligentes"
-    },
-    {
-      "id": "example-14",
-      "title": "Better onboarding",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "ready",
-        "percent": 60
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Primeiros passos"
-    },
-    {
-      "id": "example-15",
-      "title": "Public guide",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "review",
-        "percent": 80
-      },
-      "needsOwner": true,
-      "deadlineIn": null,
-      "titlePT": "Guia público"
-    },
-    {
-      "id": "example-16",
-      "title": "Quick actions",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "released",
-        "percent": 90
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Ações rápidas"
-    },
-    {
-      "id": "example-17",
-      "title": "Compact mode",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "live",
-        "percent": 100
-      },
-      "needsOwner": false,
-      "deadlineIn": 1080,
-      "titlePT": "Modo compacto"
-    },
-    {
-      "id": "example-18",
-      "title": "Fresh animations",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "new",
-        "percent": 0
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Novas animações"
-    },
-    {
-      "id": "example-19",
-      "title": "Notification settings",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "doing",
-        "percent": 40
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Configurar avisos"
-    },
-    {
-      "id": "example-20",
-      "title": "Accessibility pass",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "ready",
-        "percent": 60
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Acessibilidade"
-    },
-    {
-      "id": "example-21",
-      "title": "Offline help",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "review",
-        "percent": 80
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Ajuda offline"
-    },
-    {
-      "id": "example-22",
-      "title": "Session timeline",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "released",
-        "percent": 90
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Linha das sessões"
-    },
-    {
-      "id": "example-23",
-      "title": "Agent overview",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "live",
-        "percent": 100
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Visão dos agentes"
-    },
-    {
-      "id": "example-24",
-      "title": "Clearer buttons",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "new",
-        "percent": 0
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Botões mais claros"
-    },
-    {
-      "id": "example-25",
-      "title": "Responsive cards",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "doing",
-        "percent": 40
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Cards responsivos"
-    },
-    {
-      "id": "example-26",
-      "title": "Project labels",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "ready",
-        "percent": 60
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Nomes de projetos"
-    },
-    {
-      "id": "example-27",
-      "title": "Queue sorting",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "review",
-        "percent": 80
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Ordenar a fila"
-    },
-    {
-      "id": "example-28",
-      "title": "Usage summary",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "released",
-        "percent": 90
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Resumo de uso"
-    },
-    {
-      "id": "example-29",
-      "title": "Focus mode",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "live",
-        "percent": 100
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Modo foco"
-    },
-    {
-      "id": "example-30",
-      "title": "Reading list",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "new",
-        "percent": 0
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Lista de leitura"
-    },
-    {
-      "id": "example-31",
-      "title": "Keyboard shortcuts",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "doing",
-        "percent": 40
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Atalhos do teclado"
-    },
-    {
-      "id": "example-32",
-      "title": "Status badges",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "ready",
-        "percent": 60
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Selos de estado"
-    },
-    {
-      "id": "example-33",
-      "title": "Simple exports",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "review",
-        "percent": 80
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Exportação simples"
-    },
-    {
-      "id": "example-34",
-      "title": "Empty states",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "released",
-        "percent": 90
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Telas vazias"
-    },
-    {
-      "id": "example-35",
-      "title": "Local workspace",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "live",
-        "percent": 100
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Pasta local"
-    },
-    {
-      "id": "example-36",
-      "title": "Theme preview",
-      "owner": "SITE",
-      "executor": "codex",
-      "phase": {
-        "key": "new",
-        "percent": 0
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Prévia do tema"
-    },
-    {
-      "id": "example-37",
-      "title": "Daily progress",
-      "owner": "BOT",
-      "executor": "claude",
-      "phase": {
-        "key": "doing",
-        "percent": 40
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Progresso diário"
-    },
-    {
-      "id": "example-38",
-      "title": "Task notes",
-      "owner": "CONTENT",
-      "executor": "codex",
-      "phase": {
-        "key": "ready",
-        "percent": 60
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Notas da tarefa"
-    },
-    {
-      "id": "example-39",
-      "title": "Demo gallery",
-      "owner": "GAMES",
-      "executor": "claude",
-      "phase": {
-        "key": "review",
-        "percent": 80
-      },
-      "needsOwner": false,
-      "deadlineIn": null,
-      "titlePT": "Galeria de exemplos"
+      "projectId": "tiny-game",
+      "summary": "Make the little platformer feel warm, clear, and fun.",
+      "summaryPT": "Deixe o jogo de plataforma acolhedor, claro e divertido.",
+      "ownerPT": "Arte",
+      "titleES": "Menú del juego",
+      "ownerES": "Arte",
+      "summaryES": "Haz que el pequeño juego de plataformas sea claro, agradable y divertido."
     }
   ],
   "queue": [],
   "cards": [
     {
-      "title": "Choose the next theme",
-      "options": ["Midnight", "Soft light"],
-      "titlePT": "Escolha o próximo tema",
-      "optionsPT": ["Meia-noite", "Luz suave"]
+      "id": "choose-jump",
+      "title": "How should the jump feel?",
+      "titlePT": "Como deve ser o pulo?",
+      "options": [
+        "Floaty and forgiving",
+        "Quick and precise"
+      ],
+      "optionsPT": [
+        "Leve e tranquilo",
+        "Rápido e preciso"
+      ],
+      "projectId": "tiny-game",
+      "recommended": 0,
+      "titleES": "¿Cómo debe ser el salto?",
+      "optionsES": [
+        "Suave y fácil",
+        "Rápido y preciso"
+      ]
     },
     {
-      "title": "Try the compact layout",
-      "options": ["Try it", "Keep spacious"],
-      "titlePT": "Teste o layout compacto",
-      "optionsPT": ["Testar", "Manter espaçoso"]
-    },
+      "id": "choose-world",
+      "title": "Where does level two happen?",
+      "titlePT": "Onde acontece a segunda fase?",
+      "options": [
+        "A little forest",
+        "A moon base"
+      ],
+      "optionsPT": [
+        "Uma pequena floresta",
+        "Uma base lunar"
+      ],
+      "projectId": "tiny-game",
+      "recommended": 0,
+      "titleES": "¿Dónde ocurre el segundo nivel?",
+      "optionsES": [
+        "Un pequeño bosque",
+        "Una base lunar"
+      ]
+    }
+  ],
+  "projects": [
     {
-      "title": "Review the next release",
-      "chat": true,
-      "titlePT": "Revise a próxima versão"
+      "id": "tiny-game",
+      "name": "Little platformer",
+      "namePT": "Joguinho de plataforma",
+      "nameES": "Pequeño juego de plataformas"
     }
   ],
   "configured": true,

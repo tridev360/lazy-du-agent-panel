@@ -1,12 +1,22 @@
 // Only selected metadata is materialized. Unselected values, including message
 // content, are skipped without decoding or retaining their strings.
-function projectJSON(text, paths) {
-  const trie = Object.create(null);
+const tries = new WeakMap();
+const objectPaths=new WeakMap();
+function projectJSON(text, paths, { prefix = 0 } = {}) {
+  if(text&&typeof text==='object'){
+    if(!objectPaths.has(paths))objectPaths.set(paths,paths.map(name=>[name,name.split('.')]));
+    const out={};for(const [name,parts] of objectPaths.get(paths)){let value=text;for(const part of parts){value=value?.[part];if(value===undefined||value===null)break;}if(value!==undefined&&value!==null&&typeof value!=='object')out[name]=typeof value==='string'&&prefix?value.slice(0,prefix):value;}return out;
+  }
+  let trie = tries.get(paths);
+  if (!trie) {
+  trie = Object.create(null);
   for (const name of paths) {
     let n = trie;
     for (const key of name.split("."))
       n = n[key] || (n[key] = Object.create(null));
     n.$ = name;
+  }
+  tries.set(paths, trie);
   }
   let i = 0;
   const out = {};
@@ -18,8 +28,13 @@ function projectJSON(text, paths) {
     if (text[start] !== '"') throw Error("Invalid JSON");
     while (i < text.length) {
       const c = text[i++];
-      if (c === '"')
-        return decode ? JSON.parse(text.slice(start, i)) : undefined;
+      if (c === '"') {
+        if (!decode) return undefined;
+        if (!prefix || i - start <= prefix) return JSON.parse(text.slice(start, i));
+        let raw = text.slice(start + 1, start + 1 + prefix);
+        while (raw.length) { try { return JSON.parse('"' + raw + '"'); } catch { raw = raw.slice(0, -1); } }
+        return '';
+      }
       if (c === "\\") {
         if (i >= text.length) throw Error("Invalid JSON");
         i++;
@@ -57,6 +72,7 @@ function projectJSON(text, paths) {
         i++;
         return;
       }
+      let arrayIndex = 0;
       while (i < text.length) {
         let child;
         if (obj) {
@@ -64,6 +80,9 @@ function projectJSON(text, paths) {
           space();
           if (text[i++] !== ":") throw Error("Invalid JSON");
           child = node && Object.hasOwn(node, key) ? node[key] : undefined;
+        }
+        if (!obj) {
+          child = node?.[String(arrayIndex++)];
         }
         value(child, depth + 1);
         space();

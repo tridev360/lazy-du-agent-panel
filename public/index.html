@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-look="today">
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width,initial-scale=1" />
@@ -7,100 +7,22 @@
     <title>Lazy Du | Agent panel</title>
     <link rel="icon" href="/favicon.svg" />
     <link rel="stylesheet" href="/panel.css" />
-    <script src="/panel.js" defer></script>
-  </head>
-  <body>
-    <div class="shell">
-      <header>
-        <a
-          class="brand"
-          href="https://lazy-du.com"
-          target="_blank"
-          rel="noopener noreferrer"
-          ><img src="/marca.png" width="40" height="40" alt="" /><span
-            >LAZY DU<small data-t="panel">AGENT PANEL</small></span
-          ></a
-        >
-        <nav class="brand-links" aria-label="Lazy Du">
-          <a
-            href="https://lazy-du.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            >lazy-du.com ↗</a
-          ><a
-            href="https://x.com/Lazydunft"
-            target="_blank"
-            rel="noopener noreferrer"
-            >@Lazydunft ↗</a
-          >
-        </nav>
-        <div class="header-actions">
-          <a
-            class="example-toggle"
-            id="example-toggle"
-            href="/?example=1"
-            data-t="example"
-            >Example</a
-          ><select id="language" aria-label="Language">
-            <option value="en">EN</option>
-            <option value="pt">PT</option></select
-          ><button id="fullscreen" data-t="fullscreen">Full screen</button
-          ><button id="refresh" aria-label="Refresh">↻</button>
-        </div>
-      </header>
-      <main>
-        <section class="hero">
-          <div class="hero-heading">
-            <div>
-              <div class="eyebrow" id="eyebrow" data-t="onPC">
-                ON YOUR PC. YOUR AGENTS.
-              </div>
-              <h1 id="hero-title" data-t="queue">THE QUEUE IS MOVING.</h1>
-            </div>
-            <div class="hero-number">
-              <strong id="total-percent">?</strong
-              ><button id="progress-note"></button>
-            </div>
-          </div>
-          <div class="runway">
-            <img
-              class="traveler"
-              id="traveler"
-              src="/du.png"
-              alt=""
-              width="75"
-              height="75"
-            />
-            <div
-              id="pipeline"
-              class="pipeline"
-              aria-label="Queue progress"
-            ></div>
-          </div>
-          <div class="hero-bottom">
-            <div class="legend">
-              <span class="codex">CODEX</span><span class="claude">CLAUDE</span
-              ><span class="owner" data-t="you">YOU</span
-              ><span class="live" data-t="live">LIVE</span>
-            </div>
-            <span id="status" role="status" aria-live="polite"></span>
-          </div>
-          <div class="work-strips">
-            <section class="work-strip">
-              <h2><i class="pulse"></i><span data-t="now">NOW</span></h2>
-              <div id="now" class="strip-items"></div>
-            </section>
-            <section class="work-strip">
-              <h2>
-                <span class="next-arrow">↗</span><span data-t="next">NEXT</span>
-              </h2>
-              <div id="next" class="strip-items"></div>
-            </section>
-          </div>
-        </section>
-        <section class="dashboard-metrics">
+    <link rel="stylesheet" href="/v2.css"><link rel="stylesheet" href="/welcome.css"><link rel="stylesheet" href="/lofi.css"><link rel="stylesheet" href="/tips.css"><link rel="stylesheet" href="/sync.css"><link rel="stylesheet" href="/r4.css"><link rel="stylesheet" href="/r5.css"><link rel="stylesheet" href="/r6.css"><script src="/locale.js" defer></script><script src="/dus.js" defer></script><script src="/crew.js" defer></script><script src="/r9-model.js" defer></script><script src="/r4-core.js" defer></script><script src="/v2-core.js" defer></script><script src="/lofi.js" defer></script><script src="/tips.js" defer></script><script src="/prompts.js" defer></script><script src="/human.js" defer></script><script src="/r9-usage.js" defer></script><script src="/v2.js" defer></script><script src="/welcome.js" defer></script><script src="/sync.js" defer></script><script src="/r9.js" defer></script><script src="/panel.js" defer></script>
+  <link rel="stylesheet" href="/r7.css"><link rel="stylesheet" href="/r9.css"><link rel="stylesheet" href="/r11.css"><link rel="stylesheet" href="/v21.css"><link rel="stylesheet" href="/colors.css"><link rel="stylesheet" href="/acelerador/acelerador.css"><link rel="stylesheet" href="/look.css"><script src="/v21.js" defer></script><script src="/teach.js" defer></script><script src="/bell.js" defer></script><script src="/look.js" defer></script><script src="/look-views.js" defer></script><script src="/look-team.js" defer></script><script src="/acelerador/acelerador.js" defer></script></head>
+  <body data-welcome="pending">
+<section id="panel-boot" role="status" aria-live="polite"><a class="brand" href="https://lazy-du.com"><img src="/marca.png" width="36" height="36" alt=""><span>LAZY DU</span></a><p>Reading local metadata...</p><div class="clean-boot-summary"><div class="clean-count"><strong>…</strong><span data-boot-copy="sessions">Reading sessions...</span></div><div><h2 data-boot-copy="overview">Where things stand</h2><dl class="clean-lines"><div class="clean-line"><dt data-boot-copy="completed">Completed task</dt><dd data-boot-copy="reading">Reading...</dd></div><div class="clean-line"><dt data-boot-copy="activity">Recent activity</dt><dd data-boot-copy="reading">Reading...</dd></div><div class="clean-line"><dt data-boot-copy="blocked">Blocked by</dt><dd data-boot-copy="reading">Reading...</dd></div><div class="clean-line"><dt data-boot-copy="speed">Can we speed up?</dt><dd data-boot-copy="reading">Reading...</dd></div><div class="clean-line"><dt data-boot-copy="next">Your next step</dt><dd data-boot-copy="reading">Reading...</dd></div><div class="clean-line"><dt data-boot-copy="credit">Credit</dt><dd data-boot-copy="reading">Reading...</dd></div></dl></div></div><a class="boot-retry" data-boot-copy="retry" href="/">Reload panel</a><noscript>Enable JavaScript to open your panel.</noscript></section>
+<a class="skip" href="#main">Skip to content</a><div class="shell">
+<header><a class="brand" href="https://lazy-du.com" target="_blank" rel="noopener noreferrer"><img src="/marca.png" width="36" height="36" alt=""><span>LAZY DU<small data-t="panel">AGENT PANEL</small></span></a><div class="header-actions"><a id="example-toggle" class="example-toggle" href="/?example=1">Example</a><select id="language" aria-label="Language"><option value="en">EN</option><option value="pt">PT</option><option value="es">ES</option></select><button id="motion" aria-pressed="false">Motion</button><button id="refresh" aria-label="Refresh">↻</button><button id="fullscreen" data-t="fullscreen">Full screen</button></div></header>
+<main id="main"><section id="welcome" aria-label="Setup guide" hidden></section><div class="intro"><div><p class="eyebrow" id="v2-context">PRIVATE BY DEFAULT</p><h1 id="v2-title">Your AI crew.</h1></div><span id="status" role="status" aria-live="polite">Reading metadata...</span></div><div id="project-filter" hidden><span id="project-filter-label"></span><button id="clear-project">All projects</button></div>
+<section id="view-home" class="view home-grid" role="tabpanel" aria-labelledby="tab-home">
+<button class="home-card waiting-card" id="waiting-open"><span class="eyebrow" id="waiting-label">Waiting for you</span><strong id="waiting-count">…</strong><span class="home-copy" id="waiting-question">Reading decisions...</span><span class="card-link" id="waiting-action">View decision ↗</span></button>
+<section class="home-card stage-card"><div class="stage-top"><h2 id="hero-title">WHO IS CREATING NOW</h2><button id="progress-note" aria-label="Recorded progress"><strong id="total-percent">…</strong><span id="v2-progress-label">progress</span></button></div><div id="home-stage"><div id="agent-stage" class="agent-stage"></div></div><div class="stage-bottom"><span id="stage-note">One Du per session</span><button id="full-team">Full team ↗</button></div></section>
+<section class="home-card deadline-card" id="deadline-open"><span class="eyebrow" id="deadline-label">Next deadline</span><strong id="deadline-time">…</strong><div class="home-copy" id="deadline-title">Next delivery</div><button class="card-link" id="deadline-action">View details ↗</button></section></section>
+<nav id="view-tabs" class="view-tabs" aria-label="Panel views" role="tablist"><button id="tab-home" role="tab" aria-controls="view-home" aria-selected="true" data-view="home">Home</button><button id="tab-team" role="tab" aria-controls="view-team" aria-selected="false" data-view="team">Team</button><button id="tab-usage" role="tab" aria-controls="view-usage" aria-selected="false" data-view="usage">Usage</button><button id="tab-projects" role="tab" aria-controls="view-projects" aria-selected="false" data-view="projects">Projects</button><button id="tab-queue" role="tab" aria-controls="view-queue" aria-selected="false" data-view="queue">Queue</button><button id="tab-tips" role="tab" aria-controls="view-tips" aria-selected="false" data-view="tips">Feed your AI</button></nav>
+<section id="view-team" class="view detail-view" role="tabpanel" aria-labelledby="tab-team" hidden><div class="section-heading"><h2 id="team-title">LIVE TEAM</h2><span id="team-note"></span></div><div id="team-stage"></div><div id="team-details" class="team-details"></div></section>
+<section id="view-usage" class="view detail-view" role="tabpanel" aria-labelledby="tab-usage" hidden><div class="section-heading"><h2 id="usage-title">Usage</h2><button id="daily" class="chip" data-t="daily">Daily usage</button></div><div class="water-panel"><div><span id="token-label">Tokens</span><strong id="token-value">…</strong><small id="token-note"></small></div><div id="water-cups" class="water-cups" aria-hidden="true"></div><div><span id="water-label">Playful water estimate</span><strong id="water-value">…</strong><button id="water-info">How it works ↗</button></div></div><section class="dashboard-metrics">
           <button class="metric claude" id="claude-metric">
-            <div id="claude-ring" class="ring"><strong>?</strong></div>
+            <div id="claude-ring" class="ring"><strong>…</strong></div>
             <div>
               <span class="eyebrow">CLAUDE</span>
               <h2 id="claude-summary-title" data-t="remaining">remaining</h2>
@@ -108,7 +30,7 @@
             </div>
             <span class="metric-arrow">↗</span></button
           ><button class="metric codex" id="codex-metric">
-            <div id="codex-ring" class="ring"><strong>?</strong></div>
+            <div id="codex-ring" class="ring"><strong>…</strong></div>
             <div>
               <span class="eyebrow">CODEX</span>
               <h2 id="codex-summary-title" data-t="remaining">remaining</h2>
@@ -116,26 +38,24 @@
             </div>
             <span class="metric-arrow">↗</span></button
           ><button class="metric owner" id="sessions-metric">
-            <div id="sessions-ring" class="ring"><strong>?</strong></div>
+            <div id="sessions-ring" class="ring"><strong>…</strong></div>
             <div>
               <span class="eyebrow" data-t="sessions">SESSIONS</span>
-              <h2 data-t="recent">recent history</h2>
+              <h2 data-t="recent">agent activity</h2>
               <p id="process-note"></p>
             </div>
             <span class="metric-arrow">↗</span>
           </button>
         </section>
-        <div id="deadline-strip" class="deadline-strip"></div>
-        <div class="workspace">
-          <section class="features">
+        </section>
+<section id="view-projects" class="view detail-view" role="tabpanel" aria-labelledby="tab-projects" hidden><div class="section-heading"><h2 id="projects-title">Projects</h2></div><div id="projects" class="project-grid"></div></section>
+<section id="view-queue" class="view detail-view" role="tabpanel" aria-labelledby="tab-queue" hidden><div id="deadline-strip" class="deadline-strip"></div><section class="features">
             <div class="section-heading">
               <h2>
                 <span data-t="features">FEATURES</span
                 ><span id="task-count"></span>
               </h2>
-              <button id="daily" class="chip" data-t="daily">
-                Daily usage
-              </button>
+
             </div>
             <div class="filters" id="filters">
               <div id="owner-filters" class="filter-group"></div>
@@ -151,10 +71,10 @@
               aria-label="Feature phase"
             ></div>
             <div id="board" class="board"></div>
-            <div id="empty-workspace" class="empty-workspace" hidden>
+            <div id="empty-task board" class="empty-task board" hidden>
               <h2 data-t="auto">Your usage appears automatically.</h2>
               <p data-t="optional">
-                Add a workspace when you want a task board. Try the example to
+                Add a task board when you want a task board. Try the example to
                 see it in motion.
               </p>
               <a href="/?example=1" class="session-link" data-t="seeExample"
@@ -162,46 +82,9 @@
               >
             </div>
           </section>
-          <aside class="your-moves">
-            <div class="section-heading">
-              <h2 data-t="needsYou">NEEDS YOU</h2>
-              <span id="move-count" class="badge owner"></span>
-            </div>
-            <div id="cards"></div>
-          </aside>
-        </div>
-      </main>
-      <footer>
-        <span data-t="footer">Local. Refreshes every 30 seconds. UTC.</span
-        ><span
-          >made by
-          <a
-            href="https://lazy-du.com"
-            target="_blank"
-            rel="noopener noreferrer"
-            >Lazy Du ↗</a
-          >
-          ·
-          <a
-            href="https://x.com/Lazydunft"
-            target="_blank"
-            rel="noopener noreferrer"
-            >@Lazydunft ↗</a
-          ></span
-        >
-      </footer>
-    </div>
-    <dialog id="drawer" aria-labelledby="drawer-title">
-      <div class="drawer-header">
-        <span class="eyebrow" data-t="details">DETAILS</span
-        ><button id="close-drawer" aria-label="Close">✕</button>
-      </div>
-      <h2 id="drawer-title"></h2>
-      <div id="drawer-body"></div>
-    </dialog>
-    <div id="toast" role="status" hidden></div>
-    <span id="example-badge" class="example-badge" hidden data-t="example"
-      >Example</span
-    >
-  </body>
-</html>
+          <div id="queue-items"></div></section>
+<section id="view-tips" class="view detail-view" role="tabpanel" aria-labelledby="tab-tips" hidden><div id="tips"></div></section>
+<div hidden aria-hidden="true"><span id="eyebrow"></span><div id="pipeline"></div><img id="traveler" src="/du-mini.png" alt=""><div id="now"></div><div id="next"></div><span id="move-count"></span><div id="cards"></div></div>
+</main><footer><span data-t="footer">Local. Reads every 3 minutes. UTC.</span><button id="setup-guide">Setup guide</button><button id="quit-panel" hidden>Close panel</button><span><a href="https://lazy-du.com" target="_blank" rel="noopener noreferrer">Lazy Du ↗</a></span></footer></div>
+<dialog id="drawer" aria-labelledby="drawer-title"><div class="drawer-header"><span class="eyebrow" data-t="details">DETAILS</span><button id="close-drawer" aria-label="Close">✕</button></div><h2 id="drawer-title"></h2><div id="drawer-body"></div></dialog><div id="toast" role="status" aria-live="polite" hidden></div><span id="example-badge" hidden></span>
+</body></html>

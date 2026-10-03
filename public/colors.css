@@ -1,0 +1,15 @@
+/* Who is who, in one place: pink is you, orange is Claude Code, blue is Codex. */
+:root{
+  --who-owner:#ff2e7e;
+  --who-owner-soft:#ff2e7e1f;
+  --who-claude:#ffac62;
+  --who-claude-soft:#ffac621f;
+  --who-claude-deep:#352923;
+  --who-codex:#65a7ff;
+  --who-codex-soft:#65a7ff1f;
+  --who-codex-deep:#1c2739;
+  --who-idle:#5d5d68;
+  --who-ok:#54d16a;
+  --water:#5cc8d6;
+  --clean-accent:var(--who-owner);
+}

@@ -9,10 +9,10 @@ const phases = {
   doing: 40,
   andando: 40,
   ready: 60,
-  "commit no ramo": 60,
+  pronta: 60,
   review: 80,
-  confere: 80,
-  "pode subir": 80,
+  "revisão": 80,
+  revisao: 80,
   released: 90,
   liberado: 90,
   done: 100,
@@ -57,7 +57,7 @@ function parseTask(text, id) {
   return {
     id: clean(meta.id || id),
     title: clean(
-      meta.title || /^#\s+(.+)$/m.exec(text.slice(head[0].length))?.[1] || id,
+      meta.title || /^#\s+(.+)$/m.exec(text.slice(head[0].length))?.[1] || 'Review project changes',
     ),
     owner: clean(meta.owner || meta.dono || "TEAM"),
     executor: ["claude", "codex"].includes(meta.executor)
@@ -66,19 +66,24 @@ function parseTask(text, id) {
     phase: { key, percent },
     deadlineAt,
     needsOwner: meta.needs_you === "true",
+    completedAt: typeof meta.completed_at==='string'&&Number.isFinite(Date.parse(meta.completed_at))?new Date(meta.completed_at).toISOString():null,
+    startedAt: typeof meta.started_at==='string'&&/^\d{4}-\d{2}-\d{2}T/.test(meta.started_at)&&Number.isFinite(Date.parse(meta.started_at))?new Date(meta.started_at).toISOString():null,
+    helper:meta.helper==='true',
+    summary: meta.summary ? clean(meta.summary) : null,
+    projectId: clean(meta.project || "unassigned"),
   };
 }
 function parseQueue(text) {
   return text.split(/\r?\n/).flatMap((line, i) => {
     const m =
-      /^\s*(\d+)\.\s+(?:(FEITO|PEGUEI|DONE|DOING)\s+\d\d:\d\d\s*)?(.+)$/i.exec(
+      /^\s*(\d+)\.\s+(?:(FEITO|FAZENDO|DONE|DOING)\s+\d\d:\d\d\s*)?(.+)$/i.exec(
         line,
       );
     if (!m) return [];
     const status = (m[2] || "").toUpperCase(),
       percent = ["FEITO", "DONE"].includes(status)
         ? 100
-        : ["PEGUEI", "DOING"].includes(status)
+        : ["FAZENDO", "DOING"].includes(status)
           ? 40
           : 0;
     return [

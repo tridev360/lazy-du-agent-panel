@@ -1,0 +1,239 @@
+{
+  "usage": {
+    "codex": {
+      "source": "example",
+      "windows": [
+        {
+          "used": 18,
+          "minutes": 10080,
+          "reset": "2026-10-05T12:00:00Z"
+        }
+      ]
+    },
+    "claude": {
+      "source": "example",
+      "windows": [
+        {
+          "used": 24,
+          "minutes": 10080,
+          "reset": "2026-10-05T12:00:00Z"
+        }
+      ]
+    },
+    "sessions": [
+      {
+        "id": "game-code",
+        "agent": "codex",
+        "title": "Game logic",
+        "titlePT": "Lógica do jogo",
+        "state": "working",
+        "model": "gpt-5.4",
+        "effort": "high",
+        "tokens": 754000,
+        "weightedTokens": 512000,
+        "tools": [
+          {
+            "name": "exec_command",
+            "count": 12
+          },
+          {
+            "name": "apply_patch",
+            "count": 5
+          }
+        ],
+        "projectId": "tiny-game",
+        "projectName": "Little platformer",
+        "recent": true,
+        "updated": null,
+        "projectNamePT": "Joguinho de plataforma",
+        "role": "dev",
+        "taskDurationsMinutes": [
+          12,
+          16,
+          20
+        ],
+        "observedSteps": 17,
+        "completedSteps": 13,
+        "action": "Fixing the game jump",
+        "actionPT": "Ajustando o pulo do jogo",
+        "titleES": "Lógica del juego",
+        "taskTitleES": "Lógica del juego",
+        "projectNameES": "Pequeño juego de plataformas",
+        "actionES": "Ajustando el salto del juego"
+      },
+      {
+        "id": "game-art",
+        "agent": "claude",
+        "title": "Art & feel",
+        "titlePT": "Arte e sensação",
+        "state": "working",
+        "model": "claude-sonnet-4-6",
+        "effort": "high",
+        "tokens": 486000,
+        "weightedTokens": 356000,
+        "tools": [
+          {
+            "name": "Read",
+            "count": 8
+          },
+          {
+            "name": "Edit",
+            "count": 4
+          }
+        ],
+        "projectId": "tiny-game",
+        "projectName": "Little platformer",
+        "recent": true,
+        "updated": null,
+        "projectNamePT": "Joguinho de plataforma",
+        "role": "designer",
+        "taskDurationsMinutes": [
+          8,
+          10,
+          12
+        ],
+        "observedSteps": 12,
+        "completedSteps": 7,
+        "action": "Drawing the game characters",
+        "actionPT": "Desenhando os personagens",
+        "titleES": "Arte y sensación",
+        "taskTitleES": "Arte y sensación",
+        "projectNameES": "Pequeño juego de plataformas",
+        "actionES": "Dibujando los personajes"
+      }
+    ],
+    "daily": [
+      {
+        "day": "Example day",
+        "tokens": 486000
+      }
+    ],
+    "processes": {
+      "codex": 2,
+      "claude": 1
+    },
+    "complete": true,
+    "discovered": {
+      "codex": 2,
+      "claude": 1
+    },
+    "available": {
+      "codex": true,
+      "claude": true
+    },
+    "periods": [
+      {
+        "key": "today",
+        "from": "2026-09-30",
+        "to": "2026-09-30",
+        "claude": 486000,
+        "codex": 934000,
+        "weightedTokens": 1000000
+      },
+      {
+        "key": "week",
+        "from": "2026-09-24",
+        "to": "2026-09-30",
+        "claude": 972000,
+        "codex": 2802000,
+        "weightedTokens": 2500000
+      }
+    ]
+  },
+  "tasks": [
+    {
+      "id": "game-0",
+      "title": "Player movement",
+      "titlePT": "Movimento do jogador",
+      "owner": "Gameplay",
+      "executor": "codex",
+      "phase": {
+        "key": "new",
+        "percent": 0
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "projectId": "tiny-game",
+      "summary": "Build and check one playable part of the little platformer.",
+      "summaryPT": "Crie e confira uma parte jogável do jogo de plataforma.",
+      "ownerPT": "Jogabilidade",
+      "titleES": "Movimiento del jugador",
+      "ownerES": "Jugabilidad",
+      "summaryES": "Crea y comprueba una parte jugable del juego de plataformas."
+    },
+    {
+      "id": "game-1",
+      "title": "Pixel art",
+      "titlePT": "Arte em pixel",
+      "owner": "Design",
+      "executor": "claude",
+      "phase": {
+        "key": "doing",
+        "percent": 40
+      },
+      "needsOwner": false,
+      "deadlineIn": null,
+      "projectId": "tiny-game",
+      "summary": "Make the little platformer feel warm, clear, and fun.",
+      "summaryPT": "Deixe o jogo de plataforma acolhedor, claro e divertido.",
+      "ownerPT": "Arte",
+      "titleES": "Arte en píxeles",
+      "ownerES": "Arte",
+      "summaryES": "Haz que el pequeño juego de plataformas sea claro, agradable y divertido."
+    },
+    {
+      "id": "game-2",
+      "title": "First level",
+      "titlePT": "Primeira fase",
+      "owner": "Gameplay",
+      "executor": "codex",
+      "phase": {
+        "key": "ready",
+        "percent": 60
+      },
+      "needsOwner": false,
+      "deadlineIn": 180,
+      "projectId": "tiny-game",
+      "summary": "Build and check one playable part of the little platformer.",
+      "summaryPT": "Crie e confira uma parte jogável do jogo de plataforma.",
+      "ownerPT": "Jogabilidade",
+      "titleES": "Primer nivel",
+      "ownerES": "Jugabilidad",
+      "summaryES": "Crea y comprueba una parte jugable del juego de plataformas."
+    }
+  ],
+  "queue": [],
+  "cards": [
+    {
+      "id": "choose-jump",
+      "title": "How should the jump feel?",
+      "titlePT": "Como deve ser o pulo?",
+      "options": [
+        "Floaty and forgiving",
+        "Quick and precise"
+      ],
+      "optionsPT": [
+        "Leve e tranquilo",
+        "Rápido e preciso"
+      ],
+      "projectId": "tiny-game",
+      "recommended": 0,
+      "titleES": "¿Cómo debe ser el salto?",
+      "optionsES": [
+        "Suave y fácil",
+        "Rápido y preciso"
+      ]
+    }
+  ],
+  "projects": [
+    {
+      "id": "tiny-game",
+      "name": "Little platformer",
+      "namePT": "Joguinho de plataforma",
+      "nameES": "Pequeño juego de plataformas"
+    }
+  ],
+  "configured": true,
+  "example": true,
+  "exampleSize": "solo"
+}

@@ -23,27 +23,27 @@ const words = {
     remaining: "remaining",
     sessions: "SESSIONS",
     recent: "recent history",
-    features: "FEATURES",
+    features: "TASKS",
     daily: "Daily usage",
     auto: "Your usage appears automatically.",
     optional:
-      "Add a workspace when you want a task board. Try the example to see it in motion.",
+      "Add a task board when you want a task board. Try the example to see it in motion.",
     seeExample: "See the example",
     needsYou: "NEEDS YOU",
-    footer: "Local. Refreshes every 30 seconds. UTC.",
+    footer: "Local. Reads every 3 minutes. UTC.",
     details: "DETAILS",
     phase: ["New", "Doing", "Ready", "Review", "Released", "Live"],
     all: "All",
     none: "none",
-    unknown: "Not available in local files",
+    unknown: "Open your agent to continue",
     scanning: "Reading usage metadata...",
     read: "phases read",
-    noQueue: "No workspace yet",
-    tokens: "observed tokens",
+    noQueue: "No task board yet",
+    tokens: "tokens",
     observed:
-      "Recently modified session files, up to 200. Tokens include input, output and cached input. These counts are not the account quota.",
-    quota: "Account quota is not available from Claude session files.",
-    partial: "Reading recent files. Counts are partial.",
+      "Tokens include input, output and cached input from read sessions. Your agent app shows plan credit.",
+    quota: "Your Claude app shows your plan percentage.",
+    partial: "Your history is filling in.",
     complete:
       "Recent files scanned. Older unchanged files are outside this view.",
     running: "top-level agent sessions",
@@ -89,14 +89,14 @@ const words = {
     remaining: "restante",
     sessions: "SESSÕES",
     recent: "histórico recente",
-    features: "FEATURES",
+    features: "TAREFAS",
     daily: "Uso por dia",
     auto: "Seu uso aparece automaticamente.",
     optional:
       "Adicione uma pasta quando quiser um quadro de tarefas. Veja o exemplo para sentir a fila andando.",
     seeExample: "Ver o exemplo",
     needsYou: "PRECISA DE VOCÊ",
-    footer: "Local. Atualiza a cada 30 segundos. UTC.",
+    footer: "Local. Lê a cada 3 minutos. UTC.",
     details: "DETALHES",
     phase: ["Nova", "Fazendo", "Pronta", "Revisão", "Liberada", "No ar"],
     all: "Todas",
@@ -107,9 +107,9 @@ const words = {
     noQueue: "Ainda sem quadro",
     tokens: "tokens observados",
     observed:
-      "Arquivos de sessão alterados recentemente, até 200. Tokens incluem entrada, saída e entrada em cache. Essa contagem não é a cota da conta.",
+      "Arquivos de sessão alterados recentemente, até 200. Tokens incluem entrada, saída e entrada em cache. Essa contagem não é a crédito do plano.",
     quota:
-      "A cota da conta não está disponível nos arquivos de sessão do Claude.",
+      "A crédito do plano não está disponível nos arquivos de sessão do Claude.",
     partial: "Lendo arquivos recentes. Contagens parciais.",
     complete:
       "Arquivos recentes lidos. Arquivos antigos sem alteração ficam fora desta visão.",
@@ -135,29 +135,32 @@ const words = {
     reward: "Agora no ar:",
   },
 };
-let lang = ["en", "pt"].includes(
+let lang = ["en", "pt", "es"].includes(
   new URLSearchParams(location.search).get("lang"),
 )
   ? new URLSearchParams(location.search).get("lang")
-  : localStorage.getItem("agent-panel-language") || "en";
-if (!words[lang]) lang = "en";
+  : (() => { try { return localStorage.getItem("agent-panel-language") || "en"; } catch { return "en"; } })();
+if (!words[lang] && lang !== "es") lang = "en";
 const example = new URLSearchParams(location.search).get("example") === "1";
 let data = null,
   filterOwner = "",
   filterExecutor = "",
+  filterProject = "",
   selected = "doing",
   busy = false,
   previous = null;
-const t = (k) => words[lang][k] || k,
+const translate = text => window.PanelLocale?.text(text, lang) ?? text;
+const t = (k) => translate((words[lang] || words.en)[k] || k),
   numeric = (x) => typeof x === "number" && Number.isFinite(x),
   el = (tag, text, cls) => {
     const n = document.createElement(tag);
-    if (text !== undefined) n.textContent = text;
+    if (text !== undefined) n.textContent = translate(text);
     if (cls) n.className = cls;
     return n;
   };
+function rawEl(tag,text,cls){const n=el(tag,undefined,cls);if(text!==undefined)n.textContent=text;return n;}
 function measured(value) {
-  return numeric(value) && value >= 0 ? value.toLocaleString(lang) : "?";
+  return numeric(value) && value >= 0 ? value.toLocaleString(lang) : (lang === "pt" ? "Aguardando leitura" : "Awaiting reading");
 }
 function compact(value) {
   return numeric(value) && value >= 0
@@ -222,20 +225,25 @@ function meter(value) {
   return m;
 }
 function drawer(title, nodes) {
+  const modal=$('drawer');
+  if(!modal.open)modal.panelReturnFocus=document.activeElement;
+  if(!modal.dataset.focusCycle){modal.dataset.focusCycle='on';modal.addEventListener?.('keydown',event=>{if(event.key!=='Tab')return;const controls=[...modal.querySelectorAll('button:not([disabled]),a[href],input:not([disabled]),select:not([disabled]),textarea:not([disabled]),[tabindex]:not([tabindex="-1"])')].filter(n=>!n.hidden&&n.getClientRects().length);if(!controls.length){event.preventDefault();modal.focus();return;}const first=controls[0],last=controls.at(-1);if(controls.length===1||event.shiftKey&&document.activeElement===first||!event.shiftKey&&document.activeElement===last){event.preventDefault();(event.shiftKey?last:first).focus();}});modal.addEventListener?.('close',()=>{const previous=modal.panelReturnFocus;if(previous?.getClientRects?.().length)previous.focus();else document.querySelector('.clean-more > summary')?.focus();});}
+
   $("drawer-title").textContent = title;
   $("drawer-body").replaceChildren(...nodes);
   $("drawer").showModal();
+  $("close-drawer").focus({preventScroll:true});
 }
 function title(item) {
-  return lang === "pt" && item.titlePT ? item.titlePT : item.title;
+  return lang === "pt" && item.titlePT ? item.titlePT : lang === "es" && item.titleES ? item.titleES : item.title;
 }
 function detail(item) {
   drawer(title(item), [
+    el("p", (lang === "pt" && item.summaryPT ? item.summaryPT : lang === "es" && item.summaryES ? item.summaryES : item.summary) || (lang === "pt" ? "Resumo não registrado." : "No summary recorded."), "summary-note"),
     el(
       "p",
-      (item.owner || item.executor || "") +
-        " · " +
-        (numeric(pct(item)) ? pct(item) + "%" : "?"),
+      [(lang === "pt" && item.ownerPT ? item.ownerPT : lang === "es" && item.ownerES ? item.ownerES : item.owner) || item.executor || "",
+        numeric(pct(item)) ? pct(item) + "%" : t("phase")[0]].filter(Boolean).join(" · "),
     ),
     el(
       "p",
@@ -256,138 +264,25 @@ function detail(item) {
   ]);
 }
 function usageDetail(who) {
-  const u = data.usage,
-    credit = u[who];
-  drawer(who.toUpperCase(), [
-    el(
-      "p",
-      credit?.windows?.length
-        ? credit.windows
-            .map(
-              (w) =>
-                w.used +
-                "% · " +
-                w.minutes +
-                " min · " +
-                (w.reset ? formatTime(w.reset) : "?"),
-            )
-            .join("\n")
-        : t("quota"),
-    ),
-    el("p", measured(credit?.tokens) + " " + t("tokens")),
-    el("p", t("observed")),
-    el("p", u.complete ? t("complete") : t("partial")),
-    ...u.sessions
-      .filter((x) => x.agent === who)
-      .map((s) =>
-        el(
-          "p",
-          t("session") +
-            " " +
-            s.id +
-            " · " +
-            measured(s.tokens) +
-            " " +
-            t("tokens") +
-            " · " +
-            formatTime(s.updated),
-        ),
-      ),
-  ]);
+  const u=data.usage,total=PanelCore.usageTotals(u),period=PanelR4.period();
+  const nodes=[el('p',period,'summary-note'),el('p',lang==='pt'?'Tokens de entrada, saída e cache das sessões lidas.':'Input, output and cached tokens from read sessions.','summary-note')];
+  if(who==='claude')nodes.push(el('p',lang==='pt'?'A porcentagem do plano fica no app do Claude. Este painel mede tokens locais, não o crédito da conta.':'Your plan percentage is in the Claude app. This panel measures local tokens, not account credit.','summary-note'),el('p',document.querySelector('[data-metric=claude]').dataset.trend+' · '+(lang==='pt'?'hoje contra ontem, UTC':'today versus yesterday, UTC')));
+  else for(const win of u.codex?.windows||[])nodes.push(el('p',Math.round(100-win.used)+'% '+(lang==='pt'?'restante · ':'remaining · ')+(win.minutes>=10000?(lang==='pt'?'janela semanal':'weekly window'):(lang==='pt'?'janela de '+Math.round(win.minutes/60)+' horas':Math.round(win.minutes/60)+'-hour window'))+(win.reset?' · '+t('reset')+' '+formatTime(win.reset):'')));
+  const precise=x=>numeric(x)?new Intl.NumberFormat(lang).format(x):measured(x);
+  nodes.push(el('p',precise(u[who]?.tokens)+' '+t('tokens')));
+  for(const session of u.sessions||[])if(session.agent===who)nodes.push(el('p',session.id+' · '+precise(session.tokens)+' '+t('tokens')));
+  if(who==='claude')for(const day of u.daily||[])nodes.push(el('p',day.day+' · '+compact(day.tokens)+' '+t('tokens')+' · UTC'));
+  nodes.push(el('p',(lang==='pt'?'Leitura: ':'Read: ')+formatTime(u.updated),'summary-note'));drawer(who==='claude'?(lang==='pt'?'Consumo Claude':'Claude usage'):(lang==='pt'?'Plano Codex':'Codex plan'),nodes);
 }
-function showSessions() {
-  const u = data.usage;
-  drawer(t("sessions"), [
-    el("p", measured(sessionCount(u)) + " " + t("sessions")),
-    ...processDetails(u),
-    el("p", t("observed")),
-    el("p", u.complete ? t("complete") : t("partial")),
-    ...u.sessions.map((s) =>
-      el(
-        "p",
-        s.agent.toUpperCase() +
-          " · " +
-          t("session") +
-          " " +
-          s.id +
-          " · " +
-          measured(s.tokens) +
-          " " +
-          t("tokens") +
-          " · " +
-          formatTime(s.updated) +
-          " · " +
-          (s.recent ? t("recently") : t("inactive")),
-      ),
-    ),
-  ]);
-}
-function showDaily() {
-  drawer(t("daily"), [
-    ...(data.usage.daily.length ? [] : [el("p", "? " + t("tokens"))]),
-    el("p", t("observed")),
-    el("p", data.usage.complete ? t("complete") : t("partial")),
-    ...data.usage.daily.map((d) =>
-      el(
-        "p",
-        d.day + " · " + measured(d.tokens) + " " + t("tokens") + " · UTC",
-      ),
-    ),
-  ]);
-}
+function showSessions(){drawer(lang==='pt'?'Sessões em palavras':'Sessions at a glance',[...processDetails(data.usage),...PanelCore.agents(data).map(a=>el('p',a.id+' · '+measured(a.tokens)+' '+t('tokens')+(a.action?' · '+a.action:'')))]);}
+function showDaily(){drawer(t('daily'),[el('p',lang==='pt'?'Claude, por dia UTC. Codex informa o acumulado de cada sessão.':'Claude, by UTC day. Codex reports each session’s cumulative count.','summary-note'),...(data.usage.daily?.length?data.usage.daily.map(day=>el('p',day.day+' · '+compact(day.tokens)+' '+t('tokens')+' · UTC')):[el('p',lang==='pt'?'Abra uma sessão Claude para formar seu histórico.':'Open a Claude session to build your history.')])]);}
 function renderBoard() {
-  const tasks = data.tasks.filter(
-    (x) =>
-      (!filterOwner || x.owner === filterOwner) &&
-      (!filterExecutor || x.executor === filterExecutor),
-  );
-  $("task-count").textContent = tasks.length;
-  $("board").replaceChildren();
-  $("phase-tabs").replaceChildren();
-  for (const [idx, key] of keys.entries()) {
-    const list = tasks.filter((x) => x.phase.key === key),
-      tab = el("button", t("phase")[idx] + " " + list.length);
-    tab.setAttribute("role", "tab");
-    tab.setAttribute("aria-selected", String(key === selected));
-    tab.onclick = () => {
-      selected = key;
-      renderBoard();
-    };
-    $("phase-tabs").append(tab);
-    const col = el(
-      "section",
-      undefined,
-      "phase-column" + (key === selected ? " selected" : ""),
-    );
-    col.dataset.phase = key;
-    const heading = el("div", undefined, "phase-heading");
-    heading.append(el("span", t("phase")[idx]), el("b", list.length));
-    col.append(heading);
-    const cards = el("div", undefined, "phase-list");
-    for (const item of list) {
-      const button = el("button", undefined, "feature " + tone(item));
-      if (item.color) button.style.setProperty("--accent", item.color);
-      button.append(
-        el(
-          "span",
-          item.owner + " · " + item.executor.toUpperCase(),
-          "task-session",
-        ),
-        el("strong", title(item)),
-        meter(pct(item)),
-        el("span", numeric(pct(item)) ? pct(item) + "%" : "?", "task-foot"),
-      );
-      button.onclick = () => detail(item);
-      cards.append(button);
-    }
-    col.append(cards);
-    $("board").append(col);
-  }
-  for (const b of document.querySelectorAll("[data-executor]"))
-    b.setAttribute(
-      "aria-pressed",
-      String(filterExecutor === b.dataset.executor),
-    );
+  const tasks=data.tasks.filter(x=>(!filterOwner||x.owner===filterOwner)&&(!filterProject||x.projectId===filterProject)&&(!filterExecutor||x.executor===filterExecutor));
+  $("board").replaceChildren();$("phase-tabs").replaceChildren();$("task-count").textContent='';
+  const groups=[['new',lang==='pt'?'Para fazer':'To do',x=>(pct(x)??0)<40],['doing',lang==='pt'?'Fazendo':'In progress',x=>pct(x)===40],['checking',lang==='pt'?'Conferindo':'Being checked',x=>pct(x)>40&&pct(x)<100],['live',lang==='pt'?'Concluídas':'Finished',x=>pct(x)===100]];
+  for(const [key,label,match]of groups){const list=tasks.filter(match);if(!list.length)continue;const col=el('section',undefined,'phase-column'+(key==='doing'?' selected':'')),heading=el('div',undefined,'phase-heading');col.dataset.phase=key;heading.append(el('span',label));col.append(heading);const cards=el('div',undefined,'phase-list');for(const item of list){const button=el('button',undefined,'feature '+tone(item));const person=(lang==='pt'?item.ownerPT||item.owner:lang==='es'?item.ownerES||item.owner:item.owner),who=person==='TEAM'?(lang==='pt'?'Equipe':'Team'):person;const by=[who,item.executor==='claude'?'Claude Code':item.executor==='codex'?'Codex':''].filter(Boolean).join(' · ');if(by)button.append(el('span',by,'task-session'));button.append(rawEl('strong',title(item)));if(item.needsOwner)button.append(el('span',lang==='pt'?'Esperando sua decisão':'Waiting for your decision','decision-wait'));button.onclick=()=>detail(item);cards.append(button);}col.append(cards);$("board").append(col);}
+  if(!tasks.length)$("board").append(el('p',lang==='pt'?'Nenhuma tarefa combina com estes filtros. Escolha Todas ou troque o agente.':'No tasks match these filters. Choose All or change the agent.','filter-empty summary-note'));
+  for(const button of document.querySelectorAll('[data-executor]'))button.setAttribute('aria-pressed',String(filterExecutor===button.dataset.executor));
 }
 function renderUsageHero(usage) {
   const daily = usage.daily || [];
@@ -420,7 +315,7 @@ function renderUsageHero(usage) {
     : detected
       ? detected + "+"
       : "?";
-  $("progress-note").textContent = t("running");
+  if (typeof PanelV2 === "undefined") $("progress-note").textContent = t("running");
   $("traveler").style.setProperty("--amount", "50%");
   $("pipeline").replaceChildren();
   $("pipeline").style.setProperty("--segments", 2);
@@ -513,7 +408,30 @@ function render() {
   $("language").value = lang;
   $("refresh").ariaLabel = t("refresh");
   $("close-drawer").ariaLabel = t("close");
-  if (!data) return;
+  if (!data) { $("example-toggle").textContent = t("example"); if (typeof PanelV2 !== "undefined") PanelV2.loading(lang); return; }
+  if (typeof PanelV2 !== "undefined") {
+    document.title = "Lazy Du | " + t("panel");
+    $("example-badge").hidden = !data.example;
+    $("example-toggle").textContent = data.example ? t("liveMode") : t("example");
+    $("example-toggle").href = data.example ? "/?lang=" + lang : "/?example=1&lang=" + lang;
+    $("owner-filters").replaceChildren();
+    for (const owner of ["", ...new Set(data.tasks.map(x => x.owner).filter(Boolean))]) {
+      const label = owner ? (owner === "TEAM" ? (lang === "pt" ? "Equipe" : "Team") : lang === "pt" ? data.tasks.find(x => x.owner === owner)?.ownerPT || owner : owner) : t("all");
+      const b = el("button", label, "filter");
+      b.setAttribute("aria-pressed", String(filterOwner === owner));
+      b.onclick = () => { filterOwner = owner; render(); };
+      $("owner-filters").append(b);
+    }
+    $("owner-filters").hidden = !data.tasks.some(x => x.owner);
+    $("filters").hidden = !data.tasks.length;
+    $("phase-tabs").hidden = !data.tasks.length;
+    $("board").hidden = !data.tasks.length;
+    renderBoard();
+    PanelV2.render(data, lang);
+    if (typeof PanelWelcome !== "undefined") PanelWelcome.render(data, lang);
+    if (typeof DuSync !== "undefined") DuSync.update(data, lang);
+    return;
+  }
   const demo = data.example,
     items = [...data.queue, ...data.tasks],
     known = items.filter((x) => numeric(pct(x))),
@@ -530,7 +448,7 @@ function render() {
   $("total-percent").textContent = numeric(total)
     ? Math.round(total) + "%"
     : "?";
-  $("progress-note").textContent = items.length
+  if (typeof PanelV2 === "undefined") $("progress-note").textContent = items.length
     ? known.length + "/" + items.length + " " + t("read")
     : t("noQueue");
   $("pipeline").replaceChildren();
@@ -605,7 +523,8 @@ function render() {
       : formatTime(usage.updated);
   $("owner-filters").replaceChildren();
   for (const owner of ["", ...new Set(data.tasks.map((x) => x.owner))]) {
-    const b = el("button", owner || t("all"), "filter");
+    const label = owner ? (lang === "pt" ? data.tasks.find(x => x.owner === owner)?.ownerPT || owner : owner) : t("all");
+    const b = el("button", label, "filter");
     b.setAttribute("aria-pressed", String(filterOwner === owner));
     b.onclick = () => {
       filterOwner = owner;
@@ -614,7 +533,7 @@ function render() {
     $("owner-filters").append(b);
   }
   renderBoard();
-  $("empty-workspace").hidden = items.length > 0;
+  $("empty-task board").hidden = items.length > 0;
   $("filters").hidden = !data.tasks.length;
   $("phase-tabs").hidden = !data.tasks.length;
   $("board").hidden = !data.tasks.length;
@@ -655,12 +574,16 @@ function render() {
   }
   if (!data.cards.length) $("cards").append(el("p", t("none"), "empty"));
   document.title = "Lazy Du | " + t("panel");
+  if (typeof PanelV2 !== "undefined") PanelV2.render(data, lang);
+  if (typeof PanelWelcome !== "undefined") PanelWelcome.render(data, lang);
+  if (typeof DuSync !== "undefined") DuSync.update(data, lang);
 }
-async function refresh() {
+async function refresh(force=false) {
+  if (typeof window !== 'undefined' && window.PanelShutdown) return;
   if (busy) return;
   busy = true;
   try {
-    const res = await fetch("/api/status" + (example ? "?example=1" : ""));
+    const res = await fetch("/api/status" + (example ? "?example=1&size=" + (new URLSearchParams(location.search).get("size") || "large") : force===true?"?refresh=1":""));
     if (!res.ok) throw Error();
     const next = await res.json();
     if (previous) {
@@ -679,21 +602,23 @@ async function refresh() {
     }
     previous = new Map(next.tasks.map((x) => [x.id, x.phase.key]));
     data = next;
-    render();
     if (!next.example && (next.usage.scanning || next.usage.pending))
-      setTimeout(refresh, next.usage.codex ? 1000 : 200);
+      setTimeout(refresh, 1000);
+    render();
   } catch {
     $("status").textContent = t("failure");
+    if (typeof PanelV2 !== "undefined") PanelV2.failure();
   } finally {
     busy = false;
   }
 }
 $("language").onchange = () => {
   lang = $("language").value;
-  localStorage.setItem("agent-panel-language", lang);
+  try { localStorage.setItem("agent-panel-language", lang); } catch {}
+  if (typeof PanelWelcome !== "undefined") PanelWelcome.language(lang);
   render();
 };
-$("refresh").onclick = refresh;
+$("refresh").onclick = () => refresh(true);
 $("close-drawer").onclick = () => $("drawer").close();
 $("claude-metric").onclick = () => data && usageDetail("claude");
 $("codex-metric").onclick = () => data && usageDetail("codex");
@@ -728,6 +653,12 @@ for (const b of document.querySelectorAll("[data-executor]"))
       filterExecutor === b.dataset.executor ? "" : b.dataset.executor;
     renderBoard();
   };
+if (typeof window !== "undefined") {
+  window.panelDrawer = drawer;
+  window.panelDetail = detail;
+  window.panelProject = (id) => { filterProject = id; renderBoard(); };
+  window.panelToast = (text) => { $("toast").textContent = text; $("toast").hidden = false; setTimeout(() => $("toast").hidden = true, 2500); };
+}
 render();
 refresh();
 setInterval(refresh, 30000);

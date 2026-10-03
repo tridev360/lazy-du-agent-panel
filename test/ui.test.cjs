@@ -24,6 +24,7 @@ function ui(data) {
     get firstElementChild() {
       return this.children[0];
     }
+    focus() {}
     showModal() {
       this.open = true;
     }
@@ -75,7 +76,11 @@ function ui(data) {
       timers.push({ fn, delay });
     },
   };
+  ctx.window=ctx;
+  ctx.PanelR4={period:()=>"Today · UTC"};
+  ctx.document.querySelector=()=>({dataset:{trend:"No comparison available"}});
   vm.createContext(ctx);
+  vm.runInContext(fs.readFileSync(require.resolve("../public/v2-core.js"),"utf8"),ctx);
   vm.runInContext(
     fs.readFileSync(require.resolve("../public/panel.js"), "utf8"),
     ctx,
@@ -95,14 +100,14 @@ function ui(data) {
 }
 const example = () =>
   JSON.parse(fs.readFileSync(require.resolve("../example.json"), "utf8"));
-test("full UI renders forty example features and phase-weighted progress", async () => {
+test("full UI renders six example game tasks and phase-weighted progress", async () => {
   const u = ui(example());
   await u.ready();
-  a.equal(u.nodes.get("task-count").textContent, 40);
-  a.equal(u.nodes.get("pipeline").children.length, 40);
+  a.equal(u.nodes.get("board").children.flatMap(c=>c.children[1].children).length, 6);
+  a.equal(u.nodes.get("pipeline").children.length, 6);
   a.equal(u.nodes.get("claude-ring").firstElementChild.textContent, "54%");
   a.equal(u.nodes.get("codex-ring").firstElementChild.textContent, "72%");
-  a.equal(u.nodes.get("cards").children.length, 3);
+  a.equal(u.nodes.get("cards").children.length, 2);
 });
 test("language change translates feature names and choices", async () => {
   const u = ui(example());
@@ -113,20 +118,20 @@ test("language change translates feature names and choices", async () => {
   const all = u.nodes
     .get("board")
     .children.flatMap((c) => c.children[1].children);
-  a.ok(all.some((x) => x.children[1].textContent === "Pacote de sons"));
+  a.ok(all.some((x) => x.children[1].textContent === "Movimento do jogador"));
   a.equal(
     u.nodes.get("cards").children[0].children[1].textContent,
-    "Escolha o próximo tema",
+    "Como deve ser o pulo?",
   );
 });
 test("filters and drawer are functional", async () => {
   const u = ui(example());
   await u.ready();
   u.executors[0].onclick();
-  a.equal(u.nodes.get("task-count").textContent, 20);
+  a.equal(u.nodes.get("board").children.flatMap(c=>c.children[1].children).length, 3);
   u.nodes.get("pipeline").children[0].onclick();
   a.equal(u.nodes.get("drawer").open, true);
-  a.equal(u.nodes.get("drawer-title").textContent, "Sound pack");
+  a.equal(u.nodes.get("drawer-title").textContent, "Player movement");
   u.nodes.get("close-drawer").onclick();
   a.equal(u.nodes.get("drawer").open, false);
 });
@@ -148,9 +153,9 @@ test("missing readings display question marks without invented zero quota", asyn
   await u.ready();
   a.equal(u.nodes.get("claude-ring").firstElementChild.textContent, "?");
   a.equal(u.nodes.get("codex-ring").firstElementChild.textContent, "?");
-  a.equal(u.nodes.get("sessions-ring").firstElementChild.textContent, "?");
-  a.equal(u.nodes.get("claude-note").textContent, "? observed tokens");
-  a.equal(u.nodes.get("empty-workspace").hidden, false);
+  a.equal(u.nodes.get("sessions-ring").firstElementChild.textContent, "Awaiting reading");
+  a.equal(u.nodes.get("claude-note").textContent, "Awaiting reading tokens");
+  a.equal(u.nodes.get("empty-task board").hidden, false);
 });
 test("example choices remain local and only acknowledge the chosen card", async () => {
   const u = ui(example());
@@ -168,7 +173,7 @@ test("first usage becomes visible while the initial scan continues", async () =>
   d.usage.codex = null;
   const u = ui(d);
   await u.ready();
-  const retry = u.timers.find((x) => x.delay === 200);
+  const retry = u.timers.find((x) => x.delay === 1000);
   a.ok(retry);
   d.usage.codex = { windows: [{ used: 37, minutes: 10080 }] };
   retry.fn();
@@ -204,20 +209,20 @@ test("readable roots without usage metadata show unknown in cards and history", 
     d.usage.complete = complete;
     const u = ui(d);
     await u.ready();
-    a.equal(u.nodes.get("claude-note").textContent, "? observed tokens");
-    a.equal(u.nodes.get("sessions-ring").firstElementChild.textContent, "?");
+    a.equal(u.nodes.get("claude-note").textContent, "Awaiting reading tokens");
+    a.equal(u.nodes.get("sessions-ring").firstElementChild.textContent, "Awaiting reading");
     a.equal(
       u.nodes.get("process-note").textContent,
-      "? top-level agent sessions",
+      "Awaiting reading top-level agent sessions",
     );
     u.nodes.get("claude-metric").onclick();
-    a.match(drawerText(u), /\? observed tokens/);
+    a.match(drawerText(u), /Awaiting reading tokens/);
     u.nodes.get("sessions-metric").onclick();
-    a.match(drawerText(u), /\? SESSIONS/);
-    a.match(drawerText(u), /CLAUDE: \? · CODEX: \?/);
+    a.match(drawerText(u), /Awaiting reading top-level agent sessions/);
+    a.match(drawerText(u), /CLAUDE: Awaiting reading · CODEX: Awaiting reading/);
     a.match(drawerText(u), /Only executable names are read/);
     u.nodes.get("daily").onclick();
-    a.match(drawerText(u), /\? observed tokens/);
+    a.match(drawerText(u), /Open a Claude session to build your history/);
   }
 });
 test("unknown per-session and daily tokens remain unknown without breaking details", async () => {
@@ -234,11 +239,11 @@ test("unknown per-session and daily tokens remain unknown without breaking detai
   const u = ui(d);
   await u.ready();
   u.nodes.get("claude-metric").onclick();
-  a.match(drawerText(u), /fixture · \? observed tokens/);
+  a.match(drawerText(u), /fixture · Awaiting reading tokens/);
   u.nodes.get("sessions-metric").onclick();
-  a.match(drawerText(u), /fixture · \? observed tokens/);
+  a.match(drawerText(u), /fixture · Awaiting reading tokens/);
   u.nodes.get("daily").onclick();
-  a.match(drawerText(u), /2030-01-02 · \? observed tokens/);
+  a.match(drawerText(u), /2030-01-02 · \? tokens/);
 });
 test("valid measured zero is shown and process uncertainty has a Portuguese explanation", async () => {
   const d = unknownUsage();
@@ -255,13 +260,13 @@ test("valid measured zero is shown and process uncertainty has a Portuguese expl
   d.usage.processes = { claude: 0, codex: 0, unknown: 0 };
   const u = ui(d);
   await u.ready();
-  a.equal(u.nodes.get("claude-note").textContent, "0 observed tokens");
+  a.equal(u.nodes.get("claude-note").textContent, "0 tokens");
   a.equal(
     u.nodes.get("process-note").textContent,
     "0 top-level agent sessions",
   );
   u.nodes.get("claude-metric").onclick();
-  a.match(drawerText(u), /fixture-zero · 0 observed tokens/);
+  a.match(drawerText(u), /fixture-zero · 0 tokens/);
   u.nodes.get("language").value = "pt";
   u.nodes.get("language").onchange();
   u.nodes.get("sessions-metric").onclick();
@@ -273,9 +278,9 @@ test("a pending bounded scan uses the existing first-read retry", async () => {
   d.usage.pending = true;
   const u = ui(d);
   await u.ready();
-  a.ok(u.timers.some((x) => x.delay === 200));
+  a.ok(u.timers.some((x) => x.delay === 1000));
   d.usage.codex = { windows: [{ used: 10, minutes: 10080 }] };
-  u.timers.find((x) => x.delay === 200).fn();
+  u.timers.find((x) => x.delay === 1000).fn();
   await u.ready();
   a.equal(u.nodes.get("codex-ring").firstElementChild.textContent, "90%");
   a.ok(u.timers.some((x) => x.delay === 1000));
@@ -319,7 +324,7 @@ test("workspace queue view is preserved and missing live readings are explicit",
   configured.configured = true;
   const board = ui(configured);
   await board.ready();
-  a.equal(board.nodes.get("pipeline").children.length, 40);
+  a.equal(board.nodes.get("pipeline").children.length, 6);
   const missing = unknownUsage();
   missing.example = false;
   missing.configured = false;
