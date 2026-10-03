@@ -222,7 +222,7 @@
     choices.setAttribute('role','radiogroup');choices.setAttribute('aria-label',t.who);scopes.setAttribute('role','radiogroup');scopes.setAttribute('aria-label',simple.global);block.tabIndex=0;block.hidden=true;block.setAttribute('aria-label',t.title);status.setAttribute('role','status');status.setAttribute('aria-live','polite');
     const groups=[];
     function setTarget(value){target=value;for(const group of groups)group.setTarget(value);draw();}
-    function makeCopy(label,text,primary,buttonClass){const group=root.PanelCopySession.create({lang,label,text,writesFile:true,target,primary,status,fallback:block,failed:t.select,onTargetChange:setTarget,onFallback(){advanced.open=true;block.hidden=false;},onCopied({phrase}){status.textContent=phrase;}});group.button.className+=' '+buttonClass;groups.push(group);return group;}
+    function makeCopy(label,text,primary,buttonClass){const group=root.PanelCopySession.create({lang,label,text,writesFile:true,target,primary,status,fallback:block,failed:t.select,onTargetChange:setTarget,onFallback(){advanced.open=true;block.hidden=false;}});group.button.className+=' '+buttonClass;groups.push(group);return group;}
     const main=makeCopy(value=>value==='claude'?simple.copy:simple.copy.replace('Claude Code','Codex'),value=>ruleText(draft,lang,value,scope),true,'teach-copy');main.switcher.className+=' teach-switch';
     const removeGlobal=makeCopy(REMOVE[lang].globalLabel,value=>removalText(lang,value,'global'),false,'teach-remove-global');
     const removeOld=makeCopy(REMOVE[lang].projectLabel,value=>removalText(lang,value,'project'),false,'teach-remove');

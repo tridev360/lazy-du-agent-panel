@@ -29,11 +29,24 @@ async function main(){
       await row.locator('.project-rules-action').waitFor({state:'visible'});const target=await row.locator('.project-rules-action').boundingBox();assert.ok(target&&target.height>=44);assert.ok(target.width>=44);
     }
     assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
-    const target=page.locator('#look-sessions [data-rules-project="rules-missing"]');await target.focus();await page.evaluate(({data,lang})=>PanelV2.render(data,lang),{data:fixture,lang});assert.equal(await page.evaluate(()=>document.activeElement.dataset.rulesProject),'rules-missing');
+    const target=page.locator('#look-sessions [data-rules-project="rules-missing"]');await page.keyboard.press('Tab');await target.focus();await page.evaluate(({data,lang})=>PanelV2.render(data,lang),{data:fixture,lang});assert.equal(await page.evaluate(()=>document.activeElement.dataset.rulesProject),'rules-missing');const focus=await target.evaluate(el=>({visible:el.matches(':focus-visible'),width:parseFloat(getComputedStyle(el).outlineWidth)}));assert.ok(focus.visible&&focus.width>=2,'Visible keyboard focus');
     await page.screenshot({path:path.join(out,lang+'-'+width+'-project-rules.png'),fullPage:true});
     await target.click();await page.locator('#drawer[open] .teach-copy').click();assert.equal(await page.evaluate(()=>window.__ruleCopies.length),1);const copied=await page.evaluate(()=>window.__ruleCopies[0]);assert.ok(copied.includes('~/.claude/CLAUDE.md'));assert.ok(copied.includes('## Lazy Du Agent Panel'));
+    const main=page.locator('#drawer[open] .teach-simple > .copy-session');
+    async function oneNextStep(){
+      const phrase=await main.locator('.copy-session-phrase').innerText();
+      const count=await page.locator('#drawer[open] .teach-simple').evaluate((box,phrase)=>[...box.querySelectorAll('p')].filter(p=>p.textContent===phrase&&!p.closest('details:not([open])')&&p.checkVisibility({checkOpacity:true,checkVisibilityCSS:true})).length,phrase);
+      assert.equal(count,1,'One visible next-step instruction after copying');
+      assert.equal(await page.locator('#drawer[open] .teach-status').innerText(),await page.evaluate(lang=>PanelCopySession.T[lang].copied,lang));
+      assert.equal(await page.locator('#drawer[open] .teach-advanced').getAttribute('open'),null);
+    }
+    await oneNextStep();
     await page.screenshot({path:path.join(out,lang+'-'+width+'-project-teach.png'),fullPage:true});
-    report.cases.push({lang,width,states:['found','missing','unknown'],nestedButtons:0,overflow:false,minimumTarget:44,focusPreserved:true,teachingOpened:true,copiedInstructionVerified:true});await context.close();
+    await main.locator('.teach-switch').click();await main.locator('.teach-copy').click();
+    assert.equal(await page.evaluate(()=>window.__ruleCopies.length),2);
+    const codexCopy=await page.evaluate(()=>window.__ruleCopies[1]);assert.ok(codexCopy.includes('~/.codex/AGENTS.md'));assert.ok(!codexCopy.includes('~/.claude/CLAUDE.md'));await oneNextStep();
+    await page.screenshot({path:path.join(out,lang+'-'+width+'-project-teach-codex.png'),fullPage:true});
+    report.cases.push({lang,width,states:['found','missing','unknown'],nestedButtons:0,overflow:false,minimumTarget:44,focusPreserved:true,teachingOpened:true,copiedInstructionVerified:true,codexCopiedInstructionVerified:true,oneNextStep:true,advancedClosed:true,keyboardFocusVisible:true});await context.close();
   }
   assert.deepEqual(report.errors,[]);assert.deepEqual(report.externalRequests,[]);report.ok=true;
 }
