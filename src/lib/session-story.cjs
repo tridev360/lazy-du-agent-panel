@@ -1,7 +1,7 @@
 'use strict';
 const {projectJSON}=require('./project-json.cjs'),{createHash}=require('node:crypto');
 const key=id=>typeof id==='string'?createHash('sha256').update(id).digest('hex').slice(0,16):null;
-const headers=['type','timestamp','sessionId','parentSessionId','isSidechain','agentId','payload.id','payload.type','payload.role','payload.phase','payload.name','message.stop_reason','payload.source.subagent.thread_spawn.parent_thread_id','payload.source.subagent.parent_thread_id',...Array.from({length:8},(_,i)=>[`message.content.${i}.type`,`message.content.${i}.name`,`message.content.${i}.id`,`message.content.${i}.tool_use_id`]).flat()];
+const headers=['type','timestamp','sessionId','parentSessionId','isSidechain','agentId','payload.id','payload.parent_thread_id','payload.type','payload.role','payload.phase','payload.name','message.stop_reason','payload.source.subagent.thread_spawn.parent_thread_id','payload.source.subagent.parent_thread_id',...Array.from({length:8},(_,i)=>[`message.content.${i}.type`,`message.content.${i}.name`,`message.content.${i}.id`,`message.content.${i}.tool_use_id`]).flat()];
 const clean=text=>String(text||'').replace(/(?:https?:\/\/|[a-z]:[\\/])\S+|\b[^\s@]+@[^\s@]+\b|0x[a-f\d]{40}|\b[a-f\d]{8}(?:-[a-f\d]{4}){3}-[a-f\d]{12}\b|\b(?:sk-|ghp_|xox)[\w-]+|\b[\w-]{33,}\b/gi,'').replace(/<[^>]*>|[`*_#]/g,'').replace(/[\x00-\x1f]/g,' ').replace(/\s+/g,' ').trim();
 function actionOf(name,text){
   const s=String(text||'');
@@ -24,7 +24,9 @@ function metadataStory(line,previous={}){
   let h;try{h=projectJSON(line,headers);}catch{return{};}
   const at=typeof h.timestamp==='string'&&Number.isFinite(Date.parse(h.timestamp))?new Date(h.timestamp).toISOString():null,out={};
   const id=h.type==='session_meta'&&!previous.birthAt?h['payload.id']:h.sessionId;if(id)out.sessionKey=key(id);if(h.type==='session_meta'&&at&&!previous.birthAt)out.birthAt=at;
-  const parent=h['payload.source.subagent.thread_spawn.parent_thread_id']||h['payload.source.subagent.parent_thread_id']||h.parentSessionId;if(parent)out.parentKey=key(parent);if(parent||h.isSidechain)out.helper=true;if(h.agentId)out.helperKey=key(h.agentId);
+  // Copied ancestry later in a fork must not replace the opening identity.
+  const opening=h.type==='session_meta'&&!previous.birthAt;
+  const parent=opening?(h['payload.parent_thread_id']||h['payload.source.subagent.thread_spawn.parent_thread_id']||h['payload.source.subagent.parent_thread_id']):h.type!=='session_meta'?h.parentSessionId:null;if(parent)out.parentKey=key(parent);if(parent||h.isSidechain)out.helper=true;if(h.agentId)out.helperKey=key(h.agentId);
   const kind=h['payload.type'],tool=h['payload.name'],assistantTool=h.type==='assistant'&&Object.values(h).includes('tool_use');
   const event=h.type==='user'||h.type==='assistant'||h.type==='event_msg'&&['user_message','task_started'].includes(kind)||h.type==='response_item'&&['function_call','function_call_output'].includes(kind);
   if(at&&event&&(!previous.activityAt||at>=previous.activityAt)){out.activityAt=at;out.closedAt=null;out.finishedAt=null;}
