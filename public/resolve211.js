@@ -10,7 +10,7 @@
       "Left a session open and forgot? Team separates sessions with recent activity from paused and finished ones.",
       "Want to know where things stand right now? WEN opens the current summary in six lines.",
       "Spent more than you thought? Usage shows this week's and today's tokens and how much credit has been used.",
-      "Everything stays on your computer. No account, no key, and it reads only metadata, never your conversations."
+      "No account or API key. Reads local session metadata, connected tasks and the global rules marker. Network features are optional."
     ]
   },
   "pt": {
@@ -22,7 +22,7 @@
       "Esqueceu uma sessão aberta? A Equipe separa as sessões com atividade recente das que estão em pausa ou concluídas.",
       "Quer saber como está tudo agora? O WEN abre o resumo atual em seis linhas.",
       "Gastou mais do que achava? O Consumo mostra os tokens da semana e de hoje e quanto do crédito já foi usado.",
-      "Tudo fica no seu computador. Sem conta, sem chave, e ele lê só metadados, nunca as suas conversas."
+      "Sem conta ou chave de API. Lê metadados das sessões locais, tarefas conectadas e o marcador das regras globais. Recursos de rede são opcionais."
     ]
   },
   "es": {
@@ -34,7 +34,7 @@
       "¿Olvidaste una sesión abierta? Equipo separa las sesiones con actividad reciente de las que están en pausa o terminadas.",
       "¿Quieres saber cómo va todo ahora? WEN abre el resumen actual en seis líneas.",
       "¿Gastaste más de lo que pensabas? Uso muestra los tokens de la semana y de hoy y cuánto crédito se ha usado.",
-      "Todo queda en tu ordenador. Sin cuenta, sin clave, y solo lee metadatos, nunca tus conversaciones."
+      "Sin cuenta ni clave de API. Lee metadatos de sesiones locales, tareas conectadas y el marcador de reglas globales. Las funciones de red son opcionales."
     ]
   }
 };
