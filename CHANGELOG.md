@@ -1,5 +1,10 @@
 # Changelog
 
+## 2.2.2
+
+- Local tutorial player integration in the welcome screen and First steps.
+- Unavailable until approved language-specific media exists.
+
 ## 2.2.1
 
 - Project-level indicators show whether the team rules were observed, without treating the global setup as proof for each project.

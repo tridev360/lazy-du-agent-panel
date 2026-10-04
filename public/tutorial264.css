@@ -1,0 +1,11 @@
+.tutorial264-start { margin-top: .75rem; padding: .65rem .9rem; font: inherit; border-radius: .65rem; cursor: pointer; }
+.tutorial264-start[hidden] { display: none; }
+.tutorial264-dialog { box-sizing: border-box; width: min(52rem, calc(100vw - 2rem)); max-height: calc(100dvh - 2rem); padding: 1rem; border: 1px solid var(--border, #3e4045); border-radius: 1rem; color: var(--text, #f5f5f5); background: var(--surface, #181a1f); overflow: auto; }
+.tutorial264-dialog::backdrop { background: rgb(0 0 0 / .72); }
+.tutorial264-heading { display: flex; align-items: center; justify-content: space-between; gap: .75rem; margin-bottom: .8rem; }
+.tutorial264-heading h2 { margin: 0; font-size: 1.15rem; }
+.tutorial264-close { flex-shrink: 0; padding: .6rem .75rem; color: inherit; background: transparent; border: 1px solid var(--border, #555); border-radius: .65rem; cursor: pointer; font: inherit; }
+.tutorial264-dialog video { display: block; width: 100%; max-height: calc(100dvh - 9rem); border-radius: .5rem; background: #000; }
+.tutorial264-status { margin: .8rem 0 0; }
+.tutorial264-start:focus-visible, .tutorial264-close:focus-visible { outline: 3px solid var(--accent, #ffa256); outline-offset: 3px; }
+@media (max-width: 480px) { .tutorial264-dialog { width: calc(100vw - 1rem); max-height: calc(100dvh - 1rem); padding: .75rem; } }

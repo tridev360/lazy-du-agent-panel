@@ -11,6 +11,7 @@ const { exampleFor } = require('./lib/examples.cjs');
 const {TaskBoard}=require('./lib/task-board.cjs');
 const { createNews } = require('./lib/news.cjs');
 const { createReadSnapshot } = require('./lib/read-snapshot.cjs');
+const { buildTutorialManifest, tutorialManifestScript } = require('./tutorial-manifest.cjs');
 const {generate:generateGuidance}=require('./lib/guidance.cjs');
 const {createSettings}=require('./lib/guidance-settings.cjs');
 const {createRules}=require('./lib/guidance-rules.cjs');
@@ -46,8 +47,10 @@ function createServer({
   onClose = null,
   board = null,
   newsFetch = typeof fetch === 'function' ? fetch : null,
+  tutorialOptions = {},
 } = {}) {
   const readNews = createNews({ fetcher: newsFetch });
+  const tutorialConfig={publicDir:path.join(__dirname,'..','public'),releases:[],enabledLocales:['pt'],...tutorialOptions};
   const usageMemo=createReadSnapshot(),boardMemo=createReadSnapshot({ttl:1000}),bodyMemo=createReadSnapshot({serialize:false});
   const compressedBodies=new WeakMap();
   const guidanceMemo=createReadSnapshot({ttl:180000}),guidanceSettings=createSettings(path.join(profile,'.lazy-du-panel'),{persist:!demoOnly}),rulesReader=createRules(profile,metrics);
@@ -60,6 +63,8 @@ function createServer({
     readAsset('example.json').toString('utf8'),
   );
   const assets = {
+    "/tutorial264.js": ["tutorial264.js","text/javascript"],
+    "/tutorial264.css": ["tutorial264.css","text/css"],
     "/copy-session.js": ["copy-session.js","text/javascript"],
     "/copy-session.css": ["copy-session.css","text/css"],
     "/connect22.js": ["connect22.js","text/javascript"],
@@ -205,6 +210,19 @@ function createServer({
       } catch {
         return send(503, { error: "Local metadata unavailable" });
       }
+    }
+    if(url.pathname==='/tutorial-manifest.js')return send(200,tutorialManifestScript(tutorialConfig),'text/javascript; charset=utf-8');
+    if(url.pathname.startsWith('/tutorial-painel/')){
+      const entries=Object.values(buildTutorialManifest(tutorialConfig).tutorials);
+      const asset=entries.flatMap(entry=>[{...entry.video,type:'video/mp4'},{...entry.subtitle,type:'text/vtt; charset=utf-8'}]).find(item=>item.src===url.pathname);
+      if(!asset)return send(404,{error:'Asset unavailable'});
+      try{
+        const publicRoot=fs.realpathSync(tutorialConfig.publicDir),target=fs.realpathSync(path.join(publicRoot,asset.src.slice(1))),relative=path.relative(publicRoot,target);
+        if(relative.startsWith('..')||path.isAbsolute(relative))return send(404,{error:'Asset unavailable'});
+        const body=fs.readFileSync(target);
+        if(body.length!==asset.bytes||require('node:crypto').createHash('sha256').update(body).digest('hex')!==asset.sha256)return send(404,{error:'Asset unavailable'});
+        return send(200,body,asset.type);
+      }catch{return send(404,{error:'Asset unavailable'});}
     }
     if (assets[url.pathname]) {
       const [name, type] = assets[url.pathname];
