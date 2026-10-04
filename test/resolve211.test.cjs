@@ -16,4 +16,4 @@ test('The real mounted Home updates its seven lines when the language changes wi
  vm.runInNewContext(fs.readFileSync(path.join(__dirname,'../public/resolve211.js'),'utf8'),context);
  for(const lang of ['en','pt','es']){document.documentElement.lang=lang;context.draw();const box=ids.get('panel-solves');assert.equal(box.querySelector('h2').textContent,WORDS[lang].title);assert.deepEqual(box.querySelector('ul').children.map(n=>n.textContent),WORDS[lang].lines);factual(box.querySelector('ul').children.at(-1).textContent,lang);}
 });
-test('Public Home copy has no absolute privacy promise, unpublished claim or internal material',()=>{for(const copy of Object.values(WORDS))assert.doesNotMatch(JSON.stringify(copy),/2\.2|coming soon|em breve|próximamente|SIGILOSO|estado-trident|C:\\Users|[\u2013\u2014]/);});
+test('Public Home copy has no absolute privacy promise, unpublished claim or internal material',()=>{for(const copy of Object.values(WORDS))assert.doesNotMatch(JSON.stringify(copy),/2\.2|coming soon|em breve|próximamente|C:\\Users|[\u2013\u2014]/);});

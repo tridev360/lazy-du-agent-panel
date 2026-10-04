@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.6
+
+- Remove project-specific names from a public test; generic copy checks stay in place.
+
 ## 2.2.5
 
 - Correct the Home privacy text in English, Portuguese and Spanish: local session metadata, connected tasks, the global rules marker and optional network features.
