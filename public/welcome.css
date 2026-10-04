@@ -3,3 +3,7 @@ body[data-welcome] #main>:not(#welcome){display:none!important}body[data-welcome
 #quit-panel{color:var(--muted);font-size:11px;border:1px solid var(--line);border-radius:9px;padding:0 12px;min-height:44px}body[data-stopped] #main>:not(#panel-closed),body[data-stopped] .header-actions,body[data-stopped] #setup-guide,body[data-stopped] #quit-panel{display:none!important}#panel-closed{padding:60px 0}
 .welcome-progress{display:block;width:100%;height:8px;border:0;border-radius:8px;overflow:hidden;background:var(--line);accent-color:#ff4f91}.welcome-progress::-webkit-progress-bar{background:var(--line);border-radius:8px}.welcome-progress::-webkit-progress-value{background:#ff4f91;border-radius:8px}.welcome-progress::-moz-progress-bar{background:#ff4f91;border-radius:8px}
 body[data-welcome] #history-reading{display:none}
+
+body[data-welcome=on]>.shell{visibility:visible!important}
+body[data-welcome=on] #panel-boot,body[data-welcome=on] header>#clean-actions{display:none!important}
+#welcome .clean-choices button[aria-pressed=true]{border-color:var(--accent,#fb257f)}

@@ -3,7 +3,7 @@
   // The bell: version notes and tips made on this computer, what waits for you, decisions asked by your AIs,
   // and, only when you ask, the author's public messages. Read marks and usage marks stay in this browser.
   // This version sends no usage data anywhere.
-  const VERSION='2.2.2';
+  const VERSION='2.2.3';
   const REPO='https://github.com/tridev360/lazy-du-agent-panel';
   const NEWS_SOURCE='https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json';
   const CONTACTS=[{text:'github.com/tridev360',url:'https://github.com/tridev360'},{text:'X @hallstrid',url:'https://x.com/hallstrid'}];

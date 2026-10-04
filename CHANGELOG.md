@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.3
+
+- First-time setup opens the existing welcome screen before the dashboard.
+- First steps highlights the next pending step before operational indicators.
+- Returning users keep their preferences; skipping or reopening setup does not complete tasks or accept rules.
+
 ## 2.2.2
 
 - Local tutorial player integration in the welcome screen and First steps.
