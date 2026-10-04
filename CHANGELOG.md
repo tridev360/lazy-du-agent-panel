@@ -1,5 +1,9 @@
 # Changelog
 
+## 2.2.5
+
+- Correct the Home privacy text in English, Portuguese and Spanish: local session metadata, connected tasks, the global rules marker and optional network features.
+
 ## 2.2.4
 
 - Welcome offers a labelled fictional example in a separate tab before setup.
