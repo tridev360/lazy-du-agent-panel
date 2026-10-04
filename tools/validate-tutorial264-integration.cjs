@@ -6,7 +6,7 @@ const root=path.resolve(__dirname,'..'),out=process.env.SAIDA;
 if(process.platform!=='linux'||!out)throw Error('Official VPS render required');
 fs.mkdirSync(out,{recursive:true});
 const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
-const report={synthetic:true,realMedia:true,realApproval:true,ok:false,tests:null,cases:[],http:[],externalRequests:[],pageErrors:[],assetFailures:[],mutation:null,sourceHashes:{}};
+const report={synthetic:true,realMedia:true,realApproval:true,ok:false,tests:null,cases:[],approvedPlayback:[],http:[],externalRequests:[],pageErrors:[],assetFailures:[],mutation:null,sourceHashes:{}};
 const sources=['src/panel.cjs','src/tutorial-manifest.cjs','src/tutorial-releases.cjs','public/tutorial-painel/tutorial.pt.mp4','public/tutorial-painel/tutorial.pt.vtt','public/tutorial-painel/tutorial.pt.png','public/index.html','public/welcome.js','public/onboarding22.js','public/tutorial264.js','public/tutorial264.css','public/tutorial-manifest.js'];
 for(const p of sources)report.sourceHashes[p]=sha(path.join(root,p));
 let browser;const servers=[],contexts=[],temps=[];
@@ -103,6 +103,39 @@ async function completeDuringPlayer(page){
  await page.evaluate(()=>delete window.__tutorial264CompletionOpener);
 }
 
+async function approvedPlaybackProof(page,video,cues,identity){
+ // Observe native controls. No programmatic play(), seek or altered media.
+ await video.evaluate(e=>{e.__trustedPlaybackKey=null;e.addEventListener('keydown',event=>{e.__trustedPlaybackKey={trusted:event.isTrusted,code:event.code,activation:navigator.userActivation?.isActive===true};},{once:true});});
+ await video.focus();await video.press('Space');
+ const sample=()=>video.evaluate(e=>{
+  const quality=e.getVideoPlaybackQuality(),track=e.textTracks[0],canvas=document.createElement('canvas');canvas.width=48;canvas.height=27;
+  const context=canvas.getContext('2d');context.drawImage(e,0,0,48,27);const pixels=context.getImageData(0,0,48,27).data;
+  let min=255,max=0,nonBlack=0;for(let i=0;i<pixels.length;i+=4){const light=Math.max(pixels[i],pixels[i+1],pixels[i+2]);min=Math.min(min,light);max=Math.max(max,light);if(light>24)nonBlack++;}
+  return {currentTime:e.currentTime,paused:e.paused,autoplay:e.autoplay,readyState:e.readyState,videoWidth:e.videoWidth,videoHeight:e.videoHeight,
+   decodedFrames:quality.totalVideoFrames,droppedFrames:quality.droppedVideoFrames,key:e.__trustedPlaybackKey,trackMode:track?.mode,
+   activeCues:Array.from(track?.activeCues||[],cue=>({start:cue.startTime,end:cue.endTime,text:cue.text})),frame:{sampleWidth:48,sampleHeight:27,min,max,nonBlack},error:e.error?{code:e.error.code,message:e.error.message}:null};
+ });
+ const samples=[];
+ try{
+  await page.waitForFunction(()=>{const e=document.querySelector('#panel-tutorial-dialog video');return e&&!e.paused&&e.currentTime>=0.8&&e.readyState>=2&&e.videoWidth>0&&e.getVideoPlaybackQuality().totalVideoFrames>1&&e.textTracks[0]?.mode==='showing'&&e.textTracks[0].activeCues?.length>0;},null,{timeout:8000});
+  samples.push(await sample());
+  await page.waitForFunction(previous=>{const e=document.querySelector('#panel-tutorial-dialog video');return e&&!e.paused&&e.currentTime>=previous+0.25&&e.textTracks[0]?.activeCues?.length>0;},samples[0].currentTime,{timeout:5000});
+  samples.push(await sample());
+  for(const observed of samples){
+   assert.equal(observed.paused,false);assert.equal(observed.autoplay,false);assert.equal(observed.error,null);
+   assert.equal(observed.key.trusted,true);assert.equal(observed.key.code,'Space');assert.equal(observed.key.activation,true);
+   assert.ok(observed.videoWidth>0&&observed.videoHeight>0&&observed.decodedFrames>1);
+   assert.ok(observed.frame.nonBlack>10&&observed.frame.max-observed.frame.min>10,'Decoded approved frame has visible image data');
+   assert.equal(observed.trackMode,'showing');assert.ok(observed.activeCues.length>0);
+   for(const active of observed.activeCues){const matching=cues.find(cue=>cue.text===active.text&&Math.abs(cue.start-active.start)<0.001&&Math.abs(cue.end-active.end)<0.001);assert.ok(matching,'Active PT cue matches actual approved VTT');assert.ok(observed.currentTime>=active.start&&observed.currentTime<=active.end);}
+  }
+  assert.ok(samples[1].currentTime>=samples[0].currentTime+0.25);assert.ok(samples[1].decodedFrames>samples[0].decodedFrames,'Decoded frame count advances');
+  const photo=await screen(page,'approved-'+identity.motion+'-'+identity.entry+'-playback-cue',identity.lang,identity.width);
+  const proof={...identity,ok:true,gesture:'trusted native-control Space',samples,photo,fullPlayback:false,audioVerified:false};report.approvedPlayback.push(proof);return proof;
+ }catch(error){report.approvedPlayback.push({...identity,ok:false,samples,failure:error.message,fullPlayback:false,audioVerified:false});throw error;}
+}
+
+
 async function main(){
  const pwpath=arg('--playwright'),cache=arg('--browser-cache');if(!pwpath||!cache)throw Error('Fixed official browser cache required');process.env.PLAYWRIGHT_BROWSERS_PATH=cache;
  if(!mutation){
@@ -126,6 +159,7 @@ async function main(){
  assert.deepEqual(Object.keys(approved.manifest.tutorials),['pt']);assert.equal(approvedEntry.durationSeconds,103.2);
  assert.equal(approvedEntry.video.sha256,'be14748ec977492e80df5eb3ca50a2f8c783b201e7d61b2e4759129ad922da8b');
  assert.equal(approvedEntry.subtitle.sha256,'49d9ed65525afc6f9f3ec1818a53e7bbf19c36390ce105706494552d95b4bf56');
+ const approvedCues=fs.readFileSync(path.join(root,'public/tutorial-painel/tutorial.pt.vtt'),'utf8').trim().split(/\r?\n\r?\n/).slice(1).map(block=>{const lines=block.split(/\r?\n/),i=lines.findIndex(line=>line.includes('-->')),clock=text=>text.split(':').reduce((total,part)=>total*60+Number(part),0);assert.ok(i>=0);const times=lines[i].split(/\s+-->\s+/);return {start:clock(times[0]),end:clock(times[1]),text:lines.slice(i+1).join('\n')};});assert.ok(approvedCues.length>0);
  report.approvedRelease={durationSeconds:103.2,videoBytes:approvedEntry.video.bytes,subtitleBytes:approvedEntry.subtitle.bytes,videoSha256:approvedEntry.video.sha256,subtitleSha256:approvedEntry.subtitle.sha256,approvalMatched:approvedEntry.approvalMatched};
  for(const lang of ['pt','en','es'])for(const width of [375,1440])for(const motion of ['on','off']){
   const {context,page,requests}=await setup(approvedOrigin,lang,width,true,motion,'no-preference');
@@ -142,17 +176,18 @@ async function main(){
     await trigger.click();await page.locator('#panel-tutorial-dialog[open]').waitFor();
     const video=page.locator('#panel-tutorial-dialog video');
     await video.evaluate(e=>new Promise((resolve,reject)=>{if(e.readyState>=1)return resolve();e.addEventListener('loadedmetadata',resolve,{once:true});e.addEventListener('error',()=>reject(Error('Approved tutorial metadata failed')),{once:true});}));
-    const state=await video.evaluate(e=>({duration:e.duration,paused:e.paused,autoplay:e.autoplay,src:new URL(e.currentSrc).pathname,trackSrc:new URL(e.querySelector('track').src).pathname,srclang:e.querySelector('track').srclang}));
-    assert.ok(Math.abs(state.duration-103.2)<=0.25);assert.equal(state.paused,true);assert.equal(state.autoplay,false);
+    const state=await video.evaluate(e=>({duration:e.duration,currentTime:e.currentTime,paused:e.paused,autoplay:e.autoplay,src:new URL(e.currentSrc).pathname,trackSrc:new URL(e.querySelector('track').src).pathname,srclang:e.querySelector('track').srclang}));
+    assert.ok(Math.abs(state.duration-103.2)<=0.25);assert.equal(state.paused,true);assert.equal(state.autoplay,false);assert.ok(state.currentTime<=0.05);
     assert.equal(state.src,approvedEntry.video.src);assert.equal(state.trackSrc,approvedEntry.subtitle.src);assert.equal(state.srclang,'pt');
     const bounds=await page.locator('#panel-tutorial-dialog').boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=width);
     photos.push(await screen(page,'approved-'+motion+'-'+entry+'-player',lang,width));
+    const playback=await approvedPlaybackProof(page,video,approvedCues,{lang,width,motion,entry});photos.push(playback.photo);
     if(entry==='welcome')await page.locator('.tutorial264-close').click();else await page.keyboard.press('Escape');
     await page.waitForFunction(()=>!document.getElementById('panel-tutorial-dialog').open);
     assert.equal(await trigger.evaluate(e=>document.activeElement===e),true,'Closing returns focus to '+entry);
     const after=await page.evaluate(()=>{const e=document.querySelector('#panel-tutorial-dialog video');return {x:scrollX,y:scrollY,view:document.body.dataset.view,welcome:document.body.dataset.welcome||null,motion:localStorage.getItem('agent-panel-motion'),paused:e.paused,srcRemoved:!e.hasAttribute('src'),trackRemoved:!e.querySelector('track')};});
     for(const key of ['x','y','view','welcome','motion'])assert.equal(after[key],before[key]);
-    assert.equal(after.paused,true);assert.equal(after.srcRemoved,true);assert.equal(after.trackRemoved,true);playerStates.push({entry,before,state,after});
+    assert.equal(after.paused,true);assert.equal(after.srcRemoved,true);assert.equal(after.trackRemoved,true);playerStates.push({entry,before,state,playback,after});
    }
   }
   if(lang!=='pt')assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false,'EN/ES never request PT media');
