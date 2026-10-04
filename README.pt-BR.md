@@ -1,5 +1,9 @@
 # Lazy Du Agent Panel
 
+[![Ver como começar (1 min 43 s)](public/tutorial-painel/tutorial.pt.png)](public/tutorial-painel/tutorial.pt.mp4)
+
+Vídeo em português, com [legendas em português](public/tutorial-painel/tutorial.pt.vtt). No painel, escolha Português para abrir o player local em Boas-vindas ou Primeiros passos.
+
 Veja suas sessões do Claude Code e do Codex lado a lado em um painel local.
 
 **[Abrir o painel](#abrir-em-menos-de-um-minuto)**

@@ -1,5 +1,9 @@
 # Lazy Du Agent Panel
 
+[![Watch the getting-started tutorial in Portuguese (1 min 43 s)](public/tutorial-painel/tutorial.pt.png)](public/tutorial-painel/tutorial.pt.mp4)
+
+Portuguese video, with [Portuguese captions](public/tutorial-painel/tutorial.pt.vtt). In the panel, select Portuguese to open the local player from Welcome or First steps.
+
 See your Claude Code and Codex sessions side by side in one local panel.
 
 **[Open the panel](#open-in-under-a-minute)**

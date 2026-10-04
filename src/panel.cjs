@@ -12,6 +12,7 @@ const {TaskBoard}=require('./lib/task-board.cjs');
 const { createNews } = require('./lib/news.cjs');
 const { createReadSnapshot } = require('./lib/read-snapshot.cjs');
 const { buildTutorialManifest, tutorialManifestScript } = require('./tutorial-manifest.cjs');
+const tutorialRelease = require('./tutorial-releases.cjs');
 const {generate:generateGuidance}=require('./lib/guidance.cjs');
 const {createSettings}=require('./lib/guidance-settings.cjs');
 const {createRules}=require('./lib/guidance-rules.cjs');
@@ -50,7 +51,7 @@ function createServer({
   tutorialOptions = {},
 } = {}) {
   const readNews = createNews({ fetcher: newsFetch });
-  const tutorialConfig={publicDir:path.join(__dirname,'..','public'),releases:[],enabledLocales:['pt'],...tutorialOptions};
+  const tutorialConfig={publicDir:path.join(__dirname,'..','public'),...tutorialRelease,...tutorialOptions};
   const usageMemo=createReadSnapshot(),boardMemo=createReadSnapshot({ttl:1000}),bodyMemo=createReadSnapshot({serialize:false});
   const compressedBodies=new WeakMap();
   const guidanceMemo=createReadSnapshot({ttl:180000}),guidanceSettings=createSettings(path.join(profile,'.lazy-du-panel'),{persist:!demoOnly}),rulesReader=createRules(profile,metrics);

@@ -1,24 +1,24 @@
 'use strict';
-// Synthetic composition proof. Execute only with official VPS render and an exact frozen candidate.
+// Local tutorial proof: fictional profile data and pinned approved release media. Execute only with the official render and an exact frozen candidate.
 const fs=require('node:fs'),path=require('node:path'),os=require('node:os'),cp=require('node:child_process'),crypto=require('node:crypto'),assert=require('node:assert/strict'),vm=require('node:vm');
 const args=process.argv.slice(2),arg=n=>args[args.indexOf(n)+1],mutation=args.includes('--mutation-check');
 const root=path.resolve(__dirname,'..'),out=process.env.SAIDA;
 if(process.platform!=='linux'||!out)throw Error('Official VPS render required');
 fs.mkdirSync(out,{recursive:true});
 const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
-const report={synthetic:true,realMedia:false,realApproval:false,ok:false,tests:null,cases:[],http:[],externalRequests:[],pageErrors:[],assetFailures:[],mutation:null,sourceHashes:{}};
-const sources=['src/panel.cjs','src/tutorial-manifest.cjs','public/index.html','public/welcome.js','public/onboarding22.js','public/tutorial264.js','public/tutorial264.css','public/tutorial-manifest.js'];
+const report={synthetic:true,realMedia:true,realApproval:true,ok:false,tests:null,cases:[],http:[],externalRequests:[],pageErrors:[],assetFailures:[],mutation:null,sourceHashes:{}};
+const sources=['src/panel.cjs','src/tutorial-manifest.cjs','src/tutorial-releases.cjs','public/tutorial-painel/tutorial.pt.mp4','public/tutorial-painel/tutorial.pt.vtt','public/tutorial-painel/tutorial.pt.png','public/index.html','public/welcome.js','public/onboarding22.js','public/tutorial264.js','public/tutorial264.css','public/tutorial-manifest.js'];
 for(const p of sources)report.sourceHashes[p]=sha(path.join(root,p));
 let browser;const servers=[],contexts=[],temps=[];
 async function serve(options={}){const profile=fs.mkdtempSync(path.join(os.tmpdir(),'tutorial264-composition-'));temps.push(profile);const server=require(path.join(root,'src/panel.cjs')).createServer({demoOnly:true,offline:true,profile,...options});servers.push(server);await new Promise(r=>server.listen(0,'127.0.0.1',r));return 'http://127.0.0.1:'+server.address().port;}
 async function getManifest(origin){const res=await fetch(origin+'/tutorial-manifest.js');assert.equal(res.status,200);assert.match(res.headers.get('content-type'),/text\/javascript/);assert.equal(res.headers.get('cache-control'),'no-store');const text=await res.text(),sandbox={};sandbox.window=sandbox;sandbox.globalThis=sandbox;vm.runInNewContext(text,sandbox,{timeout:1000});assert.equal(sandbox.PanelTutorialManifest.version,1);return {manifest:JSON.parse(JSON.stringify(sandbox.PanelTutorialManifest)),text};}
-async function setup(origin,lang,width,seed=true){
- const context=await browser.newContext({viewport:{width,height:1000},locale:lang==='pt'?'pt-BR':lang==='es'?'es-ES':'en-US',reducedMotion:'reduce',serviceWorkers:'block'});contexts.push(context);
+async function setup(origin,lang,width,seed=true,motion='off',reduce='reduce'){
+ const context=await browser.newContext({viewport:{width,height:1000},locale:lang==='pt'?'pt-BR':lang==='es'?'es-ES':'en-US',reducedMotion:reduce,serviceWorkers:'block'});contexts.push(context);
  const page=await context.newPage();page.setDefaultTimeout(10000);const requests=[];
  page.on('pageerror',e=>report.pageErrors.push(e.message));page.on('request',r=>requests.push({path:new URL(r.url()).pathname,type:r.resourceType()}));
  page.on('response',r=>{if(r.status()>=400&&!new URL(r.url()).pathname.startsWith('/api/'))report.assetFailures.push({path:new URL(r.url()).pathname,status:r.status()});});
  await context.route('**/*',r=>{if(new URL(r.request().url()).origin===origin)return r.continue();report.externalRequests.push({type:r.request().resourceType(),origin:new URL(r.request().url()).origin});return r.abort();});
- await context.addInitScript(seed=>{localStorage.setItem('agent-panel-motion','off');if(seed)localStorage.setItem('agent-panel-profile',JSON.stringify({version:2,mode:'explorer',size:'large',goal:'finish'}));},seed);
+ await context.addInitScript(({seed,motion})=>{localStorage.setItem('agent-panel-motion',motion);if(seed)localStorage.setItem('agent-panel-profile',JSON.stringify({version:2,mode:'explorer',size:'large',goal:'finish'}));},{seed,motion});
  await page.goto(origin+'/?'+(seed?'example=1&size=large&':'')+'lang='+lang,{waitUntil:'load'});
  await page.waitForFunction(()=>document.body.dataset.panelMounted==='true');
  assert.equal(await page.locator('#lofi-player iframe').count(),0,'No Lofi connection before user gesture');
@@ -115,11 +115,48 @@ async function main(){
   const origin=await serve(),{page}=await setup(origin,'pt',375);
   assert.equal(await page.evaluate(()=>typeof window.PanelTutorial),'object','MUTATION_MISSING_TUTORIAL_LOADER');return;
  }
- const origin=await serve(),closed=await getManifest(origin);assert.deepEqual(closed.manifest.tutorials,{});report.http.push('Default manifest closed and no-store');
+ const origin=await serve({tutorialOptions:{releases:[]}}),closed=await getManifest(origin);assert.deepEqual(closed.manifest.tutorials,{});report.http.push('Empty release configuration closed and no-store');
  for(const lang of ['en','pt','es']){
   const {context,page,requests}=await setup(origin,lang,375);assert.equal(await page.locator('[data-panel-tutorial]:visible').count(),0);
   await page.evaluate(()=>PanelWelcome.show());assert.equal(await page.locator('[data-panel-tutorial]:visible').count(),0);
   assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false);report.cases.push({kind:'closed-boot',lang,mediaRequests:0,lofiFrames:0});await context.close();
+ }
+ // Installed default, approved media: examples and profiles remain synthetic.
+ const approvedOrigin=await serve(),approved=await getManifest(approvedOrigin),approvedEntry=approved.manifest.tutorials.pt;
+ assert.deepEqual(Object.keys(approved.manifest.tutorials),['pt']);assert.equal(approvedEntry.durationSeconds,103.2);
+ assert.equal(approvedEntry.video.sha256,'be14748ec977492e80df5eb3ca50a2f8c783b201e7d61b2e4759129ad922da8b');
+ assert.equal(approvedEntry.subtitle.sha256,'49d9ed65525afc6f9f3ec1818a53e7bbf19c36390ce105706494552d95b4bf56');
+ report.approvedRelease={durationSeconds:103.2,videoBytes:approvedEntry.video.bytes,subtitleBytes:approvedEntry.subtitle.bytes,videoSha256:approvedEntry.video.sha256,subtitleSha256:approvedEntry.subtitle.sha256,approvalMatched:approvedEntry.approvalMatched};
+ for(const lang of ['pt','en','es'])for(const width of [375,1440])for(const motion of ['on','off']){
+  const {context,page,requests}=await setup(approvedOrigin,lang,width,true,motion,'no-preference');
+  const photos=[],playerStates=[];
+  assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false,'No media before an explicit tutorial click');
+  await page.locator('#first-steps:visible').waitFor();
+  for(const entry of ['first-steps','welcome']){
+   if(entry==='welcome'){await page.evaluate(()=>PanelWelcome.show());await page.locator('#welcome:visible').waitFor();}
+   const trigger=page.locator('[data-panel-tutorial="'+entry+'"]:visible');assert.equal(await trigger.count(),lang==='pt'?1:0);
+   photos.push(await screen(page,'approved-'+motion+'-'+entry,lang,width));
+   if(lang==='pt'){
+    assert.equal(await trigger.textContent(),'Ver como começar (1 min 43 s)');await trigger.scrollIntoViewIfNeeded();await trigger.focus();
+    const before=await page.evaluate(()=>({x:scrollX,y:scrollY,view:document.body.dataset.view,welcome:document.body.dataset.welcome||null,motion:localStorage.getItem('agent-panel-motion')}));
+    await trigger.click();await page.locator('#panel-tutorial-dialog[open]').waitFor();
+    const video=page.locator('#panel-tutorial-dialog video');
+    await video.evaluate(e=>new Promise((resolve,reject)=>{if(e.readyState>=1)return resolve();e.addEventListener('loadedmetadata',resolve,{once:true});e.addEventListener('error',()=>reject(Error('Approved tutorial metadata failed')),{once:true});}));
+    const state=await video.evaluate(e=>({duration:e.duration,paused:e.paused,autoplay:e.autoplay,src:new URL(e.currentSrc).pathname,trackSrc:new URL(e.querySelector('track').src).pathname,srclang:e.querySelector('track').srclang}));
+    assert.ok(Math.abs(state.duration-103.2)<=0.25);assert.equal(state.paused,true);assert.equal(state.autoplay,false);
+    assert.equal(state.src,approvedEntry.video.src);assert.equal(state.trackSrc,approvedEntry.subtitle.src);assert.equal(state.srclang,'pt');
+    const bounds=await page.locator('#panel-tutorial-dialog').boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=width);
+    photos.push(await screen(page,'approved-'+motion+'-'+entry+'-player',lang,width));
+    if(entry==='welcome')await page.locator('.tutorial264-close').click();else await page.keyboard.press('Escape');
+    await page.waitForFunction(()=>!document.getElementById('panel-tutorial-dialog').open);
+    assert.equal(await trigger.evaluate(e=>document.activeElement===e),true,'Closing returns focus to '+entry);
+    const after=await page.evaluate(()=>{const e=document.querySelector('#panel-tutorial-dialog video');return {x:scrollX,y:scrollY,view:document.body.dataset.view,welcome:document.body.dataset.welcome||null,motion:localStorage.getItem('agent-panel-motion'),paused:e.paused,srcRemoved:!e.hasAttribute('src'),trackRemoved:!e.querySelector('track')};});
+    for(const key of ['x','y','view','welcome','motion'])assert.equal(after[key],before[key]);
+    assert.equal(after.paused,true);assert.equal(after.srcRemoved,true);assert.equal(after.trackRemoved,true);playerStates.push({entry,before,state,after});
+   }
+  }
+  if(lang!=='pt')assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false,'EN/ES never request PT media');
+  report.cases.push({kind:'approved-default',lang,width,motion,photos,playerStates,syntheticProfile:true});await context.close();
  }
  const assets=path.join(out,'synthetic-assets'),folder=path.join(assets,'tutorial-painel');fs.mkdirSync(folder,{recursive:true});
  const movie=path.join(folder,'fixture-pt.mp4'),vtt=path.join(folder,'fixture-pt.vtt');

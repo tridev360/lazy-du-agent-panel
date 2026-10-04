@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.7
+
+- Add the Portuguese getting-started video and captions to Welcome and First steps.
+- Link the same local video from the English and Portuguese README thumbnails.
+- Validate the approved files on each request; removed or changed media stays unavailable.
+
 ## 2.2.6
 
 - Remove project-specific names from a public test; generic copy checks stay in place.
