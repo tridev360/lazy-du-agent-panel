@@ -2,7 +2,7 @@
 
 [![Watch the getting-started tutorial in Portuguese (1 min 43 s)](public/tutorial-painel/tutorial.pt.png)](public/tutorial-painel/tutorial.pt.mp4)
 
-Portuguese video, with [Portuguese captions](public/tutorial-painel/tutorial.pt.vtt). In the panel, select Portuguese to open the local player from Welcome or First steps.
+Videos: [English](public/tutorial-painel/tutorial.en.mp4), [Português](public/tutorial-painel/tutorial.pt.mp4), [Español](public/tutorial-painel/tutorial.es.mp4). Captions: [English](public/tutorial-painel/tutorial.en.vtt), [Português](public/tutorial-painel/tutorial.pt.vtt), [Español](public/tutorial-painel/tutorial.es.vtt). Select the matching language in the panel to open its local player from Welcome or First steps.
 
 See your Claude Code and Codex sessions side by side in one local panel.
 

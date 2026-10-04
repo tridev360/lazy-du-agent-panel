@@ -2,7 +2,7 @@
 
 [![Ver como começar (1 min 43 s)](public/tutorial-painel/tutorial.pt.png)](public/tutorial-painel/tutorial.pt.mp4)
 
-Vídeo em português, com [legendas em português](public/tutorial-painel/tutorial.pt.vtt). No painel, escolha Português para abrir o player local em Boas-vindas ou Primeiros passos.
+Vídeos: [English](public/tutorial-painel/tutorial.en.mp4), [Português](public/tutorial-painel/tutorial.pt.mp4), [Español](public/tutorial-painel/tutorial.es.mp4). Legendas: [English](public/tutorial-painel/tutorial.en.vtt), [Português](public/tutorial-painel/tutorial.pt.vtt), [Español](public/tutorial-painel/tutorial.es.vtt). Escolha o idioma correspondente no painel para abrir seu player local em Boas-vindas ou Primeiros passos.
 
 Veja suas sessões do Claude Code e do Codex lado a lado em um painel local.
 

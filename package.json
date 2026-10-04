@@ -1,6 +1,6 @@
 {
   "name": "lazy-du-agent-panel",
-  "version": "2.2.7",
+  "version": "2.2.8",
   "description": "A private, local dashboard for Claude Code and Codex activity.",
   "license": "MIT",
   "repository": {

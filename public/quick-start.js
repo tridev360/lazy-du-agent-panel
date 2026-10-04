@@ -20,7 +20,7 @@
   const d=root.document,$=id=>d.getElementById(id),started=Date.now();
   let savedLanguage=null;try{savedLanguage=root.localStorage?.getItem('agent-panel-language');}catch{}
   root.PanelLanguageInitial=initialLanguage(new URLSearchParams(root.location?.search||'').get('lang'),savedLanguage,root.navigator?.languages?.[0]||root.navigator?.language||d.documentElement.lang);d.documentElement.lang=root.PanelLanguageInitial;
-  let isOffline=d.documentElement.dataset.offline==='true',mounted=false,problem='',latest=null,pending=false,current='2.2.7',lastReading=null,responseReady=false,lastReceivedAt=started,complete=false;
+  let isOffline=d.documentElement.dataset.offline==='true',mounted=false,problem='',latest=null,pending=false,current='2.2.8',lastReading=null,responseReady=false,lastReceivedAt=started,complete=false;
   const lang=()=>T[d.documentElement.lang]?d.documentElement.lang:'en',t=()=>T[lang()];
   const make=(tag,text)=>{const n=d.createElement(tag);if(text!==undefined)n.textContent=text;return n;};
   const boot=$('panel-boot'),bootText=boot?.querySelector('p'),reading=make('p'),message=make('p'),example=make('a'),check=make('button');

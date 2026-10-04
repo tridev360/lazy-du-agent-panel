@@ -1,5 +1,11 @@
 # Changelog
 
+## 2.2.8
+
+- Replace the getting-started tutorials with videos recorded on the current welcome flow.
+- Offer separate English, Portuguese and Spanish videos and captions in Welcome and First steps.
+- Keep exact-file validation on every media request, with no fallback to another language.
+
 ## 2.2.7
 
 - Add the Portuguese getting-started video and captions to Welcome and First steps.

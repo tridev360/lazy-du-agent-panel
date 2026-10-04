@@ -7,7 +7,7 @@ if(process.platform!=='linux'||!out)throw Error('Official VPS render required');
 fs.mkdirSync(out,{recursive:true});
 const sha=f=>crypto.createHash('sha256').update(fs.readFileSync(f)).digest('hex');
 const report={synthetic:true,realMedia:true,realApproval:true,ok:false,tests:null,cases:[],approvedPlayback:[],http:[],externalRequests:[],pageErrors:[],assetFailures:[],mutation:null,sourceHashes:{}};
-const sources=['src/panel.cjs','src/tutorial-manifest.cjs','src/tutorial-releases.cjs','public/tutorial-painel/tutorial.pt.mp4','public/tutorial-painel/tutorial.pt.vtt','public/tutorial-painel/tutorial.pt.png','public/index.html','public/welcome.js','public/onboarding22.js','public/tutorial264.js','public/tutorial264.css','public/tutorial-manifest.js'];
+const sources=['src/panel.cjs','src/tutorial-manifest.cjs','src/tutorial-releases.cjs','public/tutorial-painel/tutorial.pt.mp4','public/tutorial-painel/tutorial.pt.vtt','public/tutorial-painel/tutorial.pt.png','public/tutorial-painel/tutorial.en.mp4','public/tutorial-painel/tutorial.en.vtt','public/tutorial-painel/tutorial.es.mp4','public/tutorial-painel/tutorial.es.vtt','public/index.html','public/welcome.js','public/onboarding22.js','public/tutorial264.js','public/tutorial264.css','public/tutorial-manifest.js'];
 for(const p of sources)report.sourceHashes[p]=sha(path.join(root,p));
 let browser;const servers=[],contexts=[],temps=[];
 async function serve(options={}){const profile=fs.mkdtempSync(path.join(os.tmpdir(),'tutorial264-composition-'));temps.push(profile);const server=require(path.join(root,'src/panel.cjs')).createServer({demoOnly:true,offline:true,profile,...options});servers.push(server);await new Promise(r=>server.listen(0,'127.0.0.1',r));return 'http://127.0.0.1:'+server.address().port;}
@@ -127,7 +127,7 @@ async function approvedPlaybackProof(page,video,cues,identity){
    assert.ok(observed.videoWidth>0&&observed.videoHeight>0&&observed.decodedFrames>1);
    assert.ok(observed.frame.nonBlack>10&&observed.frame.max-observed.frame.min>10,'Decoded approved frame has visible image data');
    assert.equal(observed.trackMode,'showing');assert.ok(observed.activeCues.length>0);
-   for(const active of observed.activeCues){const matching=cues.find(cue=>cue.text===active.text&&Math.abs(cue.start-active.start)<0.001&&Math.abs(cue.end-active.end)<0.001);assert.ok(matching,'Active PT cue matches actual approved VTT');assert.ok(observed.currentTime>=active.start&&observed.currentTime<=active.end);}
+   for(const active of observed.activeCues){const matching=cues.find(cue=>cue.text===active.text&&Math.abs(cue.start-active.start)<0.001&&Math.abs(cue.end-active.end)<0.001);assert.ok(matching,'Active cue matches actual approved VTT');assert.ok(observed.currentTime>=active.start&&observed.currentTime<=active.end);}
   }
   assert.ok(samples[1].currentTime>=samples[0].currentTime+0.25);assert.ok(samples[1].decodedFrames>samples[0].decodedFrames,'Decoded frame count advances');
   const photo=await screen(page,'approved-'+identity.motion+'-'+identity.entry+'-playback-cue',identity.lang,identity.width);
@@ -155,30 +155,34 @@ async function main(){
   assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false);report.cases.push({kind:'closed-boot',lang,mediaRequests:0,lofiFrames:0});await context.close();
  }
  // Installed default, approved media: examples and profiles remain synthetic.
- const approvedOrigin=await serve(),approved=await getManifest(approvedOrigin),approvedEntry=approved.manifest.tutorials.pt;
- assert.deepEqual(Object.keys(approved.manifest.tutorials),['pt']);assert.equal(approvedEntry.durationSeconds,103.2);
- assert.equal(approvedEntry.video.sha256,'be14748ec977492e80df5eb3ca50a2f8c783b201e7d61b2e4759129ad922da8b');
- assert.equal(approvedEntry.subtitle.sha256,'49d9ed65525afc6f9f3ec1818a53e7bbf19c36390ce105706494552d95b4bf56');
- const approvedCues=fs.readFileSync(path.join(root,'public/tutorial-painel/tutorial.pt.vtt'),'utf8').trim().split(/\r?\n\r?\n/).slice(1).map(block=>{const lines=block.split(/\r?\n/),i=lines.findIndex(line=>line.includes('-->')),clock=text=>text.split(':').reduce((total,part)=>total*60+Number(part),0);assert.ok(i>=0);const times=lines[i].split(/\s+-->\s+/);return {start:clock(times[0]),end:clock(times[1]),text:lines.slice(i+1).join('\n')};});assert.ok(approvedCues.length>0);
- report.approvedRelease={durationSeconds:103.2,videoBytes:approvedEntry.video.bytes,subtitleBytes:approvedEntry.subtitle.bytes,videoSha256:approvedEntry.video.sha256,subtitleSha256:approvedEntry.subtitle.sha256,approvalMatched:approvedEntry.approvalMatched};
+ const approvedOrigin=await serve(),approved=await getManifest(approvedOrigin),pins={"pt":["9f50fd2bf592e1d6c27108196b3cc84f3bb3ec8fb9e5dca569efcb4bebacbae8","315fab1fb2b476262cf466a002033eede6e3e090aa2bec21ef0280f96cef60f9",3000122,2014],"en":["c6e211f065ef5e8a3796ef0b3cf6d756e2d6b39c2230ef35fc6212c854862a22","2bf2cc2e6f2d5861a29045042afae3150b9d1cb6288e59d957bbef1d535d0874",2934245,1970],"es":["f2680fd6aa5284fd772ec99f2316018fcb685a3d457aefff0b76c90424eaa44b","e9b098692f2b6eb7ebae720d9dbf30efc0102a44c93cc73b4ddfe07c4c0c59ae",3016203,2109]};
+ assert.deepEqual(Object.keys(approved.manifest.tutorials),['pt','en','es']);
+ const approvedReleases={},cuesByLanguage={};
+ for(const lang of ['pt','en','es']){
+  const entry=approved.manifest.tutorials[lang];assert.equal(entry.durationSeconds,103.2);assert.equal(entry.video.sha256,pins[lang][0]);assert.equal(entry.subtitle.sha256,pins[lang][1]);assert.equal(entry.video.bytes,pins[lang][2]);assert.equal(entry.subtitle.bytes,pins[lang][3]);
+  cuesByLanguage[lang]=fs.readFileSync(path.join(root,'public/tutorial-painel/tutorial.'+lang+'.vtt'),'utf8').trim().split(/\r?\n\r?\n/).slice(1).map(block=>{const lines=block.split(/\r?\n/),i=lines.findIndex(line=>line.includes('-->')),clock=text=>text.split(':').reduce((total,part)=>total*60+Number(part),0);assert.ok(i>=0);const times=lines[i].split(/\s+-->\s+/);return {start:clock(times[0]),end:clock(times[1]),text:lines.slice(i+1).join('\n')};});assert.equal(cuesByLanguage[lang].length,24);
+  approvedReleases[lang]={durationSeconds:entry.durationSeconds,videoBytes:entry.video.bytes,subtitleBytes:entry.subtitle.bytes,videoSha256:entry.video.sha256,subtitleSha256:entry.subtitle.sha256,approvalMatched:entry.approvalMatched};
+ }
+ report.approvedReleases=approvedReleases;
  for(const lang of ['pt','en','es'])for(const width of [375,1440])for(const motion of ['on','off']){
+  const approvedEntry=approved.manifest.tutorials[lang],approvedCues=cuesByLanguage[lang];
   const {context,page,requests}=await setup(approvedOrigin,lang,width,true,motion,'no-preference');
   const photos=[],playerStates=[];
   assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false,'No media before an explicit tutorial click');
   await page.locator('#first-steps:visible').waitFor();
   for(const entry of ['first-steps','welcome']){
    if(entry==='welcome'){await page.evaluate(()=>PanelWelcome.show());await page.locator('#welcome:visible').waitFor();}
-   const trigger=page.locator('[data-panel-tutorial="'+entry+'"]:visible');assert.equal(await trigger.count(),lang==='pt'?1:0);
+   const trigger=page.locator('[data-panel-tutorial="'+entry+'"]:visible');assert.equal(await trigger.count(),1);
    photos.push(await screen(page,'approved-'+motion+'-'+entry,lang,width));
-   if(lang==='pt'){
-    assert.equal(await trigger.textContent(),'Ver como começar (1 min 43 s)');await trigger.scrollIntoViewIfNeeded();await trigger.focus();
+   {
+    assert.equal(await trigger.textContent(),({pt:'Ver como começar',en:'See how to start',es:'Ver cómo empezar'})[lang]+' (1 min 43 s)');await trigger.scrollIntoViewIfNeeded();await trigger.focus();
     const before=await page.evaluate(()=>({x:scrollX,y:scrollY,view:document.body.dataset.view,welcome:document.body.dataset.welcome||null,motion:localStorage.getItem('agent-panel-motion')}));
     await trigger.click();await page.locator('#panel-tutorial-dialog[open]').waitFor();
     const video=page.locator('#panel-tutorial-dialog video');
     await video.evaluate(e=>new Promise((resolve,reject)=>{if(e.readyState>=1)return resolve();e.addEventListener('loadedmetadata',resolve,{once:true});e.addEventListener('error',()=>reject(Error('Approved tutorial metadata failed')),{once:true});}));
     const state=await video.evaluate(e=>({duration:e.duration,currentTime:e.currentTime,paused:e.paused,autoplay:e.autoplay,src:new URL(e.currentSrc).pathname,trackSrc:new URL(e.querySelector('track').src).pathname,srclang:e.querySelector('track').srclang}));
     assert.ok(Math.abs(state.duration-103.2)<=0.25);assert.equal(state.paused,true);assert.equal(state.autoplay,false);assert.ok(state.currentTime<=0.05);
-    assert.equal(state.src,approvedEntry.video.src);assert.equal(state.trackSrc,approvedEntry.subtitle.src);assert.equal(state.srclang,'pt');
+    assert.equal(state.src,approvedEntry.video.src);assert.equal(state.trackSrc,approvedEntry.subtitle.src);assert.equal(state.srclang,lang);
     const bounds=await page.locator('#panel-tutorial-dialog').boundingBox();assert.ok(bounds.x>=0&&bounds.x+bounds.width<=width);
     photos.push(await screen(page,'approved-'+motion+'-'+entry+'-player',lang,width));
     const playback=await approvedPlaybackProof(page,video,approvedCues,{lang,width,motion,entry});photos.push(playback.photo);
@@ -190,7 +194,7 @@ async function main(){
     assert.equal(after.paused,true);assert.equal(after.srcRemoved,true);assert.equal(after.trackRemoved,true);playerStates.push({entry,before,state,playback,after});
    }
   }
-  if(lang!=='pt')assert.equal(requests.some(r=>/\.(mp4|vtt)$/.test(r.path)),false,'EN/ES never request PT media');
+  assert.ok(requests.filter(r=>/\.(mp4|vtt)$/.test(r.path)).every(r=>r.path==='/tutorial-painel/tutorial.'+lang+'.mp4'||r.path==='/tutorial-painel/tutorial.'+lang+'.vtt'),'Only the selected language is requested');
   report.cases.push({kind:'approved-default',lang,width,motion,photos,playerStates,syntheticProfile:true});await context.close();
  }
  const assets=path.join(out,'synthetic-assets'),folder=path.join(assets,'tutorial-painel');fs.mkdirSync(folder,{recursive:true});
