@@ -1,4 +1,17 @@
-# Lazy Du Agent Panel 2.2.1
+# Lazy Du Agent Panel
+
+See your Claude Code and Codex sessions side by side in one local panel.
+
+**[Open the panel](#open-in-under-a-minute)**
+
+No account or API key. Session metadata is read locally without decoding conversations or tool arguments. Connected task folders and the global rules marker are also read; author messages, version checks, music and external links use optional network features. See [Privacy](#privacy) and [What leaves your computer](#what-leaves-your-computer).
+
+Fictional example, illustrated with existing v2.1 screenshots:
+
+![Fictional larger team, desktop](docs/v2.1/home-en-1440.png)
+![Fictional larger team, phone](docs/v2.1/home-en-390.png)
+
+[Português](README.pt-BR.md) · [Lazy Du](https://lazy-du.com)
 
 ## What the panel solves
 
@@ -8,14 +21,6 @@
 - Left a session open and forgot? Team separates sessions with recent activity from paused and finished ones.
 - Want to know where things stand right now? WEN opens the current summary in six lines.
 - Spent more than you thought? Usage shows this week's and today's tokens and how much credit has been used.
-- Everything stays on your computer. No account, no key, and it reads only metadata, never your conversations.
-
-Follow your Claude Code and Codex sessions in a local panel. Start small, switch modes whenever you need more detail.
-
-![Fictional larger team, desktop](docs/v2.1/home-en-1440.png)
-![Fictional larger team, phone](docs/v2.1/home-en-390.png)
-
-[Português](README.pt-BR.md) · [Lazy Du](https://lazy-du.com)
 
 ## Open in under a minute
 
@@ -27,7 +32,7 @@ node src/open.cjs
 
 The launcher opens your browser at http://127.0.0.1:3251. On Windows you can double-click panel.bat. On macOS, run bash panel.command, or use the command above.
 
-Choose project size, then what you want to follow. Each choice takes one click. Skip is available. Preferences lets you change the mode, language and reading options later.
+Before choosing, View example opens a clearly labelled fictional example in another tab; your setup stays open. Choose project size, then what you want to follow. First steps shows one next step before the indicators; Skip takes you to your chosen view. Preferences lets you change the mode, language and reading options later.
 
 No account, API key, package installation or project configuration is needed. Claude Code or Codex on this computer provides real metadata. An empty profile falls back to a clearly labelled fictional example when its scan finishes. You can choose either example at any time under More: one person or a larger team.
 
@@ -37,7 +42,7 @@ For an isolated example without reading local sessions:
 node src/open.cjs --demo
 ~~~
 
-The panel stays on this computer. Close panel in the footer stops a launcher with desktop shutdown enabled. Closing a browser tab alone leaves the server running. Ctrl+C stops a source server.
+The server runs locally on this computer. Close panel in the footer stops a launcher with desktop shutdown enabled. Closing a browser tab alone leaves the server running. Ctrl+C stops a source server.
 
 ## If an AI runs the command
 
@@ -110,7 +115,7 @@ The panel stores its own configuration and projected metadata cache in ~/.lazy-d
 
 The server binds to 127.0.0.1:3251 and checks Host and Origin; the page uses a Content Security Policy. The server's two public download destinations are the author's news.json (off until enabled or clicked) and package.json (version check on click). Optional music and external links open only on click. No session metadata is sent. Use --offline to disable these features.
 
-To stay on this version, use a tagged checkout or run npx github:tridev360/lazy-du-agent-panel#v2.2.1 after that tag is published. Updating is always your choice.
+To keep a version, use a tagged checkout. Updating is always your choice.
 
 ## Privacy
 

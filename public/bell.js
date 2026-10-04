@@ -1,9 +1,10 @@
 (function(root){
   'use strict';
+  const panelStorage=()=>root.PanelStorage?.storage()??((root.location?.search&&new URLSearchParams(root.location.search).get('example')==='1')?null:root.localStorage);
   // The bell: version notes and tips made on this computer, what waits for you, decisions asked by your AIs,
   // and, only when you ask, the author's public messages. Read marks and usage marks stay in this browser.
   // This version sends no usage data anywhere.
-  const VERSION='2.2.3';
+  const VERSION='2.2.4';
   const REPO='https://github.com/tridev360/lazy-du-agent-panel';
   const NEWS_SOURCE='https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json';
   const CONTACTS=[{text:'github.com/tridev360',url:'https://github.com/tridev360'},{text:'X @hallstrid',url:'https://x.com/hallstrid'}];
@@ -67,8 +68,8 @@
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document)return;
   const d=root.document;
-  const get=(key,fallback)=>{try{const v=JSON.parse(root.localStorage.getItem(key));return v??fallback;}catch{return fallback;}};
-  const put=(key,value)=>{try{root.localStorage.setItem(key,JSON.stringify(value));}catch{}};
+  const get=(key,fallback)=>{try{const v=JSON.parse(panelStorage().getItem(key));return v??fallback;}catch{return fallback;}};
+  const put=(key,value)=>{try{panelStorage().setItem(key,JSON.stringify(value));}catch{}};
   let snapshot=null,lang='en',checking=false,status='';
   const today=()=>new Date().toISOString().slice(0,10);
   function el(tag,value,cls){const n=d.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;}

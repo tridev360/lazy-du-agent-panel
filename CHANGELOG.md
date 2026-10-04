@@ -1,5 +1,12 @@
 # Changelog
 
+## 2.2.4
+
+- Welcome offers a labelled fictional example in a separate tab before setup.
+- Returning from the example keeps the original setup and its unfinished input.
+- Example preferences stay in that tab, without changing the original panel.
+- The README starts with one purpose and one opening action, with accurate privacy details.
+
 ## 2.2.3
 
 - First-time setup opens the existing welcome screen before the dashboard.

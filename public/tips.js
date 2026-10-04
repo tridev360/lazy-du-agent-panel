@@ -1,5 +1,6 @@
 'use strict';
 (function(root) {
+  const panelStorage=()=>root.PanelStorage?.storage()??((root.location?.search&&new URLSearchParams(root.location.search).get('example')==='1')?null:root.localStorage);
   const XP = Object.freeze({ comum: 10, rara: 25, epica: 50, lendaria: 100 });
   const STORE = 'painel-feed-public-v1', SOUND = 'painel-feed-muted-v1', LIMIT = 500, ID = /^[a-z0-9][a-z0-9_-]{0,63}$/;
   const controllers = new WeakMap();
@@ -46,7 +47,7 @@
   }
   function readMuted(storage){try{return storage?.getItem(SOUND)!=='0';}catch{return true;}}
   function saveMuted(storage,muted){try{storage?.setItem(SOUND,muted?'1':'0');}catch{}}
-  function storage(){try{return root.localStorage;}catch{return null;}}
+  function storage(){try{return panelStorage();}catch{return null;}}
   let audio,audioGesture=false;
   function resumeAudio(){audioGesture=true;try{const Audio=root.AudioContext||root.webkitAudioContext;if(Audio){audio||=new Audio();audio.resume?.();}}catch{}}
   function playSound(levelUp,realBonus=false){

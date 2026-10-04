@@ -1,4 +1,17 @@
-# Lazy Du Agent Panel 2.2.1
+# Lazy Du Agent Panel
+
+Veja suas sessões do Claude Code e do Codex lado a lado em um painel local.
+
+**[Abrir o painel](#abrir-em-menos-de-um-minuto)**
+
+Sem conta ou chave de API. Os metadados das sessões são lidos localmente, sem decodificar conversas ou argumentos de ferramentas. O painel também lê pastas de tarefas conectadas e o marcador das regras globais; mensagens do autor, checagem de versão, música e links externos usam recursos opcionais de rede. Veja [Privacidade](#privacidade) e [O que sai do seu computador](#o-que-sai-do-seu-computador).
+
+Exemplo fictício, ilustrado com as imagens já existentes da v2.1:
+
+![Time fictício maior no computador](docs/v2.1/home-pt-1440.png)
+![Time fictício maior no celular](docs/v2.1/home-pt-390.png)
+
+[English](README.md) · [Lazy Du](https://lazy-du.com)
 
 ## O que o painel resolve
 
@@ -8,14 +21,6 @@
 - Esqueceu uma sessão aberta? A Equipe separa as sessões com atividade recente das que estão em pausa ou concluídas.
 - Quer saber como está tudo agora? O WEN abre o resumo atual em seis linhas.
 - Gastou mais do que achava? O Consumo mostra os tokens da semana e de hoje e quanto do crédito já foi usado.
-- Tudo fica no seu computador. Sem conta, sem chave, e ele lê só metadados, nunca as suas conversas.
-
-Acompanhe suas sessões do Claude Code e Codex em um painel local. Comece pequeno e troque de modo quando precisar de mais detalhes.
-
-![Time fictício maior no computador](docs/v2.1/home-pt-1440.png)
-![Time fictício maior no celular](docs/v2.1/home-pt-390.png)
-
-[English](README.md) · [Lazy Du](https://lazy-du.com)
 
 ## Abrir em menos de um minuto
 
@@ -27,7 +32,7 @@ node src/open.cjs
 
 O atalho abre o navegador em http://127.0.0.1:3251. No Windows, você pode abrir panel.bat com dois cliques. No Mac, rode bash panel.command ou use o comando acima.
 
-Escolha o tamanho do projeto e depois o que quer acompanhar. Um clique por escolha. Pode pular. Em Mais → Preferências, você troca o modo, o idioma e as opções de leitura quando quiser.
+Antes das escolhas, Ver exemplo abre um exemplo fictício identificado em outra aba; sua configuração continua aberta. Escolha o tamanho do projeto e depois o que quer acompanhar. Primeiros passos mostra um próximo passo antes dos indicadores; Pular leva à tela que você escolheu. Em Mais → Preferências, você troca o modo, o idioma e as opções de leitura quando quiser.
 
 Sem conta, chave de API, instalação de pacote ou configuração do projeto. Claude Code ou Codex neste computador fornece os metadados reais. Se o perfil estiver vazio, o painel abre um exemplo fictício, identificado, depois de terminar a leitura. Em Mais → Exemplo, escolha uma pessoa ou um time maior.
 
@@ -37,7 +42,7 @@ Para ver só o exemplo, sem ler sessões locais:
 node src/open.cjs --demo
 ~~~
 
-Tudo fica neste computador. Fechar painel no rodapé encerra um atalho que tenha o fechamento habilitado. Fechar apenas a aba deixa o servidor ligado. Ctrl+C encerra o servidor aberto pelo código.
+O servidor roda localmente neste computador. Fechar painel no rodapé encerra um atalho que tenha o fechamento habilitado. Fechar apenas a aba deixa o servidor ligado. Ctrl+C encerra o servidor aberto pelo código.
 
 ## Se uma IA for rodar o comando
 
@@ -112,7 +117,7 @@ O painel salva sua configuração e o cache de metadados projetados em ~/.lazy-d
 
 O servidor escuta em 127.0.0.1:3251 e confere Host e Origin; a página usa uma Content Security Policy. Os dois destinos públicos de download do servidor são news.json do autor (desligado até você ligar ou clicar) e package.json (conferência de versão no clique). Música opcional e links externos só abrem no clique. Nenhum metadado de sessão sai. Use --offline para desligar esses recursos.
 
-Para manter esta versão, use uma cópia com tag ou rode npx github:tridev360/lazy-du-agent-panel#v2.2.1 depois que essa tag for publicada. Você escolhe quando atualizar.
+Para manter uma versão, use uma cópia com a tag dela. Você escolhe quando atualizar.
 
 ## Privacidade
 

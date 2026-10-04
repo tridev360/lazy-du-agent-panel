@@ -1,5 +1,6 @@
 "use strict";
 (function(root){
+  const panelStorage=()=>root.PanelStorage?.storage()??((root.location?.search&&new URLSearchParams(root.location.search).get('example')==='1')?null:root.localStorage);
   const C=root.PanelCore,doc=root.document,$=id=>doc.getElementById(id);
   const labels={
     en:{home:'Home',team:'Team',usage:'Usage',projects:'Projects',queue:'Queue',tips:'Feed your AI',title:'Your AI crew.',context:'PRIVATE BY DEFAULT',game:'EXAMPLE · BUILDING A LITTLE GAME',stage:'WHO IS CREATING NOW',waiting:'Waiting for you',clear:'No pending items found in this reading.',decision:'View decision ↗',deadline:'Next deadline',noDeadline:'Next delivery',detail:'View details ↗',progress:'progress',fullTeam:'Full team ↗',oneDu:'One Du per session',empty:'No sessions read yet.',emptyNote:'Start Claude Code or Codex, or try the example.',teamTitle:'Live team',recent:'Working on the project',resting:'Resting',working:'Working',waitingState:'Waiting',unknown:'Open your agent to continue',model:'Model',effort:'Depth',tools:'Tools',tokens:'Tokens',project:'Project',updated:'Last activity',estimate:'Delivery estimate',all:'All projects',unassigned:'Unassigned sessions',readOnly:'Review this in your agent chat.',partial:'Read on this computer.',water:'Playful water estimate',formula:'A playful estimate, without measuring real water use. (Fresh input + output + 10% cached input) ÷ 1,500 × 0.3 ml. One cup is 250 ml. Only sessions with a token breakdown enter this partial estimate.',how:'How it works ↗',simulated:'Example only. Nothing is sent to your agents.',saved:'Example choice saved',nextDecision:'Another example decision will appear shortly.',tipTitle:'Feed your AI',feed:'Feed · Copy prompt',copied:'Copied · +10 XP',copyFailed:'Select and copy the prompt below.',previous:'Previous tip',next:'Next tip',level:'Level',xp:'XP earned by copying prompts',motion:'Motion',off:'Motion off',back:'Back to overview',tasks:'tasks',hours:'h',mins:'min',due:'Due now',scanning:'Reading metadata...',offline:'Could not refresh. Showing last reading.',language:'Language',views:'Panel views',skip:'Skip to content'},
@@ -14,8 +15,8 @@
   ];
   let snapshot=null,locale='en',tab='home',project='',tipIndex=0,answered=new Set(),decisionTimer=null,decisionIndex=0,stageKey='',failed=false;
   const stageStates=new Map();
-  const stored=(key,fallback)=>{try{return root.localStorage.getItem(key)||fallback;}catch{return fallback;}};
-  const save=(key,value)=>{try{root.localStorage.setItem(key,value);}catch{}};
+  const stored=(key,fallback)=>{try{return panelStorage().getItem(key)||fallback;}catch{return fallback;}};
+  const save=(key,value)=>{try{panelStorage().setItem(key,value);}catch{}};
   let xp=Math.max(0,Math.min(100000,Number(stored('agent-panel-tip-xp','0'))||0));
   let motion=stored('agent-panel-motion','on');
   locale=new URLSearchParams(root.location.search).get('lang')||stored('agent-panel-language','en');if(!labels[locale]&&locale!=='es')locale='en';

@@ -1,5 +1,6 @@
 (function(root){
   'use strict';
+  const panelStorage=()=>root.PanelStorage?.storage()??((root.location?.search&&new URLSearchParams(root.location.search).get('example')==='1')?null:root.localStorage);
   const TYPES=['context','mixed-projects','effort-read','small-model-code','forgotten-helper','quiet-project','many-projects'];
   const STORE='agent-panel-guidance-hidden';
   const finite=n=>typeof n==='number'&&Number.isFinite(n),value=v=>typeof v==='string'&&v.trim()?v:'?',number=n=>finite(n)?String(n):'?';
@@ -82,12 +83,12 @@
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document)return;
   const d=root.document;let snapshot=null,lang='en',drawerWrapped=false;
-  const hidden=()=>{try{const v=JSON.parse(root.localStorage.getItem(STORE));return Array.isArray(v)?v.filter(t=>TYPES.includes(t)):[];}catch{return [];}};
+  const hidden=()=>{try{const v=JSON.parse(panelStorage().getItem(STORE));return Array.isArray(v)?v.filter(t=>TYPES.includes(t)):[];}catch{return [];}};
   const el=(tag,text,cls)=>{const n=d.createElement(tag);if(text!==undefined&&text!==null)n.textContent=text;if(cls)n.className=cls;return n;};
   const button=(label,click,cls='guidance-button')=>{const b=el('button',label,cls);b.type='button';b.onclick=click;return b;};
   const visible=()=>alerts(snapshot,hidden());
   const redraw=()=>{root.PanelLook?.draw?.();root.PanelLookViews?.draw?.();root.PanelBell?.update?.(snapshot,lang);};
-  function dismiss(type){if(!TYPES.includes(type))return;try{root.localStorage.setItem(STORE,JSON.stringify([...new Set([...hidden(),type])]));}catch{}redraw();}
+  function dismiss(type){if(!TYPES.includes(type))return;try{panelStorage().setItem(STORE,JSON.stringify([...new Set([...hidden(),type])]));}catch{}redraw();}
   async function copyText(text,status){const locale=lang;try{await root.navigator.clipboard.writeText(text);status.textContent=T[locale].copied;return true;}catch{status.textContent=T[locale].copyFailed;return false;}}
   async function saveSettings(payload,status){try{const r=await root.fetch('/api/guidance-settings',{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(payload)});if(!r.ok)throw Error('save');const data=await r.json();if(data.ok===false)throw Error('save');if(data.guidance)snapshot={...snapshot,guidance:data.guidance};status.textContent=T[lang].saved;redraw();root.document.getElementById('refresh')?.click();return true;}catch{status.textContent=T[lang].saveFailed;return false;}}
   function card(a,compact=false){const c=describe(a,lang),w=T[lang],box=el('article',undefined,compact?'guidance-session-card':'guidance-card');box.dataset.guidanceId=a.id;box.dataset.guidanceType=a.type;box.append(el(compact?'strong':'h3',c.title),el('p',c.line));if(compact){box.append(button(w.open,()=>open(a.id)));return box;}

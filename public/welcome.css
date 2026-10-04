@@ -7,3 +7,7 @@ body[data-welcome] #history-reading{display:none}
 body[data-welcome=on]>.shell{visibility:visible!important}
 body[data-welcome=on] #panel-boot,body[data-welcome=on] header>#clean-actions{display:none!important}
 #welcome .clean-choices button[aria-pressed=true]{border-color:var(--accent,#fb257f)}
+
+#welcome-example,.welcome-example-banner a{display:inline-flex;align-items:center;min-height:44px;color:var(--accent,#fb257f);text-decoration:underline;overflow-wrap:anywhere}
+#welcome-example-new-tab{margin:0 0 16px}.welcome-example-banner{padding:16px 20px;margin:16px 0;border:1px solid var(--line,#34343d);border-radius:12px;background:var(--panel,#131318)}.welcome-example-banner p{margin:0 0 8px;line-height:1.5}.welcome-example-banner a{margin-right:16px}.welcome-example-banner a[hidden]{display:none!important}
+#welcome-example:focus-visible,.welcome-example-banner a:focus-visible{outline:2px solid var(--accent,#fb257f);outline-offset:3px}

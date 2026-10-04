@@ -1,4 +1,5 @@
 "use strict";
+const panelStorage=()=>window.PanelStorage?.storage()??((window.location?.search&&new URLSearchParams(window.location.search).get('example')==='1')?null:window.localStorage);
 const $ = (id) => document.getElementById(id),
   keys = ["new", "doing", "ready", "review", "released", "live"];
 const words = {
@@ -611,7 +612,7 @@ async function refresh(force=false) {
 }
 $("language").onchange = () => {
   lang = $("language").value;
-  try { localStorage.setItem("agent-panel-language", lang); } catch {}
+  try { panelStorage().setItem("agent-panel-language", lang); } catch {}
   if (typeof PanelWelcome !== "undefined") PanelWelcome.language(lang);
   render();
 };

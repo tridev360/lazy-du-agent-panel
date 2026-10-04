@@ -1,5 +1,6 @@
 (function(root){
   'use strict';
+  const panelStorage=()=>root.PanelStorage?.storage()??((root.location?.search&&new URLSearchParams(root.location.search).get('example')==='1')?null:root.localStorage);
   // Teach your AI: optional working rules copied with the instruction for the local AI.
   // The panel only shows and copies this text; it never writes rule files or makes a network request.
   // The copied instruction asks the person's local AI to save the rules if the person approves.
@@ -211,8 +212,8 @@
   if(typeof module==='object'&&module.exports)module.exports=api;
   if(!root.document)return;
   const d=root.document;
-  function read(){try{const saved=JSON.parse(root.localStorage.getItem(STORE));return saved&&saved.version===1?normalize(saved):null;}catch{return null;}}
-  function write(choice){try{root.localStorage.setItem(STORE,JSON.stringify({...normalize(choice),savedAt:new Date().toISOString()}));return true;}catch{return false;}}
+  function read(){try{const saved=JSON.parse(panelStorage().getItem(STORE));return saved&&saved.version===1?normalize(saved):null;}catch{return null;}}
+  function write(choice){try{panelStorage().setItem(STORE,JSON.stringify({...normalize(choice),savedAt:new Date().toISOString()}));return true;}catch{return false;}}
   function el(tag,value,cls){const n=d.createElement(tag);if(value!==undefined)n.textContent=value;if(cls)n.className=cls;return n;}
   function current(){return lingua(d.documentElement.lang||'en');}
   function summary(choice,lang){const t=T[lingua(lang)];if(choice.mode==='own')return t.current+t.keep;if(choice.mode==='recommended')return t.current+t.currentRecommended;return t.current+TASKS.map(task=>t.tasks[task]+' '+(choice.picks[task]==='both'?t.both:NAMES[choice.picks[task]])).join(' · ');}

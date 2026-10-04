@@ -78,6 +78,7 @@ function createServer({
     "/teach211.css": ["teach211.css","text/css"],
     "/resolve211.css": ["resolve211.css","text/css"],
     "/resolve211.js": ["resolve211.js","text/javascript"],
+    "/demo-storage.js": ["demo-storage.js", "text/javascript"],
     "/quick-start.js": ["quick-start.js", "text/javascript"],
     "/v21.js": ["v21.js", "text/javascript"],
     "/v21.css": ["v21.css", "text/css"],
