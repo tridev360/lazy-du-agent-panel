@@ -148,6 +148,6 @@ html.ic .sala-agentes .ic-mix-leg{font-size:12px;color:#a6a6b2;line-height:1.4}
 html.ic .sala-agentes .ic-mix-c{color:var(--orange,#ffac62);font-weight:650}
 html.ic .sala-agentes .ic-mix-x{color:var(--blue,#65a7ff);font-weight:650}
 @media(max-width:760px){html.ic .sala-agentes{flex-wrap:wrap}html.ic .sala-agentes .ic-mix{flex-basis:100%;max-width:none;flex-direction:row;align-items:center}html.ic .sala-agentes .ic-mix-barra{flex:0 0 90px}}
-/* 04/10 16:1x: o bloco "O que precisa de voce" lido do ESCOLHAS ficava velho e repetia o topo; o "Precisa de voce agora" do
+/* o bloco "O que precisa de voce" lido do ESCOLHAS ficava velho e repetia o topo; o "Precisa de voce agora" do
    "Em que pe estamos" e a fonte unica. Escondido ja no carregamento (antes dependia do agora.js, que carrega por ultimo). */
 html.ic #gancho-cards{display:none}

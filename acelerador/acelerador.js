@@ -1,4 +1,4 @@
-/* ACELERAR: modulo PD do painel (02/10). Botao ao lado do WEN e do AUTOMATIZAR; abre uma gaveta com:
+/* ACELERAR: modulo PD do painel. Botao ao lado do WEN e do AUTOMATIZAR; abre uma gaveta com:
  *   1. o CONTROLE de marcha (1 a 5): cada marcha diz o que muda no trabalho e o efeito no credito (poupa, normal,
  *      gasta mais); a linha fixa "Nunca corta" fica embaixo. Trocar espera 4 s com Desfazer e so entao grava:
  *      no modo dono, 1 linha "| OS DOIS | marcha N: <nome>" no recados do painel e a marcha no json do modulo;
@@ -360,7 +360,7 @@
   function horaDe(iso) { const m = /T(\d{2}):(\d{2})/.exec(String(iso || '')); return m ? m[1] + ':' + m[2] : ''; }
   function numero(n, lang) { try { return new Intl.NumberFormat(lang === 'en' ? 'en-US' : lang === 'es' ? 'es-ES' : 'pt-BR').format(n); } catch { return String(n); } }
 
-  // ---------- marcha viva (10/10): o que esta ligado agora, lido das voltas de 15 min do ROTINA (marcha-viva.cjs) ----------
+  // ---------- marcha viva: o que esta ligado agora, lido das voltas de 15 min do ROTINA (marcha-viva.cjs) ----------
   // Data no formato da lingua: pt e es "DD/MM", en "Oct 9". Hora no relogio deste computador. Nunca nome de arquivo na frase.
   function diaNaLingua(ddmm, lang) { const m = /^(\d{2})\/(\d{2})$/.exec(String(ddmm || '')); if (!m) return ''; return lang === 'en' ? MESES_EN[Number(m[2]) - 1] + ' ' + Number(m[1]) : ddmm; }
   function duracao(min, lang) {
@@ -474,7 +474,7 @@
     gatilho.setAttribute('aria-haspopup', 'dialog');
     gatilho.setAttribute('aria-controls', 'acel-gaveta');
     gatilho.setAttribute('aria-expanded', 'false');
-    // 10/10 (PECA 5): o botao mostra a marcha ligada: o simbolo (o infinito ou o numero), o nome e, na ROTINA sem volta, um "?"
+    // PECA 5: o botao mostra a marcha ligada: o simbolo (o infinito ou o numero), o nome e, na ROTINA sem volta, um "?"
     const gSimbolo = el('span', 'acel-trigger-simbolo');
     gSimbolo.setAttribute('aria-hidden', 'true');
     const gNome = el('span', 'acel-trigger-nome');

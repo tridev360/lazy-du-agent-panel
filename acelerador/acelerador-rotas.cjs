@@ -7,7 +7,7 @@
 //             fica so no json). E a unica escrita fora do json: 1 linha por troca de marcha, no formato do painel.
 // Rotas (prefixo padrao /api/acelerador; op.prefixo troca):
 //   GET  /api/acelerador            modo, marcha escolhida, fases ligadas com a data, ganhos medidos (dono), marcas, minutos, token
-//                                   e, so no dono, a marcha VIVA (10/10): as voltas de 15 min do ROTINA lidas do estado ao lado do
+//                                   e, so no dono, a marcha VIVA: as voltas de 15 min do ROTINA lidas do estado ao lado do
 //                                   recados (marcha-viva.cjs, so leitura): ligada ou nao, ultima e proxima volta, minutos ganhos hoje e 7 dias
 //   POST /api/acelerador/marcha     { marcha: 1..5 }       guarda a marcha; no dono com recados, 1 linha "| OS DOIS | marcha N: <nome>"
 //   POST /api/acelerador/ligar      { fase }               liga so a proxima fase (sem pular)

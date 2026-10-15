@@ -1,4 +1,4 @@
-/* blocos-folha.css (Fase 2, 08/10): estilo dos blocos proprios do tema FOLHA DO DIA (blocos-folha.js).
+/* blocos-folha.css (Fase 2): estilo dos blocos proprios do tema FOLHA DO DIA (blocos-folha.js).
    Toda regra comeca em html[data-theme=folha] (ou esconde nos outros temas): nos temas GRADE e LIVRO nada daqui vale.
    4 tamanhos: 40/600 frase, 22/600 titulo de bloco, 16/400 texto, 13/500 rotulo e horario. Nada abaixo de 13. */
 html:not([data-theme=folha]) #fh-agora,html:not([data-theme=folha]) #fh-kbtn,html:not([data-theme=folha]) .fh-k-fundo,html:not([data-theme=folha]) .fh-k-lista,html:not([data-theme=folha]) #fh-lado{display:none!important}

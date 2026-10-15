@@ -1,4 +1,4 @@
-/* CRONOGRAMA no Inicio (04/10). Linha do tempo do dia: hora em negrito, cor de quem faz (laranja Claude, azul Codex, rosa voce),
+/* CRONOGRAMA no Inicio. Linha do tempo do dia: hora em negrito, cor de quem faz (laranja Claude, azul Codex, rosa voce),
    feito apagado, rodando em destaque, o que espera ele em rosa. Pulso so com Motion on. */
 .crono { margin: 0 0 16px; padding: 18px 22px 16px; border-radius: 20px; border: 1px solid #36363f; background: #141419; color: #fff; display: grid; gap: 10px; min-width: 0; }
 .crono[hidden] { display: none; }

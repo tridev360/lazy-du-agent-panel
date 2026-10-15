@@ -1,4 +1,4 @@
-/* theme-livro.css (fase 2, 08/10): tema LIVRO DE ORDENS (terminal de ordens, ref ferramenta). Inter + JetBrains Mono, quase preto,
+/* theme-livro.css (fase 2): tema LIVRO DE ORDENS (terminal de ordens, ref ferramenta). Inter + JetBrains Mono, quase preto,
    blocos com borda fina e canto de 8 px, linhas de tabela com dono, estado e idade, numero em mono, ticker na barra.
    Mesma marcacao da GRADE (vistas.js); os blocos so do livro (placar do dia, grade de 35 dias, FILL, livro do fluxo, fita)
    moram em blocos-livro.js/.css. Fluxo: cada fio na cor de quem manda (voce rosa, Claude laranja, Codex azul); a idade

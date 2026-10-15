@@ -1,4 +1,4 @@
-/* anim-folha.js (08/10, Fase 2): animacoes do tema FOLHA DO DIA (papel calmo). Curva longa, pouca coisa por vez, nada
+/* anim-folha.js (Fase 2): animacoes do tema FOLHA DO DIA (papel calmo). Curva longa, pouca coisa por vez, nada
    pisca forte; cada evento tem um gesto proprio, reconhecivel sem legenda (os 21 passos da demo do motor comum):
    mensagem comando = ponto com cauda suave desliza pelo fio na cor de quem manda, o fio acende e esfria em 2 s, quem recebe
    tinge o nome e abre 1 anel; duvida = anel vazado que respira; resposta = 2 pontos em fila.

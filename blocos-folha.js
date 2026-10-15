@@ -1,4 +1,4 @@
-/* blocos-folha.js (Fase 2, 08/10): os blocos proprios do tema FOLHA DO DIA, que so aparecem com data-theme="folha".
+/* blocos-folha.js (Fase 2): os blocos proprios do tema FOLHA DO DIA, que so aparecem com data-theme="folha".
    Gancho (1 linha no index.html, depois do vistas.js):
      <link rel="stylesheet" href="/blocos-folha.css"><script defer src="/blocos-folha.js"></script>
    e 1 linha no servidor.cjs (blocos-folha-rota.cjs serve os 2 arquivos e GET /api/folha/hoje).

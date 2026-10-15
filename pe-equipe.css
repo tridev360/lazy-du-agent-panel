@@ -1,4 +1,4 @@
-/* PAINEL PE + PAINEL-100 (03/10): aba Equipe com as duas IAs, o fluxo animado e a linha do tempo por agente.
+/* PAINEL PE + PAINEL-100: aba Equipe com as duas IAs, o fluxo animado e a linha do tempo por agente.
    Cores de quem e (tokens do painel em painel-v3.css, com reserva aqui): rosa = voce, laranja = lado do Claude, azul = lado do Codex.
    O estado (trabalhando, esperando, dormindo) vai no ponto e na palavra; o tipo da mensagem vai no traco do fio.
    Animacao so em transform e opacity (e o canvas das particulas); Movimento off e reduced-motion desligam. */
@@ -417,7 +417,7 @@ html[data-motion="off"] .pe-equipe *, html[data-motion="off"] .pe-equipe *::befo
 .pe-flow-head .pe-motion { position: absolute; top: 0; right: 0; padding: 0; border: 0; gap: 0; }
 .pe-flow-head .pe-motion-btn { padding: 3px 10px; border: 1px solid var(--pe-line-2); background: transparent; color: var(--pe-dim); font-size: 11px; font-weight: 600; }
 .pe-flow-head .pe-motion-btn:hover { color: var(--pe-ink); border-color: var(--pe-ink); }
-/* pe-anim.css (04/10): uma animacao por tipo de acao no cartao do agente (aba Equipe).
+/* pe-anim.css: uma animacao por tipo de acao no cartao do agente (aba Equipe).
    Uso: o cartao (ja com position: relative e data-lado) ganha .pa-card + 1 classe de tipo;
    dentro dele vao <span class="pa-fx"> (borda viva) e <span class="pa-tag"> (icone + rotulo). O pe-anim.js monta isso.
    Tipos: pa-escrevendo, pa-lendo, pa-executando, pa-testando, pa-revisando, pa-subindo, pa-ajudante,
@@ -575,7 +575,7 @@ html.ic .ic-sessao.pa-card .pa-tag { top: -8px; right: 8px; }
 .pe-janela-btn[aria-pressed="true"] { background: var(--pe-line); color: var(--pe-ink); }
 .pe-janela-btn:focus-visible { outline: 2px solid var(--pe-ink); outline-offset: 2px; }
 
-/* 04/10 12:5x: o que cada ajudante faz (Arvore e Fluxo), 1 linha cada; so os ativos a vista, os parados atras de "ver todos (N)".
+/* o que cada ajudante faz (Arvore e Fluxo), 1 linha cada; so os ativos a vista, os parados atras de "ver todos (N)".
    Sem animacao nova: o ponto do ativo usa a cor do lado, parado; Motion off e reduced-motion nao mudam nada aqui. */
 .pe-ajl { display: grid; gap: 4px; padding: 0 14px 12px 74px; min-width: 0; }
 .pe-ajl[hidden] { display: none; }

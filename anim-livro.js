@@ -1,4 +1,4 @@
-/* anim-livro.js (fase 2, 08/10): animacoes do tema LIVRO DE ORDENS (terminal de ordens: LEDs, ticker, "FILL").
+/* anim-livro.js (fase 2): animacoes do tema LIVRO DE ORDENS (terminal de ordens: LEDs, ticker, "FILL").
    Movimento suave (ease), ponto redondo com cauda de cometa na cor de quem manda, flash de 300 ms como ordem executada,
    numero com tick. Sem brilho de neon. Cada evento do motor tem a versao do livro, nunca mais pobre que a da GRADE:
    mensagem   = o fio acende na cor de quem manda e esfria em 3 passos; cometa com cauda corre o fio (duvida = anel que pulsa,

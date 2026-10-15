@@ -254,14 +254,16 @@
     if (it.tipo === 'sessao' && n && !n.juntou) return { rotulos: [], estado: capP(estadoTxt(n)), quem: quem(), extras: [] };
     const p = soltasP(it.frase);
     if (it.tipo === 'ajudante' || (it.tipo === 'codex' && it.sessao !== undefined && p.length > 1)) return { rotulos: p.slice(0, -1), estado: capP(p[p.length - 1]), quem: null, extras: [] };
-    if (it.tipo === 'codex') return { rotulos: [], estado: capP(semPontoP(it.frase)) || 'sem estado lido', quem: null, extras: [] };
-    return { rotulos: [], estado: capP(p[0]) || 'sem estado lido', quem: null, extras: p.slice(1).map(capP) };
+    const semEstado = e => (e ? { estado: e } : { estado: SEM_ESTADO, estadoDica: SEM_ESTADO_SOL });
+    if (it.tipo === 'codex') return Object.assign({ rotulos: [], quem: null, extras: [] }, semEstado(capP(semPontoP(it.frase))));
+    return Object.assign({ rotulos: [], quem: null, extras: p.slice(1).map(capP) }, semEstado(capP(p[0])));
   }
+  const SEM_ESTADO = 'Sem estado lido', SEM_ESTADO_SOL = 'Solução: o painel lê de novo sozinho em 30 s';
   function linhasPartes(h, it, pre, opcoes) {
     const pt = it && it.partes, o = opcoes || {}; if (!pt) return null;
     const out = [], quem = h('span', pre + '-quem'); let n = 0;
     const poe = el => { if (n) quem.append(' '); quem.append(el); n++; };
-    if (pt.estado) { const e = h('span', pre + '-estado', pt.estado); e.dataset.estado = it.precisa ? 'precisa' : it.estado || 'sem'; out.push(e); }
+    if (pt.estado) { const e = h('span', pre + '-estado', pt.estado); e.dataset.estado = it.precisa ? 'precisa' : it.estado || 'sem'; if (pt.estadoDica) e.title = pt.estadoDica; out.push(e); }
     for (const r of pt.rotulos) poe(h('span', pre + '-papel', r));
     if (pt.quem) {
       const q = pt.quem;
@@ -758,8 +760,13 @@
       return { nome: (l.pendente || l.semNome) && !l.nomeDoDono && w ? String(w.nome).trim() : l.nome, foco: Number.isInteger(l.foco) ? l.foco : null, focoTexto: l.focoTexto, barra: l.barra, pctTexto: l.pctTexto, faltamTexto: l.faltamTexto, situacao: l.selos.situacao, alta: l.selos.foco || null,
         cards: a === null && b === null ? null : Math.max(a || 0, b || 0), esperaVoce: l.chaveEstado === 'espera-ele', quem, sessao: chave, sessaoNome: NOMES.get(chave) || 'Sem sessão' };
     };
-    const vistas = N.todas.map(vista), sessoes = new Map(), prazo = s => fhNum(s.maiorPrazoMin) === null ? 'sem prazo' : 'maior prazo ' + MD.minutos(s.maiorPrazoMin);
-    for (const s of N.sessoes) sessoes.set(fhChave(s.chave), { chave: fhChave(s.chave), nome: s.nome, total: s.total, atrasadas: s.atrasadas, prazoTexto: prazo(s), resumo: s.total + (s.total === 1 ? ' frente, ' : ' frentes, ') + s.atrasadas + (s.atrasadas === 1 ? ' atrasada, ' : ' atrasadas, ') + prazo(s), linhas: vistas.filter(v => v.sessao === fhChave(s.chave)) });
+    // "sem prazo" so quando todas as frentes da sessao dizem sem-prazo; faltamMin vazio em frente em dia ou atrasada e prazo nao lido
+    const vistas = N.todas.map(vista), sessoes = new Map(), semTodas = ls => ls.length > 0 && ls.every(v => v.situacao && v.situacao.classe === 'sem-prazo');
+    const prazo = (s, ls) => fhNum(s.maiorPrazoMin) !== null ? 'maior prazo ' + MD.minutos(s.maiorPrazoMin) : semTodas(ls) ? 'sem prazo' : 'prazo sem leitura';
+    for (const s of N.sessoes) {
+      const ls = vistas.filter(v => v.sessao === fhChave(s.chave)), pz = prazo(s, ls);
+      sessoes.set(fhChave(s.chave), { chave: fhChave(s.chave), nome: s.nome, total: s.total, atrasadas: s.atrasadas, prazoTexto: pz, prazoSolucao: pz === 'prazo sem leitura' ? 'Solução: peça ao seu Claude para gravar faltamMin em cada frente de estado/frentes-situacao.json' : null, resumo: s.total + (s.total === 1 ? ' frente, ' : ' frentes, ') + s.atrasadas + (s.atrasadas === 1 ? ' atrasada, ' : ' atrasadas, ') + pz, linhas: ls });
+    }
     const com = vistas.filter(v => v.cards > 0), resp = vistas.filter(v => !(v.cards > 0) && v.esperaVoce);
     return { lido: true, motivo: null, solucao: null, sessoes, voce: { lido: true, cards: vistas.length && vistas.every(v => v.cards === null) ? null : com.reduce((s, v) => s + v.cards, 0), respostas: resp.length, semCards: vistas.filter(v => v.cards === null).length, itens: [...com.map(v => Object.assign({ tipo: 'card' }, v)), ...resp.map(v => Object.assign({ tipo: 'resposta' }, v))] } };
   }
@@ -790,9 +797,10 @@
   function fhBloco(P, mod, chave, max) {
     const b = P.h('div', 'fh-norte'), S = mod.lido ? mod.sessoes.get(chave) || null : null, k = 'S:' + chave;
     if (!mod.lido) { const q = P.h('div', 'fh-nt is-q', 'frentes: ?'); q.title = 'Frentes desta sessão sem leitura: ' + mod.motivo + '. Solução: ' + mod.solucao; b.append(q); return b; }
-    if (!S) { const z = P.h('div', 'fh-nt is-zero', 'none: nenhuma frente agora'); z.title = 'Nenhuma frente do Norte é desta sessão nesta leitura'; b.append(z); return b; }
+    if (!S) { const z = P.h('div', 'fh-nt is-zero', 'nenhuma frente agora'); z.title = 'Nenhuma frente do Norte é desta sessão nesta leitura'; b.append(z); return b; }
     const vis = S.linhas.slice(0, max), resto = S.linhas.slice(max);
     const tira = P.h('div', 'fh-nt', P.h('span', 'fh-nt-n', P.h('b', '', String(S.total)), S.total === 1 ? ' frente' : ' frentes'), P.h('span', 'fh-sit is-' + (S.atrasadas ? 'atrasada' : 'em-dia'), S.atrasadas ? S.atrasadas + (S.atrasadas === 1 ? ' atrasada' : ' atrasadas') : 'nenhuma atrasada'), P.h('span', 'fh-prazo', S.prazoTexto));
+    if (S.prazoSolucao) tira.querySelector('.fh-prazo').title = S.prazoSolucao;
     tira.title = 'Norte desta sessão: ' + S.resumo + '. As frentes abaixo seguem a ordem do Norte: atrasadas primeiro, depois o seu foco';
     if (resto.length) tira.append(fhBotao(P, resto.length, 'Mais ' + resto.length + (resto.length === 1 ? ' frente desta sessão' : ' frentes desta sessão') + '. Abre aqui mesmo, na ordem do Norte', k));
     const frentes = P.h('div', 'fh-frentes', ...vis.map(v => fhLinha(P, v))); frentes.dataset.cabe = String(Math.min(3, vis.length));
@@ -828,7 +836,7 @@
       const emLinha = !!(pl.closest && pl.closest('.fv-n2'));
       fs.slice(0, fica).forEach(x => {
         if (!x.el) return;
-        const est = x.partes && x.partes.estado ? String(x.partes.estado) : '', frase = String(x.frase || '').replace(/\s+·\s+/g, ', ');
+        const est = x.partes && x.partes.estado ? String(x.partes.estado).trim() : '', frase = String(x.frase || '').replace(/\s+·\s+/g, ', ');
         const selos = [...x.el.querySelectorAll('.fv-selo')].map(fhSeloTexto).filter(Boolean);
         x.el.title = x.nome + '. ' + frase + (est && !frase.includes(est) ? '. ' + est : '') + (selos.length ? '. Selos: ' + selos.join(', ') : '');
         if (!emLinha) return;
@@ -941,7 +949,7 @@
     const tot = partes.length ? P.h('div', 'fh-p6b-tot', ...partes.map(x => P.h('span', 'fh-p', x)), P.h('span', 'fh-p', 'lido ' + hm(n.atualizado))) : P.h('div', 'fh-p6b-tot is-q', 'total: ?');
     tot.title = partes.length ? 'Norte inteiro: ' + partes.join(', ') + ', lido ' + hm(n.atualizado) + '.' : 'Total do Norte sem leitura. ' + sol;
     const lf = lido && Array.isArray(n.ordemFoco) ? n.ordemFoco.filter(o => o && Number.isInteger(o.posicao) && typeof o.foco === 'string') : null;
-    const focos = lf && lf.length ? P.h('div', 'fh-p6b-focos', ...lf.map(o => { const f = P.h('span', 'fh-foco', 'F' + o.posicao); f.dataset.foco = String(o.posicao); return P.h('span', 'fh-p fh-p6b-f', f, P.h('span', 'fh-p6b-fn', o.foco)); })) : P.h('div', 'fh-p6b-focos is-q', lf ? 'focos: none' : 'focos: ?');
+    const focos = lf && lf.length ? P.h('div', 'fh-p6b-focos', ...lf.map(o => { const f = P.h('span', 'fh-foco', 'F' + o.posicao); f.dataset.foco = String(o.posicao); return P.h('span', 'fh-p fh-p6b-f', f, P.h('span', 'fh-p6b-fn', o.foco)); })) : P.h('div', 'fh-p6b-focos is-q', lf ? 'focos: nenhum' : 'focos: ?');
     focos.title = lf && lf.length ? 'Ordem do seu foco: ' + lf.map(o => 'F' + o.posicao + ' ' + o.foco).join(', ') + '.' : lf ? 'Nenhum foco escrito nesta leitura do Norte' : 'Ordem do foco sem leitura. ' + sol;
     const leg = P.h('div', 'fh-p6b-leg', ...[['aceso', 'trabalhando'], ['entregou', 'entregou'], ['dormindo', 'dormindo'], ['sem', 'sem leitura']].map(([c, t]) => P.h('span', 'fh-p6b-li', P.h('i', 'ft-px is-' + c), t)));
     const ss = P.h('div', 'fh-p6b-ss', ...[M.cC, ...M.sessoes, M.cX].filter(Boolean).map(it => {
@@ -996,7 +1004,7 @@
   doc.addEventListener('keydown', e => { if (e.key === 'Escape' && FH.aberto && ST.P) { FH.aberto = null; ST.P.repintar(); } });
   doc.addEventListener('click', e => { if (FH.aberto && ST.P && !(e && e.target && e.target.closest && e.target.closest('.fh-pop,.fh-p6-mais'))) { FH.aberto = null; ST.P.repintar(); } });
   root.PainelFluxoH = Object.freeze({ modelo: fhModelo, caminho: fhCaminho, estado: () => ({ aberto: FH.aberto, norte: !!FH.norte, voo: !!FH.voo }),
-    _teste: Object.freeze({ voce: fhVoce, cab: fhCab, dicas: fhDicas, afasta: fhAfasta, pe: fhPe, voceAjusta: fhVoceAjusta, cabe: fhCabe, desenho: (P, M, norte, voo, modo) => { ST.M = M; ST.P = P; FH.norte = norte || null; FH.voo = voo || null; const mapa = modo === 'c' ? desenhoC(P, M) : desenhoA(P, M); fhMontar(P, M, mapa, modo === 'c' ? 'c' : 'a'); return mapa; } }) });
+    _teste: Object.freeze({ voce: fhVoce, bloco: fhBloco, pilhas: fhPilhas, norte: n => { FH.norte = n || null; }, cab: fhCab, dicas: fhDicas, afasta: fhAfasta, pe: fhPe, voceAjusta: fhVoceAjusta, cabe: fhCabe, desenho: (P, M, norte, voo, modo) => { ST.M = M; ST.P = P; FH.norte = norte || null; FH.voo = voo || null; const mapa = modo === 'c' ? desenhoC(P, M) : desenhoA(P, M); fhMontar(P, M, mapa, modo === 'c' ? 'c' : 'a'); return mapa; } }) });
 
   // ---------- pintar (chamado pelo vistas.js no lugar do Fluxo de hoje) ----------
   function pintar(box, P) {

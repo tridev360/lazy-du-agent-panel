@@ -1,4 +1,4 @@
-/* tema.js (08/10): escolhe o tema do painel antes da 1a pintura: grade (padrao) | livro | folha.
+/* tema.js: escolhe o tema do painel antes da 1a pintura: grade (padrao) | livro | folha.
    Fica guardado so neste navegador (localStorage). #...&tema=livro na barra de endereco tambem escolhe. Sem rede. */
 (function () {
   'use strict';

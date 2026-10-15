@@ -1,4 +1,4 @@
-/* theme-grade.css (08/10): tema GRADE, o PADRAO. Carvao quente, pixel exato, cor so quando alguem precisa de voce.
+/* theme-grade.css: tema GRADE, o PADRAO. Carvao quente, pixel exato, cor so quando alguem precisa de voce.
    So cores, fontes e o jeito das animacoes (pixel/dither, passos discretos, sem brilho). A marcacao e comum (vistas.js).
    Fontes: Silkscreen (pixel, 16/24/48 presos na grade de 8) + Geist. As fontes vem dentro do kit (letras/letras.css, woff2 local). */
 html[data-theme=grade]{

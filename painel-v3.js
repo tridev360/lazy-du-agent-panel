@@ -977,7 +977,7 @@ window.PainelPrevisao=module.exports;})();
    updateText(group.label,({pt:'Pausadas e entregues',en:'Paused and delivered',es:'Pausadas y entregadas'}[c.lang])+' ('+resting.length+')');group.box.hidden=!resting.length;
    for(const [i,a]of resting.entries())place(group.list,agentBranch(c,a,model),i);holder.append(group.box);
   }
-  if(root.PainelBuild){let badge=document.getElementById('build-badge');if(!badge){badge=el('span','op-build');badge.id='build-badge';document.querySelector('footer')?.append(badge);}/* 04/10: o rodape dizia "r17 · 77a1f213 · 22:11" (hash e uma hora de 2 dias atras com cara de agora): agora diz a versao e o DIA dela, sem hash */const at=String(root.PainelBuild.at||''),dia=/^\d{4}-\d{2}-\d{2}/.test(at)?at.slice(8,10)+'/'+at.slice(5,7):'?';updateText(badge,({pt:'versão ',en:'version ',es:'versión '}[c.lang]||'versão ')+root.PainelBuild.version+({pt:' de ',en:' of ',es:' del '}[c.lang]||' de ')+dia);badge.title=at;}
+  if(root.PainelBuild){let badge=document.getElementById('build-badge');if(!badge){badge=el('span','op-build');badge.id='build-badge';document.querySelector('footer')?.append(badge);}/* o rodape dizia "r17 · 77a1f213 · 22:11" (hash e uma hora de 2 dias atras com cara de agora): agora diz a versao e o DIA dela, sem hash */const at=String(root.PainelBuild.at||''),dia=/^\d{4}-\d{2}-\d{2}/.test(at)?at.slice(8,10)+'/'+at.slice(5,7):'?';updateText(badge,({pt:'versão ',en:'version ',es:'versión '}[c.lang]||'versão ')+root.PainelBuild.version+({pt:' de ',en:' of ',es:' del '}[c.lang]||' de ')+dia);badge.title=at;}
  }
  function render(data,options={}){const host=document.getElementById('operator-live');if(!host)return;const c=instances.get(host)||create(host);c.data=data;c.options=options;paint(c);}
  function summaryLine(value){value=root.PainelLinguagem?.teamText(value)||value;if(/esforço|esforco|testes?\b|Tier S|arvore|árvore|branch|sha|hash/i.test(String(value||'')))return 'Verificações descritas nos detalhes';const source=String(value||'').replace(/\bcommit\b/gi,'alteração salva').replace(/\bmerge\b/gi,'integração');const first=source.split(/;|\n/)[0].trim(),words=first.split(/\s+/);return words.length>22?words.slice(0,22).join(' ')+'…':first;}
@@ -1117,7 +1117,7 @@ document.addEventListener('keydown',event=>{
 (function(){
  const key='app-panel-motion',button=document.createElement('button'),query=matchMedia('(prefers-reduced-motion: reduce)');let stored=null;
  try{stored=localStorage.getItem(key);}catch{}
- let off=stored==='off';/* 04/10: ligado por padrao no painel local; so a sua escolha desliga */button.id='motion-toggle';button.type='button';button.className='motion-toggle';
+ let off=stored==='off';/* ligado por padrao no painel local; so a sua escolha desliga */button.id='motion-toggle';button.type='button';button.className='motion-toggle';
  function paint(){document.documentElement.dataset.motion=off?'off':'on';button.setAttribute('aria-pressed',String(off));const lang=document.documentElement.lang;
   button.textContent=lang==='pt'?'Movimento '+(off?'off':'on'):lang==='es'?'Movimiento '+(off?'off':'on'):'Motion '+(off?'off':'on');
   if(off)for(const animation of document.getAnimations())animation.cancel();

@@ -1,4 +1,4 @@
-/* CABECALHO (10/10): o par WEN + marcha no comeco da direita da barra e a barra em 2 linhas quando nao cabe.
+/* CABECALHO: o par WEN + marcha no comeco da direita da barra e a barra em 2 linhas quando nao cabe.
    So variaveis dos 3 temas (--g-*); fonte pixel da casa (--g-pix) nos 2 rotulos. Animacao so em transform e opacity;
    Motion off e reduced motion = parado. 3 variantes por data-botoes (a, b, c); a recomendada e a "a". */
 #g-duo{display:flex;align-items:center;gap:8px;flex:none}

@@ -1,4 +1,4 @@
-/* FUSAO DO FLUXO (10/10). So o Fluxo: resumo, consumo, fechadas, trilho com Entregas e LED, e o botao Acelerar. Cores so pelos tokens --g-* (os 3 temas herdam). */
+/* FUSAO DO FLUXO. So o Fluxo: resumo, consumo, fechadas, trilho com Entregas e LED, e o botao Acelerar. Cores so pelos tokens --g-* (os 3 temas herdam). */
 #fz-fusao{display:none}
 html[data-g-new=fluxo] #fz-fusao{display:block;min-width:0;margin:0 0 8px}
 #fz-fusao *{box-sizing:border-box}

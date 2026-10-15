@@ -1,4 +1,4 @@
-/* entregas.css (09/10): ENTREGAS em barras (entregas.js). Nos 3 temas pelas variaveis do tema (--g-*); cor so onde importa:
+/* entregas.css: ENTREGAS em barras (entregas.js). Nos 3 temas pelas variaveis do tema (--g-*); cor so onde importa:
    verde = quase la (80% ou mais), roxo = em obra, laranja = depende de voce. Piso de 13 px; numero em fonte de numero; nada cortado.
    Visivel: a lista no topo da Fila, o cartao no Agora e as barras em Projetos (cada uma so na sua vista). */
 #en-fila,#en-projetos{display:none}

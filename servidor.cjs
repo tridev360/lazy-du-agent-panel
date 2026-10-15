@@ -171,7 +171,7 @@ function createServer(root,sessionsRoot,options={}) {
     try{if(require('./rotina.cjs').handle(req,url,{send,root,example,dir:__dirname}))return;}catch{return send(503,{error:'Rotina indisponível'});}
     try{if(require('./cronograma-tela.cjs').handle(req,url,{send,root,example,dir:__dirname}))return;}catch{return send(503,{error:'Cronograma unavailable'});}
     if(acel&&acel.handle(req,/^\/(?:api\/)?acelerador/.test(url.pathname)?SIGILO.guardarResposta(res,dono):res))return;
-    try{if(require('./ia-conceito/ia-rotas.cjs').handle(req,url,{root,send,port,nonce,example,painelDir:__dirname,notify}))return;}catch(error){if(error.code!=='MODULE_NOT_FOUND'&&url.pathname.includes('ia-conceito'))return send(503,{error:'IA unavailable'});} // PAINEL-IA 02/10: Ensine sua IA (aba Alimente sua IA)
+    try{if(require('./ia-conceito/ia-rotas.cjs').handle(req,url,{root,send,port,nonce,example,painelDir:__dirname,notify}))return;}catch(error){if(error.code!=='MODULE_NOT_FOUND'&&url.pathname.includes('ia-conceito'))return send(503,{error:'IA unavailable'});} // PAINEL-IA: Ensine sua IA (aba Alimente sua IA)
     if(req.method==='GET' && url.pathname==='/api/eventos') {
       if(req.headers.origin && !['http://127.0.0.1:'+port,'http://localhost:'+port].includes(req.headers.origin))return send(403,{error:'Local origin required'});
       const {createStateStream}=require('./realtime.cjs');

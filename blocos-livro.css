@@ -1,4 +1,4 @@
-/* blocos-livro.css (fase 2, 08/10): blocos proprios do tema LIVRO DE ORDENS (blocos-livro.js).
+/* blocos-livro.css (fase 2): blocos proprios do tema LIVRO DE ORDENS (blocos-livro.js).
    Fora do livro nada disto aparece. Piso de 13 px; numero em mono; cor so onde importa (verde = fechou, rosa = voce). */
 html:not([data-theme=livro]) #lv-placar,html:not([data-theme=livro]) #lv-fios,html:not([data-theme=livro]) #lv-toast,html:not([data-theme=livro]) #lv-fita{display:none!important}
 html[data-theme=livro] .lv-bloco{display:none}

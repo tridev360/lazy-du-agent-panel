@@ -1,4 +1,4 @@
-/* anim-grade.js (08/10): animacoes do tema GRADE. Pixel e dither, passos discretos (4 px, 30 a 60 ms), sem brilho e sem
+/* anim-grade.js: animacoes do tema GRADE. Pixel e dither, passos discretos (4 px, 30 a 60 ms), sem brilho e sem
    gradiente. So este arquivo e o theme-grade.css sao do tema: a marcacao (vistas.js) e o motor (anim-motor.js) sao comuns.
    Evento -> animacao (reconhecivel sem legenda):
    mensagem comando = quadrado cheio viaja pelo fio com rastro de dither; duvida = quadrado vazado que pisca; resposta = 2 quadrados;

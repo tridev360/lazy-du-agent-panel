@@ -1,4 +1,4 @@
-/* PAINEL GRADE FINAL (08/10): marcacao UNICA das vistas novas (esqueleto de 6 abas + AGORA, EQUIPE > Fluxo e CEREBRO).
+/* PAINEL GRADE FINAL: marcacao UNICA das vistas novas (esqueleto de 6 abas + AGORA, EQUIPE > Fluxo e CEREBRO).
    Os 3 temas (grade, livro, folha) so trocam a camada: theme-<tema>.css e anim-<tema>.js, por data-theme no <html> (tema.js).
    Eventos (mensagem, card, subiu, ajudante...) saem daqui para o anim-motor.js, que chama a animacao do tema ligado.
    So leitura: usa o mesmo estado do painel (latestSnapshot) e as rotas GET que ja existem.

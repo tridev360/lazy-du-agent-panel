@@ -1,4 +1,4 @@
-/* pe-anim.js (04/10): do tipo de acao do agente para a classe do pe-anim.css.
+/* pe-anim.js: do tipo de acao do agente para a classe do pe-anim.css.
    Duas entradas: (a) Codex, pelo state e lastAction que o /api/estado ja traz em equipe.agents[];
    (b) Claude, pelo NOME da ultima ferramenta. Sem tipo conhecido: generico. Nunca inventa tipo.
    A "dica" (opcional) e so testada por regex aqui e nunca guardada nem mostrada. Sem rede, sem style inline. */
@@ -142,7 +142,7 @@
   if (root) root.PaAnim = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 /* ===== fim do pe-anim.js ===== */
-/* PAINEL PE (02/10) + PAINEL-100 (03/10): aba EQUIPE com as DUAS IAs.
+/* PAINEL PE + PAINEL-100: aba EQUIPE com as DUAS IAs.
  * Uso: <div data-pe-equipe></div> na aba Equipe, com pe-equipe.css e este arquivo carregados.
  * Gancho: com window.PainelGanchos, registra 'equipe' com {render(snapshot, ctx), destroy()}.
  *   snapshot = o objeto do GET /api/estado; ctx (opcional) = {mount: elemento, lang: 'pt' | 'en' | 'es'}.

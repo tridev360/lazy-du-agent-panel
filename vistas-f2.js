@@ -1,4 +1,4 @@
-/* vistas-f2.js (F2, 09/10): as 16 abas antigas no formato novo, SEM trocar o JS delas (adaptador por cima).
+/* vistas-f2.js (F2): as 16 abas antigas no formato novo, SEM trocar o JS delas (adaptador por cima).
    Raiz = a vista antiga aberta (#panel-<alvo>, #cronograma-casa ou #rotina-card) + o #drawer aberto (so texto).
    Classes neutras (cor so por variavel do tema, vale GRADE, LIVRO e FOLHA; detalhe em MARCACAO-F2.md):
      f2-piso (letra < 13 px vira 13), f2-frase (caixa alta vira frase), f2-inteiro / f2-desclampa (sem reticencia),

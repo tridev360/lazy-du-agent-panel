@@ -1,4 +1,4 @@
-/* blocos-livro.js (fase 2, 08/10): blocos proprios do tema LIVRO DE ORDENS, por cima da marcacao comum (vistas.js).
+/* blocos-livro.js (fase 2): blocos proprios do tema LIVRO DE ORDENS, por cima da marcacao comum (vistas.js).
    So aparecem com data-theme="livro" (o css esconde nos outros temas e aqui nada le a rede fora do livro).
    1. PLACAR DO DIA (estilo P&L) logo abaixo do Agora: fechadas hoje, delta contra ontem, sparkline de 14 dias, melhor dia,
       sequencia e total de 14 dias; ao lado, a GRADE DE PIXELS de 35 dias (1 pixel = 1 fechada, 1 coluna = 1 dia).

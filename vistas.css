@@ -1,4 +1,4 @@
-/* PAINEL GRADE FINAL (08/10): marcacao comum das vistas novas (vem do exemplo GRADE). Cada tema so muda cores, fontes e detalhes na sua camada.
+/* PAINEL GRADE FINAL: marcacao comum das vistas novas (vem do exemplo GRADE). Cada tema so muda cores, fontes e detalhes na sua camada.
    Fundo calmo, numero com pixel exato, cor so quando alguem precisa de voce.
    Fonte pixel: Silkscreen (grade de 8 px: 16/24/48 = 1 pixel da letra vira 2/3/6 px; o 4 do Tiny5 lia como d). Leitura: Geist.
    Na versao final as duas fontes ficam em woff2 local e o CSP volta a 'self'. */

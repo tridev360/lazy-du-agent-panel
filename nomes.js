@@ -1,4 +1,4 @@
-/* nomes.js (F2, 08/10): MAPA UNICO de nome de exibicao + "frase normal". Todo lugar do painel novo chama PainelNomes.
+/* nomes.js (F2): MAPA UNICO de nome de exibicao + "frase normal". Todo lugar do painel novo chama PainelNomes.
    Apresentação dos nomes: primeira letra maiuscula, resto minusculo; nunca o id cru (CORTES, local_..., pasta); acentos certos.
    Sessoes: Atendimento, Assistente, Loja, Cortes, Claude, Codex, Você.
    Codex de uma sessao = "<Sessão> · Codex N"; ajudante = "<Sessão> · ajudante N" (o ajudante de dados manda id cru + tipo). */

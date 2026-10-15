@@ -1,6 +1,6 @@
 {
   "versao": "2026-10-02",
-  "fonte": "pesquisa de agua do Claude, 02/10/2026 (fontes publicas; nada medido nesta maquina)",
+  "fonte": "pesquisa de agua do Claude, outubro de 2026 (fontes publicas; nada medido nesta maquina)",
   "unidade_energia": "Wh por token, nivel dos servidores (antes do PUE)",
   "unidade_agua": "L por kWh de energia de servidor",
   "formula": "agua_L = soma_tipo(tokens_tipo * wh_por_token_tipo) / 1000 * (wue + pue * ewif)",
@@ -155,6 +155,6 @@
     "Watershed, Bistline et al. (ago/2026)",
     "Li, Yang, Islam e Ren, Making AI Less Thirsty (2025)",
     "LBNL, relatorio de data centers dos EUA (dez/2024)",
-    "precos de Anthropic e OpenAI (consultados em 02/10/2026)"
+    "precos de Anthropic e OpenAI (consultados em outubro de 2026)"
   ]
 }

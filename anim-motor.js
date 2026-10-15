@@ -1,4 +1,4 @@
-/* anim-motor.js (08/10): motor comum das animacoes do painel novo. NAO desenha estilo: cada tema (anim-grade.js,
+/* anim-motor.js: motor comum das animacoes do painel novo. NAO desenha estilo: cada tema (anim-grade.js,
    anim-livro.js, anim-folha.js) registra o seu jeito com PainelAnim.tema(nome, impl) e o motor chama o tema ligado.
    O motor so faz 4 coisas:
    1. acha os EVENTOS comparando a leitura nova com a anterior (so o que a fonte registra; nada inventado):
