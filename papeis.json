@@ -1,0 +1,249 @@
+{
+  "version": 1,
+  "roles": {
+    "panel-dev": {
+      "match": "\\b(codex painel|painel nomes|dev do painel)\\b",
+      "labels": {"pt":"AGENTE DEV DO PAINEL","en":"AGENTE PANEL DEV","es":"AGENTE DEV DEL PANEL"},
+      "taskLabels": {"pt":"Melhora nomes e entregas","en":"Improves names and delivery estimates","es":"Mejora nombres y entregas"}
+    },
+    "combat-animator": {
+      "match": "\\b(sons e jogo|animador de combate|combat animation|dopamina luta)\\b",
+      "labels": {"pt":"AGENTE ANIMADOR DE COMBATE","en":"AGENTE COMBAT ANIMATOR","es":"AGENTE ANIMADOR DE COMBATE"},
+      "taskLabels": {"pt":"Anima combate e seus sons","en":"Animates combat and action sounds","es":"Anima combate y sus sonidos"}
+    },
+    "maestro": {
+      "match": "\\b(maestro|coordenacao|coordenar|coordena|orchestrator|coordenacao)\\b",
+      "labels": {
+        "pt": "AGENTE MAESTRO",
+        "en": "AGENTE MAESTRO",
+        "es": "AGENTE MAESTRO"
+      },
+      "taskLabels": {
+        "pt": "Coordena tarefas e entregas",
+        "en": "Coordinates tasks and deliveries",
+        "es": "Coordina tareas y entregas"
+      }
+    },
+    "architect": {
+      "match": "\\b(arquiteto|architect|arquitecto)\\b",
+      "labels": {
+        "pt": "AGENTE ARQUITETO",
+        "en": "AGENTE ARCHITECT",
+        "es": "AGENTE ARQUITECTO"
+      },
+      "taskLabels": {
+        "pt": "Define estrutura da entrega",
+        "en": "Designs the delivery architecture",
+        "es": "Define estructura de entrega"
+      }
+    },
+    "data-engineer": {
+      "match": "\\b(dados vivos|dados ao vivo|data engineer|live data|r4 dados|backend dados)\\b",
+      "labels": {
+        "pt": "AGENTE ENGENHEIRO DE DADOS",
+        "en": "AGENTE DATA ENGINEER",
+        "es": "AGENTE INGENIERO DE DATOS"
+      },
+      "taskLabels": {
+        "pt": "Atualiza os dados ao vivo",
+        "en": "Updates the live panel data",
+        "es": "Actualiza los datos en vivo"
+      }
+    },
+    "text-reviewer": {
+      "match": "\\b(revis[a-z]* (?:de |o |os )?text[a-z]*|revisor texto|text review|traducao|tradutor|translator)\\b",
+      "labels": {
+        "pt": "AGENTE REVISOR DE TEXTO",
+        "en": "AGENTE TEXT REVIEWER",
+        "es": "AGENTE REVISOR DE TEXTO"
+      },
+      "taskLabels": {
+        "pt": "Confere textos e seus idiomas",
+        "en": "Checks text across all languages",
+        "es": "Revisa textos en sus idiomas"
+      }
+    },
+    "animator": {
+      "match": "\\b(mapa motion|mapa animacao|anim[a-z]*|motion|mapa com|map motion)\\b",
+      "labels": {
+        "pt": "AGENTE ANIMADOR",
+        "en": "AGENTE ANIMATOR",
+        "es": "AGENTE ANIMADOR"
+      },
+      "taskLabels": {
+        "pt": "Anima o mapa ao vivo",
+        "en": "Animates the live agent map",
+        "es": "Anima el mapa en vivo"
+      }
+    },
+    "security": {
+      "match": "\\b(seguranca|security|guardian|guardiao|privacy|privacidade)\\b",
+      "labels": {
+        "pt": "AGENTE GUARDIÃO",
+        "en": "AGENTE GUARDIAN",
+        "es": "AGENTE GUARDIAN"
+      },
+      "taskLabels": {
+        "pt": "Confere segurança dos dados locais",
+        "en": "Checks safety of local data",
+        "es": "Revisa seguridad de datos locales"
+      }
+    },
+    "qa": {
+      "match": "\\b(qa|test[a-z]*|gates?|vitest|mutacao|validar)\\b",
+      "labels": {
+        "pt": "AGENTE QA",
+        "en": "AGENTE QA",
+        "es": "AGENTE QA"
+      },
+      "taskLabels": {
+        "pt": "Testa a entrega desta tarefa",
+        "en": "Tests this work before delivery",
+        "es": "Prueba esta tarea actual"
+      }
+    },
+    "economist": {
+      "match": "\\b(economia|econom[a-z]*|dinheiro|funds|ralos|rank reparo)\\b",
+      "labels": {
+        "pt": "AGENTE ECONOMISTA",
+        "en": "AGENTE ECONOMIST",
+        "es": "AGENTE ECONOMISTA"
+      },
+      "taskLabels": {
+        "pt": "Analisa custos e suas recompensas",
+        "en": "Studies costs and player rewards",
+        "es": "Analiza costes y sus recompensas"
+      }
+    },
+    "product": {
+      "match": "\\b(produto|product|usabilidade|produto manager)\\b",
+      "labels": {
+        "pt": "AGENTE PRODUCT MANAGER",
+        "en": "AGENTE PRODUCT MANAGER",
+        "es": "AGENTE PRODUCT MANAGER"
+      },
+      "taskLabels": {
+        "pt": "Planeja a experiência do produto",
+        "en": "Plans the overall product experience",
+        "es": "Planifica la experiencia del producto"
+      }
+    },
+    "artist": {
+      "match": "\\b(arte|artista|artist|sprites?|pixel|grafic[a-z]*|graphics|inimigos|bosses|galeria)\\b",
+      "labels": {
+        "pt": "AGENTE ARTISTA",
+        "en": "AGENTE ARTIST",
+        "es": "AGENTE ARTISTA"
+      },
+      "taskLabels": {
+        "pt": "Desenha personagens e seus cenários",
+        "en": "Draws characters and their environments",
+        "es": "Dibuja personajes y sus escenarios"
+      }
+    },
+    "dj": {
+      "match": "\\b(som|sons|sounds?|audio|lofi|dj|armas)\\b",
+      "labels": {
+        "pt": "AGENTE DJ",
+        "en": "AGENTE DJ",
+        "es": "AGENTE DJ"
+      },
+      "taskLabels": {
+        "pt": "Cria sons para cada ação",
+        "en": "Creates sounds for each action",
+        "es": "Crea sonidos para cada acción"
+      }
+    },
+    "reviewer": {
+      "match": "\\b(revis[a-z]*|review[a-z]*|audit[a-z]*|tier s)\\b",
+      "labels": {
+        "pt": "AGENTE REVISOR",
+        "en": "AGENTE REVIEWER",
+        "es": "AGENTE REVISOR"
+      },
+      "taskLabels": {
+        "pt": "Confere a qualidade da entrega",
+        "en": "Checks quality of each delivery",
+        "es": "Revisa la calidad de entrega"
+      }
+    },
+    "engineer": {
+      "match": "\\b(infra|infraestrutura|engineer|engenheiro|custo)\\b",
+      "labels": {
+        "pt": "AGENTE ENGENHEIRO",
+        "en": "AGENTE ENGINEER",
+        "es": "AGENTE INGENIERO"
+      },
+      "taskLabels": {
+        "pt": "Cuida da infraestrutura do projeto",
+        "en": "Maintains the project infrastructure safely",
+        "es": "Cuida la infraestructura del proyecto"
+      }
+    },
+    "writer": {
+      "match": "\\b(cortes|redator|content|writer|texto)\\b",
+      "labels": {
+        "pt": "AGENTE REDATOR",
+        "en": "AGENTE WRITER",
+        "es": "AGENTE REDACTOR"
+      },
+      "taskLabels": {
+        "pt": "Escreve textos para o projeto",
+        "en": "Writes text for the project",
+        "es": "Escribe textos para el proyecto"
+      }
+    },
+    "detective": {
+      "match": "\\b(dados|data|leitura|analise|analise dados|detetive)\\b",
+      "labels": {
+        "pt": "AGENTE DETETIVE",
+        "en": "AGENTE DETECTIVE",
+        "es": "AGENTE DETECTIVE"
+      },
+      "taskLabels": {
+        "pt": "Confere as fontes dos dados",
+        "en": "Checks the available data sources",
+        "es": "Revisa las fuentes de datos"
+      }
+    },
+    "designer": {
+      "match": "\\b(tela|design[a-z]*|screen|interface|layout)\\b",
+      "labels": {
+        "pt": "AGENTE DESIGNER",
+        "en": "AGENTE DESIGNER",
+        "es": "AGENTE DISEÑADOR"
+      },
+      "taskLabels": {
+        "pt": "Desenha as telas do projeto",
+        "en": "Designs the project interface screens",
+        "es": "Diseña las pantallas del proyecto"
+      }
+    },
+    "dev": {
+      "match": "\\b(codigo|dev|backend|comando[a-z]*|command[a-z]*|rota|frontend)\\b",
+      "labels": {
+        "pt": "AGENTE DEV",
+        "en": "AGENTE DEV",
+        "es": "AGENTE DEV"
+      },
+      "taskLabels": {
+        "pt": "Implementa a tarefa em código",
+        "en": "Implements the current coding task",
+        "es": "Implementa la tarea en código"
+      }
+    },
+    "helper": {
+      "match": "",
+      "labels": {
+        "pt": "AGENTE AJUDANTE",
+        "en": "AGENTE HELPER",
+        "es": "AGENTE AYUDANTE"
+      },
+      "taskLabels": {
+        "pt": "Acompanha os próximos passos",
+        "en": "Follows the next work steps",
+        "es": "Sigue los próximos pasos"
+      }
+    }
+  }
+}

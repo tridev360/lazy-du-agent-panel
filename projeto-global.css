@@ -1,0 +1,31 @@
+.pg-caixa{position:relative;flex:none;display:flex;align-items:center}
+.pg-botao{all:unset;cursor:pointer;display:flex;align-items:center;gap:6px;height:32px;padding:0 10px;border:1px solid var(--g-line);background:var(--g-s1,transparent);color:var(--g-tx2);font:500 12px/1 var(--g-sans,system-ui);white-space:nowrap;box-sizing:border-box;max-width:260px}
+.pg-botao .pg-nome{color:var(--g-tx);font-weight:600;overflow:hidden;text-overflow:ellipsis}
+.pg-botao .pg-trocar{color:var(--g-tx3)}
+.pg-botao[data-todos="0"]{border-color:var(--g-rosa);box-shadow:inset 3px 0 0 var(--g-rosa)}
+.pg-botao:hover .pg-trocar,.pg-botao:focus-visible .pg-trocar{color:var(--g-tx)}
+.pg-botao:focus-visible,.pg-op:focus-visible{outline:1px solid var(--g-tx);outline-offset:2px}
+.pg-lista{position:absolute;top:calc(100% + 6px);right:0;z-index:60;min-width:200px;display:flex;flex-direction:column;padding:4px;background:var(--g-bg);border:1px solid var(--g-line);box-shadow:0 8px 24px rgba(0,0,0,.25)}
+.pg-lista[hidden]{display:none}
+.pg-op{all:unset;cursor:pointer;padding:8px 10px;color:var(--g-tx2);font:500 13px/1.2 var(--g-sans,system-ui)}
+.pg-op:hover{color:var(--g-tx);background:var(--g-s1,transparent)}
+.pg-op[aria-selected="true"]{color:var(--g-tx);box-shadow:inset 3px 0 0 var(--g-rosa)}
+.pg-aviso{margin:8px 0 0;padding:8px 12px;border:1px dashed var(--g-line);color:var(--g-tx2);font:500 12px/1.4 var(--g-sans,system-ui)}
+.pg-aviso[hidden]{display:none}
+/* Fluxo: selo do projeto no cartao e o interruptor "Fluxo geral / So o projeto ativo" */
+.fv-selo.is-proj{color:var(--g-tx);border-color:var(--g-line)}
+.fv-selo.is-proj.is-ativo{border-color:var(--g-rosa);color:var(--g-tx)}
+.fv-selo.is-dono{border-style:dashed}
+.fv-escopo{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin:8px 0 0}
+.fv-escopo-op{all:unset;cursor:pointer;padding:6px 10px;border:1px solid var(--g-line);color:var(--g-tx2);font:500 12px/1 var(--g-sans,system-ui)}
+.fv-escopo-op[aria-pressed="true"]{color:var(--g-tx);border-color:var(--g-tx)}
+.fv-escopo-op[aria-disabled="true"]{cursor:default;opacity:.55}
+.fv-escopo-op:focus-visible{outline:1px solid var(--g-tx);outline-offset:2px}
+.fv-escopo .g-sec{font-size:12px}
+.fv-card.is-fora-proj{opacity:.45}
+@media (max-width:760px){
+  .pg-caixa{order:4;flex:1 0 100%;padding:4px 0 8px}
+  .pg-botao{max-width:none;width:100%;height:32px}
+  .pg-lista{left:0;right:auto;width:100%;box-sizing:border-box}
+}
+#pg-aviso-fila{margin:8px 0 12px}

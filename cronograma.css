@@ -1,0 +1,97 @@
+/* CRONOGRAMA no Inicio (04/10). Linha do tempo do dia: hora em negrito, cor de quem faz (laranja Claude, azul Codex, rosa voce),
+   feito apagado, rodando em destaque, o que espera ele em rosa. Pulso so com Motion on. */
+.crono { margin: 0 0 16px; padding: 18px 22px 16px; border-radius: 20px; border: 1px solid #36363f; background: #141419; color: #fff; display: grid; gap: 10px; min-width: 0; }
+.crono[hidden] { display: none; }
+html:not([data-painel-tab="home"]) .crono { display: none; }
+.crono-topo { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; }
+.crono-titulo { margin: 0; font-size: 16px; font-weight: 700; }
+.crono-abas { display: inline-flex; gap: 4px; padding: 4px; border-radius: 12px; border: 1px solid #2c2c34; background: #101014; }
+.crono-aba { font: inherit; font-size: 13px; min-height: 34px; padding: 6px 14px; border-radius: 9px; border: 0; background: transparent; color: #bdbdc8; cursor: pointer; }
+.crono-aba[aria-selected="true"] { background: #26262e; color: #fff; font-weight: 650; }
+.crono-aba:focus-visible, .crono-seta:focus-visible, .crono-enviar:focus-visible, .crono-desfazer:focus-visible { outline: 2px solid #ff2e7e; outline-offset: 2px; }
+.crono-lido { margin: 0; font-size: 12px; color: #a6a6b2; font-variant-numeric: tabular-nums; }
+.crono-lido.is-velho { color: #ffac62; font-weight: 600; }
+.crono-legenda { margin: 0; display: flex; gap: 14px; flex-wrap: wrap; font-size: 12px; color: #a6a6b2; }
+.crono-leg { display: inline-flex; align-items: center; gap: 6px; }
+.crono-dot { display: inline-block; flex: none; width: 9px; height: 9px; border-radius: 50%; background: #6b6b76; margin-right: 8px; vertical-align: middle; }
+.crono-leg .crono-dot { margin-right: 0; }
+.quem-claude .crono-dot { background: #ffac62; }
+.quem-codex .crono-dot { background: #65a7ff; }
+.quem-ele .crono-dot { background: #ff2e7e; }
+.quem-os-dois .crono-dot { background: linear-gradient(90deg, #ffac62 50%, #65a7ff 50%); }
+.crono-grupo { display: grid; gap: 6px; min-width: 0; }
+.crono-grupo + .crono-grupo { margin-top: 8px; }
+.crono-grupo-titulo { margin: 4px 0 0; font-size: 12px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; color: #a6a6b2; }
+.crono-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 4px; }
+.crono-lista.is-linha { position: relative; padding-left: 14px; }
+.crono-lista.is-linha::before { content: ""; position: absolute; left: 4px; top: 6px; bottom: 6px; width: 2px; border-radius: 2px; background: #26262e; }
+.crono-item { position: relative; display: grid; grid-template-columns: 112px minmax(0, 1fr) auto; column-gap: 12px; align-items: start; padding: 8px 10px; border-radius: 10px; border: 1px solid transparent; min-width: 0; }
+.crono-lista:not(.is-linha) .crono-item { grid-template-columns: minmax(0, 1fr) auto; }
+.crono-lista:not(.is-linha) .crono-hora:empty { display: none; }
+.crono-hora { font-size: 14px; font-weight: 750; font-variant-numeric: tabular-nums; color: #fff; overflow-wrap: anywhere; }
+.crono-corpo { min-width: 0; }
+.crono-oque { margin: 0; font-size: 14px; line-height: 1.45; overflow-wrap: anywhere; }
+.crono-meta { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 4px; }
+.crono-chip { font-size: 11px; font-weight: 600; padding: 1px 8px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .18); color: #cfcfd8; white-space: nowrap; }
+.chip-rodando { border-color: rgba(87, 214, 141, .6); color: #57d68d; }
+.chip-espera-voce { border-color: rgba(255, 46, 126, .7); color: #ff8eb9; }
+.chip-travado { border-color: rgba(255, 172, 98, .7); color: #ffac62; }
+.chip-na-fila { color: #a6a6b2; }
+.chip-maxima { border-color: rgba(255, 255, 255, .35); color: #fff; }
+.chip-prazo { border-color: rgba(255, 172, 98, .5); color: #ffcf9e; }
+.crono-quem, .crono-dep { font-size: 11px; color: #a6a6b2; }
+/* feito apagado, rodando em destaque, espera voce em rosa */
+.crono-item.is-feito { opacity: .45; }
+.crono-item.is-feito .crono-oque { text-decoration: line-through; text-decoration-color: rgba(255, 255, 255, .35); }
+.crono-item.is-rodando { background: rgba(87, 214, 141, .07); border-color: rgba(87, 214, 141, .28); }
+.crono-item.is-espera-voce { background: rgba(255, 46, 126, .09); border-color: rgba(255, 46, 126, .5); }
+.crono-item.is-travado { border-color: rgba(255, 172, 98, .35); }
+.crono-lista.is-linha .crono-item::before { content: ""; position: absolute; left: -14px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: #3a3a44; box-shadow: 0 0 0 3px #141419; }
+.crono-lista.is-linha .crono-item.is-feito::before { background: #57d68d; }
+.crono-lista.is-linha .crono-item.is-rodando::before { background: #57d68d; }
+.crono-lista.is-linha .crono-item.is-espera-voce::before { background: #ff2e7e; }
+@media (prefers-reduced-motion: no-preference) { html:not([data-motion="off"]) .crono-lista.is-linha .crono-item.is-rodando::before { animation: crono-pulso 1.6s ease-in-out infinite; } }
+html[data-motion="on"] .crono-lista.is-linha .crono-item.is-rodando::before { animation: crono-pulso 1.6s ease-in-out infinite; }
+@keyframes crono-pulso { 0%, 100% { opacity: 1; transform: scale(1); } 50% { opacity: .55; transform: scale(1.35); } }
+.crono-agora { position: relative; display: flex; align-items: center; gap: 8px; margin: 2px 0; color: #ff8eb9; font-size: 11px; font-weight: 700; letter-spacing: .06em; text-transform: uppercase; }
+.crono-agora::after { content: ""; flex: 1; height: 2px; border-radius: 2px; background: linear-gradient(90deg, #ff2e7e, rgba(255, 46, 126, 0)); }
+.crono-lista.is-linha .crono-agora::before { content: ""; position: absolute; left: -17px; width: 12px; height: 12px; border-radius: 50%; background: #ff2e7e; box-shadow: 0 0 0 3px #141419; }
+/* mudar ordem */
+.crono-item.is-movel[draggable="true"] { cursor: grab; }
+.crono-item.is-arrastando { opacity: .5; }
+.crono-item.is-alvo { border-color: #ff2e7e; border-style: dashed; }
+.crono-setas { display: flex; gap: 4px; }
+.crono-seta { font: inherit; font-size: 14px; width: 32px; height: 32px; border-radius: 8px; border: 1px solid #36363f; background: #1c1c22; color: #e4e4ea; cursor: pointer; }
+.crono-seta:disabled { opacity: .3; cursor: default; }
+.crono-pedido { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 6px; padding: 10px 12px; border-radius: 12px; border: 1px solid rgba(255, 46, 126, .5); background: rgba(255, 46, 126, .07); }
+.crono-pedido p { flex: 1 1 260px; margin: 0; font-size: 13px; line-height: 1.45; }
+.crono-enviar, .crono-desfazer { font: inherit; font-size: 13px; min-height: 40px; padding: 8px 14px; border-radius: 10px; border: 1px solid #42444e; background: #202127; color: #eee; cursor: pointer; }
+.crono-enviar { background: #963959; border-color: #c66a8d; color: #fff; }
+.crono-enviar:disabled { opacity: .5; cursor: default; }
+.crono-aviso { margin: 4px 0 0; font-size: 12px; font-weight: 600; }
+.crono-aviso.is-ok { color: #57d68d; }
+.crono-aviso.is-erro { color: #ffac62; }
+.crono-vazio { margin: 0; font-size: 13px; color: #a6a6b2; }
+.crono-pedidos { font-size: 12px; color: #a6a6b2; border-top: 1px solid #26262e; padding-top: 8px; }
+.crono-pedidos summary { cursor: pointer; min-height: 28px; line-height: 28px; width: max-content; max-width: 100%; }
+.crono-pedidos p { margin: 4px 0 0; overflow-wrap: anywhere; }
+@media (pointer: coarse) { .crono-seta { width: 44px; height: 44px; } .crono-aba { min-height: 44px; } .crono-pedidos summary { min-height: 44px; line-height: 44px; } }
+@media (max-width: 760px) {
+  .crono { padding: 14px 14px 12px; border-radius: 17px; }
+  .crono-abas { width: 100%; }
+  .crono-aba { flex: 1; }
+  .crono-item, .crono-lista:not(.is-linha) .crono-item { grid-template-columns: minmax(0, 1fr) auto; row-gap: 2px; }
+  .crono-hora { grid-column: 1; font-size: 13px; }
+  .crono-corpo { grid-column: 1; }
+  .crono-setas { grid-column: 2; grid-row: 1 / span 2; flex-direction: column; align-self: center; }
+  .crono-pedido button { flex: 1 1 auto; }
+}
+.chip-passou { border-color: rgba(255, 172, 98, .7); color: #ffac62; }
+.crono-feitos { margin: 0 0 2px; }
+.crono-feitos-botao { font: inherit; font-size: 13px; font-weight: 600; min-height: 36px; padding: 6px 10px; border-radius: 10px; border: 1px dashed #36363f; background: transparent; color: #8ee6ae; cursor: pointer; }
+.crono-feitos-botao:focus-visible { outline: 2px solid #ff2e7e; outline-offset: 2px; }
+.crono-lista.is-linha .crono-feitos { position: relative; }
+.crono-lista.is-linha .crono-feitos::before { content: ""; position: absolute; left: -14px; top: 14px; width: 8px; height: 8px; border-radius: 50%; background: #57d68d; box-shadow: 0 0 0 3px #141419; }
+@media (pointer: coarse) { .crono-feitos-botao { min-height: 44px; } }
+
+.crono-chip.chip-prazo { max-width: 100%; white-space: normal; overflow-wrap: anywhere; }

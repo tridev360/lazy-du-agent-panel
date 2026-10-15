@@ -1,0 +1,10 @@
+{
+  "id":"EXEMPLO-painel",
+  "sessao":"CODEX",
+  "criado":"2026-09-29",
+  "pergunta":"EXEMPLO: qual vista você prefere? Este card só demonstra o painel.",
+  "opcoes":[{"label":"Por sessão","descricao":"Agrupar as tasks pela sessão dona."},{"label":"Com prazo","descricao":"Mostrar apenas tasks com prazo."}],
+  "tipo":"decisao",
+  "exemplo":true,
+  "link_sessao":""
+}

@@ -1,0 +1,86 @@
+/* Início C. A clássica conserva seus nós, controles e CSS originais. */
+#panel-home .im-only,#sala-comando .im-only{display:none}
+#panel-home .im-toggle{display:inline-flex;align-self:flex-start;width:max-content;max-width:100%;min-height:36px;padding:6px 10px;font:inherit;font-size:11px;margin:0 0 12px;color:var(--muted)}
+#panel-home .im-toggle[aria-checked='true']{border-color:var(--cor-codex);color:var(--ink)}
+#panel-home[data-inicio-modo='missoes'] .im-only{display:block}
+/* A grade da missão não herda as três colunas nem as linhas da Home antiga. */
+#panel-home[data-inicio-modo='missoes']{width:100%;max-width:none;min-width:0;height:auto;min-height:0;max-height:none;grid-template-columns:minmax(0,1.45fr) minmax(0,1fr);grid-template-rows:auto auto auto auto;gap:16px;margin-bottom:16px}
+#panel-home[data-inicio-modo='missoes']>#inicio-sessoes{grid-column:1;grid-row:1;min-width:0;width:100%;order:0}
+#panel-home[data-inicio-modo='missoes']>#gancho-cards{grid-column:2;grid-row:1/3;min-width:0;width:100%;order:0}
+#panel-home[data-inicio-modo='missoes']>#home-spend{grid-column:1;grid-row:2;min-width:0;width:100%;order:0}
+#panel-home[data-inicio-modo='missoes']>#contas-claude{grid-column:1/-1;grid-row:3;min-width:0;width:100%;order:0}
+#panel-home[data-inicio-modo='missoes']>#ideias-panel{grid-column:1/-1;grid-row:4;min-width:0;order:0}
+#panel-home[data-inicio-modo='missoes']>#agora300{grid-column:1/-1;min-width:0}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-only{display:block}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes']{border-color:#4f9dff55;border-radius:4px;background:linear-gradient(135deg,#4f9dff08,transparent 55%),var(--panel);padding:28px;position:relative}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes']::after{content:'';position:absolute;right:12px;top:12px;width:18px;height:18px;border-top:1px solid var(--green);border-right:1px solid var(--green);pointer-events:none}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .sala-agentes{display:none}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .sala-rodando{display:none}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .sala-topo{flex-wrap:wrap}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-kicker{flex-basis:100%;color:var(--cor-codex);font-size:10px;letter-spacing:.1em}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] #sala-titulo{font-size:24px;font-weight:650;text-transform:uppercase}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-owner{width:190px;flex-shrink:0;border:0;border-right:1px solid var(--line);background:transparent;color:var(--ink);padding:16px 24px 16px 0;text-align:left;font:inherit;cursor:pointer}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-owner > span{display:block;color:var(--cor-codex);font-size:11px;letter-spacing:.08em}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-owner strong{display:block;font-size:80px;line-height:1.3;color:var(--cor-voce);font-weight:600;font-variant-numeric:tabular-nums}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-owner small{display:block;font-size:11px;line-height:1.7;color:var(--muted)}
+html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .sala-voce{border-left:3px solid var(--cor-voce);padding:14px 18px;background:#ff2e7e08;border-radius:3px}
+#panel-home[data-inicio-modo='missoes'] .home-card{border-radius:4px;position:relative}
+#panel-home[data-inicio-modo='missoes'] .home-card::after{content:'';position:absolute;right:12px;top:12px;width:10px;height:10px;border-top:1px solid var(--line);border-right:1px solid var(--line);pointer-events:none}
+#panel-home[data-inicio-modo='missoes'] #inicio-sessoes{background:linear-gradient(135deg,#4f9dff09,transparent),var(--panel);border-color:#4f9dff44}
+#panel-home[data-inicio-modo='missoes'] #inicio-sessoes-titulo,#panel-home[data-inicio-modo='missoes'] #inicio-sessoes-lista{display:none}
+#panel-home[data-inicio-modo='missoes'] .im-heading{font-size:16px;margin:8px 0 20px}
+#panel-home[data-inicio-modo='missoes'] .im-missions{display:grid;gap:12px}
+#panel-home[data-inicio-modo='missoes'] .im-mission{padding:18px;border:1px solid #4f9dff44;border-radius:3px;background:#08080a60;min-width:0}
+#panel-home[data-inicio-modo='missoes'] .im-mission-top{display:flex;gap:12px;align-items:center;color:var(--muted);font-size:10px}
+#panel-home[data-inicio-modo='missoes'] .im-id{border:1px solid #4f9dff44;padding:4px 6px;color:var(--cor-codex)}
+#panel-home[data-inicio-modo='missoes'] .im-family{text-transform:uppercase}
+#panel-home[data-inicio-modo='missoes'] .im-percent{margin-left:auto;color:var(--muted);font-size:20px}
+#panel-home[data-inicio-modo='missoes'] .im-mission h3{font-size:15px;line-height:1.5;margin:18px 0 14px;font-weight:600;overflow-wrap:anywhere}
+#panel-home[data-inicio-modo='missoes'] .im-track{--im-color:var(--cor-codex);height:7px;width:100%;border:1px solid var(--line);background:#08080a;overflow:hidden}
+#panel-home[data-inicio-modo='missoes'] .im-fill{display:block;height:100%;width:100%;background:var(--im-color);transform:scaleX(var(--im-scale,0));transform-origin:left;transition:transform .35s ease}
+#panel-home[data-inicio-modo='missoes'] .im-track[data-known='false']{background:repeating-linear-gradient(120deg,transparent 0 4px,#ffffff08 4px 6px)}
+#panel-home[data-inicio-modo='missoes'] .im-mission[data-side='claude'] .im-track{--im-color:var(--cor-claude)}
+#panel-home[data-inicio-modo='missoes'] .im-stage{display:grid;grid-template-columns:130px 1fr;gap:12px;padding:18px 0;border-bottom:1px solid var(--line);font-size:11px;line-height:1.6}
+#panel-home[data-inicio-modo='missoes'] .im-stage span{color:var(--cor-codex);font-size:9px}
+#panel-home[data-inicio-modo='missoes'] .im-stage strong{font-weight:400;color:var(--ink);overflow-wrap:anywhere}
+#panel-home[data-inicio-modo='missoes'] .im-record,#panel-home[data-inicio-modo='missoes'] .im-proof{display:block;color:var(--muted);font-size:10px;line-height:1.7;overflow-wrap:anywhere;margin:10px 0 0}
+#panel-home[data-inicio-modo='missoes'] .im-empty,#panel-home[data-inicio-modo='missoes'] .im-notice{font-size:12px;line-height:1.7;color:var(--muted)}
+#panel-home[data-inicio-modo='missoes'] #gancho-cards{display:flex;flex-direction:column;border-color:#ff2e7e55;background:linear-gradient(180deg,#ff2e7e15,transparent 65%),var(--panel);align-self:stretch}
+#panel-home[data-inicio-modo='missoes'] .im-alert-kicker{color:var(--cor-voce);font-size:10px;letter-spacing:.09em;margin:8px 0 16px}
+#panel-home[data-inicio-modo='missoes'] #gancho-cards .ic-precisa{font-size:24px;line-height:1.25;align-items:flex-start;flex-wrap:wrap}
+#panel-home[data-inicio-modo='missoes'] #gancho-cards .ic-precisa-n{background:transparent;color:var(--cor-voce);font-size:40px;padding:0;min-height:48px}
+#panel-home[data-inicio-modo='missoes'] #gancho-cards [data-pc-cards],#panel-home[data-inicio-modo='missoes'] #ic-precisa-n{display:none}
+#panel-home[data-inicio-modo='missoes'] .im-alert-body{min-width:0}
+#panel-home[data-inicio-modo='missoes'] .im-alert-list{list-style:none;padding:0;margin:0;display:grid;gap:12px}
+#panel-home[data-inicio-modo='missoes'] .im-alert-step{display:grid;grid-template-columns:48px minmax(0,1fr);gap:14px;padding:20px 0;border-top:1px solid #ff2e7e33;min-width:0}
+#panel-home[data-inicio-modo='missoes'] .im-alert-number{color:var(--cor-voce);font-size:48px;line-height:1;font-variant-numeric:tabular-nums}
+#panel-home[data-inicio-modo='missoes'] .im-alert-copy{min-width:0}
+#panel-home[data-inicio-modo='missoes'] .im-alert-copy h3{font-size:16px;line-height:1.5;font-weight:600;margin:0 0 12px;overflow-wrap:anywhere}
+#panel-home[data-inicio-modo='missoes'] .im-alert-where{color:var(--muted);font-size:11px;line-height:1.6;overflow-wrap:anywhere}
+#panel-home[data-inicio-modo='missoes'] .im-alert-link{display:inline-flex;align-items:center;min-height:44px;color:var(--cor-voce);font-size:12px;line-height:1.6;max-width:100%;overflow-wrap:anywhere;text-decoration:none}
+#panel-home[data-inicio-modo='missoes'] .im-alert-link:hover{text-decoration:underline}
+#panel-home[data-inicio-modo='missoes'] .im-alert-link:focus-visible{outline:2px solid var(--cor-voce);outline-offset:4px}
+#panel-home[data-inicio-modo='missoes'] .im-alert-empty{display:flex;align-items:center;gap:16px;padding:24px 16px;margin:12px 0 24px;border:1px solid var(--line);border-radius:3px;background:#ffffff03}
+#panel-home[data-inicio-modo='missoes'] .im-alert-check{color:var(--green);font-size:32px}
+#panel-home[data-inicio-modo='missoes'] .im-alert-empty strong{font-size:16px}
+#panel-home[data-inicio-modo='missoes'] .im-alert-empty p{color:var(--muted);font-size:11px;line-height:1.7;margin:8px 0 0}
+#panel-home[data-inicio-modo='missoes'] #contas-claude{border-color:#4f9dff44;border-radius:4px;background:linear-gradient(135deg,#4f9dff09,transparent),var(--panel)}
+#panel-home[data-inicio-modo='missoes'] #contas-claude .contas298-head{flex-wrap:wrap}
+#panel-home[data-inicio-modo='missoes'] #contas298-title{display:none}
+#panel-home[data-inicio-modo='missoes'] #contas-claude .im-kicker{flex-basis:100%;color:var(--cor-codex);font-size:10px;letter-spacing:.1em}
+#panel-home[data-inicio-modo='missoes'] .im-energy-title{font-size:16px;margin:0 auto 0 0}
+#panel-home[data-inicio-modo='missoes'] .contas298-account{border-color:#4f9dff44;border-radius:3px;background:#08080a60;padding:18px}
+#panel-home[data-inicio-modo='missoes'] .contas298-account.is-current{border-color:var(--green)}
+#panel-home[data-inicio-modo='missoes'] .contas298-account .contas298-value,#panel-home[data-inicio-modo='missoes'] .contas298-account>.contas298-small{display:none}
+#panel-home[data-inicio-modo='missoes'] .im-energy-number{display:block;font-size:28px;color:var(--green);font-weight:500;margin:16px 0}
+#panel-home[data-inicio-modo='missoes'] .im-energy .im-track{height:12px;--im-color:var(--green)}
+#panel-home[data-inicio-modo='missoes'] .im-energy small{display:block;font-size:10px;line-height:1.7;color:var(--muted);margin-top:8px;overflow-wrap:anywhere}
+#panel-home[data-inicio-modo='missoes'] .im-energy-note{color:var(--muted);font-size:11px;line-height:1.7}
+html[data-motion='off'] #panel-home .im-fill{transition:none}
+@media(prefers-reduced-motion:reduce){#panel-home .im-fill{transition:none}}
+@media(max-width:760px){#panel-home[data-inicio-modo='missoes']{grid-template-columns:minmax(0,1fr);grid-template-rows:none}#panel-home[data-inicio-modo='missoes']>#inicio-sessoes{grid-column:1;grid-row:1}#panel-home[data-inicio-modo='missoes']>#gancho-cards{grid-column:1;grid-row:2}#panel-home[data-inicio-modo='missoes']>#home-spend{grid-column:1;grid-row:3}#panel-home[data-inicio-modo='missoes']>#contas-claude{grid-column:1;grid-row:4}#panel-home[data-inicio-modo='missoes']>#ideias-panel{grid-column:1;grid-row:5}}
+@media(max-width:760px){html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes']{padding:18px;flex-direction:column}html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-owner{width:100%;border-right:0;border-bottom:1px solid var(--line);padding:0 0 14px}html[data-painel-tab='home'] #sala-comando[data-inicio-modo='missoes'] .im-owner strong{font-size:48px}#panel-home[data-inicio-modo='missoes'] .im-stage{grid-template-columns:1fr;gap:6px}#panel-home[data-inicio-modo='missoes'] .im-mission{padding:14px}}
+/* r11: a lista do Espera voce nunca numera sozinha (o numero grande ja diz), tambem dentro da gaveta */
+.im-alert-list{list-style:none;padding:0;margin:0}
+
+#g-decidir .im-alert-body,#g-decidir .im-alert-kicker{display:none}

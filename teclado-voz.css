@@ -1,0 +1,25 @@
+.teclado-dialogo{box-sizing:border-box;width:min(540px,calc(100vw - 24px));max-height:calc(100dvh - 32px);padding:24px;overflow:auto;border:1px solid var(--g-line,#aaa);background:var(--g-s1,#fff);color:var(--g-tx,#18181b);font:14px/1.5 var(--g-sans,system-ui);overscroll-behavior:contain}
+.teclado-dialogo::backdrop{background:rgb(0 0 0 / .48)}
+.teclado-dialogo h2{margin:0 0 16px;font-size:22px;color:inherit}
+.teclado-dialogo label{display:block}
+.teclado-dialogo button,.teclado-dialogo input,#teclado-voz-tecla,#teclado-ajuda{box-sizing:border-box;min-height:44px;padding:8px 12px;border:1px solid var(--g-line,#aaa);background:var(--g-bg,#fff);color:var(--g-tx,#18181b);font:inherit}
+.teclado-dialogo button,#teclado-ajuda{cursor:pointer}
+.teclado-dialogo input{display:block;width:100%;margin:8px 0 12px;font-size:16px}
+.teclado-dialogo :focus-visible,#teclado-voz-tecla:focus-visible,#teclado-ajuda:focus-visible{outline:2px solid var(--g-rosa,#b91c67);outline-offset:2px}
+#teclado-resultados{display:grid;gap:6px;max-height:40dvh;overflow:auto;padding:3px}
+#teclado-resultados button{text-align:left;overflow-wrap:anywhere}
+#teclado-resultados button[data-selecionado=true]{border-color:var(--g-rosa,#b91c67);box-shadow:inset 3px 0 var(--g-rosa,#b91c67)}
+#teclado-result-status{font-size:12px;color:var(--g-tx2,#52525b)}
+.teclado-dialogo dl{display:grid;grid-template-columns:minmax(100px,1fr) minmax(0,1.4fr);gap:10px 16px;margin:0 0 16px}
+.teclado-dialogo dt{font-weight:600;overflow-wrap:anywhere}
+.teclado-dialogo dd{margin:0;color:var(--g-tx2,#52525b)}
+#teclado-voz-label{display:grid;gap:6px;font:13px/1.5 var(--g-sans,system-ui);color:var(--g-tx,#18181b)}
+#teclado-voz-tecla{width:100%;max-width:240px;font-size:14px}
+html[data-theme=grade] .teclado-dialogo{border-radius:0}
+html[data-theme=livro] .teclado-dialogo{border-radius:6px}
+html[data-theme=folha] .teclado-dialogo{border-radius:12px}
+
+#teclado-titulo-aba{position:absolute;width:1px;height:1px;margin:-1px;padding:0;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+#teclado-titulo-aba:focus{position:static;width:auto;height:auto;margin:0 0 12px;clip-path:none;white-space:normal;outline:2px solid var(--g-rosa,#b91c67);outline-offset:4px;font:600 20px/1.4 var(--g-sans,system-ui);color:var(--g-tx,#18181b)}
+@media(max-width:480px){.teclado-dialogo{padding:16px}.teclado-dialogo dl{grid-template-columns:1fr;gap:3px}.teclado-dialogo dd{margin-bottom:9px}}
+@media(prefers-reduced-motion:reduce){.teclado-dialogo,#teclado-titulo-aba{animation:none!important;transition:none!important}}

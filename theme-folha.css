@@ -1,0 +1,163 @@
+/* theme-folha.css (08/10, Fase 2): tema FOLHA DO DIA (papel calmo). Geist em tudo, so o que pede acao vira superficie.
+   Mesma marcacao da GRADE (vistas.js). Os blocos proprios do Agora (aneis, frase, Hoje, Feito hoje, Ctrl K) moram em
+   blocos-folha.js/.css. Fluxo: sem caixa, um fio fino na cor de quem manda (voce rosa, Claude laranja, Codex azul), cada
+   linha visivel mesmo fria; a "cara" de cada sessao vira a barrinha de 2 px na cor do lado. Cerebro: pontos coloridos por
+   tipo (blocos-folha.js redesenha por cima do mapa comum). O jeito de cada evento mora no anim-folha.js. */
+html[data-theme=folha]{
+  --g-bg:#0B0B0C;--g-s1:#141416;--g-line:rgba(237,237,239,.08);--g-dot:#2A2A2E;--g-tx:#EDEDEF;--g-tx2:#A1A1AA;--g-tx3:#71717A;
+  --g-rosa:#FF2E7E;--g-claude:#FF8A3D;--g-codex:#4F9DFF;--g-anda:#3DD68C;--g-trava:#F5A524;--g-dorme:#52525B;
+  --g-pix:'Geist',system-ui,'Segoe UI',sans-serif;--g-sans:'Geist',system-ui,'Segoe UI',sans-serif;
+  --g-p16:13px;--g-p24:20px;--g-p48:40px;
+  --g-fio-quente:1;--g-fio-morno:.9;--g-fio-recente:.75;--g-fio-frio:.5;
+  --bg:#0B0B0C;--panel:#141416;--line:#222226;--muted:#A1A1AA;--ink:#EDEDEF;--pink:#FF2E7E;--cor-voce:#FF2E7E;--cor-claude:#FF8A3D;--cor-codex:#4F9DFF;
+  -webkit-font-smoothing:antialiased
+}
+html[data-theme=folha] body{background:var(--g-bg)}
+html[data-theme=folha] .g-h{font:600 var(--g-p24)/1.2 var(--g-sans);text-transform:lowercase;letter-spacing:-.01em}
+html[data-theme=folha] .g-h::first-letter{text-transform:uppercase}
+html[data-theme=folha] .g-num{font:600 var(--g-p48)/1 var(--g-sans);letter-spacing:-.03em}
+html[data-theme=folha] .g-n24{font:600 var(--g-p24)/1 var(--g-sans)}
+html[data-theme=folha] .g-lab{font:500 13px/1 var(--g-sans);text-transform:none;letter-spacing:0}
+html[data-theme=folha] .g-tab{font:500 15px/1 var(--g-sans);text-transform:lowercase}
+html[data-theme=folha] .g-tab .g-tl::first-letter{text-transform:uppercase}
+html[data-theme=folha] .g-tab .g-key{display:none}
+html[data-theme=folha] #g-bar,html[data-theme=folha] #g-bar .g-wrap,html[data-theme=folha] .g-tabs,html[data-theme=folha] .g-tab{height:56px}
+html[data-theme=folha] .g-temas,html[data-theme=folha] .g-tema{border-radius:8px}
+html[data-theme=folha] .g-btn{border-radius:8px}
+html[data-theme=folha] .g-sq,html[data-theme=folha] .g-st{border-radius:50%}
+html[data-theme=folha] .g-st.is-anda{animation:fh-respira 2.4s ease-in-out infinite}
+html[data-theme=folha] .g-st.is-espera{background:transparent;box-shadow:inset 0 0 0 1.5px var(--g-tx2)}
+@keyframes fh-respira{0%,100%{opacity:1}50%{opacity:.4}}
+html[data-theme=folha][data-motion=off] .g-st.is-anda{animation:none}
+/* sub abas: titulo da aba + vistas em texto, sem linha (como no exemplo aprovado) */
+html[data-theme=folha] #g-subnav{height:auto;border-bottom:0;margin:40px 0 32px;gap:24px;align-items:baseline}
+html[data-theme=folha] #g-subnav button{height:auto;font:500 16px/1.4 var(--g-sans);color:var(--g-tx2);box-shadow:none}
+html[data-theme=folha] #g-subnav button:hover{color:var(--g-tx)}
+html[data-theme=folha] #g-subnav button[aria-current=true]{color:var(--g-tx);box-shadow:none}
+html[data-theme=folha] #g-subnav::before{font:600 22px/1.2 var(--g-sans);letter-spacing:-.01em;color:var(--g-tx);margin-right:16px}
+html[data-theme=folha][data-g-tab=equipe] #g-subnav::before{content:'Equipe'}
+html[data-theme=folha][data-g-tab=fila] #g-subnav::before{content:'Fila'}
+html[data-theme=folha][data-g-tab=decidir] #g-subnav::before{content:'Decidir'}
+html[data-theme=folha][data-g-tab=cerebro] #g-subnav::before{content:'C\E9rebro'}
+html[data-theme=folha][data-g-tab=caixa] #g-subnav::before{content:'Caixa'}
+/* no Agora as sub vistas ficam quietas no alto da coluna de 720 */
+html[data-theme=folha][data-g-tab=agora] #g-subnav{max-width:720px;margin:24px auto 0;gap:20px}
+html[data-theme=folha][data-g-tab=agora] #g-subnav button{font:500 13px/1.4 var(--g-sans);color:var(--g-tx3)}
+html[data-theme=folha][data-g-tab=agora] #g-subnav button[aria-current=true]{color:var(--g-tx2)}
+/* AGORA da GRADE (so aparece se o blocos-folha.js nao carregar): 1 coluna de leitura */
+html[data-theme=folha] #g-agora{max-width:760px;margin:0 auto}
+html[data-theme=folha] .g-cols{grid-template-columns:minmax(0,1fr);gap:40px}
+html[data-theme=folha] .g-col.is-acao{box-shadow:none;background:var(--g-s1);border-radius:12px;padding:24px;margin:0}
+html[data-theme=folha] .g-espera .g-col-head{flex-direction:row-reverse;justify-content:flex-end;align-items:baseline;gap:12px}
+html[data-theme=folha] .g-espera .g-col-head .g-h{font-size:28px}
+html[data-theme=folha] .g-espera .g-col-head .g-num{font-size:40px}
+html[data-theme=folha] .g-list>li+li::before{background:var(--g-line)}
+html[data-theme=folha] .g-faixa{grid-template-columns:120px minmax(0,1fr);border-top-color:var(--g-line)}
+html[data-theme=folha] .g-faixa>.g-sec:last-child{grid-column:2}
+html[data-theme=folha] .g-regua i,html[data-theme=folha] .g-barra i{border-radius:4px}
+html[data-theme=folha] .g-obra .opx-leds{border-radius:8px}
+html[data-theme=folha] .g-obra .opx-led{border-radius:3px}
+html[data-theme=folha] #g-dock .cx-alvo,html[data-theme=folha] #g-dock .cx-text,html[data-theme=folha] #g-dock .cx-send{border-radius:8px}
+/* FLUXO: largura de 1200, numeros grandes em 1 linha, sem caixa; VOCE e a unica superficie */
+html[data-theme=folha][data-g-new=fluxo] main,html[data-theme=folha][data-g-new=cerebro] main{max-width:1296px}
+html[data-theme=folha] .g-fluxo-head{flex-direction:column-reverse;align-items:flex-start;gap:16px}
+html[data-theme=folha] .g-fluxo-head .g-h{font:500 13px/1.4 var(--g-sans);color:var(--g-tx3)}
+html[data-theme=folha] .g-fluxo-nota{font:500 13px/1.5 var(--g-sans);color:var(--g-tx3)}
+html[data-theme=folha] .g-contagem{gap:32px;align-items:baseline}
+html[data-theme=folha] .g-contagem>div{flex-direction:row-reverse;align-items:baseline;gap:8px}
+html[data-theme=folha] .g-contagem>div::before{content:'';width:8px;height:8px;border-radius:50%;align-self:center;order:3;margin-right:4px}
+html[data-theme=folha] .g-contagem>div:nth-child(1)::before{background:var(--g-anda)}
+html[data-theme=folha] .g-contagem>div:nth-child(2)::before{box-shadow:inset 0 0 0 1.5px var(--g-tx2)}
+html[data-theme=folha] .g-contagem>div:nth-child(3)::before{background:var(--g-dorme)}
+html[data-theme=folha] .g-contagem .g-num,html[data-theme=folha] .g-contagem .g-n24{font:600 22px/1.2 var(--g-sans);color:var(--g-tx)}
+html[data-theme=folha] .g-contagem .g-lab{font:600 22px/1.2 var(--g-sans);color:var(--g-tx);text-transform:lowercase;padding:0}
+html[data-theme=folha] .g-contagem .g-ligar{order:-1}
+/* caixas: a "cara" vira a barrinha de 2 px na cor do lado; ponto de 8 px de estado; nome em 15/600 */
+html[data-theme=folha] .g-no{background:transparent;grid-template-columns:2px minmax(0,1fr);gap:2px 14px;padding:4px 0}
+html[data-theme=folha] .g-no .g-no-face{align-self:stretch;width:2px;margin:0;background:var(--lado-cor,var(--g-tx3));border-radius:1px;grid-row:1/span 2}
+html[data-theme=folha] .g-no .g-no-face>*{display:none}
+html[data-theme=folha] .g-no[data-estado=dormindo] .g-no-face{opacity:.35}
+html[data-theme=folha] .g-no[data-precisa="1"] .g-no-face::after{content:'';position:absolute;left:-3px;top:-10px;right:auto;width:8px;height:8px;border-radius:50%;background:var(--g-rosa);animation:fh-respira 2.4s ease-in-out infinite}
+html[data-theme=folha] .g-no .g-no-nome{font:600 15px/20px var(--g-sans)}
+html[data-theme=folha] .g-no .g-no-linha{font:400 13px/20px var(--g-sans)}
+html[data-theme=folha] .g-no[data-estado=dormindo] .g-no-nome{color:var(--g-tx2)}
+html[data-theme=folha] .g-no.is-voce{box-shadow:none;background:var(--g-s1);border-radius:12px;padding:16px 20px;grid-template-columns:8px minmax(0,1fr)}
+html[data-theme=folha] .g-no.is-voce .g-no-face{width:8px;height:8px;border-radius:50%;align-self:center;grid-row:1;background:var(--g-rosa)}
+html[data-theme=folha] .g-no.is-voce .g-no-nome{font:600 22px/28px var(--g-sans);text-transform:lowercase}
+html[data-theme=folha] .g-no.is-voce .g-no-t::first-letter{text-transform:uppercase}
+html[data-theme=folha] .g-no.is-voce .g-no-linhas{grid-column:1/span 2}
+/* fios: cada linha na cor de quem manda e visivel mesmo fria (calmo, nao cinza); quanto mais novo, mais forte */
+html[data-theme=folha] .g-mapa svg.g-fios{shape-rendering:geometricPrecision}
+html[data-theme=folha] .g-rot-bg{fill:var(--g-bg)}
+html[data-theme=folha] .g-fio-l{stroke-width:1.5;stroke:var(--g-tx3);opacity:var(--g-fio-frio);stroke-linecap:round;stroke-linejoin:round;transition:opacity 1s ease,stroke .6s ease,stroke-width .3s ease}
+html[data-theme=folha] .g-fio-seta{fill:var(--g-tx3);opacity:var(--g-fio-frio);transition:opacity 1s ease}
+html[data-theme=folha] .g-fio[data-lado=claude] .g-fio-l,html[data-theme=folha] .g-fio-l[data-lado=claude]{stroke:var(--g-claude)}
+html[data-theme=folha] .g-fio[data-lado=claude] .g-fio-seta,html[data-theme=folha] .g-fio-seta[data-lado=claude]{fill:var(--g-claude)}
+html[data-theme=folha] .g-fio[data-lado=codex] .g-fio-l,html[data-theme=folha] .g-fio-l[data-lado=codex]{stroke:var(--g-codex)}
+html[data-theme=folha] .g-fio[data-lado=codex] .g-fio-seta,html[data-theme=folha] .g-fio-seta[data-lado=codex]{fill:var(--g-codex)}
+html[data-theme=folha] .g-fio[data-lado=voce] .g-fio-l,html[data-theme=folha] .g-fio-l[data-lado=voce]{stroke:var(--g-rosa)}
+html[data-theme=folha] .g-fio[data-lado=voce] .g-fio-seta,html[data-theme=folha] .g-fio-seta[data-lado=voce]{fill:var(--g-rosa)}
+html[data-theme=folha] .g-fio[data-idade=recente] .g-fio-l,html[data-theme=folha] .g-fio[data-idade=recente] .g-fio-seta{opacity:var(--g-fio-recente)}
+html[data-theme=folha] .g-fio[data-idade=morno] .g-fio-l,html[data-theme=folha] .g-fio[data-idade=morno] .g-fio-seta{opacity:var(--g-fio-morno)}
+html[data-theme=folha] .g-fio[data-idade=quente] .g-fio-l,html[data-theme=folha] .g-fio[data-idade=quente] .g-fio-seta,html[data-theme=folha] .g-fio[data-hover="1"] .g-fio-l,html[data-theme=folha] .g-fio[data-sel="1"] .g-fio-l{opacity:1}
+html[data-theme=folha] .g-fio[data-idade=quente] .g-fio-l{stroke-width:2}
+html[data-theme=folha] .g-fio[data-sel="1"] .g-fio-l{stroke-width:2.5}
+html[data-theme=folha] .g-fio[data-apagado="1"] .g-fio-l,html[data-theme=folha] .g-fio[data-apagado="1"] .g-fio-seta{opacity:.15}
+html[data-theme=folha] .g-rot{font:500 13px/16px var(--g-sans);fill:var(--g-tx2)}
+html[data-theme=folha] .g-colk{letter-spacing:.02em;text-transform:none;font:500 13px/16px var(--g-sans)}
+html[data-theme=folha] .g-amostra .g-fio-l{opacity:1;stroke:var(--g-tx2)}
+html[data-theme=folha] .g-legenda{border-top-color:var(--g-line)}
+html[data-theme=folha] .g-demo-cap{border-radius:8px;font:500 13px/1 var(--g-sans)}
+html[data-theme=folha] .g-fx-rot{font:500 13px/1 var(--g-sans);color:var(--g-tx);animation:fh-sobe 1.3s ease both}
+html[data-theme=folha] .g-fx-rot.fx-rot-ok{color:var(--g-anda)}
+html[data-theme=folha] .g-fx-rot.fx-rot-rosa{color:var(--g-rosa)}
+html[data-theme=folha] .g-fx-rot.fx-rot-ambar{color:var(--g-trava)}
+html[data-theme=folha] .g-fx-rot.fx-noar{border-radius:8px}
+@keyframes fh-sobe{0%{opacity:0;transform:translateY(4px)}25%,75%{opacity:1;transform:none}100%{opacity:0;transform:translateY(-6px)}}
+/* estado continuo e efeitos de 1 vez: devagar */
+html[data-theme=folha] .g-no[data-work="1"] .g-no-face{animation:fh-respira 2.4s ease-in-out infinite}
+html[data-theme=folha] .fx-troca .g-acao{animation:fh-fade .6s ease both}
+@keyframes fh-fade{from{opacity:0;transform:translateY(2px)}to{opacity:1;transform:none}}
+html[data-theme=folha] .fx-acorda{animation:fh-acorda .9s ease both}
+@keyframes fh-acorda{from{opacity:.35}to{opacity:1}}
+html[data-theme=folha] .fx-acorda .g-no-face{animation:fh-barra-acende .9s ease both}
+@keyframes fh-barra-acende{from{opacity:.3;transform:scaleY(.4)}to{opacity:1;transform:none}}
+html[data-theme=folha] .fx-dorme{animation:fh-dorme 1s ease both}
+@keyframes fh-dorme{from{opacity:1}to{opacity:.55}}
+html[data-theme=folha] .fx-recebe .g-no-nome{animation:fh-recebe .7s ease}
+@keyframes fh-recebe{0%,100%{color:inherit}40%{color:var(--lado-cor,var(--g-tx))}}
+html[data-theme=folha] .fx-terminou .g-no-nome{animation:fh-ok 1.2s ease}
+@keyframes fh-ok{0%,100%{color:inherit}30%,60%{color:var(--g-anda)}}
+html[data-theme=folha] .fx-erro .g-no-face{animation:fh-erro 1s ease}
+@keyframes fh-erro{0%,100%{background:var(--lado-cor,var(--g-tx3))}30%,70%{background:var(--g-trava)}}
+html[data-theme=folha] .fx-pulsa{animation:fh-voce 1.6s ease-in-out}
+@keyframes fh-voce{0%,100%{background:var(--g-s1)}30%,70%{background:color-mix(in srgb,var(--g-rosa) 16%,var(--g-s1))}50%{background:var(--g-s1)}}
+html[data-theme=folha] .fx-feito{animation:fh-voce-ok 1.4s ease-in-out}
+@keyframes fh-voce-ok{0%,100%{background:var(--g-s1)}35%{background:color-mix(in srgb,var(--g-anda) 14%,var(--g-s1))}}
+html[data-theme=folha] .fx-chega{animation:fh-chega 1.2s ease}
+@keyframes fh-chega{0%,100%{opacity:1}40%{opacity:.3}}
+html[data-theme=folha][data-motion=off] .g-no-face,html[data-theme=folha][data-motion=off] .g-no-face::after,html[data-theme=folha][data-motion=off] .g-fx-rot,html[data-theme=folha][data-motion=off] .g-no-nome{animation:none!important}
+/* CEREBRO: numeros em 1 linha de 16, mapa sem borda, "aberto agora" no pe */
+html[data-theme=folha][data-g-new=cerebro] #g-cerebro{display:flex!important;flex-direction:column}
+html[data-theme=folha] #g-cerebro>.g-col-head{order:6;margin:24px 0 0!important;padding-top:16px;border-top:1px solid var(--g-line);justify-content:flex-start;gap:16px}
+html[data-theme=folha] #g-cerebro>.g-col-head .g-h{font:500 13px/1.4 var(--g-sans);color:var(--g-tx3)}
+html[data-theme=folha] #g-cerebro>.g-aberto{order:7;margin-top:8px}
+html[data-theme=folha] #g-cerebro>.g-aberto .g-num{font:600 22px/1 var(--g-sans);min-width:0}
+html[data-theme=folha] #g-cerebro>.g-quatro{order:1;margin-top:0;padding-top:0;border-top:0;gap:8px 24px}
+html[data-theme=folha] #g-cerebro .g-quatro .g-n24{font:400 16px/1.5 var(--g-sans);color:var(--g-tx)}
+html[data-theme=folha] #g-cerebro .g-quatro .g-sec{font:400 16px/1.5 var(--g-sans);color:var(--g-tx2)}
+html[data-theme=folha] #g-cerebro>.g-cerebro-mapa{order:2;margin-top:32px}
+html[data-theme=folha] #g-cerebro>.g-cb-legenda{order:3}
+html[data-theme=folha] #g-cerebro>.fh-cb-legenda{order:3}
+html[data-theme=folha] #g-cerebro>.g-item-aberto{order:4;grid-template-columns:8px minmax(0,1fr) auto}
+html[data-theme=folha] #g-cerebro .g-item-aberto .g-sq{width:8px;height:8px}
+html[data-theme=folha] #g-cerebro .g-cerebro-mapa.fh-cb-on>canvas:not(.fh-cb){opacity:0}
+html[data-theme=folha] #g-cerebro .g-cerebro-mapa.fh-cb-on~.g-cb-legenda{display:none}
+html[data-theme=folha] .g-no.is-voce .g-no-face::after{display:none}
+/* celular: a barra volta a ter 2 linhas (a altura de 56 so vale no largo); sub abas com gutter de 16 */
+@media (max-width:760px){
+  html[data-theme=folha] #g-bar,html[data-theme=folha] #g-bar .g-wrap{height:auto}
+  html[data-theme=folha] .g-tabs,html[data-theme=folha] .g-tab{height:40px}
+  html[data-theme=folha] #g-subnav,html[data-theme=folha][data-g-tab=agora] #g-subnav{margin:16px 0 16px;gap:16px;overflow-x:auto;white-space:nowrap}
+  html[data-theme=folha] #g-subnav::before{font-size:18px;margin-right:4px}
+}

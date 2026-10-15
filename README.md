@@ -1,167 +1,51 @@
 # Lazy Du Agent Panel
 
-[![Watch the getting-started tutorial in Portuguese (1 min 43 s)](public/tutorial-painel/tutorial.pt.png)](public/tutorial-painel/tutorial.pt.mp4)
+A local panel for your Claude Code and Codex sessions: who is waiting for you, who is working now, projects, helpers and usage. It runs on your computer, with no account, no API key and no dependencies. Node 20 or newer.
 
-Videos: [English](public/tutorial-painel/tutorial.en.mp4), [Português](public/tutorial-painel/tutorial.pt.mp4), [Español](public/tutorial-painel/tutorial.es.mp4). Captions: [English](public/tutorial-painel/tutorial.en.vtt), [Português](public/tutorial-painel/tutorial.pt.vtt), [Español](public/tutorial-painel/tutorial.es.vtt). Select the matching language in the panel to open its local player from Welcome or First steps.
+[Português](README.pt-BR.md)
 
-See your Claude Code and Codex sessions side by side in one local panel.
+> Version 3 is a new base. The interface is mostly in Portuguese for now; English and Spanish cover part of the screens. Version 2.2.8 stays available under the `v2.2.8` tag.
 
-**[Open the panel](#open-in-under-a-minute)**
+## Start here
 
-No account or API key. Session metadata is read locally without decoding conversations or tool arguments. Connected task folders and the global rules marker are also read; author messages, version checks, music and external links use optional network features. See [Privacy](#privacy) and [What leaves your computer](#what-leaves-your-computer).
+1. Clone or download this repository into a new folder.
+2. Run `node checar.cjs` to check the setup in plain sentences, then `node servidor.cjs`.
+3. Open http://127.0.0.1:3257. Read Start here and take the one minute tour, or skip it.
+4. Look at Waiting for you, answer in the Claude Code or Codex session, then check Working now.
 
-Fictional example, illustrated with existing v2.1 screenshots:
+To open it again: `painel.bat` on Windows or `sh painel.sh` on Linux. The server listens only on 127.0.0.1. Ctrl+C stops a server started in the terminal.
 
-![Fictional larger team, desktop](docs/v2.1/home-en-1440.png)
-![Fictional larger team, phone](docs/v2.1/home-en-390.png)
+Prefer to try it first? `npm run example` (or `npm run example:win`) opens a fictional state, with no real sessions.
 
-[Português](README.pt-BR.md) · [Lazy Du](https://lazy-du.com)
+## What you get
 
-## What the panel solves
-
-- Took on too much and got lost? See the Claude Code and Codex sessions on this computer side by side, in one place.
-- Can't remember who started what? Team shows who started each session and the helpers of each one.
-- Lost track of an agent? The timeline shows the tools it used and its last activity.
-- Left a session open and forgot? Team separates sessions with recent activity from paused and finished ones.
-- Want to know where things stand right now? WEN opens the current summary in six lines.
-- Spent more than you thought? Usage shows this week's and today's tokens and how much credit has been used.
-
-## Open in under a minute
-
-You need Node.js 20 or later. Download this repository and extract it, then:
-
-~~~sh
-node src/open.cjs
-~~~
-
-The launcher opens your browser at http://127.0.0.1:3251. On Windows you can double-click panel.bat. On macOS, run bash panel.command, or use the command above.
-
-Before choosing, View example opens a clearly labelled fictional example in another tab; your setup stays open. Choose project size, then what you want to follow. First steps shows one next step before the indicators; Skip takes you to your chosen view. Preferences lets you change the mode, language and reading options later.
-
-No account, API key, package installation or project configuration is needed. Claude Code or Codex on this computer provides real metadata. An empty profile falls back to a clearly labelled fictional example when its scan finishes. You can choose either example at any time under More: one person or a larger team.
-
-For an isolated example without reading local sessions:
-
-~~~sh
-node src/open.cjs --demo
-~~~
-
-The server runs locally on this computer. Close panel in the footer stops a launcher with desktop shutdown enabled. Closing a browser tab alone leaves the server running. Ctrl+C stops a source server.
-
-## If an AI runs the command
-
-This is a local server. Run it once: the launcher keeps the server in the background. If port 3251 already answers with this version, only open http://127.0.0.1:3251. You can close the terminal; use Close panel in the footer to stop the server. Add --lang pt for Portuguese messages or --lang es for Spanish.
-
-Close the panel in the footer before updating it, then run git pull in your panel folder and open it again.
-
-## What leaves your computer
-
-Metadata and preferences stay local. Author messages are off by default and fetch the public file only after you allow them. Music and external links open only after a click. Feedback opens an issue with fixed text; you decide whether to submit it on GitHub. Check for a new version requests only the official repository's public package.json, on click, without sending metadata. Installation and updates are never automatic. The page blocks external connections outside these permitted features.
-
-To disable author messages, version checks, music, feedback and external links:
-
-~~~sh
-node src/open.cjs --offline
-~~~
-
-If an online panel already uses that port, close it from its footer before opening offline mode.
-
-## Three modes
-
-| Mode | Home overview |
-| --- | --- |
-| BEGINNER | Up to two agents, your next step first |
-| EXPLORER | Up to six agents, a small team |
-| PRO | The full project and available agents |
-
-All modes retain access to Team and its known parent relationships, Sessions, Usage, Queue and Feed your AI. The mode changes the home overview; it does not create, stop or send instructions to agents.
-
-The home has one recent-activity count and six short lines. A recent session is observed activity, not proof that a process is still running. An ended conversation is not a delivered task. A completed task needs a recorded completion date; fictional examples label their simulated progress. Missing credit is Not available. Credit percentages say whether they are used or remaining. Tokens and credit are separate units.
-
-Team shows you on top and Claude Code and Codex side by side, with each session and the helpers its metadata links to. Wires carry small dots in the direction of who sent, in the sender's color; idle wires stay still, and Motion off or reduced motion shows no dots. Click a wire to read who works with whom, in plain words.
-
-Sessions shows one column per session with metadata only: state, current action, tools, model, tokens and project. It does not read or send messages. Usage starts with a one-line summary, then the week total, cups, the playful water estimate and credit rings; How we calculate explains every number.
-
-AUTOMATE copies a routine plan with the instruction for your AI. Copying the plan does not start a background agent. ACCELERATE has gears and steps; each one copies a text your AI can apply. Marking a step only records it on this panel.
-
-## Teach your AI and the bell
-
-Teach your AI copies optional working rules with the instruction for your AI, which saves them in your global ~/.claude/CLAUDE.md or ~/.codex/AGENTS.md and confirms in one line. Another button copies the text to remove them.
-
-### Exact copied rules (Claude Code, all projects)
-
-~~~text
-Save the rules below in my global ~/.claude/CLAUDE.md so they apply to all my projects. Put them in a section that starts with the title "## Lazy Du Agent Panel". If that section already exists, replace only that section: its title line and the lines starting with "- " right below it. Create the file if it does not exist. Do not delete or change anything else. Then confirm in one line. If you cannot reach my home folder from here (for example, in a cloud session), say so in one line and stop.
-
-## Lazy Du Agent Panel: my working rules
-- Coordinate: the AI where I start the work coordinates and splits it into tasks; the other AI checks the plan.
-- Write code: Claude Code and Codex in parallel on independent tasks (tasks that touch the same files go one after another), with the strongest model and high effort.
-- Review: the other AI reviews each change; nobody reviews its own work.
-- Analyze and measure: a smaller model with low effort.
-- Ship to production: only after my explicit ok, by the AI that runs this project's safest checks.
-- Write public text: one AI writes, the other reviews, and I approve before it goes out.
-- In projects that have a tasks/ folder, keep one Markdown file per task there.
-- Phases: new, open, doing, ready, review, released, done. When a task is finished, set phase: done and add completed_at: with the ISO date and time.
-- Questions that need my decision go in tasks/decisions.md as numbered headings, like ## 1. Which music fits the menu? Add DONE once I answer.
-- When you start a helper, pick its model and effort by this table, when this tool lets you: coordinate, the strongest model, high or extra high effort; write code, the strongest model, high effort; review security or money, the strongest model, extra high effort, in a clean session, never the one that wrote it; review text, the strongest model, high effort; measure and count, a smaller model, low effort; mechanical task, the smallest model, low effort.
-~~~
-
-
-The bell lists version notes and tips made on this computer, what waits for you and decisions asked by your AIs. Read marks, and the screens you opened (used only to suggest one feature you have not tried, at most one a day), stay in this browser. Author messages are off by default. When you turn them on, or press See author messages, the local server downloads https://raw.githubusercontent.com/tridev360/lazy-du-agent-panel/main/news.json with a plain GET: no identifier, no cookie, a 5 second limit, and at most once a day when on. GitHub sees your IP address like any download. Send feedback opens a new GitHub issue in your browser; nothing is sent until you submit it there.
-
-## Security
-
-If npx asks "Ok to proceed? (y)", it is asking permission to download and run this package. Check the repository and version first. "npm warn skipping integrity check for git dependency" is a warning for a package fetched directly from GitHub. To stay on a chosen version, use its tag. A command pinned to a commit or tag keeps that version until you change the command.
-
-The reader projects a fixed allowlist of metadata from ~/.claude/projects and ~/.codex/sessions: timestamps, hashed session identifiers, known parents, model, effort, project labels, tool names and counts, token counters and available credit windows. Conversation bodies and tool arguments are never decoded. It does not read .env, auth.json or credential files.
-
-The panel stores its own configuration and projected metadata cache in ~/.lazy-du-panel/. Browser choices stay in localStorage. Connecting a task folder lets it read the Markdown task headings and fields documented below. It never edits your AI instruction files: Teach your AI copies a request, and your AI can save those rules only after you approve its file edit.
-
-The server binds to 127.0.0.1:3251 and checks Host and Origin; the page uses a Content Security Policy. The server's two public download destinations are the author's news.json (off until enabled or clicked) and package.json (version check on click). Optional music and external links open only on click. No session metadata is sent. Use --offline to disable these features.
-
-To keep a version, use a tagged checkout. Updating is always your choice.
+- Now: what waits for you, agents working now and the age of each reading. A missing reading shows "?" with the fix, never an invented zero.
+- Flow: coordinator, sessions and helpers in one vertical view, with who sends and who receives.
+- Ideas: ideas with votes and a one tap decision. Optional reviewers ("councillors") give a verdict before you decide.
+- Brain: your CLAUDE.md, memory, agents and rules, when you allow those sources.
+- Schedule, deliveries, cards and queue when you connect an optional state folder (see `metodo/GUIA.md`).
+- WEN: a one line per front summary with progress, minutes left and who works now.
+- Grid, Book and Sheet themes. Motion respects reduced motion.
 
 ## Privacy
 
-To find task folders, it also checks whether a tasks folder exists in the project folders of your sessions. It reads only the .md files of the folder you connect. To identify the project, it also checks the session folder and folders above it for the existence of .git and package.json. This search only checks whether they exist, without reading their contents.
+- Session reading is metadata only: known scalar fields from the records. Messages and tool outputs are discarded; private files, links, `.credentials.json` and `auth.json` are not opened.
+- Conversation view, voice, music and the research log start off and are turned on only by your choice.
+- Nothing is sent out of your computer, with two opt-in exceptions: Ask (uses your Codex) under Decide > Council runs your installed Codex, read only, with the idea text, only when you click; the lofi radio loads YouTube only if you add radios to `estado/lofi.json` and press play.
+- Names you list in `config/nomes-ocultar.json` are masked in every response.
 
-To check off First steps, it also opens ~/.claude/CLAUDE.md and ~/.codex/AGENTS.md only to see whether a line starts with "## Lazy Du Agent Panel". It keeps only yes or no and never shows or sends the rest. It also keeps the global file's last modified time to identify chats started after that change.
+## Optional settings
 
-The server binds to localhost. It reads permitted metadata from the standard .codex/sessions and .claude/projects directories in your own profile: identifiers, known parent identifiers, timestamps, model, effort, tool names and token counters. It projects those fields without decoding conversation bodies or tool arguments. Session identifiers are hashed. Project folder names can appear; full paths stay private in the profile cache so `Connect the tasks of <folder>` can find an already observed task folder. They never appear in the browser snapshot or leave this computer. There is no telemetry or credential requirement: this version sends no usage data.
+| Variable | Default | Use |
+| --- | --- | --- |
+| PAINEL_HOME | your home | folder with .claude and .codex |
+| PAINEL_HOMES | one home | JSON array of homes, or paths separated by semicolons |
+| CLAUDE_CONFIG_DIR | .claude in home | real Claude config folder, with projects/ |
+| CODEX_HOME | .codex in home | real Codex folder, with sessions/ |
+| PAINEL_ROOT | estado-local, if present | another state folder |
+| PAINEL_PORT | 3257 | local port, also `--port 3261` |
+| PAINEL_SO_LEITURA | off | 1 turns off every write to the state |
 
-Usage and preferences stay local. Guidance preferences are stored in ~/.lazy-du-panel/guidance.json; dismissing a notice type and First steps progress stay in browser localStorage. The panel cache contains projected metadata; upgrading to this version invalidates the older conversation cache. If an older version left a .panel-cache folder in the panel folder, you can delete that old cache. Acceleration preferences are stored in .lazy-du-panel/acceleration.json under your profile. A corrupt saved file displays an error without overwriting it.
+## License
 
-In First steps, `Connect the tasks of <folder>` connects a tasks folder that already exists; `<folder>` is the project folder name. Each step can take a few minutes to check off because reading and cached checks update separately.
-
-Connect my task folder, in Queue, copies a text that has your AI create the tasks folder in your project. The panel reads its .md files. Reference format:
-
-~~~md
----
-phase: doing
----
-# Draw the menu
-~~~
-
-Phases: new, open, doing, ready, review, released and done. Optional header fields: title, owner, executor (claude or codex), project, deadline, started_at and completed_at (ISO dates). A finished task counts as a delivery only with completed_at. Files without the header are skipped. An optional decisions.md lists one pending decision per numbered heading, such as ## 1. Which music fits the menu? Headings marked DONE are skipped. No external state service is required.
-
-English, Portuguese and Spanish are available. Motion off and reduced-motion settings are respected. Optional music connects to its provider only after your click.
-
-## Validation
-
-~~~sh
-node --test --test-concurrency=1 test/*.test.cjs
-~~~
-
-For browser validation, use an already installed Playwright Core and Chromium in an isolated worker:
-
-~~~sh
-node tools/validate-public.cjs --playwright /path/to/playwright-core --browser /path/to/chromium --out /path/to/output
-~~~
-
-OUTPUT_DIR is another way to choose the output directory. PLAYWRIGHT_MODULE and CHROMIUM_PATH can replace the arguments. The script writes tests.txt, validation.json and fictional captures in 1440, 768, 390 and 375 pixels. It uses temporary empty profiles and synthetic metadata, never your real sessions. A failed test keeps the exit code nonzero even if screenshots were captured for review.
-
-The portable Windows build remains separate from source use. It needs Node 24 on the build machine and isolated postject tooling. See tools/build-windows.cjs. No executable is included in this source tree; source use needs Node.
-
-Author: github.com/tridev360 · X @hallstrid
-
-MIT license.
+MIT. See [LICENSE](LICENSE). Bundled fonts (Geist, Inter, JetBrains Mono, Silkscreen) keep their own OFL licenses in `letras/`.

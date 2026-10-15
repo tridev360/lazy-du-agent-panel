@@ -1,0 +1,9 @@
+/* Lugares da Home: ACELERAR no topo (ao lado do WEN), COORDENADOR (#coordenador-pb-bar do PB) entre a sala e a Home, so no Inicio,
+   e o que precisa de voce (data-pc-cards do PC) na coluna da direita. A grade do Inicio fica no inicio-clean.css. */
+.gancho{min-width:0}
+.gancho[hidden]{display:none!important}
+.gancho:empty{display:none}
+.gancho-coordenador{margin:0 0 16px}
+html:not([data-painel-tab="home"]) .gancho-coordenador{display:none}
+.gancho-coordenador:has(> #coordenador-pb-bar:empty),.gancho-cards:has(> [data-pc-cards]:empty){display:none}
+@media(max-width:760px){.gancho-coordenador{margin-bottom:16px}}

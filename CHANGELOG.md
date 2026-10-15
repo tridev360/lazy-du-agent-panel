@@ -1,5 +1,14 @@
 # Changelog
 
+## 3.0.0
+
+- New base, rebuilt view by view: Now, Flow, Ideas, Brain, Schedule, WEN and the Grid, Book and Sheet themes.
+- Starts with `node servidor.cjs` (or `npm start`); `node checar.cjs` checks the setup first. The old `src/panel.cjs` entry and the `lazy-du-panel` command are gone.
+- Optional state folder for cards, schedule, deliveries and ideas, with the method guide in `metodo/`.
+- Fictional example with `npm run example`, no real sessions.
+- Conversation view, voice, music and research log start off; session reading stays metadata only.
+- Interface mostly in Portuguese for now. Version 2.2.8 stays under the `v2.2.8` tag.
+
 ## 2.2.8
 
 - Replace the getting-started tutorials with videos recorded on the current welcome flow.

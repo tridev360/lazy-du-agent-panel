@@ -1,0 +1,29 @@
+{
+  "atualizadoEm": "2025-03-14T15:25:00.000Z",
+  "entregas": [
+    {
+      "id": "bot-exemplo",
+      "nome": "Limites do bot",
+      "projeto": "Bot de exemplo",
+      "dono": "Claude",
+      "passos": [
+        {
+          "nome": "Teste que falha",
+          "peso": 1,
+          "feito": true
+        },
+        {
+          "nome": "Correção e teste verde",
+          "peso": 2,
+          "feito": false
+        },
+        {
+          "nome": "Você decide o próximo passo",
+          "peso": 1,
+          "feito": false,
+          "dependeDele": true
+        }
+      ]
+    }
+  ]
+}

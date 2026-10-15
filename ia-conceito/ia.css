@@ -1,0 +1,63 @@
+/* Modulo IA (proposta PAINEL-IA 02/10): base comum aos 3 conceitos.
+   Tokens do painel; 1 destaque (o rosa) na acao principal e no progresso; espaco em 4/8/12/16/24/32/48;
+   letra 12 (rotulo), 13 (texto para colar), 14 (texto), 22 (titulo), 40 (numero). So transform e opacity animam. */
+html.iac-on #ia-tips{display:none!important}
+.iac{--iac-card:#141419;--iac-fundo:#0e0e12;--iac-linha:#303038;--iac-linha2:#24242b;--iac-mudo:#a6a6b2;--iac-tinta:#fff;--iac-rosa:var(--pink,#ff2e7e);--iac-mono:'Cascadia Mono',Consolas,ui-monospace,monospace;
+  max-width:1080px;margin:24px auto 0;padding:0 0 96px;color:var(--iac-tinta);font-family:var(--body,'Space Grotesk','Segoe UI',system-ui,sans-serif);font-size:14px;line-height:1.5;text-align:left}
+.iac *,.iac *::before,.iac *::after{box-sizing:border-box}
+.iac h2,.iac h3,.iac h4,.iac p,.iac ul,.iac ol,.iac figure{margin:0;padding:0}
+.iac ul,.iac ol{list-style:none}
+.iac img{display:block}
+.iac-cartao{border:1px solid var(--iac-linha);border-radius:20px;background:var(--iac-card)}
+.iac button{font:inherit;color:inherit;letter-spacing:normal;text-transform:none;box-shadow:none}
+.iac button:focus-visible,.iac summary:focus-visible{outline:2px solid var(--iac-rosa);outline-offset:3px}
+
+/* a acao principal (uma por tela) */
+.iac .iac-primario{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:48px;margin:0;padding:0 24px;border:0;border-radius:12px;background:var(--iac-rosa);color:#08080a;font-size:14px;font-weight:700;line-height:1.2;cursor:pointer;transition:transform .12s ease,opacity .12s ease}
+.iac .iac-primario:hover{opacity:.92}
+.iac .iac-primario:active{transform:translateY(1px)}
+.iac .iac-primario.is-feito{background:#ff2e7e24;color:var(--iac-rosa)}
+/* copiar de cada item (secundario) */
+.iac .iac-copiar{display:inline-flex;align-items:center;justify-content:center;gap:4px;min-width:88px;min-height:40px;margin:0;padding:0 16px;border:1px solid var(--iac-linha);border-radius:10px;background:transparent;color:var(--iac-tinta);font-size:12px;font-weight:600;line-height:1.2;white-space:nowrap;cursor:pointer;transition:border-color .12s ease,background-color .12s ease}
+.iac .iac-copiar:hover{border-color:var(--iac-rosa)}
+.iac .iac-copiar.is-feito{border-color:transparent;background:#ff2e7e1f;color:var(--iac-rosa)}
+.iac .is-feito .iac-copiar-texto::before{content:'✓ '}
+/* texto de ligacao (abrir, ver mais) */
+.iac .iac-link{display:inline-flex;align-items:center;gap:8px;min-height:40px;margin:0;padding:0;border:0;background:transparent;color:var(--iac-mudo);font-size:12px;cursor:pointer}
+.iac .iac-link:hover{color:var(--iac-tinta)}
+
+/* o texto que vai para a IA */
+.iac-colar{margin:0;padding:12px 16px;border:1px solid var(--iac-linha2);border-radius:12px;background:var(--iac-fundo);color:#e9e9f0;font:400 13px/1.6 var(--iac-mono);white-space:pre-wrap;overflow-wrap:anywhere;user-select:text}
+
+.iac-status{margin:12px 0 0;font-size:12px;line-height:1.5;color:var(--iac-mudo)}
+.iac-status[hidden]{display:none}
+.iac-status.is-ok{color:var(--iac-tinta)}
+.iac-status.is-erro{color:#ffac62}
+.iac-chip{display:inline-flex;align-items:center;height:24px;padding:0 8px;border:1px solid #ff2e7e66;border-radius:999px;color:var(--iac-rosa);font-size:12px;font-weight:600;line-height:1;white-space:nowrap}
+
+/* vazio, erro e carregando */
+.iac-vazio{display:grid;gap:16px;justify-items:start;padding:32px;color:var(--iac-mudo)}
+.iac-esqueleto{display:grid;gap:12px;padding:32px}
+.iac-osso{display:block;height:16px;border-radius:8px;background:linear-gradient(90deg,#1b1b21 0%,#24242c 50%,#1b1b21 100%);background-size:200% 100%;animation:iac-osso 1.4s linear infinite}
+.iac-osso:first-child{width:40%;height:24px}
+.iac-osso:nth-child(2){width:72%}
+.iac-osso:nth-child(3){width:64%}
+@keyframes iac-osso{to{background-position:-200% 0}}
+.iac-escondido{position:fixed;left:-9999px;top:0;opacity:0}
+
+/* recompensa na hora da acao */
+.iac [data-iac-agente]{position:relative}
+@keyframes iac-pop{0%{transform:scale(.4);opacity:0}55%{transform:scale(1.2);opacity:1}100%{transform:scale(1);opacity:1}}
+@keyframes iac-pulo{0%,100%{transform:translateY(0)}35%{transform:translateY(-10px)}65%{transform:translateY(0) scale(1.04,.96)}}
+@keyframes iac-sobe{0%{transform:translateY(8px);opacity:.2}100%{transform:none;opacity:1}}
+@keyframes iac-mais{0%{transform:translate(-50%,0);opacity:0}20%{opacity:1}100%{transform:translate(-50%,-32px);opacity:0}}
+@keyframes iac-brilho{0%{transform:rotate(var(--iac-angulo)) translateY(0) scale(.4);opacity:1}100%{transform:rotate(var(--iac-angulo)) translateY(-72px) scale(1);opacity:0}}
+.iac .iac-ganhou .iac-marca{animation:iac-pop .45s cubic-bezier(.2,.8,.3,1.25)}
+.iac .iac-usou .iac-chip{animation:iac-pop .5s cubic-bezier(.2,.8,.3,1.25)}
+.iac [data-iac-agente].iac-pulo{animation:iac-pulo .6s ease}
+.iac [data-iac-conta].iac-subiu{animation:iac-sobe .35s ease-out}
+.iac-mais{position:absolute;left:50%;top:-8px;z-index:2;color:var(--iac-rosa);font-size:14px;font-weight:700;pointer-events:none;animation:iac-mais .8s ease-out forwards}
+.iac-brilho{position:absolute;left:50%;top:50%;z-index:2;margin:-8px 0 0 -6px;color:var(--iac-rosa);font-size:14px;line-height:1;pointer-events:none;animation:iac-brilho .9s ease-out forwards}
+html[data-motion="off"] .iac,html[data-motion="off"] .iac *{animation:none!important;transition:none!important}
+@media(prefers-reduced-motion:reduce){.iac,.iac *{animation:none!important;transition:none!important}}
+@media(max-width:760px){.iac{margin-top:16px;padding-bottom:120px}.iac .iac-copiar{min-height:44px}.iac-vazio,.iac-esqueleto{padding:24px}}

@@ -1,0 +1,65 @@
+<!doctype html>
+<html lang="pt-BR" data-theme="grade">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <meta name="color-scheme" content="dark">
+  <title>Conselho</title>
+  <link rel="stylesheet" href="/letras/letras.css">
+  <link rel="stylesheet" href="/estilo.css">
+  <script src="/cliente.js" defer></script>
+</head>
+<body>
+  <div class="shell">
+    <header class="topbar">
+      <div class="brand"><span class="brand-seal" aria-hidden="true">C</span><span><strong>Conselho</strong><small>O conselho aconselha. Você decide.</small></span></div>
+      <nav class="mode-tabs" aria-label="O que decidir">
+        <button id="mode-fila" data-mode="fila" aria-pressed="true">Decidir <b id="fila-count">0</b></button>
+        <button id="mode-revisao" data-mode="revisao" aria-pressed="false">Rever aceitas <b id="review-count">0</b></button>
+      </nav>
+      <div class="owner-stats" aria-label="Seu dia">
+        <span class="stat"><b id="today">0</b><small>hoje</small></span>
+        <span class="stat"><b id="streak">0</b><small>seguidas</small></span>
+        <span class="stat batch"><span id="batch-dots" class="batch-dots" aria-hidden="true"></span><small id="batch-label">meta 0/10</small></span>
+        <span id="achievement" class="achievement" hidden></span>
+      </div>
+      <div class="top-actions">
+        <button id="undo-top" class="ghost-btn" disabled title="Desfazer a última decisão (Z)">Desfazer <kbd>Z</kbd></button>
+        <button id="sound" class="ghost-btn" aria-pressed="false" title="Som curto e baixo">Som: não</button>
+        <button id="motion" class="ghost-btn" aria-pressed="true" title="Animações">Movimento: sim</button>
+      </div>
+    </header>
+    <div id="error" class="error" role="alert" hidden></div>
+    <main class="layout">
+      <section class="stage" aria-label="A ideia atual">
+        <section id="projects" class="projects" aria-labelledby="projects-heading">
+          <div class="projects-head"><h2 id="projects-heading">Por projeto</h2><span class="panel-note">Equipe online primeiro. Ideia aceita fica anotada para a equipe responsável organizar a execução.</span></div>
+          <div id="project-bar" class="project-bar" role="group" aria-label="Filtrar a fila por projeto"></div>
+          <div id="lote-panel" class="lote-panel" hidden></div>
+        </section>
+        <section id="review-panel" class="review-panel" aria-labelledby="review-heading" hidden>
+          <h2 id="review-heading">Rever aceitas</h2>
+          <p>Ideias que você aceitou sem ver as ressalvas. Confira e escolha de novo.</p>
+          <div id="review-list" class="review-list"></div>
+        </section>
+        <article id="idea-card" class="idea-card" aria-busy="true"><p class="loading">Chamando o conselho para a mesa…</p></article>
+      </section>
+      <aside class="side">
+        <section class="table-panel" aria-labelledby="table-heading">
+          <div class="panel-head"><h2 id="table-heading">A mesa</h2><span id="table-note" class="panel-note">Acertou ganha 10. Errou perde 5.</span></div>
+          <div id="round-table" class="round-table"></div>
+        </section>
+        <section class="ranking-panel" aria-labelledby="ranking-heading">
+          <div class="panel-head"><h2 id="ranking-heading">Placar</h2>
+            <div class="ranking-tabs" role="group" aria-label="Quem aparece no placar"><button data-filter="conselheiro" aria-pressed="true">Conselho</button><button data-filter="idealista" aria-pressed="false">Idealistas</button><button data-filter="todos" aria-pressed="false">Todos</button></div>
+          </div>
+          <ol id="ranking" class="ranking-list"></ol>
+          <p class="ranking-foot">Seta: subiu ou desceu na última decisão. Número com ×: acertos seguidos.</p>
+        </section>
+      </aside>
+    </main>
+    <footer class="keys"><span><kbd>1</kbd><kbd>2</kbd><kbd>3</kbd><kbd>4</kbd> escolher</span><span><kbd>P</kbd> pular</span><span><kbd>Z</kbd> desfazer (o lote inteiro volta junto)</span><span><kbd>Enter</kbd> próxima ou confirmar</span><span><kbd>Esc</kbd> voltar</span><span class="keys-end">Você tem a última palavra.</span></footer>
+  </div>
+  <div id="announcement" class="sr-only" aria-live="polite" aria-atomic="true"></div>
+</body>
+</html>

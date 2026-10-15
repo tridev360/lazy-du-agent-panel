@@ -1,0 +1,82 @@
+/* FUSAO DO FLUXO (10/10). So o Fluxo: resumo, consumo, fechadas, trilho com Entregas e LED, e o botao Acelerar. Cores so pelos tokens --g-* (os 3 temas herdam). */
+#fz-fusao{display:none}
+html[data-g-new=fluxo] #fz-fusao{display:block;min-width:0;margin:0 0 8px}
+#fz-fusao *{box-sizing:border-box}
+#fz-topo{display:grid;grid-template-columns:minmax(0,1.15fr) minmax(0,1.45fr) minmax(0,.6fr);gap:16px;margin:0 0 16px;min-width:0}
+#fz-corpo{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:16px;align-items:start;min-width:0}
+#fz-corpo > #g-fluxo{min-width:0}
+#fz-lado{display:grid;gap:16px;min-width:0}
+.fz-caixa{min-width:0;padding:16px;border:1px solid var(--g-line);background:var(--g-s1);color:var(--g-tx)}
+.fz-h{margin:0 0 12px;font:var(--g-p16)/1 var(--g-pix);color:var(--g-tx);text-transform:uppercase;letter-spacing:0}
+.fz-lab{font:var(--g-p16)/1 var(--g-pix);color:var(--g-tx2);text-transform:none;white-space:nowrap}
+.fz-sub{font:400 13px/20px var(--g-sans);color:var(--g-tx2);overflow-wrap:anywhere}
+.fz-sol{display:block;font:400 12px/18px var(--g-sans);color:var(--g-tx2);overflow-wrap:anywhere}
+.fz-nota{margin:12px 0 0;font:400 12px/18px var(--g-sans);color:var(--g-tx2)}
+.fz-vazio{margin:0;font:400 13px/20px var(--g-sans);color:var(--g-tx2);overflow-wrap:anywhere}
+.fz-tres{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.fz-cel{display:grid;gap:6px;align-content:start;min-width:0}
+.fz-val{font:var(--g-p24)/1 var(--g-pix);color:var(--g-tx)}
+.fz-cel.is-sem .fz-val{color:var(--g-tx2)}
+.fz-cel.is-zero .fz-val{color:var(--g-anda)}
+.fz-cel.is-n .fz-val{color:var(--g-tx)}
+.fz-uso{display:grid;gap:10px;margin:0;padding:0;list-style:none}
+.fz-lin{display:grid;grid-template-columns:84px minmax(0,1fr) 44px auto;gap:8px 10px;align-items:center;min-width:0}
+.fz-nome{font:400 13px/20px var(--g-sans);color:var(--g-tx);white-space:nowrap}
+.fz-barra{display:block;height:6px;background:var(--g-line);min-width:0}
+.fz-barra-i{display:block;height:100%;background:var(--g-tx2)}
+.fz-lin.is-davez .fz-barra-i{background:var(--g-anda)}
+.fz-pct{font:var(--g-p16)/1 var(--g-pix);color:var(--g-tx);text-align:right}
+.fz-lin.is-sem .fz-pct{color:var(--g-tx2)}
+.fz-vez{font:var(--g-p16)/1 var(--g-pix);color:var(--g-anda);white-space:nowrap}
+.fz-zera{grid-column:2 / -1;font:400 12px/18px var(--g-sans);color:var(--g-tx2)}
+.fz-lin .fz-sol{grid-column:2 / -1}
+.fz-grande{display:block;font:var(--g-p48)/1 var(--g-pix);color:var(--g-tx);margin:0 0 8px}
+.fz-grande.is-texto{font:600 var(--g-p20, 20px)/1.2 var(--g-sans, sans-serif)}
+#fz-entregas .fz-copia{min-width:0;margin:0;padding:0;border:0;background:none}
+#fz-entregas .fz-copia .en-cols{grid-template-columns:minmax(0,1fr);gap:16px}
+#fz-entregas .fz-copia .en-projs{grid-template-columns:minmax(0,1fr);gap:12px}
+#fz-entregas .fz-copia .en-head{margin:0 0 12px}
+#fz-entregas .fz-copia .en-sub{flex:1 1 100%}
+#fz-entregas .fz-copia *{overflow-wrap:anywhere;word-break:normal}
+.fz-cel .fz-sub{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:4;overflow:hidden}
+.fz-led-host{min-width:0;overflow:hidden}
+.fz-led-host .opx{min-width:0;max-width:100%}
+#fz-acao{display:none}
+html.fz-dono #fz-acao{display:flex;justify-content:flex-end;margin:0 0 12px}
+#fz-acelerar{display:none}
+html.fz-dono #fz-acelerar{display:inline-flex;align-items:center;min-height:32px;margin:0;padding:0 12px;border:1px solid var(--g-line);background:transparent;color:var(--g-tx);font:var(--g-p16)/1 var(--g-pix);cursor:pointer;white-space:nowrap}
+html.fz-dono #fz-acelerar.is-espera{color:var(--g-tx2)}
+html.fz-dono #fz-acelerar:disabled{opacity:.6;cursor:default}
+#fz-pulso{margin:0 0 16px;padding:16px;border:1px solid var(--g-line);background:var(--g-s1);color:var(--g-tx);min-width:0}
+#fz-pulso[hidden]{display:none}
+.fz-pulso-topo{display:flex;align-items:center;justify-content:space-between;gap:12px}
+.fz-pulso-l1{margin:0 0 4px;font:400 14px/20px var(--g-sans);color:var(--g-tx)}
+.fz-pulso-resp{margin:2px 0;font:400 13px/20px var(--g-sans);color:var(--g-tx);overflow-wrap:anywhere}
+.fz-pulso-erro{margin:0 0 6px;font:400 13px/20px var(--g-sans);color:var(--g-trava)}
+.fz-pulso-cards{min-width:0;margin-top:12px}
+.fz-fechar{border:1px solid var(--g-line);background:transparent;color:var(--g-tx2);font:var(--g-p16)/1 var(--g-pix);min-height:28px;padding:0 10px;cursor:pointer}
+@media (max-width: 1199px){
+  #fz-corpo{grid-template-columns:minmax(0,1fr)}
+  #fz-topo{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}
+  #fz-topo > #fz-consumo{grid-column:1 / -1;order:3}
+}
+@media (max-width: 760px){
+  html[data-g-new=fluxo] #fz-fusao{display:flex;flex-direction:column;gap:16px}
+  #fz-topo,#fz-corpo,#fz-lado{display:contents}
+  #fz-fusao > #fz-pulso{order:0;margin:0}
+  #fz-topo > #fz-resumo{order:1}
+  #fz-corpo > #g-fluxo{order:2}
+  #fz-topo > #fz-consumo{order:3;grid-column:auto}
+  #fz-topo > #fz-fechadas{order:4}
+  #fz-lado > #fz-entregas{order:5}
+  #fz-lado > #fz-led{order:6}
+  .fz-tres{grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+  .fz-lin{grid-template-columns:72px minmax(0,1fr) 40px auto}
+}
+
+/* LED no trilho estreito do Fluxo, inclusive desktop. */
+.fz-led-host .opx[data-variant=d]{grid-template-columns:minmax(0,1fr)}
+.fz-led-host .opx-mods{grid-template-columns:repeat(auto-fit,minmax(0,1fr));min-width:0}
+.fz-led-host .opx-mod{min-width:0}
+.fz-led-host .opx-leds{grid-template-columns:repeat(var(--cols,4),minmax(0,1fr));padding:4px;gap:2px}
+.fz-led-host .opx-led{width:100%;max-width:14px}

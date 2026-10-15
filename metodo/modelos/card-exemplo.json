@@ -1,0 +1,26 @@
+{
+  "id": "subir-busca-nova",
+  "sessao": "backend",
+  "criado": "2025-03-14T15:20:00.000Z",
+  "tipo": "subida",
+  "perigoso": true,
+  "pergunta": "Posso subir a busca nova (hash d4e5f6a, testes 48/48, revisão CONFERE)?",
+  "opcoes": [
+    {
+      "label": "Subir agora",
+      "descricao": "Testes 48/48 e revisão CONFERE no mesmo hash. Volta, se der errado: hash 9a8b7c6.",
+      "recomendada": true
+    },
+    {
+      "label": "Esperar",
+      "descricao": "Fica para depois do horário de pico. Nada muda no ar."
+    }
+  ],
+  "recomendada": 0,
+  "porque": "Corrige a busca que hoje volta vazia quando a palavra tem acento.",
+  "destrava": "A tarefa de filtros, que depende da busca nova.",
+  "link_sessao": "chat da backend",
+  "respondido": "",
+  "respondidoEm": "",
+  "prova": null
+}

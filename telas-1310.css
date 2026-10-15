@@ -1,0 +1,84 @@
+:is(#panel-council,#panel-brain,#panel-journey){min-height:100vh}
+:is(#panel-council,#panel-brain,#panel-journey) :is(button,summary,input,select,textarea):focus-visible{outline:2px solid var(--pink);outline-offset:3px}
+
+#panel-brain :is(.cb-live summary,.cb-source>summary,.cb-org-memories button){min-height:44px}
+#panel-brain .cb-mod-options label{min-height:44px;min-width:44px;display:flex;align-items:center;gap:8px}
+:is(#panel-council,#panel-brain,#panel-journey):not([hidden]){display:flex;flex-direction:column}
+:is(#panel-council,#panel-brain,#panel-journey)>.ds-summary{order:2}
+
+/* Six readable sizes in the three renewed views; sources keep their own content. */
+html:is([data-painel-tab=council],[data-painel-tab=brain],[data-painel-tab=journey]) :where(#panel-council,#panel-brain,#panel-journey) :where(p,small,span,time,code,label,dt,dd,summary,h3,strong,button){font-size:12px!important}
+#panel-council :is(.cm-proposal h2,.cm-proposal h1){font-size:20px!important;line-height:24px!important}
+#panel-council :is(.cm-card-symbol,.cm-president-gavel),#panel-brain .cb-synapse-icon{font-size:24px!important}
+#panel-council .cm-read-controls>.cm-button:not(.cm-sound),#panel-council .cm-read-tools>summary,#panel-council :is(.cm-proposal-more>summary,.cm-proposal-source>summary){font-size:0!important}
+#panel-council .cm-sound{font-size:24px!important}
+#panel-brain :is(.cb-now-count strong,.cb-stat strong),#panel-journey .jt-number{font-size:48px!important}
+#panel-brain :is(.cb-heading h1,.cb-detail h2),#panel-journey :is(.view-title,h2:not(.jt-title)){font-size:24px!important}
+#panel-brain :is(.cb-heading p,.cb-detail>p),#panel-journey .jt-phrase{font-size:14px!important}
+#panel-journey .jt-title,#panel-brain .cb-org-family strong{font-size:16px!important}
+#panel-council .cm-seat :is(strong,small){line-height:14px!important;overflow-wrap:anywhere}
+@media(max-width:950px){#panel-council .cm-table[data-layout=compact] .cm-choice{grid-template-rows:24px 32px 18px minmax(46px,1fr) 16px 4px}#panel-council .cm-table[data-layout=compact] .cm-effect{line-height:16px;height:32px}#panel-council .cm-table[data-layout=compact] .cm-hold-note{line-height:16px;height:16px}}
+@media(max-width:950px){#panel-council .cm-table[data-layout=compact] .cm-advice{min-height:76px}#panel-council .cm-table[data-layout=compact] .cm-cards{min-height:370px}}
+
+@media(max-width:650px){#panel-council .cm-table[data-layout=compact] .cm-seat{padding-inline:0}#panel-council .cm-table[data-layout=compact] .cm-seat strong{height:28px;line-height:14px!important}}
+
+#panel-council .cm-table[data-layout=compact] .cm-summary{display:-webkit-box!important;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;font-size:12px!important;line-height:16px;margin:0;height:32px}
+#panel-council .cm-table[data-layout=compact] .cm-proposal{min-height:128px;height:128px}
+#panel-council .cm-table[data-layout=compact] .cm-affinity{display:none}
+#panel-brain #cb-map-note{display:none}
+#panel-journey .jt-step{display:none}
+#panel-journey .jt-continue{margin-top:24px}
+#panel-journey .jt-continue>summary{min-height:44px;display:flex;align-items:center;width:fit-content;color:var(--fg);cursor:pointer;border:1px solid var(--line);padding:8px 16px;border-radius:8px}
+#panel-journey .jt-continue[open]>.jt-track{margin-top:24px}
+
+#panel-brain .cb-detail[hidden]{display:none!important}
+#panel-brain .cb-workspace:has(.cb-detail[hidden]){grid-template-columns:minmax(0,1fr)}
+#panel-brain .cb-now{max-width:720px}
+#panel-brain .cb-now-relation{grid-column:1/-1}
+#panel-brain .cb-now-link{grid-column:1/-1;justify-self:start}
+#panel-council .cm-vote-badge{background:transparent;color:var(--ink);border:0}
+#panel-journey>.view-title{display:none}
+@media(min-width:1000px){#panel-journey .jt-track{grid-template-columns:repeat(3,minmax(0,1fr))}}
+
+#panel-brain .cb-map{height:clamp(280px,calc(100svh - 500px),480px)}
+#panel-council .cm-seat strong{overflow-wrap:normal;word-break:normal}
+#panel-council .cm-count-label{display:block;font-size:12px;line-height:14px;font-weight:400}
+#panel-council .cm-votes-key{display:block;text-align:center;font-size:12px;line-height:16px;color:var(--ink);margin:0 0 4px}
+#panel-council .cm-table[data-sealed=true] .cm-choice{background:var(--panel);border-color:var(--line);box-shadow:none}
+#panel-council .cm-table[data-sealed=true] .cm-card-symbol{color:var(--ink)}
+#panel-council .cm-reconsider{background:var(--pink);color:#160911;border-color:var(--pink);font-weight:600}
+
+@media (min-width:651px) and (max-width:950px){#panel-brain .cb-map{height:clamp(280px,calc(100svh - 640px),400px)}}
+#panel-brain .cb-agente span{white-space:nowrap;width:max-content;position:relative;left:50%;transform:translateX(-50%)}
+
+#panel-brain .cb-agente{top:40%}
+@media (max-width:650px){#panel-brain .cb-agente{top:42%}}
+
+@media (min-width:951px){#panel-brain .cb-map{height:clamp(280px,calc(100svh - 520px),480px)}}
+
+/* Initial deep links must use a stylesheet allowed by the server CSP. */
+html[data-painel-tab="council"] .panel-view:not(#panel-council),html[data-painel-tab="brain"] .panel-view:not(#panel-brain),html[data-painel-tab="journey"] .panel-view:not(#panel-journey){display:none!important}
+
+/* r11 Fila > Projetos: abre direto nas entregas por projeto, como o painel de origem. A faixa "Projetos n / Trabalhando n"
+   e os quadros grandes de filtro somem desta vista (o filtro de projeto fica no "Vendo:" do topo). */
+#panel-projects > .up-strip,#panel-projects > #project-strip,html.esq #panel-projects > .up-strip{display:none!important}
+/* a grade ocupa a linha toda com 3 projetos; o titulo longo fica ao lado do icone e quebra dentro dele */
+#en-projetos .en-projs{grid-template-columns:repeat(auto-fit,minmax(300px,1fr))}
+.en-grupo-h{flex-wrap:nowrap;align-items:flex-start}
+.en-grupo-h .en-ic{flex:none;margin-top:2px}
+.en-grupo-t{flex:0 1 auto;min-width:0;overflow-wrap:anywhere}
+.en-grupo-n{flex:0 1 auto;min-width:0}
+/* icone pixel de cada projeto (o telas-1310.js marca data-icone pelo nome); sem marca fica o quadradinho de sempre */
+.en-ic[data-icone] rect{display:none}
+.en-ic[data-icone="loja"]{background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM1 1h1v1h-1zM6 1h1v1h-1zM0 2h1v1h-1zM1 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM0 3h1v1h-1zM7 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1zM0 5h1v1h-1zM7 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM7 6h1v1h-1z'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM1 1h1v1h-1zM6 1h1v1h-1zM0 2h1v1h-1zM1 2h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM0 3h1v1h-1zM7 3h1v1h-1zM0 4h1v1h-1zM2 4h1v1h-1zM5 4h1v1h-1zM7 4h1v1h-1zM0 5h1v1h-1zM7 5h1v1h-1zM0 6h1v1h-1zM1 6h1v1h-1zM2 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM5 6h1v1h-1zM6 6h1v1h-1zM7 6h1v1h-1z'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.en-ic[data-icone="atendimento"]{background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM0 1h1v1h-1zM7 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM0 3h1v1h-1zM7 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM7 4h1v1h-1zM1 5h1v1h-1zM2 5h1v1h-1zM1 6h1v1h-1z'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1h-1zM1 0h1v1h-1zM2 0h1v1h-1zM3 0h1v1h-1zM4 0h1v1h-1zM5 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM0 1h1v1h-1zM7 1h1v1h-1zM0 2h1v1h-1zM2 2h1v1h-1zM4 2h1v1h-1zM6 2h1v1h-1zM7 2h1v1h-1zM0 3h1v1h-1zM7 3h1v1h-1zM0 4h1v1h-1zM1 4h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM6 4h1v1h-1zM7 4h1v1h-1zM1 5h1v1h-1zM2 5h1v1h-1zM1 6h1v1h-1z'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+.en-ic[data-icone="cortes"]{background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1h-1zM1 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM1 1h1v1h-1zM2 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM1 5h1v1h-1zM3 5h1v1h-1zM4 5h1v1h-1zM6 5h1v1h-1zM0 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM1 7h1v1h-1zM2 7h1v1h-1zM5 7h1v1h-1zM6 7h1v1h-1z'/%3E%3C/svg%3E") center/100% 100% no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8' shape-rendering='crispEdges'%3E%3Cpath d='M0 0h1v1h-1zM1 0h1v1h-1zM6 0h1v1h-1zM7 0h1v1h-1zM1 1h1v1h-1zM2 1h1v1h-1zM5 1h1v1h-1zM6 1h1v1h-1zM2 2h1v1h-1zM3 2h1v1h-1zM4 2h1v1h-1zM5 2h1v1h-1zM3 3h1v1h-1zM4 3h1v1h-1zM2 4h1v1h-1zM3 4h1v1h-1zM4 4h1v1h-1zM5 4h1v1h-1zM1 5h1v1h-1zM3 5h1v1h-1zM4 5h1v1h-1zM6 5h1v1h-1zM0 6h1v1h-1zM3 6h1v1h-1zM4 6h1v1h-1zM7 6h1v1h-1zM1 7h1v1h-1zM2 7h1v1h-1zM5 7h1v1h-1zM6 7h1v1h-1z'/%3E%3C/svg%3E") center/100% 100% no-repeat}
+
+/* r11 (G15): filtros da Fila (Prontos, Parados, projetos, Claude, Codex, Com prazo, Precisa de mim) com letra legivel; antes 9 px em caixa de 44 px */
+#panel-queue :is(.filter,.chip){font-size:13px!important;line-height:18px;padding:6px 12px}
+#panel-queue :is(.filter,.chip) :is(.g-nome,b){font-size:inherit}
+/* r11: no celular a coluna "Quem faz" nao parte o nome no meio ("Atendime / nto"); a coluna cresce ate caber a palavra */
+#panel-queue #board td .g-nome{overflow-wrap:normal;word-break:normal;hyphens:none}
+@media (max-width:760px){#panel-queue #board .up-records{table-layout:auto}#panel-queue #board .up-records th:first-child{width:auto}#panel-queue #board .up-records td,#panel-queue #board .up-records td *{overflow-wrap:break-word}#panel-queue #board .up-records td:last-child{white-space:nowrap}}
+/* r11: palavra no lugar do numero ("nenhum") em letra normal, sem a fonte grande dos numeros */
+html.esq .up-strip .up-number.up-palavra,.up-strip .up-number.up-palavra{font-family:var(--g-sans,inherit)!important;font-size:inherit!important;font-weight:600;letter-spacing:normal!important;text-transform:none!important}

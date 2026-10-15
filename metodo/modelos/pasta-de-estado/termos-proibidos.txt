@@ -1,0 +1,5 @@
+# Um termo por linha. O revisor-texto procura cada um (sem diferenciar maiúscula) em todo texto que sai.
+# Troque os exemplos inventados abaixo pelos seus: nome interno do projeto, cliente, servidor, pasta da máquina.
+nome-interno-do-projeto
+cliente-exemplo
+servidor-interno-exemplo

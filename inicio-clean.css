@@ -1,0 +1,153 @@
+/* Inicio clean.
+   3 tamanhos de letra: 12 (rotulo), 14 (texto e titulo), 32 (numero). Espaco em degraus 4/8/16/24/32.
+   1 destaque: o rosa da marca so em "Seu proximo passo" (e no foco do teclado). */
+
+/* ---------- topo: marca, WEN, AUTOMATIZAR, ACELERAR; o resto no menu da engrenagem ---------- */
+html.ic .header-actions{gap:8px;flex-wrap:nowrap}
+html.ic .header-actions>.wen-controls{order:1}
+html.ic #gancho-acelerador{order:2;display:inline-flex;align-items:center;gap:8px}
+html.ic #gancho-acelerador[hidden]{display:none}
+html.ic .header-actions>.local{order:3}
+html.ic .header-actions>.local[data-ok="1"] #status{position:absolute;width:1px;height:1px;margin:-1px;padding:0;border:0;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+html.ic .header-actions>.local[data-ok="0"] i{background:#ffac62}
+html.ic .header-actions>.panel-settings{order:10}
+html.ic #wen-last{display:none}
+html.ic .ic-menu{display:grid;gap:8px;padding-bottom:8px;margin-bottom:4px;border-bottom:1px solid #26262e}
+html.ic .ic-menu #command-trigger,html.ic .ic-menu #lofi-trigger{width:100%;min-height:40px;justify-content:space-between;border:1px solid #34343e;border-radius:8px;background:transparent;color:#fff;font-size:14px;box-shadow:none}
+html.ic .ic-menu #command-trigger kbd{color:#a6a6b2;border-color:#34343e}
+html.ic .ic-menu-row{display:flex;align-items:center;justify-content:space-between;gap:8px;font-size:12px;color:#a6a6b2}
+html.ic .ic-menu-row select{min-height:40px}
+html.ic #panel-settings-options{min-width:216px}
+
+/* ---------- abas: 4 a vista e o resto em Mais ---------- */
+html.ic .tabs-mais{position:relative;display:flex;align-items:center;align-self:stretch}
+html.ic .tabs-mais>summary{display:flex;align-items:center;list-style:none;cursor:pointer;border-radius:8px;padding:8px 11px;font:500 12px var(--body,'Space Grotesk','Segoe UI',sans-serif);color:var(--muted,#a6a6b2);white-space:nowrap;user-select:none}
+html.ic .tabs-mais>summary::-webkit-details-marker{display:none}
+html.ic .tabs-mais>summary::after{content:'';display:inline-block;margin-left:8px;width:6px;height:6px;border-right:1.5px solid currentColor;border-bottom:1.5px solid currentColor;transform:translateY(-3px) rotate(45deg)}
+html.ic .tabs-mais>summary:hover,html.ic .tabs-mais[open]>summary,html.ic .tabs-mais>summary.is-active{color:#fff;background:#ffffff0a}
+html.ic .tabs-mais>summary:focus-visible{outline:2px solid var(--pink,#ff2e7e);outline-offset:3px}
+html.ic .tabs-mais-lista{position:absolute;top:calc(100% + 4px);left:0;z-index:40;display:grid;gap:4px;padding:8px;min-width:184px;border:1px solid #34343e;border-radius:12px;background:#111114;box-shadow:0 8px 24px #0008}
+html.ic .tabs-mais-lista button{width:100%;text-align:left}
+
+/* ---------- sala: numero de agentes + 6 linhas ---------- */
+html.ic .sala{display:grid;grid-template-columns:184px minmax(0,1fr);column-gap:24px;padding:16px 24px;margin-bottom:16px}
+html.ic:not([data-painel-tab="home"]) .sala{display:none}
+html.ic .sala-corpo{min-width:0}
+html.ic .sala-agentes{display:flex;flex-direction:column;justify-content:center;align-items:flex-start;gap:8px;margin:0;padding:8px 24px 8px 0;border:0;border-right:1px solid #26262e;border-radius:0;background:transparent;color:#fff;text-align:left;font:inherit;cursor:pointer}
+html.ic .sala-agentes strong{font-size:32px;font-weight:650;line-height:1;font-variant-numeric:tabular-nums}
+html.ic .sala-agentes span{font-size:12px;color:#a6a6b2;line-height:1.4}
+html.ic .sala-agentes:hover span{color:#fff}
+html.ic .sala-agentes .ic-pelo-menos{font-weight:400}
+html.ic .sala-agentes:focus-visible{outline:2px solid var(--pink,#ff2e7e);outline-offset:4px;border-radius:8px}
+html.ic .sala-topo h2{font-size:14px}
+html.ic .sala-linha[data-key="proximo"] .sala-texto{color:var(--pink,#ff2e7e)}
+html.ic .sala-linha:not(.sala-sem-detalhe)>summary:hover .sala-texto{color:#fff;text-decoration:underline;text-underline-offset:4px}
+html.ic .sala-linha[data-key="proximo"]:not(.sala-sem-detalhe)>summary:hover .sala-texto{color:var(--pink,#ff2e7e)}
+
+/* ---------- grade do Inicio: quem trabalha | o que precisa de voce + quanto gastei ---------- */
+html.ic .home-view{grid-template-columns:minmax(0,1.45fr) minmax(320px,1fr);grid-template-rows:auto 1fr;align-items:start;height:auto;min-height:0;max-height:none;gap:16px}
+html.ic .home-view>.home-stage,html.ic .home-view>#manage-wait,html.ic .home-view>#home-deadline{display:none!important}
+html.ic .home-view>#inicio-sessoes{grid-column:1;grid-row:1;min-height:0}
+html.ic .home-view>#home-spend{grid-column:1;grid-row:2;min-height:0}
+html.ic .home-view>#gancho-cards{grid-column:2;grid-row:1/span 2}
+
+/* o que precisa de voce: os cards (botoes) e os pedidos do chat (cada um com o seu botao); um titulo so, com a soma */
+html.ic #gancho-cards{padding:16px 24px;gap:8px}
+html.ic .ic-precisa{display:flex;align-items:center;gap:8px;margin:0 0 8px;font-size:14px;font-weight:650;line-height:1.5}
+html.ic .ic-precisa-n{display:inline-grid;place-items:center;min-width:24px;height:24px;padding:0 8px;border-radius:12px;background:#ffffff14;font-size:12px;font-variant-numeric:tabular-nums}
+html.ic #gancho-cards .pcc{padding:0;border:0;background:transparent}
+html.ic #gancho-cards .pcc-topo,html.ic #gancho-cards .pcc-bloco__titulo,html.ic #gancho-cards .pcc-bloco__sub,html.ic #gancho-cards .pcc-vazio__s{display:none}
+html.ic #gancho-cards .pcc:has(.pcc-pedido) .pcc-vazio{display:none}
+html.ic #gancho-cards .pcc-vazio{padding:8px 0;border:0;background:transparent}
+
+/* quem esta trabalhando: 1 linha por sessao */
+html.ic .inicio-sessoes{padding:16px 24px;gap:8px}
+html.ic .inicio-sessoes h2{margin:0 0 8px;font-size:14px;font-weight:650;line-height:1.5}
+html.ic #inicio-sessoes-lista{list-style:none;margin:0;padding:0;display:grid;gap:4px}
+html.ic .ic-vazio{font-size:14px;color:#a6a6b2;padding:8px 0}
+html.ic .ic-sessao{display:grid;grid-template-columns:28px minmax(0,1fr) auto;align-items:center;gap:16px;width:100%;margin:0;padding:8px;border:0;border-radius:12px;background:transparent;color:#fff;text-align:left;font:inherit;cursor:pointer}
+html.ic .ic-sessao:hover{background:#ffffff08}
+html.ic .ic-sessao:focus-visible{outline:2px solid var(--pink,#ff2e7e);outline-offset:2px}
+html.ic .ic-retrato{width:28px;height:28px;border-radius:50%;object-fit:cover;background:#1d1d24;box-shadow:0 0 0 2px var(--cor-claude,#ffac62)}
+html.ic .ic-sessao[data-family="codex"] .ic-retrato{box-shadow:0 0 0 2px var(--cor-codex,#4f9dff)}
+html.ic .ic-sessao-texto{display:flex;flex-direction:column;gap:4px;min-width:0}
+html.ic .ic-sessao-nome{font-size:14px;font-weight:650;line-height:1.3}
+html.ic .ic-sessao-faz{font-size:12px;color:#a6a6b2;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html.ic .ic-sessao-faz:empty{display:none}
+html.ic .ic-sessao-info{display:flex;flex-direction:column;align-items:flex-end;gap:4px;font-size:12px;color:#a6a6b2;white-space:nowrap}
+html.ic .ic-sessao-linha{display:inline-flex;align-items:center;gap:8px}
+html.ic .ic-ponto{display:inline-block;width:8px;height:8px;border-radius:50%;background:#55555f}
+html.ic .ic-ponto[data-state="on"]{background:var(--cor-claude,#ffac62)}
+html.ic .ic-sessao[data-family="codex"] .ic-ponto[data-state="on"]{background:var(--cor-codex,#4f9dff)}
+html.ic .ic-ponto[data-state="unknown"]{background:transparent;box-shadow:inset 0 0 0 1.5px #a6a6b2}
+html.ic .ic-sessao-entrega{color:#fff}
+
+/* quanto gastei: so os 2 numeros da semana (tokens e agua ficam na aba Consumo) */
+html.ic #home-spend{padding:16px 24px}
+html.ic #home-spend-title{font-size:14px;margin:0 0 8px}
+html.ic #home-spend-facts{grid-template-columns:1fr 1fr;gap:16px}
+html.ic #home-spend-facts>div:nth-child(n+3),html.ic #home-spend .home-spend-note,html.ic #home-spend small{display:none}
+html.ic #home-result{margin:8px 0 0;font-size:12px;color:#a6a6b2}
+html.ic #home-spend-facts dt{font-size:12px}
+html.ic #home-spend-facts dd{font-size:32px;line-height:1.1}
+html.ic #home-spend-facts [data-lado="codex"] dd{color:var(--cor-codex,#4f9dff)}
+html.ic #home-spend-facts [data-lado="claude"] dd{color:var(--cor-claude,#ffac62)}
+html.ic #home-spend .home-text-link{margin-top:8px;padding-top:0}
+
+/* ---------- tablet e celular ---------- */
+@media(max-width:1100px) and (min-width:761px){html.ic .home-view{grid-template-columns:minmax(0,1fr) minmax(0,1fr)}}
+@media(max-width:760px){
+  html.ic .sala{grid-template-columns:1fr;row-gap:8px;padding:16px}
+  html.ic .sala-agentes{flex-direction:row;justify-content:flex-start;align-items:baseline;gap:8px;width:100%;padding:0 0 8px;border-right:0;border-bottom:1px solid #26262e}
+  html.ic .home-view{grid-template-columns:1fr;gap:16px}
+  html.ic .home-view>#inicio-sessoes,html.ic .home-view>#gancho-cards,html.ic .home-view>#home-spend{grid-column:1;grid-row:auto}
+  html.ic #gancho-cards{padding:16px}
+  html.ic .home-view>#gancho-cards{order:1}
+  html.ic .home-view>#inicio-sessoes{order:2;padding:16px}
+  html.ic .home-view>#home-spend{order:3;padding:16px}
+  html.ic .ic-sessao{gap:8px;padding:8px 4px}
+  html.ic .tabs-mais-lista{left:auto;right:0}
+}
+@media(prefers-reduced-motion:reduce){html.ic *{transition:none!important}}
+
+/* ---------- aba Equipe: a Equipe nova (PE) no lugar do palco antigo; a Atividade segue embaixo ---------- */
+html.ic #panel-team:has(#pe-equipe:not(:empty)) #operator-live,html.ic #panel-team:has(#pe-equipe:not(:empty)) #team-stage-host{display:none!important}
+html.ic #pe-equipe:empty{display:none}
+/* O topo da Equipe nova e um <header>: a regra de header do painel (altura fixa, linha embaixo) nao vale dentro dela. */
+#pe-equipe header{height:auto;min-height:0;border-bottom:0;display:grid}
+.pe-tl header{height:auto;min-height:0;border-bottom:0}
+
+/* ---------- faixa de novidade (PAINEL-100): 1 linha no topo, no estilo dos cartoes; cor do lado de quem fez ou neutra ---------- */
+.faixa-nova{--faixa:var(--muted,#a6a6b2);display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:12px 0 0;padding:8px 8px 8px 16px;border:1px solid #2c2c35;border-left:3px solid var(--faixa);border-radius:14px;background:var(--panel,#141419);color:#fff;font-size:13px;line-height:1.45}
+.faixa-nova[data-lado="claude"]{--faixa:var(--cor-claude,#ffac62)}
+.faixa-nova[data-lado="codex"]{--faixa:var(--cor-codex,#4f9dff)}
+.faixa-nova[hidden]{display:none}
+.faixa-nova-k{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--faixa);white-space:nowrap}
+.faixa-nova-t{flex:1 1 240px;min-width:0;overflow-wrap:anywhere}
+.faixa-nova-ver{min-height:32px;padding:4px 14px;border:1px solid #34343e;border-radius:999px;background:transparent;color:#fff;font:inherit;cursor:pointer}
+.faixa-nova-ver:hover{border-color:var(--faixa)}
+.faixa-nova-x{display:inline-flex;align-items:center;justify-content:center;width:32px;height:32px;padding:0;border:1px solid #34343e;border-radius:10px;background:transparent;color:#a6a6b2;cursor:pointer}
+.faixa-nova-x svg{width:16px;height:16px;fill:none;stroke:currentColor;stroke-width:2;stroke-linecap:round}
+.faixa-nova-x:hover{color:#fff;border-color:#4a4a55}
+@media(max-width:560px){.faixa-nova{display:grid;grid-template-columns:minmax(0,1fr) auto auto;grid-template-areas:"k ver x" "t t t";gap:6px 8px;padding:8px 8px 10px 14px}.faixa-nova-k{grid-area:k;white-space:normal}.faixa-nova-t{grid-area:t}.faixa-nova-ver{grid-area:ver}.faixa-nova-x{grid-area:x}}
+.faixa-nova-ver:focus-visible,.faixa-nova-x:focus-visible{outline:2px solid #fff;outline-offset:2px}
+/* o aviso curto de "salvo" segue embaixo, mas no estilo dos cartoes (o verde nao e cor da casa para aviso) */
+html.ic #toast{background:var(--panel,#141419);color:#fff;border:1px solid #34343e}
+
+@property --mix-claude{syntax:"<percentage>";inherits:false;initial-value:50%}
+.agentes-mix{background:linear-gradient(to top,var(--orange,#ffac62) 0 var(--mix-claude,50%),var(--blue,#65a7ff) var(--mix-claude,50%) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;transition:--mix-claude .9s ease}
+html[data-motion="off"] .agentes-mix{transition:none}
+html.ic .sala-agentes strong .ic-agentes-num{font-size:inherit;line-height:inherit;color:#fff}
+html.ic .sala-agentes .ic-mix{display:flex;flex-direction:column;gap:5px;width:100%;max-width:150px}
+html.ic .sala-agentes .ic-mix[hidden]{display:none}
+html.ic .sala-agentes .ic-mix-barra{display:flex;gap:2px;height:6px;border-radius:6px;overflow:hidden;background:#26262e}
+html.ic .sala-agentes .ic-mix-barra i{display:block;min-width:4px;flex-basis:0}
+html.ic .sala-agentes .ic-mix-claude{background:var(--orange,#ffac62)}
+html.ic .sala-agentes .ic-mix-codex{background:var(--blue,#65a7ff)}
+html.ic .sala-agentes .ic-mix-leg{font-size:12px;color:#a6a6b2;line-height:1.4}
+html.ic .sala-agentes .ic-mix-c{color:var(--orange,#ffac62);font-weight:650}
+html.ic .sala-agentes .ic-mix-x{color:var(--blue,#65a7ff);font-weight:650}
+@media(max-width:760px){html.ic .sala-agentes{flex-wrap:wrap}html.ic .sala-agentes .ic-mix{flex-basis:100%;max-width:none;flex-direction:row;align-items:center}html.ic .sala-agentes .ic-mix-barra{flex:0 0 90px}}
+/* 04/10 16:1x: o bloco "O que precisa de voce" lido do ESCOLHAS ficava velho e repetia o topo; o "Precisa de voce agora" do
+   "Em que pe estamos" e a fonte unica. Escondido ja no carregamento (antes dependia do agora.js, que carrega por ultimo). */
+html.ic #gancho-cards{display:none}

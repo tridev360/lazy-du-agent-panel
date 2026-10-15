@@ -1,0 +1,186 @@
+/* letra minima, frase normal, nada cortado com reticencia */
+html.esq .f2-piso{font-size:13px!important}
+html.esq .f2-frase{text-transform:none!important;letter-spacing:0!important}
+html.esq .f2-inteiro{text-overflow:clip!important;white-space:normal!important;overflow:visible!important}
+html.esq .f2-desclampa{-webkit-line-clamp:unset!important;line-clamp:none!important;display:block!important;overflow:visible!important;max-height:none!important}
+/* superficies: a 1a vira bloco plano com linha em cima; a de dentro some; a vista nao tem moldura */
+html.esq .f2-raiz{background:transparent!important;border-color:transparent!important;box-shadow:none!important;border-radius:0!important}
+html.esq .f2-bloco{background:transparent!important;background-image:none!important;border-color:transparent!important;border-top:1px solid var(--g-line)!important;box-shadow:none!important;border-radius:0!important}
+html.esq .f2-plano{background:transparent!important;background-image:none!important;border-color:transparent!important;box-shadow:none!important;border-radius:0!important}
+html.esq .f2-bloco.f2-acento,html.esq .f2-plano.f2-acento{border-left-color:currentColor}
+html.esq .f2-acento{border-left-style:solid!important}
+/* topo nao repete o nome: o sub-menu ja diz */
+html.esq[data-g-old] main .view-title{display:none!important}
+/* faixa "registros 257 · leitura..." (upgrade.js): 1 linha plana, numero em pixel 24 + rotulo 13 px */
+html.esq .up-strip{display:flex!important;flex-wrap:wrap;align-items:baseline;gap:8px 32px;background:none!important;border:0!important;border-top:1px solid var(--g-line)!important;border-bottom:1px solid var(--g-line)!important;box-shadow:none!important;border-radius:0!important;padding:12px 0!important;margin:0 0 24px!important}
+html.esq .up-strip .up-heroes{display:flex!important;flex-wrap:wrap;gap:8px 32px;align-items:baseline;margin:0!important}
+html.esq .up-strip .up-hero{display:flex!important;flex-direction:row!important;align-items:baseline;gap:8px;background:none!important;border:0!important;box-shadow:none!important;padding:0!important;min-height:0!important;border-radius:0!important}
+html.esq .up-strip .up-number{font:var(--g-p24)/1 var(--g-pix)!important;color:var(--g-tx)!important;letter-spacing:0!important}
+html.esq .up-strip .up-label,html.esq .up-strip .up-chip,html.esq .up-strip .up-caption{font:400 13px/20px var(--g-sans)!important;color:var(--g-tx2)!important;text-transform:none!important;letter-spacing:0!important;background:none!important;border:0!important;padding:0!important;box-shadow:none!important}
+html.esq .up-strip .up-proof{display:flex!important;gap:8px 16px;flex-wrap:wrap;align-items:baseline;margin:0!important}
+html.esq .up-strip .up-chip.is-old{color:var(--g-trava)!important}
+html.esq .up-strip .up-track{flex:1 1 160px;max-width:320px;height:8px!important;background:var(--g-line)!important;border-radius:0!important}
+html.esq .up-strip .up-fill{background:var(--g-anda)!important;border-radius:0!important}
+/* nome de sessao colorido dentro das abas antigas */
+html.esq .f2-nome{font-weight:600}
+/* FILA: Todas N, contagem por etapa, conta que bate */
+html.esq #phase-tabs .f2-n{font-variant-numeric:tabular-nums;color:var(--g-tx3);margin-left:2px}
+html.esq #phase-tabs [aria-selected=true] .f2-n{color:inherit}
+html.esq #phase-tabs .f2-todas{all:unset;cursor:pointer;box-sizing:border-box;padding:6px 12px;font:600 13px/20px var(--g-sans);color:var(--g-tx2);border-bottom:1px solid transparent}
+html.esq #phase-tabs .f2-todas[aria-selected=true]{color:var(--g-tx);border-bottom-color:var(--g-tx)}
+html.esq #phase-tabs .f2-todas:focus-visible{outline:2px solid var(--g-tx);outline-offset:2px}
+html.esq #board{max-height:none!important;overflow:visible!important}
+html.f2-fila-todas #board .phase-column{display:block!important}
+html.f2-fila-todas #board .f2-mais-linha{display:none}
+html.esq #board .f2-ver{display:none}
+html.f2-fila-todas #board .f2-ver{all:unset;cursor:pointer;box-sizing:border-box;display:inline-flex;align-items:center;height:32px;margin:8px 0 0;padding:0 16px;font:600 13px/1 var(--g-sans);color:var(--g-tx);box-shadow:inset 0 0 0 1px var(--g-dot)}
+html.f2-fila-todas #board .f2-ver:hover{background:var(--g-s1)}
+html.esq #board .up-records td{vertical-align:middle;padding:6px 8px}
+html.esq #board .up-record-button{min-height:32px}
+html.esq #phase-tabs>button:not(.f2-todas){all:unset;cursor:pointer;box-sizing:border-box;padding:6px 12px;font:600 13px/20px var(--g-sans);color:var(--g-tx2);border-bottom:1px solid transparent}
+html.esq #phase-tabs>button:not(.f2-todas)[aria-selected=true]{color:var(--g-tx);border-bottom-color:var(--g-tx)}
+html.esq #phase-tabs>button:focus-visible{outline:2px solid var(--g-tx);outline-offset:2px}
+html.esq #phase-tabs{display:flex;flex-wrap:wrap;gap:4px 8px;border-bottom:1px solid var(--g-line)}
+html.esq[data-theme=grade][data-g-old] main :is(button,.chip,.filter,select,input,.up-chip){border-radius:0!important}
+html.f2-fila-todas #board .phase-column:has(> .empty-column){display:none!important}
+html.esq #board .f2-etapa{display:none}
+html.f2-fila-todas #board .f2-etapa{display:block;margin:24px 0 8px;font:var(--g-p16)/1 var(--g-pix);color:var(--g-tx);text-transform:none;letter-spacing:0}
+html.f2-fila-todas #board .f2-etapa .f2-n{color:var(--g-tx2)}
+html.esq .f2-fila-conta{margin:8px 0 16px;font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html.esq .f2-fila-conta b{color:var(--g-tx);font-weight:600}
+html.esq #board .empty-column{font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+/* compositor "Para": sem caixa alta, cor do lado */
+html.esq #g-dock .cx-to{text-transform:none!important;font:600 13px/1 var(--g-sans)!important;letter-spacing:0!important}
+html.esq #cx-alvo[data-lado]{color:var(--fio-cor)}
+html.esq #cx-alvo option{color:var(--g-tx);background:var(--g-s1)}
+html.esq #cx-alvo option[data-lado]{color:var(--fio-cor)}
+@media (max-width:760px){html.esq #g-dock .cx-alvo-wrap{flex:0 1 auto;min-width:0}html.esq #cx-alvo{max-width:42vw;text-overflow:clip}}
+/* WEN novo */
+.f2-wen{position:fixed;top:56px;right:16px;z-index:70;width:min(920px,calc(100vw - 32px));max-height:calc(100vh - 72px);overflow-y:auto;overflow-x:hidden;--f2-risco:#F0616D;box-sizing:border-box;padding:16px;background:var(--g-s1);border:1px solid var(--g-line);color:var(--g-tx);font:400 13px/20px var(--g-sans)}
+.f2-wen[hidden]{display:none}
+.f2-wen-head{display:flex;align-items:center;gap:16px;margin-bottom:12px}
+.f2-wen-head .g-btn{margin-left:auto}
+.f2-wen-linhas{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.f2-wen-l{display:grid;grid-template-columns:150px minmax(0,1fr);gap:2px 12px;padding:8px 0;border-top:1px solid var(--g-line)}
+.f2-wen-l .g-lab{grid-row:span 2;white-space:normal;line-height:20px}
+.f2-wen-t{color:var(--g-tx)}
+.f2-wen-t.is-vazio{color:var(--g-tx2)}
+.f2-wen-f,.f2-wen-m{grid-column:2}
+.f2-wen-l.is-velho .f2-wen-f{color:var(--g-trava)}
+.f2-wen-mais{margin-top:12px;border-top:1px solid var(--g-line);padding-top:8px}
+.f2-wen-mais>summary{cursor:pointer;font:600 13px/32px var(--g-sans);color:var(--g-tx2)}
+.f2-wen-mais .g-sec{margin:4px 0}
+.f2-wen-auto .wen-auto{all:unset;cursor:pointer;box-sizing:border-box;height:32px;padding:0 16px;display:inline-flex;align-items:center;font:600 13px/1 var(--g-sans);color:var(--g-tx);box-shadow:inset 0 0 0 1px var(--g-dot);margin:4px 0}
+.f2-wen-auto .wen-auto[aria-checked=true]{background:var(--g-tx);color:var(--g-bg)}
+/* WEN em tabela: selos (Claude laranja, Codex azul, script cinza), barras e cartoes no celular. Cor so por variavel do tema (GRADE, LIVRO, FOLHA; todos escuros).
+   Selo = texto na cor da IA sobre a propria cor a 16% do fundo (contraste >= 4,5 nos tres temas); a borda leva a cor cheia. */
+.f2-wen-corpo{display:grid;gap:12px}
+.f2-wen-leg{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px}
+.f2-leg-t{margin-right:8px}
+.f2-selo{display:inline-block;box-sizing:border-box;max-width:100%;font:600 12px/18px var(--g-sans);padding:1px 8px;margin:2px 4px 2px 0;border-radius:999px;border:1px solid var(--g-dot);white-space:nowrap;color:var(--g-tx2);background:transparent}
+.f2-selo-claude{color:var(--g-claude);border-color:var(--g-claude);background:color-mix(in srgb,var(--g-claude) 16%,var(--g-s1))}
+.f2-selo-codex{color:var(--g-codex);border-color:var(--g-codex);background:color-mix(in srgb,var(--g-codex) 16%,var(--g-s1))}
+.f2-selo-script{color:var(--g-tx2);border-color:var(--g-dot);background:var(--g-off,transparent)}
+.f2-wen-tab{width:100%;border-collapse:collapse;font:400 13px/20px var(--g-sans);table-layout:auto}
+.f2-wen-tab th{text-align:left;font:600 12px/20px var(--g-sans);color:var(--g-tx2);padding:6px 8px;border-bottom:1px solid var(--g-line)}
+.f2-wen-tab td{padding:8px;border-bottom:1px solid var(--g-line);vertical-align:middle;color:var(--g-tx)}
+.f2-wen-tab th:nth-child(2){width:22%}
+.f2-bar{height:8px;border-radius:4px;background:var(--g-bg);border:1px solid var(--g-line);overflow:hidden;min-width:80px;margin-bottom:2px}
+.f2-bar i{display:block;height:100%;width:0;background:var(--g-codex)}
+.f2-bar-g i{background:var(--g-anda)}
+.f2-bar-a i{background:var(--g-trava)}
+.f2-bar-r i{background:var(--f2-risco,#F0616D)}
+.f2-bar-s i{background:var(--g-dot)}
+.f2-pct{font-size:12px}
+.f2-faltam{font:600 14px/20px var(--g-sans);color:var(--g-tx)}
+.f2-cards{color:var(--g-trava);font-weight:600;white-space:nowrap}
+.f2-wen-tab .f2-cel{min-width:0}
+.f2-sol{display:block;margin-top:2px}
+.f2-frente{font-weight:600}
+.f2-parada{display:inline-block;margin-left:8px;padding:0 8px;border-radius:999px;border:1px solid var(--g-trava);color:var(--g-trava);font:600 12px/18px var(--g-sans);white-space:nowrap}
+.f2-wen-rodape{margin:0;display:flex;flex-wrap:wrap;align-items:center;gap:2px 0}
+.f2-rod-t{margin-right:6px;color:var(--g-tx)}
+.f2-rotina{margin-left:8px}
+.f2-wen-h{margin:0 0 6px;font:600 15px/22px var(--g-sans);color:var(--g-tx);text-transform:none;letter-spacing:0}
+.f2-acel-lista{list-style:none;margin:0;padding:0;display:grid;gap:0}
+.f2-acel-l{display:grid;grid-template-columns:48px minmax(0,1fr) auto;gap:2px 12px;align-items:baseline;padding:6px 0;border-top:1px solid var(--g-line)}
+.f2-acel-l .f2-sol{grid-column:2 / 4;margin:0}
+.f2-ganho{color:var(--g-anda);font-weight:600;white-space:nowrap}
+.f2-ganho-sem{white-space:nowrap}
+.f2-acel-total{margin:6px 0 0}
+.f2-acel-t{min-width:0;overflow-wrap:anywhere}
+.f2-acel-nota{margin:0 0 4px}
+.f2-parada-sem{display:block;width:fit-content;max-width:100%;margin:4px 0 0;padding:1px 8px;border-radius:8px;white-space:normal}
+.f2-tok-obs{display:block;margin-top:2px}
+.f2-eco-lista{list-style:none;margin:0;padding:0}
+.f2-eco-l{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:2px 12px;align-items:baseline;padding:6px 0;border-top:1px solid var(--g-line)}
+.f2-eco-t{min-width:0;overflow-wrap:anywhere}
+.f2-eco-ef{color:var(--g-anda);font-weight:600}
+.f2-wen-mais .f2-wen-h{margin:8px 0 4px}
+@media (max-width:760px){.f2-wen{right:16px;left:16px;width:auto}
+.f2-wen-tab,.f2-wen-tab tbody{display:block;width:auto}
+.f2-wen-tab thead{display:none}
+.f2-wen-tab tr{display:block;padding:12px;margin:0 0 12px;border:1px solid var(--g-line);border-radius:8px}
+.f2-wen-tab td{display:grid;grid-template-columns:104px minmax(0,1fr);gap:8px;border:0;padding:4px 0;align-items:start}
+.f2-wen-tab td::before{content:attr(data-rotulo);font:600 12px/20px var(--g-sans);color:var(--g-tx2)}
+.f2-wen-tab td>.f2-cel{min-width:0}
+.f2-acel-l{grid-template-columns:44px minmax(0,1fr)}.f2-acel-l .f2-ganho,.f2-acel-l .f2-ganho-sem{grid-column:2}
+.f2-eco-l{grid-template-columns:minmax(0,1fr)}
+.f2-selo{white-space:normal}.f2-wen-l{grid-template-columns:1fr}.f2-wen-l .g-lab{grid-row:auto}.f2-wen-f,.f2-wen-m{grid-column:1}}
+/* QA de TELA */
+/* Radar: o retrato escondido no esqueleto deixava o titulo na coluna de 56 px (uma palavra por linha) */
+html.esq #panel-radar .rd-top{display:flex!important;flex-wrap:wrap;align-items:center;gap:8px 16px}
+html.esq #panel-radar .rd-top>*{min-width:0}
+html.esq #panel-radar .rd-top>:not(img):not(button):not(a){flex:1 1 320px}
+/* Financas no celular: numero de dinheiro nunca parte no meio */
+@media (max-width:760px){html.esq #panel-finances :is(strong,b,dd,td,output,[class*=valor],[class*=num],[class*=saldo],[class*=total],[class*=money]){overflow-wrap:normal!important;word-break:keep-all!important}html.esq #panel-finances .f2-dinheiro{white-space:nowrap}}
+/* Cerebro: "ver fonte" pequeno (o arquivo cru so aqui) */
+.g-ver-fonte{margin-top:4px}
+.g-ver-fonte>summary{cursor:pointer;list-style:none;font:400 13px/20px var(--g-sans);color:var(--g-tx3)}
+.g-ver-fonte>summary::-webkit-details-marker{display:none}
+.g-ver-fonte>summary:hover{color:var(--g-tx2)}
+.g-ver-fonte .g-sec{display:block;overflow-wrap:anywhere}
+/* Arvore: o Fluxo velho dentro da Arvore sai (o Fluxo e um so, na sub-aba Fluxo); o modo Arvore fica ligado pelo vistas.js */
+html.esq[data-g-old=team] #panel-team .pe-views{display:none!important}
+/* numeros unicos do painel (a mesma conta em toda vista): 1 linha embaixo da faixa de numeros */
+html.esq .f2-numeros{margin:-12px 0 24px;display:grid;gap:2px}
+html.esq .f2-numeros .g-sec{margin:0;color:var(--g-tx2)}
+/* nome colorido nunca abaixo do piso (o pai pode ter so o nome e herdar letra miuda) */
+html.esq .f2-nome{font-size:max(13px,1em)}
+
+@media (max-width:600px){
+  html.esq #g-dock .cx{flex-wrap:wrap;row-gap:8px}
+  html.esq #g-dock .cx-head{flex:1 1 auto;min-width:0}
+  html.esq #g-dock .cx-alvo-wrap{flex:1 1 auto;min-width:0}
+  html.esq #g-dock .cx-alvo{width:100%;min-width:176px}
+  html.esq #g-dock .cx-actions{flex:none}
+  html.esq #g-dock .cx-text{order:3;flex:1 1 100%;width:100%}
+}
+#panel-settings:not([open])>#panel-settings-options{display:none!important}
+html.esq .jpb-fala-btn .f2-vermais{display:inline-block;margin-left:6px;font:500 13px/1.4 var(--g-sans,inherit);color:var(--g-tx2,inherit);text-decoration:underline;text-underline-offset:3px}
+#g-agora .g-clamp.f2-aberto{display:block;-webkit-line-clamp:unset;overflow:visible}
+#g-agora .f2-vertudo{all:unset;cursor:pointer;display:inline-block;margin:2px 0 6px;font:500 13px/1.4 var(--g-sans,inherit);color:var(--g-tx2,inherit);text-decoration:underline;text-underline-offset:3px}
+#g-agora .f2-vertudo:focus-visible{outline:2px solid var(--g-tx,currentColor);outline-offset:2px}
+html[data-theme=livro] #g-agora .g-espera .g-item .g-txt.g-clamp{white-space:normal;display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;text-overflow:clip;grid-row:1;grid-column:1}
+html[data-theme=livro] #g-agora .g-espera .g-item .g-txt.g-clamp.f2-aberto{display:block;-webkit-line-clamp:unset;overflow:visible}
+html[data-theme=livro] #g-agora .g-espera .g-item .g-meta{grid-row:1;grid-column:2;flex-wrap:wrap;white-space:normal;overflow:visible}
+html[data-theme=livro] #g-agora .g-espera .g-item .f2-vertudo{grid-row:2;grid-column:1;justify-self:start;margin:0 0 2px}
+html[data-theme=livro] #g-agora .g-row .g-row-body .g-sec{white-space:normal;overflow:visible;text-overflow:clip}
+@media (max-width:760px){
+  html[data-theme=livro] #g-agora .g-espera .g-item .g-meta{grid-row:3;grid-column:1}
+}
+html.esq .up-more .up-summary-text{-webkit-line-clamp:unset!important;display:block!important;overflow:visible!important;max-height:none!important}
+html.esq #panel-queue .up-record-button>span{-webkit-line-clamp:unset;display:block;overflow:visible}
+html.esq .pe-ajl-t{white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:anywhere}
+.g-conta small.g-conta-sol{max-width:220px}
+@media (min-width:1100px){.g-contas{column-gap:28px}}
+@media (max-width:760px){
+  html.esq #panel-launches .launch-tabs button,html.esq #panel-launches :is(.launch-state,.launch-item-foot,.launch-hard){font-size:13px}
+  /* Mapa: o trabalho aberto no celular com a frase inteira; o "Abrir" desce para a linha de baixo */
+  html.esq #g-cerebro>.g-aberto{grid-template-columns:auto minmax(0,1fr);gap:12px 16px}
+  html.esq #g-cerebro>.g-aberto>.g-btn{grid-column:1/-1;justify-self:start}
+  html.esq #g-cerebro .g-aberto-item .g-clamp{display:block;-webkit-line-clamp:unset;overflow:visible}
+}
+
+/* r11: card ou faixa de numeros sem numero e "Ver mais" vazio somem (semNumero no vistas-f2.js) */
+html .up-strip[hidden],html.esq .up-strip[hidden],html .up-hero[hidden],html.esq .up-strip .up-hero[hidden],html .up-more[hidden]{display:none!important}

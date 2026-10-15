@@ -1,0 +1,83 @@
+
+#voz-widget{min-width:0;color:var(--g-tx,var(--ink));font:12px/1.45 var(--g-sans,system-ui)}
+#voz-widget [hidden],#voz-gaveta[hidden]{display:none!important}
+.voz-controles{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+#voz-widget button,#voz-gaveta button{min-height:44px;padding:8px 12px;border:1px solid var(--g-line,var(--line));background:var(--g-bg,var(--bg));color:inherit;font:inherit;cursor:pointer;touch-action:manipulation}
+#voz-widget button:focus-visible,#voz-gaveta button:focus-visible,#voz-mic:focus-visible,#voz-texto:focus-visible{outline:2px solid var(--g-rosa,var(--pink));outline-offset:2px}
+#voz-widget button:disabled{opacity:.55;cursor:wait}
+html.esq #g-dock #painel-caixa{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:8px 16px;width:100%;box-sizing:border-box}
+html.esq #g-dock .cx-head,html.esq #g-dock .cx-alvo-wrap{min-width:0}
+html.esq #g-dock .cx-actions{min-width:0;gap:8px}
+html.esq #g-dock .cx-actions .cx-mic[hidden]{display:none!important}
+html.esq #g-dock .cx-actions .cx-send{height:44px;min-height:44px;min-width:72px;white-space:nowrap}
+html.esq #g-dock .cx-text{height:44px;min-height:44px;max-height:96px}
+html.esq #g-dock #voz-widget{grid-column:1/-1;display:grid;grid-template-columns:auto minmax(0,1fr);gap:8px 16px}
+#voz-status{margin:0;align-self:center;overflow-wrap:anywhere}
+.voz-privacidade{grid-column:1/-1;margin:0;color:var(--g-tx2,var(--muted));font-size:11px}
+#voz-revisao{grid-column:1/-1;max-height:26dvh;overflow:auto}
+#voz-texto{display:block;width:100%;box-sizing:border-box;min-height:64px;padding:8px;margin:8px 0;border:1px solid var(--g-line,var(--line));background:var(--g-bg,var(--bg));color:inherit;font:16px var(--g-sans,system-ui);resize:vertical}
+html:has(#voz-widget[data-estado=ouvindo]) #voz-mic{background:var(--g-rosa,var(--pink))}
+#voz-widget[data-estado=erro] #voz-status{color:var(--g-trava,var(--pink))}
+#voz-gaveta{box-sizing:border-box;min-width:0;padding:16px;border:1px solid var(--g-line,var(--line));background:var(--g-s1,var(--panel));color:var(--g-tx,var(--ink));font:14px/1.45 var(--g-sans,system-ui);overflow:auto;overscroll-behavior:contain}
+.voz-cabecalho,.voz-acoes{display:flex;align-items:center;justify-content:space-between;gap:8px;flex-wrap:wrap}
+.voz-cabecalho h2{font-size:18px;margin:0}
+.voz-aviso{font-size:12px;color:var(--g-tx2,var(--muted));margin:12px 0}
+#voz-mensagens{white-space:pre-wrap;overflow-wrap:anywhere}
+#voz-mensagens p{margin:12px 0;padding-top:8px;border-top:1px solid var(--g-line,var(--line))}
+#voz-audio-status{overflow-wrap:anywhere}
+
+html{--voz-gaveta-h:clamp(260px,34dvh,360px)}
+html[data-voz-conversa=aberta] body{display:grid!important;grid-template-columns:minmax(0,1fr)!important;grid-template-rows:auto minmax(0,1fr) var(--voz-gaveta-h) auto!important;height:100dvh!important;min-height:0!important;overflow:hidden!important}
+html[data-voz-conversa=aberta] body>#g-bar{grid-column:1;grid-row:1}
+html[data-voz-conversa=aberta] body>.shell{grid-column:1;grid-row:2;min-width:0;min-height:0;height:100%!important;max-height:100%!important;overflow:auto!important;box-sizing:border-box}
+html[data-voz-conversa=aberta] body>#g-dock{grid-column:1;grid-row:4;min-width:0;position:relative!important;bottom:auto!important;margin-bottom:0!important}
+html[data-voz-conversa=aberta] #voz-gaveta{grid-column:1;grid-row:3;min-height:0;height:var(--voz-gaveta-h);max-height:none;display:flex;flex-direction:column;overflow:hidden}
+#voz-gaveta .voz-cabecalho{flex:none}
+#voz-gaveta #voz-mensagens{flex:1 1 auto;min-height:60px;overflow:auto;overscroll-behavior:contain}
+#voz-gaveta #voz-audio-status{flex:none;margin:8px 0 0}
+#voz-gaveta .voz-acoes{flex:none;justify-content:flex-start;margin-top:8px}
+#voz-gaveta .voz-aviso{flex:none;margin:8px 0}
+html[data-theme=grade] #voz-widget button,html[data-theme=grade] #voz-gaveta{border-radius:0}
+html[data-theme=livro] #voz-widget button,html[data-theme=livro] #voz-gaveta{border-radius:6px}
+html[data-theme=folha] #voz-widget button,html[data-theme=folha] #voz-gaveta{border-radius:8px}
+
+html[data-theme=folha]:not(.fh-k-open) body #g-dock{display:block!important;position:sticky;bottom:12px;left:auto;width:min(720px,calc(100% - 32px));margin:0 auto 12px;box-sizing:border-box;background:var(--g-s1);border:1px solid var(--g-line);border-radius:12px;z-index:40}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock .g-wrap{display:block;min-height:0;padding:8px 12px;max-width:none}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock .g-slash,html[data-theme=folha]:not(.fh-k-open) body #g-dock .g-dock-dica,html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-head,html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-text,html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-thumbs,html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-image,html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-count{display:none!important}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock #painel-caixa{display:flex;flex-wrap:wrap;align-items:center;gap:8px;width:100%}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock #voz-widget{display:contents}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock .voz-controles{order:1;flex:none}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock #voz-status{order:2;flex:1 1 140px;min-width:0}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-actions{order:3;flex:none;display:flex;align-items:center;gap:8px}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock #voz-revisao{order:4;flex:1 1 100%}
+@media(max-width:760px){
+  html{--voz-gaveta-h:clamp(180px,48dvh,460px)}
+  html[data-theme=folha]:not(.fh-k-open) body #g-dock{width:calc(100% - 16px);margin:0 8px 8px}
+  html[data-theme=folha]:not(.fh-k-open) body #g-dock #voz-status{flex:1 1 100%;order:5}
+
+  html.esq #g-dock .g-wrap{padding:8px 16px}
+  html.esq #g-dock .g-slash{display:none}
+  html.esq #g-dock #painel-caixa{grid-template-columns:minmax(0,1fr) auto;gap:8px}
+  html.esq #g-dock .cx-head{grid-column:1/-1}
+  html.esq #g-dock .cx-alvo{width:100%;max-width:100%}
+  html.esq #g-dock .cx-text{grid-column:1/-1}
+  html.esq #g-dock .cx-actions{grid-column:2;grid-row:3}
+  html.esq #g-dock .cx-actions{display:grid;grid-template-columns:auto auto}
+  html.esq #g-dock .cx-actions .cx-image{grid-row:2;grid-column:1/-1}
+  html.esq #g-dock .cx-actions #voz-mic{grid-row:1;grid-column:1}
+  html.esq #g-dock .cx-actions .cx-send:not(#voz-mic){grid-row:1;grid-column:2}
+  html.esq #g-dock #voz-widget{display:contents}
+  .voz-controles{grid-column:1;grid-row:3;gap:4px}
+  #voz-widget button{padding:8px;font-size:11px}
+  #voz-status{grid-column:1/-1;font-size:11px}
+  html.esq #g-dock .cx-actions .cx-send{min-width:60px;padding:0 8px;font-size:12px}
+  html.esq #g-dock .cx-count{display:none}
+}
+#voz-mensagens:empty::before{content:"Nenhuma mensagem ainda. Ligue a voz, fale e a resposta da COORDENADOR aparece aqui.";color:var(--g-tx2,var(--muted));font-size:13px}
+html[data-theme=folha][data-voz-conversa=aberta] body>#g-dock:not(#x){margin-bottom:12px!important}
+@media(max-width:760px){html[data-theme=folha][data-voz-conversa=aberta] body>#g-dock:not(#x){margin-bottom:8px!important}}
+#painel-caixa .cx-mic.voz-oculto{display:none!important}
+#voz-mic[hidden]{display:none!important}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock .voz-privacidade{order:6;flex:1 1 100%}
+html[data-theme=folha]:not(.fh-k-open) body #g-dock .cx-send:not(#voz-mic){display:none!important}
+#voz-mensagens p{max-width:72ch}

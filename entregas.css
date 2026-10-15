@@ -1,0 +1,141 @@
+/* entregas.css (09/10): ENTREGAS em barras (entregas.js). Nos 3 temas pelas variaveis do tema (--g-*); cor so onde importa:
+   verde = quase la (80% ou mais), roxo = em obra, laranja = depende de voce. Piso de 13 px; numero em fonte de numero; nada cortado.
+   Visivel: a lista no topo da Fila, o cartao no Agora e as barras em Projetos (cada uma so na sua vista). */
+#en-fila,#en-projetos{display:none}
+html[data-g-old=queue] #en-fila,html:not(.esq)[data-painel-tab=queue] #en-fila{display:block}
+html[data-g-old=projects] #en-projetos,html:not(.esq)[data-painel-tab=projects] #en-projetos{display:block}
+
+/* cores das 3 situacoes, por tema (1 linha cada para trocar) */
+html{--en-quase:var(--g-anda,#22C55E);--en-obra:#A78BFA;--en-voce:#FB923C;--en-trilho:var(--g-line,#2B2925);--en-raio:2px;--en-alt:4px}
+html[data-theme=grade]{--en-obra:#B194F2;--en-voce:#FF9F45;--en-trilho:var(--g-off,#1F1E1A);--en-raio:0;--en-alt:6px}
+html[data-theme=livro]{--en-obra:#A78BFA;--en-voce:#FB923C;--en-trilho:#1E1E23;--en-raio:1px;--en-alt:4px}
+html[data-theme=folha]{--en-obra:#9F7AEA;--en-voce:#FF9548;--en-trilho:rgba(237,237,239,.08);--en-raio:999px;--en-alt:6px}
+
+.en-bloco{box-sizing:border-box;min-width:0;color:var(--g-tx,#ECE8DF);font:400 14px/20px var(--g-sans,system-ui,sans-serif)}
+.en-bloco *{box-sizing:border-box}
+.en-fila,.en-projetos{margin:24px 0 32px}
+.en-card{margin:32px 0 8px;padding-top:24px;border-top:1px solid var(--g-line,#2B2925)}
+
+/* cabecalho */
+.en-head{display:flex;flex-wrap:wrap;align-items:baseline;gap:8px 16px;margin:0 0 16px}
+.en-head .g-h{flex:0 0 auto}
+.en-sub{font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398);min-width:0;overflow-wrap:anywhere}
+.en-ver{margin-left:auto;background:none;border:1px solid var(--g-line,#2B2925);color:var(--g-tx,#ECE8DF);font:500 13px/20px var(--g-sans,system-ui,sans-serif);padding:6px 12px;min-height:36px;border-radius:var(--en-raio);cursor:pointer;white-space:nowrap}
+.en-ver:hover{border-color:var(--g-tx3,#7D776D)}
+.en-ver:focus-visible,.en-mini:focus-visible,.en-proj:focus-visible{outline:2px solid var(--g-tx,#ECE8DF);outline-offset:2px}
+
+/* legenda */
+.en-legenda{display:flex;flex-wrap:wrap;align-items:center;gap:8px 20px;margin:0 0 20px;font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398)}
+.en-chip{display:inline-flex;align-items:center;gap:8px}
+.en-chip i{display:inline-block;width:16px;height:var(--en-alt);border-radius:var(--en-raio);background:var(--en-cor)}
+.en-leg-nota{color:var(--g-tx2,#A9A398)}
+
+/* cor de cada situacao */
+.en-bloco .is-quase{--en-cor:var(--en-quase)}
+.en-bloco .is-obra{--en-cor:var(--en-obra)}
+.en-bloco .is-voce{--en-cor:var(--en-voce)}
+.en-bloco .is-pronta{--en-cor:var(--en-quase)}
+.en-bloco .is-sem-leitura{--en-cor:var(--g-tx2,#A9A398)}
+
+/* aviso de leitura velha e sem leitura */
+.en-aviso{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;margin:0 0 20px;padding:10px 14px;border-left:3px solid var(--en-voce);background:color-mix(in srgb,var(--en-voce) 10%,transparent);font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398)}
+.en-aviso b{color:var(--g-tx,#ECE8DF);font-weight:600}
+.en-aviso .en-idade{color:var(--en-voce);font:600 16px/20px var(--g-sans,system-ui,sans-serif)}
+.en-semleitura{display:flex;align-items:center;gap:16px;padding:16px;border:1px dashed var(--g-line,#2B2925);border-radius:var(--en-raio);color:var(--g-tx2,#A9A398);font:400 13px/20px var(--g-sans,system-ui,sans-serif)}
+.en-semleitura b{display:block;color:var(--g-tx,#ECE8DF);font-weight:600}
+.en-q-grande{font:500 32px/1 var(--g-pix,ui-monospace,monospace);color:var(--g-tx3,#7D776D)}
+.en-semleitura.is-curto{padding:12px}
+
+/* grupos por projeto (colunas que se encaixam; 1 coluna no celular) */
+.en-grupos{columns:340px;column-gap:48px}
+.en-grupo{break-inside:avoid;margin:0 0 28px;min-width:0}
+.en-grupo-h{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin:0 0 4px;color:var(--g-tx2,#A9A398)}
+.en-ic{flex:0 0 16px;color:var(--g-tx2,#A9A398)}
+.en-grupo-t{margin:0;font:var(--g-p16,16px)/20px var(--g-pix,ui-monospace,monospace);text-transform:uppercase;letter-spacing:.02em;color:var(--g-tx,#ECE8DF)}
+.en-grupo-n{font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398)}
+
+/* 1 entrega */
+.en-item{padding:12px 0;border-top:1px solid var(--g-line,#2B2925);min-width:0;scroll-margin:96px}
+.en-l1{display:flex;align-items:baseline;justify-content:space-between;gap:12px;min-width:0}
+.en-nome{min-width:0;font:600 14px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx,#ECE8DF);overflow-wrap:anywhere}
+.en-pct{flex:0 0 auto;font:var(--g-p16,16px)/20px var(--g-pix,ui-monospace,monospace);font-variant-numeric:tabular-nums;color:var(--en-cor,var(--g-tx,#ECE8DF))}
+.en-barra{display:block;position:relative;height:var(--en-alt);margin:6px 0 8px;background:var(--en-trilho);border-radius:var(--en-raio);overflow:hidden}
+.en-barra>i{position:absolute;inset:0 auto 0 0;width:var(--en-p,0%);background:var(--en-cor);border-radius:var(--en-raio);transition:width .7s cubic-bezier(.2,.8,.2,1)}
+html[data-motion=off] .en-barra>i{transition:none}
+.en-frente{margin:0;font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398);overflow-wrap:anywhere}
+.en-rot{color:var(--g-tx2,#A9A398)}
+.en-pct-nota{font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398)}
+.en-h{color:var(--g-tx,#ECE8DF);font-variant-numeric:tabular-nums;white-space:nowrap}
+/* adianta: neutro; verde so quando corta caminho de verdade (nunca em trava: passo seu, alguem de fora, espera) */
+.en-adianta{font-style:normal;color:var(--g-tx2,#A9A398)}
+.en-adianta.is-livre{color:var(--en-quase)}
+.en-seu{color:var(--en-voce);font-weight:600}
+.en-ok{color:var(--en-quase);font-weight:600}
+.en-q{color:var(--g-tx,#ECE8DF)}
+.en-fonte{margin:4px 0 0;font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398)}
+
+/* recompensa: subiu o % desde a ultima leitura (verde 1 vez) e foco quando chega do Agora */
+.en-item.is-subiu .en-pct{animation:en-subiu 1.2s ease-out 1}
+@keyframes en-subiu{0%,30%{color:var(--en-quase);transform:translateY(-2px)}100%{transform:none}}
+.en-item.is-foco{animation:en-foco 1.8s ease-out 1}
+@keyframes en-foco{0%,40%{box-shadow:inset 3px 0 0 var(--en-cor);background:color-mix(in srgb,var(--en-cor) 12%,transparent)}100%{box-shadow:inset 3px 0 0 transparent;background:transparent}}
+html[data-motion=off] .en-item.is-subiu .en-pct,html[data-motion=off] .en-item.is-foco{animation:none}
+html[data-motion=off] .en-item.is-foco{box-shadow:inset 3px 0 0 var(--en-cor)}
+
+/* (b) cartao do Agora */
+.en-cols{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:16px 48px}
+.en-col{min-width:0}
+.en-col-t{margin:0 0 4px;font:600 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398);text-transform:uppercase;letter-spacing:.06em}
+.en-col.is-voce .en-col-t{color:var(--en-voce)}
+.en-mini,.en-proj{display:block;width:100%;margin:0;padding:10px 8px;background:none;border:0;border-top:1px solid var(--g-line,#2B2925);color:inherit;font:inherit;text-align:left;cursor:pointer;border-radius:0}
+.en-mini:hover,.en-proj:hover{background:color-mix(in srgb,var(--g-tx,#ECE8DF) 4%,transparent)}
+.en-mini .en-l1,.en-proj .en-l1{display:flex}
+.en-mini .en-frente{display:block}
+.en-vazio{margin:0;padding:10px 0;border-top:1px solid var(--g-line,#2B2925);font:400 13px/20px var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,#A9A398)}
+
+/* (c) Projetos */
+.en-projs{display:grid;grid-template-columns:repeat(auto-fill,minmax(300px,1fr));gap:16px 32px;align-items:start}
+.en-proj{padding:12px;border:1px solid var(--g-line,#2B2925);border-radius:var(--en-raio)}
+.en-proj .en-grupo-h{margin-bottom:8px}
+.en-pl{display:block;margin-top:8px}
+.en-pl .en-nome{font-weight:500;font-size:13px}
+.en-pl .en-barra{margin:4px 0 0}
+
+/* ---------- GRADE: pixel, barra em segmentos de LED, cantos retos ---------- */
+html[data-theme=grade] .en-barra>i{background:repeating-linear-gradient(90deg,var(--en-cor) 0 6px,transparent 6px 8px);transition-timing-function:steps(12,end)}
+html[data-theme=grade] .en-barra{background:repeating-linear-gradient(90deg,var(--en-trilho) 0 6px,transparent 6px 8px)}
+html[data-theme=grade] .en-chip i{background:repeating-linear-gradient(90deg,var(--en-cor) 0 6px,transparent 6px 8px)}
+html[data-theme=grade] .en-aviso{background:none;box-shadow:inset 0 0 0 1px var(--en-voce);border-left-width:0}
+
+/* ---------- LIVRO: tabela fina de mesa de operacao, numero mono ---------- */
+html[data-theme=livro] .en-grupo{background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px;padding:12px 16px 4px}
+html[data-theme=livro] .en-grupo .en-item:first-of-type{border-top-color:transparent}
+html[data-theme=livro] .en-item{padding:10px 0}
+html[data-theme=livro] .en-pct{font-weight:500}
+html[data-theme=livro] .en-card .en-col{background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px;padding:12px 16px 4px}
+html[data-theme=livro] .en-card .en-col .en-mini:first-of-type{border-top-color:transparent}
+html[data-theme=livro] .en-proj{background:var(--g-s1);border-radius:8px}
+
+/* ---------- FOLHA: folha clara de leitura, barras redondas e macias ---------- */
+html[data-theme=folha] .en-grupo{background:var(--g-s1);border-radius:12px;padding:14px 18px 6px}
+html[data-theme=folha] .en-grupo .en-item:first-of-type{border-top-color:transparent}
+html[data-theme=folha] .en-grupo-t{text-transform:none;letter-spacing:0;font-weight:600}
+html[data-theme=folha] .en-card{border-top:0;padding-top:0;margin:64px 0 0}
+html[data-theme=folha] #fh-agora .en-card .g-h{font:600 22px/1.25 var(--g-sans);letter-spacing:-.01em;text-transform:none}
+html[data-theme=folha] .en-cols{grid-template-columns:minmax(0,1fr);gap:24px}
+html[data-theme=folha] .en-col{background:var(--g-s1);border-radius:12px;padding:12px 16px 6px}
+html[data-theme=folha] .en-col .en-mini:first-of-type{border-top-color:transparent}
+html[data-theme=folha] .en-col-t{text-transform:none;letter-spacing:0;font-size:14px}
+html[data-theme=folha] .en-proj{background:var(--g-s1);border:0;border-radius:12px}
+html[data-theme=folha] .en-ver{border-radius:999px}
+html[data-theme=folha] .en-aviso{border-left:0;border-radius:12px}
+
+/* ---------- celular ---------- */
+@media (max-width:760px){
+  .en-cols{grid-template-columns:minmax(0,1fr);gap:20px}
+  .en-grupos{columns:auto;column-count:1}
+  .en-projs{grid-template-columns:minmax(0,1fr)}
+  .en-ver{margin-left:0}
+  .en-legenda{gap:6px 16px}
+  .en-fila,.en-projetos{margin:16px 0 24px}
+}

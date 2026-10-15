@@ -1,0 +1,57 @@
+/* "Em que pe estamos" no topo do Inicio (item 98; refeito 04/10). Ordem de leitura: o que precisa de voce (destaque rosa),
+   no ar, rodando com hora, e o resto menor. Tokens dos cartoes da Home aprovada (r14). Nada cortado: o texto quebra linha. */
+.sala{margin:0 0 16px;border:1px solid #36363f;border-radius:20px;background:#141419;padding:18px 24px 16px;color:#fff}
+html:not([data-painel-tab="home"]) .sala{display:none}
+.sala-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.sala-topo h2{margin:0;font-size:16px;font-weight:700;line-height:1.4}
+.sala-lido{font-size:12px;color:#a6a6b2;font-variant-numeric:tabular-nums}
+.sala-lido.sala-falhou,.sala-lido.sala-velho{color:#ffac62}
+.sala-linhas{display:grid;gap:14px;min-width:0}
+.sala-rotulo{margin:0 0 6px;font-size:11px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#a6a6b2;line-height:1.4}
+.sala-texto{margin:0;font-size:14px;font-weight:550;line-height:1.5;overflow-wrap:anywhere}
+.sala-nada,.sala-carregando{margin:0;font-size:13px;color:#a6a6b2}
+.sala-sem-leitura{font-size:14px;color:#a6a6b2;font-weight:600}
+/* 1) o que precisa de voce: o unico destaque da caixa */
+.sala-voce{border:1px solid rgba(255,46,126,.55);background:rgba(255,46,126,.08);border-radius:14px;padding:12px 16px}
+.sala-voce .sala-rotulo{color:#ff8eb9}
+.sala-voce.is-vazio{border-color:#2c2c34;background:#18181e}
+.sala-voce.is-vazio .sala-rotulo{color:#a6a6b2}
+.sala-voce-nada{margin:0;font-size:14px;color:#cfcfd8}
+.sala-voce-lista{margin:0;padding:0 0 0 20px;display:grid;gap:8px}
+.sala-voce-item{font-size:15px;line-height:1.45}
+.sala-voce-item::marker{color:#ff8eb9;font-weight:700}
+.sala-voce-passo{font-weight:650;overflow-wrap:anywhere}
+.sala-voce-meta{display:inline-flex;flex-wrap:wrap;align-items:center;gap:8px;margin-left:10px;vertical-align:middle}
+.sala-chip{display:inline-block;font-size:11px;font-weight:600;padding:2px 8px;border-radius:999px;border:1px solid rgba(255,255,255,.2);color:#d6d6de;white-space:nowrap}
+.sala-link{font:inherit;font-size:12px;font-weight:650;color:#ff8eb9;background:none;border:0;padding:4px 0;min-height:28px;cursor:pointer}
+.sala-link:focus-visible{outline:2px solid #ff2e7e;outline-offset:2px;border-radius:4px}
+/* 2) no ar e 3) rodando */
+.sala-linha{min-width:0;border-top:1px solid #26262e;padding-top:12px}
+.sala-noar .sala-texto{color:#8ee6ae}
+.sala-rodando-lista{list-style:none;margin:0;padding:0;display:grid;gap:7px}
+.sala-rodando-item{display:grid;grid-template-columns:118px minmax(0,1fr);column-gap:14px;row-gap:2px;align-items:baseline;font-size:14px;line-height:1.45}
+.sala-rodando-item[hidden]{display:none}
+.sala-quando{font-weight:700;font-variant-numeric:tabular-nums;color:#fff;overflow-wrap:anywhere}
+.sala-oque{color:#e4e4ea;overflow-wrap:anywhere}
+.sala-lado{display:inline-block;width:8px;height:8px;border-radius:50%;margin-right:8px;vertical-align:middle;background:#a6a6b2}
+.sala-lado.is-claude{background:#ffac62}.sala-lado.is-codex{background:#65a7ff}.sala-lado.is-ele{background:#ff2e7e}.sala-lado.is-os-dois{background:linear-gradient(90deg,#ffac62 50%,#65a7ff 50%)}
+.sala-atrasado{grid-column:2;font-size:12px;font-weight:600;color:#ffac62}
+/* 4) o resto, menor */
+.sala-baixo{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));column-gap:28px}
+.sala-baixo .sala-texto{font-size:13px;font-weight:500;color:#d6d6de}
+.sala-acelerado{font-size:12px;color:#a6a6b2;border-top:1px solid #26262e;padding-top:8px}
+.sala-acelerado summary{cursor:pointer;min-height:28px;line-height:28px;width:max-content;max-width:100%;font-weight:650}
+.sala-acelerado summary:focus-visible{outline:2px solid #ff2e7e;outline-offset:2px;border-radius:4px}
+.sala-acelerado ul{margin:6px 0 0;padding:0 0 0 18px;display:grid;gap:4px}
+.sala-acelerado .sala-texto{font-size:13px;font-weight:500;color:#d6d6de;display:inline}
+.sala-antes{color:#a6a6b2}
+@media(pointer:coarse){.sala-link,.sala-acelerado summary{min-height:44px;line-height:44px}}
+@media(max-width:760px){
+  .sala{padding:14px 16px 12px;border-radius:17px;margin-bottom:12px}
+  .sala-voce{padding:12px 13px}
+  .sala-voce-meta{display:flex;margin:4px 0 0}
+  .sala-rodando-item{grid-template-columns:1fr;row-gap:0}
+  .sala-atrasado{grid-column:1}
+  .sala-quando{font-size:13px;color:#cfcfd8}
+  .sala-baixo{grid-template-columns:1fr;row-gap:14px}
+}

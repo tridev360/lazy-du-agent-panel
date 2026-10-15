@@ -1,0 +1,18 @@
+{
+  "_leia": "Nomes que o painel esconde em toda resposta (filtro do sigilo-pessoas.cjs). Troque pelos seus. PAINEL_NOMES_OCULTAR aponta outro arquivo.",
+  "nomes": [
+    "Fulano Exemplo"
+  ],
+  "nomesComuns": [],
+  "qualquerCaixa": [
+    "Beltrano"
+  ],
+  "contas": [
+    "conta_exemplo"
+  ],
+  "minusculos": [],
+  "comunidades": [
+    "Comunidade Exemplo"
+  ],
+  "protegidas": []
+}

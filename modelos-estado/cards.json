@@ -1,0 +1,19 @@
+{
+  "id": "decidir-filtro",
+  "sessao": "Claude",
+  "criado": "2025-03-14T15:20:00.000Z",
+  "tipo": "decisao",
+  "pergunta": "Qual filtro fazemos primeiro?",
+  "opcoes": [
+    {
+      "label": "Por projeto",
+      "descricao": "Ajuda a ver o trabalho de cada projeto.",
+      "recomendada": true
+    },
+    {
+      "label": "Por data",
+      "descricao": "Ajuda a conferir o que mudou hoje."
+    }
+  ],
+  "respondido": ""
+}

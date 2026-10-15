@@ -1,0 +1,113 @@
+/* blocos-livro.css (fase 2, 08/10): blocos proprios do tema LIVRO DE ORDENS (blocos-livro.js).
+   Fora do livro nada disto aparece. Piso de 13 px; numero em mono; cor so onde importa (verde = fechou, rosa = voce). */
+html:not([data-theme=livro]) #lv-placar,html:not([data-theme=livro]) #lv-fios,html:not([data-theme=livro]) #lv-toast,html:not([data-theme=livro]) #lv-fita{display:none!important}
+html[data-theme=livro] .lv-bloco{display:none}
+html[data-theme=livro][data-g-new=agora] #lv-placar{display:grid}
+html[data-theme=livro][data-g-new=fluxo] #lv-fios{display:block}
+
+/* ---------- placar do dia (P&L) + grade de 35 dias ---------- */
+html[data-theme=livro] #lv-placar{grid-template-columns:minmax(0,5fr) minmax(0,7fr);gap:48px;margin:32px 0 24px;padding:24px 0 0;border-top:1px solid var(--g-line)}
+html[data-theme=livro] .lv-pl{display:grid;gap:12px;align-content:start;min-width:0}
+html[data-theme=livro] .lv-pl-top{display:flex;align-items:baseline;gap:16px}
+html[data-theme=livro] .lv-pl-num{display:inline-block;font:500 32px/1 var(--g-pix);font-variant-numeric:tabular-nums;letter-spacing:-.02em;color:var(--g-tx)}
+html[data-theme=livro] .lv-pl-num.is-tick{animation:lvb-tick .3s ease-out}
+html[data-theme=livro] .lv-pl-lbl{font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .lv-delta{font:500 13px/20px var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx2)}
+html[data-theme=livro] .lv-delta.is-up{color:var(--g-anda)}
+html[data-theme=livro] .lv-delta.is-down{color:#EF4444}
+html[data-theme=livro] .lv-spark{display:block;width:100%;height:40px;overflow:visible}
+html[data-theme=livro] .lv-spark-l{fill:none;stroke:var(--g-tx);stroke-width:1.5;stroke-linejoin:round}
+html[data-theme=livro] .lv-spark-area{fill:color-mix(in srgb,var(--g-tx) 6%,transparent);stroke:none}
+html[data-theme=livro] .lv-spark-p{fill:none;stroke:var(--g-anda);stroke-width:6;stroke-linecap:round}
+html[data-theme=livro] .lv-kv{display:flex;flex-wrap:wrap;gap:8px 24px;font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .lv-kv b{font:500 13px/20px var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx)}
+html[data-theme=livro] .lv-fonte{margin:0;font:400 13px/18px var(--g-sans);color:var(--g-tx3)}
+html[data-theme=livro] .lv-pix{display:grid;gap:8px;align-content:end;min-width:0}
+html[data-theme=livro] .lv-pix-grid{display:flex;gap:3px;align-items:flex-end;justify-content:space-between}
+html[data-theme=livro] .lv-pix-col{display:flex;flex-direction:column-reverse;gap:2px;padding:2px;border-radius:2px;flex:0 1 auto}
+html[data-theme=livro] .lv-pix-col.is-hoje{box-shadow:inset 0 0 0 1px var(--g-tx3)}
+html[data-theme=livro] .lv-pix-col b{display:block;width:8px;height:5px;background:#1E1E23;border-radius:1px}
+html[data-theme=livro] .lv-pix-col b.on{background:var(--g-anda)}
+html[data-theme=livro] .lv-pix-col.is-cheia b.on{background:#4ADE80}
+html[data-theme=livro] .lv-pix-col b.is-novo{animation:lvb-pix .3s ease-out}
+html[data-theme=livro] .lv-pix-col.is-semleitura b{background:transparent;box-shadow:inset 0 0 0 1px #1E1E23}
+html[data-theme=livro] .lv-pix-col:hover b:not(.on){background:#26262C}
+html[data-theme=livro] .lv-pix-axis{display:flex;justify-content:space-between;gap:16px;font:400 13px/16px var(--g-pix);color:var(--g-tx3)}
+
+/* ---------- FILL: linha pisca verde 300 ms, toast ---------- */
+html[data-theme=livro] .g-item.lv-fill{animation:lvb-fill .3s ease-out}
+html[data-theme=livro] #lv-toast{position:fixed;right:24px;bottom:72px;z-index:80;display:flex;align-items:center;gap:12px;height:40px;max-width:min(560px,calc(100vw - 48px));padding:0 16px;box-sizing:border-box;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-anda);border-radius:8px;font:400 13px/1 var(--g-sans);color:var(--g-tx)}
+html[data-theme=livro] #lv-toast[hidden]{display:none}
+html[data-theme=livro] #lv-toast.is-entra{animation:lvb-toast .3s ease-out}
+html[data-theme=livro] #lv-toast b{font:600 13px/1 var(--g-pix);color:var(--g-anda);letter-spacing:.04em}
+html[data-theme=livro] #lv-toast span{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+html[data-theme=livro] #lv-toast em{font:500 13px/1 var(--g-pix);font-style:normal;color:var(--g-tx2);white-space:nowrap}
+
+/* ---------- livro do fluxo (1 linha por direcao, cor de quem manda) ---------- */
+html[data-theme=livro] #lv-fios{margin:32px 0 24px;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px;overflow:hidden}
+html[data-theme=livro] #lv-fios .lv-bhead{display:flex;align-items:baseline;justify-content:space-between;gap:16px;padding:16px 20px;border-bottom:1px solid var(--g-line)}
+html[data-theme=livro] .lv-tab{display:grid}
+html[data-theme=livro] .lv-tr{all:unset;box-sizing:border-box;display:grid;grid-template-columns:72px minmax(0,1.2fr) minmax(0,1.2fr) 96px 56px 64px;gap:16px;align-items:center;min-height:40px;padding:0 20px;border-bottom:1px solid var(--g-line);font:400 14px/20px var(--g-sans);color:var(--g-tx);cursor:pointer;box-shadow:inset 2px 0 0 var(--lv-cor,transparent);transition:background-color .2s ease}
+html[data-theme=livro] .lv-tr:last-child{border-bottom:0}
+html[data-theme=livro] .lv-tr:hover{background:color-mix(in srgb,var(--g-tx) 4%,transparent)}
+html[data-theme=livro] .lv-tr:focus-visible{outline:1px solid var(--g-tx);outline-offset:-1px}
+html[data-theme=livro] .lv-tr.is-sel{background:color-mix(in srgb,var(--lv-cor,var(--g-tx)) 12%,transparent);box-shadow:inset 3px 0 0 var(--lv-cor,var(--g-tx))}
+html[data-theme=livro] .lv-th{cursor:default;min-height:32px;font:500 13px/16px var(--g-pix);letter-spacing:.06em;color:var(--g-tx3);box-shadow:none}
+html[data-theme=livro] .lv-th:hover{background:none}
+html[data-theme=livro] .lv-tr>span{min-width:0;overflow:visible;text-overflow:clip;white-space:normal;overflow-wrap:break-word;padding:6px 0}
+html[data-theme=livro] .lv-tr .is-num{text-align:right}
+html[data-theme=livro] .lv-mono{font:400 13px/20px var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx2)}
+html[data-theme=livro] .lv-tr.is-quente .lv-mono:first-child{color:var(--g-tx)}
+html[data-theme=livro] .lv-quem{display:flex;align-items:center;gap:8px;color:var(--lv-cor,var(--g-tx))}
+html[data-theme=livro] .lv-para{color:var(--g-tx2)}
+html[data-theme=livro] .lv-dot{flex:none;display:inline-block;width:7px;height:7px;border-radius:50%;background:var(--lv-cor,var(--g-tx3))}
+html[data-theme=livro] .lv-tipo{font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .lv-tipo.k-duvida{color:var(--g-trava)}
+html[data-theme=livro] .lv-tipo.k-resposta{color:var(--g-anda)}
+html[data-theme=livro] [data-lado=claude]{--lv-cor:var(--g-claude)}
+html[data-theme=livro] [data-lado=codex]{--lv-cor:var(--g-codex)}
+html[data-theme=livro] [data-lado=voce]{--lv-cor:var(--g-rosa)}
+html[data-theme=livro] [data-lado=ok]{--lv-cor:var(--g-anda)}
+html[data-theme=livro] [data-lado=trava]{--lv-cor:var(--g-trava)}
+html[data-theme=livro] [data-lado=dorme]{--lv-cor:var(--g-tx3)}
+
+/* ---------- fita na barra (ticker do ultimo evento) ---------- */
+html[data-theme=livro] #lv-fita{flex:0 1 auto;min-width:0;max-width:min(560px,50%);margin-left:auto;display:flex;align-items:center;gap:10px;height:28px;padding:0 12px;border-radius:6px;box-shadow:inset 0 0 0 1px var(--g-line);overflow:hidden}
+html[data-theme=livro] .lv-fita-h{flex:none;font:500 13px/1 var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx3)}
+html[data-theme=livro] .lv-fita-t{display:flex;align-items:center;gap:8px;min-width:0;font:400 13px/1 var(--g-sans);color:var(--g-tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] .lv-fita-t.is-vazio{color:var(--g-tx3)}
+html[data-theme=livro] .lv-fita-t.is-entra{animation:lvb-fita .3s ease-out}
+html[data-theme=livro] .g-sub .g-sub-nota+#lv-fita{margin-left:24px}
+
+/* ---------- movimento ---------- */
+@keyframes lvb-tick{0%{transform:translateY(-4px);color:var(--g-anda)}100%{transform:none}}
+@keyframes lvb-pix{0%{transform:scale(1.8);background:#86EFAC}100%{transform:none}}
+@keyframes lvb-fill{0%{background:color-mix(in srgb,var(--g-anda) 28%,transparent)}100%{background:transparent}}
+@keyframes lvb-toast{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
+@keyframes lvb-fita{0%{opacity:0;transform:translateY(8px)}100%{opacity:1;transform:none}}
+html[data-theme=livro][data-motion=off] #lv-placar *,html[data-theme=livro][data-motion=off] #lv-fios *,html[data-theme=livro][data-motion=off] #lv-toast,html[data-theme=livro][data-motion=off] #lv-fita *,html[data-theme=livro][data-motion=off] .g-item.lv-fill{animation:none!important;transition:none!important}
+
+html[data-theme=livro] .lv-tab.is-sem-hora .lv-tr{grid-template-columns:minmax(0,1.2fr) minmax(0,1.2fr) 96px 56px}
+/* ---------- larguras ---------- */
+@media (max-width:760px){html[data-theme=livro] #lv-fita{display:none}}
+@media (max-width:1100px){
+  html[data-theme=livro] #lv-placar{grid-template-columns:1fr;gap:24px}
+  html[data-theme=livro] .lv-tr{grid-template-columns:56px minmax(0,1fr) minmax(0,1fr) 48px 56px}
+  html[data-theme=livro] .lv-tr>span:nth-child(4){display:none}
+  html[data-theme=livro] .lv-tab.is-sem-hora .lv-tr{grid-template-columns:minmax(0,1fr) minmax(0,1fr) 88px 48px}
+  html[data-theme=livro] .lv-tab.is-sem-hora .lv-tr>span:nth-child(4){display:block}
+}
+@media (max-width:760px){
+  html[data-theme=livro] .lv-pix-col b{width:5px;height:4px}
+  html[data-theme=livro] .lv-pix-grid{gap:2px}
+  html[data-theme=livro] .lv-pix-axis span:nth-child(2){display:none}
+  html[data-theme=livro] .lv-tr{grid-template-columns:48px minmax(0,1fr) minmax(0,1fr) 48px;padding:0 12px;gap:8px}
+  html[data-theme=livro] .lv-tr>span:nth-child(5){display:none}
+  html[data-theme=livro] #lv-fios .lv-bhead{flex-wrap:wrap;padding:12px}
+  html[data-theme=livro] #lv-toast{right:16px;left:16px;max-width:none}
+}
+
+/* Cada uma das 35 colunas cabe no espaco disponivel, inclusive no celular. */
+html[data-theme=livro] .lv-pix-grid{display:grid;grid-template-columns:repeat(35,minmax(0,1fr));gap:1px;min-width:0;width:100%}
+html[data-theme=livro] .lv-pix-col{min-width:0;padding:1px;width:100%;box-sizing:border-box}
+html[data-theme=livro] .lv-pix-col b{width:100%;max-width:8px}

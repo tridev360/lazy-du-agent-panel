@@ -1,0 +1,50 @@
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card){--up-muted:var(--op-color-2,#bdbdc8);--up-ease:cubic-bezier(.22,1,.36,1)}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-strip{margin:8px 0 24px;padding:16px;border:1px solid var(--line);border-radius:8px;background:linear-gradient(130deg,#ffffff03,transparent 70%),var(--panel);box-shadow:inset 0 1px 0 #ffffff07,0 1px 2px #00000018;min-width:0}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-heroes{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-hero{min-width:0;padding:8px 0}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-label{display:block;font-size:11px;line-height:1.5;color:var(--up-muted)}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-number{display:block;font-size:clamp(28px,3vw,40px);font-weight:500;line-height:1.2;margin:8px 0;font-variant-numeric:tabular-nums;letter-spacing:-.03em;overflow-wrap:anywhere}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-proof{display:flex;flex-wrap:wrap;gap:8px;align-items:center;margin-top:8px}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-caption{color:var(--up-muted);font-size:11px;line-height:1.6;overflow-wrap:anywhere}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-chip{display:inline-block;max-width:100%;padding:4px 8px;border:1px solid var(--line);border-radius:4px;font-size:11px;line-height:1.5;color:var(--up-muted);overflow-wrap:anywhere}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-chip.is-current{color:var(--green)}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-chip.is-old{color:var(--orange)}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-chip.is-unknown{color:var(--pink)}
+#panel-queue .up-track{height:8px;margin-top:16px;background:var(--bg);border:1px solid var(--line);overflow:hidden;border-radius:4px}
+#panel-queue .up-fill{display:block;width:100%;height:100%;background:var(--green);transform:scaleX(var(--up-scale,0));transform-origin:left;transition:transform .35s var(--up-ease)}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-more{min-width:0;max-width:100%;margin:8px 0;border-left:1px solid var(--line);padding-left:12px}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-summary{display:flex;gap:12px;align-items:baseline;cursor:pointer;min-height:32px;padding:4px 0;list-style:none;font-size:12px;line-height:1.5}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-summary-text{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;overflow:hidden;min-width:0;color:var(--up-muted);overflow-wrap:anywhere}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-more-label{color:var(--blue);white-space:nowrap;font-size:11px;flex:none}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-full{font-size:12px;line-height:1.65;overflow-wrap:anywhere}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) details.up-more:not([open])>.up-full{display:none}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-summary:focus-visible{outline:2px solid var(--blue);outline-offset:4px;border-radius:4px}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) p:not(.up-full){display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) :is(dialog,details[open]) p{display:block;overflow:visible}
+#panel-launches .launch-item{min-width:0;padding:12px 16px;border:1px solid var(--line);border-radius:8px;box-shadow:inset 0 1px 0 #ffffff06;background:linear-gradient(130deg,#ffffff02,transparent 70%),var(--panel)}
+#panel-launches :is(.launch-name,.launch-state,.launch-item-foot){font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+#panel-launches .launch-name{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#panel-sessions .jpb-fala-btn[aria-expanded='false'] .jpb-fala-text{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#panel-sessions .jpb-fala-btn[aria-expanded='true'] .jpb-fala-text{display:block;overflow:visible}
+#panel-projects .project-card{border-radius:8px;min-width:0;box-shadow:inset 0 1px 0 #ffffff06,0 1px 2px #00000012;background:linear-gradient(130deg,#ffffff03,transparent 70%),var(--panel)}
+#panel-projects :is(.project-progress,.project-fact){font-variant-numeric:tabular-nums}
+#panel-queue .up-records{width:100%;border-collapse:collapse;table-layout:fixed;margin-top:16px;font-size:12px;font-variant-numeric:tabular-nums}
+#panel-queue .up-records th{text-align:left;font-weight:500;color:var(--up-muted);padding:8px;border-bottom:1px solid var(--line)}
+#panel-queue .up-records th:first-child{width:60%}
+#panel-queue .up-records td{padding:12px 8px;vertical-align:top;border-bottom:1px solid var(--line);overflow-wrap:anywhere}
+#panel-queue .up-record-button{display:block;width:100%;text-align:left;padding:0;border:0;background:transparent;color:var(--ink);font:inherit;font-weight:500;cursor:pointer;line-height:1.5}
+#panel-queue .up-record-button>span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+#panel-queue .up-record-button:focus-visible{outline:2px solid var(--blue);outline-offset:4px}
+#panel-queue .up-record-button:hover{color:var(--blue)}
+:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-roll{animation:up-number-roll .36s var(--up-ease)}
+@keyframes up-number-roll{from{transform:translateY(4px);opacity:1}to{transform:translateY(0);opacity:1}}
+@media(max-width:600px){
+ :is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-heroes{grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}
+ :is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-strip{padding:12px;margin-bottom:16px}
+ :is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) .up-number{font-size:28px}
+ #panel-queue .up-records th:first-child{width:55%}
+ #panel-queue .up-records :is(th,td){padding:8px 4px;font-size:11px}
+ :is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue,#panel-tips,#ideias-panel,#cronograma-casa,#rotina-card) .up-summary{min-height:44px;gap:8px}
+}
+html[data-motion='off'] :is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) :is(.up-roll,.up-fill){animation:none;transition:none}
+@media(prefers-reduced-motion:reduce){:is(#panel-team,#panel-sessions,#panel-consumption,#panel-launches,#panel-projects,#panel-queue) :is(.up-roll,.up-fill){animation:none;transition:none}}

@@ -1,0 +1,6 @@
+/* Ajustes da previa 3296. */
+/* Nome longo de agente no palco da Home passava de 2 linhas e cobria a linha de baixo: corta em 2 linhas com reticencias. */
+.eq-home .eq-agent-name{display:-webkit-box;-webkit-box-orient:vertical;-webkit-line-clamp:2;line-clamp:2;overflow:hidden}
+@media(min-width:761px){footer{padding-right:96px}}
+.launch-idade{margin:0 0 14px;font-size:13px;color:#a6a6b2;line-height:1.5}
+.launch-idade.is-velha{color:#ffac62;font-weight:600}

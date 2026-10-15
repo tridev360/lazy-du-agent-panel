@@ -1,0 +1,24 @@
+{
+  "id": "escolher-login",
+  "sessao": "frontend",
+  "criado": "2025-03-14T14:05:00.000Z",
+  "tipo": "decisao",
+  "pergunta": "Qual tela de login fazemos primeiro?",
+  "opcoes": [
+    {
+      "label": "Login por link no email",
+      "descricao": "Nada para decorar. Mais rápido de testar.",
+      "recomendada": true
+    },
+    {
+      "label": "Login com código no celular",
+      "descricao": "Um código de 6 dígitos chega por SMS. Pede o número de telefone."
+    }
+  ],
+  "recomendada": 0,
+  "porque": "O protótipo precisa de um login para o teste com 5 pessoas.",
+  "destrava": "A tela de perfil, que vem logo depois do login.",
+  "link_sessao": "chat da coordenadora",
+  "respondido": "",
+  "respondidoEm": ""
+}

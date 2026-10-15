@@ -1,0 +1,60 @@
+/* WEN: status em 6 linhas + AUTOMATIZAR. Usa as cores do painel (--panel, --line, --ink, --muted, --pink, --green). */
+.wen-controls{display:inline-flex;align-items:center;gap:6px;flex-wrap:nowrap}
+.wen-controls .wen-trigger{min-height:40px;min-width:52px;padding:7px 12px;border:1px solid var(--pink,#ff2e7e);border-radius:9px;background:var(--pink,#ff2e7e);color:#fff;font:700 13px/1 var(--body,'Space Grotesk','Segoe UI',sans-serif);letter-spacing:.06em;cursor:pointer;box-shadow:0 3px 0 #8f1546;transition:transform .12s ease,box-shadow .12s ease,filter .12s ease}
+.wen-controls .wen-trigger:hover{filter:brightness(1.08)}
+.wen-controls .wen-trigger:active,.wen-controls .wen-trigger.wen-pressing{transform:translateY(3px) scale(.96);box-shadow:0 0 0 #8f1546;filter:brightness(.92)}
+.wen-controls .wen-trigger[aria-busy="true"]{cursor:progress}
+.wen-controls .wen-trigger:focus-visible,.wen-controls .wen-auto:focus-visible{outline:2px solid #ff84af;outline-offset:3px}
+.wen-controls .wen-auto{min-height:40px;padding:7px 10px 7px 30px;position:relative;border:1px solid var(--line,#303038);border-radius:9px;background:var(--panel,#141419);color:var(--muted,#a6a6b2);font:600 11px/1 var(--body,'Space Grotesk','Segoe UI',sans-serif);letter-spacing:.04em;cursor:pointer}
+.wen-controls .wen-auto::before{content:"";position:absolute;left:9px;top:50%;width:14px;height:8px;margin-top:-4px;border-radius:8px;background:#484850;transition:background .15s ease}
+.wen-controls .wen-auto::after{content:"";position:absolute;left:10px;top:50%;width:6px;height:6px;margin-top:-3px;border-radius:50%;background:#d6d6de;transition:transform .15s ease}
+.wen-controls .wen-auto.is-on{color:var(--ink,#fff);border-color:var(--green,#54d16a)}
+.wen-controls .wen-auto.is-on::before{background:var(--green,#54d16a)}
+.wen-controls .wen-auto.is-on::after{transform:translateX(6px);background:#fff}
+.wen-last{color:var(--muted,#a6a6b2);font:500 11px/1.2 var(--body,'Space Grotesk','Segoe UI',sans-serif);white-space:nowrap}
+/* 640 px: cada linha curta (ate 60 caracteres) cabe em 1 linha da tela no desktop. */
+.wen-panel{position:fixed;z-index:45;top:92px;right:16px;width:min(640px,calc(100vw - 32px));max-height:calc(100vh - 110px);overflow:auto;background:var(--panel,#141419);border:1px solid var(--line,#303038);border-radius:14px;box-shadow:0 14px 40px #000a;color:var(--ink,#fff);font:13px/1.45 var(--body,'Space Grotesk','Segoe UI',sans-serif)}
+.wen-panel.wen-opening{animation:wen-open .26s ease-out}
+.wen-panel.wen-refresh{animation:wen-refresh .26s ease-out}
+@keyframes wen-open{from{opacity:0;transform:translateY(-8px) scale(.98)}to{opacity:1;transform:none}}
+@keyframes wen-refresh{0%{box-shadow:0 0 0 2px #ff2e7e66,0 14px 40px #000a}100%{box-shadow:0 14px 40px #000a}}
+.wen-head{display:flex;align-items:center;gap:10px;padding:12px 14px;border-bottom:1px solid var(--line,#303038)}
+.wen-title{font-size:15px;letter-spacing:.08em;color:var(--pink,#ff2e7e)}
+.wen-at{flex:1;color:var(--muted,#a6a6b2);font-size:12px}
+.wen-close{min-width:36px;min-height:36px;border:1px solid var(--line,#303038);border-radius:9px;background:transparent;color:var(--ink,#fff);font-size:18px;cursor:pointer}
+.wen-list{padding:6px 8px 8px}
+.wen-row{border-radius:10px;margin:2px 0;transition:background .3s ease,box-shadow .3s ease}
+.wen-summary{display:grid;grid-template-columns:128px minmax(0,1fr);gap:10px;align-items:baseline;padding:9px 8px;cursor:pointer;list-style:none}
+.wen-summary::-webkit-details-marker{display:none}
+.wen-summary:hover{background:#ffffff0a;border-radius:10px}
+.wen-label{color:var(--muted,#a6a6b2);font-weight:600;font-size:12px}
+.wen-text{color:var(--ink,#fff);overflow-wrap:anywhere}
+.wen-row.is-unknown .wen-text{color:var(--muted,#a6a6b2)}
+.wen-row[open] .wen-summary{background:#ffffff0d;border-radius:10px 10px 0 0}
+.wen-detail{padding:6px 10px 10px 146px;color:#ccccd7;font-size:11.5px;background:#ffffff08;border-radius:0 0 10px 10px}
+.wen-source,.wen-note{margin:3px 0;overflow-wrap:anywhere}
+.wen-note{color:var(--muted,#a6a6b2)}
+.wen-row.wen-changed{background:#54d16a1f;box-shadow:inset 3px 0 0 var(--green,#54d16a)}
+.wen-live{margin:0;padding:0 14px 10px;color:var(--green,#54d16a);font-size:11.5px;min-height:0}
+.wen-live:empty{display:none}
+/* Celular: o cabecalho nao cabe mais 2 botoes; o WEN vira uma barra flutuante embaixo a esquerda (ao alcance do polegar)
+   e o painel abre acima dela. O botao redondo do chat segue embaixo a direita. */
+@media(max-width:600px){
+  /* Escrevendo na caixa de mensagem: a barra flutuante (WEN) e o botao do chat saem da frente (o Enviar fica livre)
+     e o foco rola a caixa para acima de onde a barra fica. */
+  html{scroll-padding-bottom:96px}
+  body:has(.cx:focus-within) .wen-controls,body:has(.cx:focus-within) .painel-chat-trigger{visibility:hidden}
+  .wen-controls{position:fixed;z-index:44;left:12px;bottom:14px;gap:6px;padding:5px;border:1px solid var(--line,#303038);border-radius:13px;background:#0d0d10f2;box-shadow:0 6px 18px #0008}
+  .wen-controls .wen-trigger{min-width:52px;min-height:44px;padding:6px 12px}
+  .wen-controls .wen-auto{min-height:44px;padding:6px 10px 6px 30px;font-size:11px}
+  .wen-last{display:none}
+  .wen-panel{top:auto;bottom:76px;left:8px;right:8px;width:auto;max-height:calc(100vh - 150px)}
+  .wen-list{padding:4px 4px 6px}
+  /* 12 px e respiro menor: a linha curta (ate 60 caracteres) cabe em 1 linha tambem a 375 px. */
+  .wen-summary{grid-template-columns:1fr;gap:2px;padding:8px 6px}
+  .wen-text{font-size:12px}
+  .wen-detail{padding-left:10px}
+  body:has(.wen-controls){padding-bottom:72px}
+}
+@media(prefers-reduced-motion:reduce){.wen-controls *,.wen-panel,.wen-row{animation:none!important;transition:none!important}}
+html[data-motion="off"] .wen-controls *,html[data-motion="off"] .wen-panel,html[data-motion="off"] .wen-row{animation:none!important;transition:none!important}

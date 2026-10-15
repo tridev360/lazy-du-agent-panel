@@ -1,0 +1,1 @@
+{"type":"object","additionalProperties":false,"required":["fala_simples","fala_literal"],"properties":{"fala_simples":{"type":"string","maxLength":260},"fala_literal":{"type":["string","null"],"maxLength":1200}}}

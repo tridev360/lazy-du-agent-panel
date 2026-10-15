@@ -1,0 +1,28 @@
+'use strict';
+(function(root){
+ const labels={noAr:'No ar',rodando:'Rodando',travado:'Travado',acelerar:'Acelerar',voce:'Você',credito:'Crédito'};
+ const KEY='painel-agora-ultima-visita-v1';
+ function summaryKnown(s){return !!s?.ok&&!['noAr','travado'].some(k=>s.unavailable?.includes(k));}
+ function returnSummary(previous,s,cards,now=Date.now()){if(!previous||!Number.isFinite(previous.at)||now-previous.at<4*3600000||!summaryKnown(s))return null;const clock=new Intl.DateTimeFormat('pt-BR',{timeZone:'America/Sao_Paulo',hour:'2-digit',minute:'2-digit',hour12:false}).format(new Date(previous.at));const live=s.noAr.filter(v=>!(previous.noAr||[]).includes(v));const blocked=s.travado.filter(v=>!(previous.travado||[]).includes(v));return 'Desde '+clock+': '+(live.length?'subiu '+live.join('; '):'nenhuma subida nova informada')+', '+(blocked.length?'travou '+blocked.join('; '):'nenhuma trava nova informada')+', '+cards.length+' cards esperam.';}
+ function creditText(c){if(typeof c==='string')return c;return ['claude','codex'].map(k=>{const a=c?.[k],label=k==='claude'?'Claude':'Codex';return label+': '+(typeof a==='string'?a:typeof a?.semana==='number'?a.semana+'% usado':typeof a?.restante==='number'?a.restante+'% restante':a?.texto||'sem leitura');}).join(' · ');}
+ function cardSignature(cards,source,unavailable){const keys=['arquivo','versao','id','sessao','familia','pergunta','opcoes','passos','feitos','tipoLivre','perigoso','bloqueado','avisoPerigo','motivo','ondeResponder','chatLink','ganhoTempo','chavePassos'];return JSON.stringify([cards.map(c=>Object.fromEntries(keys.map(k=>[k,c[k]]))),source.voce,!!unavailable]);}
+ function values(s){if(!s.ok)return Object.fromEntries(Object.keys(labels).map(k=>[k,['Sem leitura']]));const vals={noAr:s.noAr.length?s.noAr:['Sem leitura'],rodando:s.rodando.length?s.rodando.map(v=>[v.o_que,v.quando||'Previsão sem leitura',v.faixa].filter(Boolean).join(' · ')):['Nenhuma execução informada'],travado:s.travado.length?s.travado:['Nenhuma trava informada'],acelerar:s.acelerar.length?s.acelerar.map(v=>[v.espera,v.feito].filter(Boolean).join(' · ')):['Sem leitura'],voce:s.voce.length?s.voce.map(v=>v.passo):['Nada pedido a você'],credito:[creditText(s.credito)]};for(const k of Object.keys(labels))if(s.unavailable?.includes(k))vals[k]=['Sem leitura'];return vals;}
+ function start(){const D=root.document,home=D.getElementById('panel-home');if(!home||D.getElementById('agora300'))return;const el=(tag,cl,t)=>{const n=D.createElement(tag);if(cl)n.className=cl;if(t!==undefined)n.textContent=t;return n;};let data=null,busy=false,timer=null,previous=null,arrived=false,rowSig=null,cardSig=null;
+  try{previous=JSON.parse(root.localStorage.getItem(KEY)||'null');}catch{}
+  // vezes, previsao dupla, Acelerar em texto de log). Agora o bloco so mostra os cards de 1 toque (estado/cards) e o resumo da volta;
+  // sem card e sem resumo, ele some (nada de "Nenhum card esperando" com itens embaixo).
+  const wrap=el('section','agora300');wrap.id='agora300';wrap.setAttribute('aria-label','Cards');wrap.hidden=true;const summary=el('p','agora-return');summary.hidden=true;const cards=el('section','agora-cards');cards.id='agora300-cards';const notice=el('p','agora-notice');notice.setAttribute('role','status');notice.setAttribute('aria-live','polite');wrap.append(summary,cards,notice);home.prepend(wrap);D.documentElement.classList.add('agora300-ativo');
+  const tell=text=>{notice.textContent=text||'';if(text)wrap.hidden=false;};
+  const suffix=new URLSearchParams(root.location.search).get('exemplo')==='1'?'?exemplo=1':'';
+  async function post(url,p){const r=await root.fetch(url+suffix,{method:'POST',headers:{'Content-Type':'application/json','X-Agora-Token':data?.token||''},body:JSON.stringify(p)});return r.json();}
+  const cardUI=root.PainelCards1Toque.mount(cards,{post,refresh,notice:tell});
+  function draw(d){data=d;const s=d.agora||{ok:false},c=d.cards?.pendentes||[];const nextCards=cardSignature(c,s,d.cards?.unavailable);if(nextCards!==cardSig){cardSig=nextCards;if(d.cards?.unavailable){cards.replaceChildren(el('h2','','Cards: sem leitura agora'));}else if(c.length)cardUI.render(c,s);else cards.replaceChildren();}wrap.hidden=!(c.length||d.cards?.unavailable||!summary.hidden||notice.textContent);
+   if(!arrived&&summaryKnown(s)){arrived=true;const msg=returnSummary(previous,s,c);if(msg){summary.textContent=msg;summary.hidden=false;wrap.hidden=false;}save();}
+  }
+  function save(){if(!summaryKnown(data?.agora))return;try{root.localStorage.setItem(KEY,JSON.stringify({at:Date.now(),noAr:data.agora.noAr,travado:data.agora.travado}));}catch{}}
+  async function refresh(){if(busy||D.hidden)return;busy=true;try{const r=await root.fetch('/api/agora'+suffix,{cache:'no-store'});if(!r.ok)throw Error();draw(await r.json());}catch{draw({agora:{ok:false,stale:true},cards:{pendentes:[],unavailable:true},olhe:{text:'Cards sem leitura',button:'Atualizar',target:'refresh'}});}finally{busy=false;}}
+  
+  const cadence=()=>{root.clearInterval(timer);timer=null;if(!D.hidden){refresh();timer=root.setInterval(()=>{save();refresh();},20000);}};D.addEventListener('visibilitychange',cadence);root.addEventListener('pagehide',()=>{save();root.clearInterval(timer);});cadence();root.PainelAgora=Object.freeze({refresh});
+ }
+ const api={values,summaryKnown,returnSummary,creditText,cardSignature,start};if(typeof module==='object'&&module.exports)module.exports=api;else{root.PainelAgoraHelpers=Object.freeze(api);if(root.document.readyState==='loading')root.document.addEventListener('DOMContentLoaded',start,{once:true});else start();}
+})(typeof window==='object'?window:globalThis);

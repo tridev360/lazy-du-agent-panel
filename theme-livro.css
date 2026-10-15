@@ -1,0 +1,204 @@
+/* theme-livro.css (fase 2, 08/10): tema LIVRO DE ORDENS (terminal de ordens, ref ferramenta). Inter + JetBrains Mono, quase preto,
+   blocos com borda fina e canto de 8 px, linhas de tabela com dono, estado e idade, numero em mono, ticker na barra.
+   Mesma marcacao da GRADE (vistas.js); os blocos so do livro (placar do dia, grade de 35 dias, FILL, livro do fluxo, fita)
+   moram em blocos-livro.js/.css. Fluxo: cada fio na cor de quem manda (voce rosa, Claude laranja, Codex azul); a idade
+   so muda a forca da cor, nunca vira cinza. O movimento e suave (ease); o jeito de cada evento mora no anim-livro.js. */
+html[data-theme=livro]{
+  --g-bg:#0B0B0D;--g-s1:#131316;--g-line:#222227;--g-dot:#2E2E35;--g-tx:#EDEDEF;--g-tx2:#A1A1AA;--g-tx3:#71717A;
+  --g-rosa:#FF3D8B;--g-claude:#F97316;--g-codex:#60A5FA;--g-anda:#22C55E;--g-trava:#EAB308;--g-dorme:#52525B;
+  --g-pix:'JetBrains Mono',ui-monospace,Consolas,monospace;--g-sans:'Inter',ui-sans-serif,'Segoe UI',system-ui,sans-serif;
+  --g-p16:13px;--g-p24:20px;--g-p48:32px;
+  --g-fio-quente:#EDEDEF;--g-fio-morno:#A1A1AA;--g-fio-recente:#71717A;--g-fio-frio:#3F3F46;
+  --bg:#0B0B0D;--panel:#131316;--line:#222227;--muted:#A1A1AA;--ink:#EDEDEF;--pink:#FF3D8B;--cor-voce:#FF3D8B;--cor-claude:#F97316;--cor-codex:#60A5FA;
+  -webkit-font-smoothing:antialiased
+}
+html[data-theme=livro] body{background:var(--g-bg)}
+html[data-theme=livro] .g-h{font:600 var(--g-p24)/1.2 var(--g-sans);text-transform:lowercase;letter-spacing:-.01em}
+html[data-theme=livro] .g-h::first-letter{text-transform:uppercase}
+html[data-theme=livro] .g-num,html[data-theme=livro] .g-n24{font-family:var(--g-pix);font-weight:500;font-variant-numeric:tabular-nums;letter-spacing:-.02em}
+html[data-theme=livro] .g-lab{font:500 13px/1 var(--g-pix);letter-spacing:.04em}
+html[data-theme=livro] .g-btn{border-radius:6px;font-family:var(--g-sans);height:28px;padding:0 14px}
+html[data-theme=livro] .g-btn.is-quieto{border-radius:6px}
+
+/* ---------- barra: abas em texto, placar vira ticker "● 7 anda ● 1 travou ● 7 espera voce" ---------- */
+html[data-theme=livro] .g-tab{font:500 15px/1 var(--g-sans);text-transform:lowercase;padding:0 14px;transition:color .2s ease,box-shadow .2s ease}
+html[data-theme=livro] .g-tab .g-tl::first-letter{text-transform:uppercase}
+html[data-theme=livro] .g-tab .g-key{font:500 13px/1 var(--g-pix);color:var(--g-tx3)}
+html[data-theme=livro] .g-placar,html[data-theme=livro] .g-mark,html[data-theme=livro] .g-slash,html[data-theme=livro] .g-davez{font-family:var(--g-pix)}
+html[data-theme=livro] .g-placar{gap:14px;border-radius:6px;padding:0 10px;font:500 13px/1 var(--g-pix)}
+html[data-theme=livro] .g-pl svg{display:none}
+html[data-theme=livro] .g-pl{gap:6px}
+html[data-theme=livro] .g-pl::before{content:"";width:6px;height:6px;border-radius:50%;background:var(--g-tx3);flex:none}
+html[data-theme=livro] .g-pl::after{content:attr(aria-label);font:400 13px/1 var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .g-pl.is-anda{order:1}
+html[data-theme=livro] .g-pl.is-anda::before{background:var(--g-anda);animation:lv-respira 1.8s ease-in-out infinite}
+html[data-theme=livro] .g-pl.is-trava{order:2}
+html[data-theme=livro] .g-pl.is-trava::before{background:#EF4444}
+html[data-theme=livro] .g-pl.is-espera{order:3}
+html[data-theme=livro] .g-pl.is-espera::before{background:var(--g-rosa)}
+html[data-theme=livro] .g-pl.is-espera .g-odo{color:var(--g-rosa)}
+html[data-theme=livro] .g-combo{order:4;font:600 13px/1 var(--g-pix);color:var(--g-anda)}
+html[data-theme=livro] .g-odo.is-rolando>span{animation:lv-tick .3s ease-out both}
+html[data-theme=livro] .g-temas,html[data-theme=livro] .g-tema{border-radius:6px}
+
+/* ---------- AGORA: espera voce em cima (tabela inteira), travou e andando lado a lado, como o livro ---------- */
+html[data-theme=livro] .g-cols{grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:24px}
+html[data-theme=livro] .g-cols .g-espera{grid-column:1/-1;order:1}
+html[data-theme=livro] .g-cols>section:nth-child(3){order:2}
+html[data-theme=livro] .g-cols>section:nth-child(2){order:3}
+html[data-theme=livro] .g-col{background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px;padding:12px 20px 4px;margin:0}
+html[data-theme=livro] .g-col.is-acao{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-rosa);padding:12px 20px 4px;margin:0}
+html[data-theme=livro] .g-col-head{min-height:40px;align-items:center}
+html[data-theme=livro] .g-col .g-sub2{margin:0 0 8px;font-size:13px}
+html[data-theme=livro] .g-espera .g-col-head{justify-content:flex-end;flex-direction:row-reverse;gap:12px}
+html[data-theme=livro] .g-espera .g-col-head .g-num{color:var(--g-rosa);font-size:32px;line-height:1}
+html[data-theme=livro] .g-list>li{padding:0;transition:background-color .3s ease}
+html[data-theme=livro] .g-list>li+li::before{background:var(--g-line)}
+html[data-theme=livro] .g-list>li:hover{background:color-mix(in srgb,var(--g-tx) 3%,transparent)}
+/* linha da espera: numero | o que (1 linha) | dono, tipo e idade | botao */
+html[data-theme=livro] .g-espera .g-item{grid-template-columns:28px minmax(0,1fr) 92px;align-items:center;gap:0 16px;min-height:40px;padding:6px 0}
+html[data-theme=livro] .g-espera .g-mark{color:var(--g-tx3);font:500 13px/20px var(--g-pix);height:20px}
+html[data-theme=livro] .g-espera .g-mark svg{display:none}
+html[data-theme=livro] .g-espera .g-mark.is-feito{color:var(--g-anda)}
+html[data-theme=livro] .g-espera .g-mark.is-feito svg{display:block}
+html[data-theme=livro] .g-espera .g-item>div{display:grid;grid-template-columns:minmax(0,1fr) minmax(180px,34%);gap:16px;align-items:center;min-width:0}
+html[data-theme=livro] .g-espera .g-item .g-meta{order:2;flex-wrap:nowrap;justify-content:flex-end;min-width:0;overflow:hidden;white-space:nowrap;font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .g-espera .g-item .g-meta b{font-weight:500;color:var(--g-tx2)}
+html[data-theme=livro] .g-espera .g-item .g-txt{order:1;margin:0;display:block;-webkit-line-clamp:unset;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 15px/22px var(--g-sans);color:var(--g-tx)}
+html[data-theme=livro] .g-espera .g-item>.g-btn{justify-self:end;margin:0}
+html[data-theme=livro] .g-tag-perigo{color:var(--g-trava)}
+html[data-theme=livro] .g-item.is-saindo{opacity:1;animation:lv-ok-linha .3s ease-out}
+/* andando e travou: ponto, nome, dono na cor do lado (borda), o que faz e idade em mono */
+html[data-theme=livro] .g-row{grid-template-columns:7px 7px minmax(0,1fr);gap:0 12px;min-height:40px;padding:4px 0 4px 20px;margin-left:-20px;box-shadow:inset 2px 0 0 var(--g-claude)}
+html[data-theme=livro] .g-row:has(.g-sq.is-codex){box-shadow:inset 2px 0 0 var(--g-codex)}
+html[data-theme=livro] .g-row .g-row-body{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.1fr);gap:16px;align-items:baseline}
+html[data-theme=livro] .g-row .g-row-nome{font:500 15px/22px var(--g-sans)}
+html[data-theme=livro] .g-row .g-row-body .g-sec{margin:0;text-align:right;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .g-row-trava{min-height:40px;align-items:center;padding:6px 0}
+html[data-theme=livro] .g-row-trava .g-st{margin-top:0}
+html[data-theme=livro] .g-row-trava .g-txt{margin:0;font:400 15px/22px var(--g-sans)}
+html[data-theme=livro] .g-vazio{font-size:14px;color:var(--g-tx3)}
+/* no ar, contas e projetos em blocos com borda */
+html[data-theme=livro] .g-faixa{margin-top:24px;padding:14px 20px;border-top:0;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px}
+html[data-theme=livro] .g-faixa+.g-faixa{margin-top:8px;padding-top:14px}
+html[data-theme=livro] .g-faixa .g-txt{font:400 14px/22px var(--g-sans)}
+html[data-theme=livro] .g-obra{margin-top:24px;padding:16px 20px;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px}
+html[data-theme=livro] .g-regua i,html[data-theme=livro] .g-barra i{border-radius:2px}
+html[data-theme=livro] .g-sq,html[data-theme=livro] .g-st{border-radius:2px;width:7px;height:7px}
+html[data-theme=livro] .g-st{border-radius:50%}
+html[data-theme=livro] .g-st.is-trava{background:#EF4444}
+html[data-theme=livro] .g-st.is-anda{animation:lv-respira 1.8s ease-in-out infinite}
+html[data-theme=livro] .g-obra .opx-leds,html[data-theme=livro] .g-obra .opx-led{border-radius:50%}
+html[data-theme=livro] .g-obra .opx-leds{border-radius:6px}
+html[data-theme=livro] #g-dock .cx-alvo,html[data-theme=livro] #g-dock .cx-text,html[data-theme=livro] #g-dock .cx-send{border-radius:6px}
+
+/* ---------- FLUXO: caixas com dono na borda; cada fio na cor de quem manda ---------- */
+html[data-theme=livro] .g-mapa svg.g-fios{shape-rendering:geometricPrecision}
+html[data-theme=livro] .g-no{background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--lado-cor,var(--g-tx3));border-radius:8px;padding:6px 12px;transition:box-shadow .25s ease,background-color .25s ease}
+html[data-theme=livro] .g-no:hover{box-shadow:inset 0 0 0 1px var(--g-tx3),inset 2px 0 0 var(--lado-cor,var(--g-tx3))}
+html[data-theme=livro] .g-no.is-voce{box-shadow:inset 0 0 0 1px var(--g-rosa);background:color-mix(in srgb,var(--g-rosa) 8%,var(--g-s1))}
+html[data-theme=livro] .g-no .g-no-nome{font:600 14px/20px var(--g-sans)}
+html[data-theme=livro] .g-no .g-no-linha{font:400 13px/18px var(--g-sans);white-space:normal;overflow:visible;text-overflow:clip;overflow-wrap:break-word;min-width:0}
+html[data-theme=livro] .g-no>div{min-width:0}
+html[data-theme=livro] .g-fios .g-fio{--fio:var(--g-tx2)}
+html[data-theme=livro] .g-fios [data-lado=claude]{--fio:var(--g-claude)}
+html[data-theme=livro] .g-fios [data-lado=codex]{--fio:var(--g-codex)}
+html[data-theme=livro] .g-fios [data-lado=voce]{--fio:var(--g-rosa)}
+html[data-theme=livro] .g-fios .g-fio-l{stroke:var(--fio);stroke-opacity:.42;stroke-width:1.5;transition:stroke-opacity .6s ease,stroke-width .3s ease}
+html[data-theme=livro] .g-fios .g-fio-seta{fill:var(--fio);fill-opacity:.42;transition:fill-opacity .6s ease}
+html[data-theme=livro] .g-fios .g-fio[data-idade=recente] .g-fio-l{stroke:var(--fio);stroke-opacity:.62}
+html[data-theme=livro] .g-fios .g-fio[data-idade=recente] .g-fio-seta{fill:var(--fio);fill-opacity:.62}
+html[data-theme=livro] .g-fios .g-fio[data-idade=morno] .g-fio-l{stroke:var(--fio);stroke-opacity:.82}
+html[data-theme=livro] .g-fios .g-fio[data-idade=morno] .g-fio-seta{fill:var(--fio);fill-opacity:.82}
+html[data-theme=livro] .g-fios .g-fio[data-idade=quente] .g-fio-l{stroke:var(--fio);stroke-opacity:1;stroke-width:2}
+html[data-theme=livro] .g-fios .g-fio[data-idade=quente] .g-fio-seta{fill:var(--fio);fill-opacity:1}
+html[data-theme=livro] .g-fios .g-fio[data-hover="1"] .g-fio-l,html[data-theme=livro] .g-fios .g-fio[data-sel="1"] .g-fio-l{stroke:var(--fio);stroke-opacity:1}
+html[data-theme=livro] .g-fios .g-fio[data-hover="1"] .g-fio-seta,html[data-theme=livro] .g-fios .g-fio[data-sel="1"] .g-fio-seta{fill:var(--fio);fill-opacity:1}
+html[data-theme=livro] .g-fios .g-fio[data-sel="1"] .g-fio-l{stroke-width:2.5}
+html[data-theme=livro] .g-fios .g-fio[data-apagado="1"]{opacity:.22}
+html[data-theme=livro] .g-rot{font:500 13px/16px var(--g-pix);fill:var(--fio,var(--g-tx2))}
+html[data-theme=livro] .g-rot-bg{fill:var(--g-bg)}
+html[data-theme=livro] .g-fio.fx-conta .g-rot{animation:lv-rot .3s ease-out}
+html[data-theme=livro] .g-amostra .g-fio-l{stroke:var(--g-tx2);stroke-opacity:1;stroke-width:1.5}
+html[data-theme=livro] .g-colk{font:500 13px/16px var(--g-pix)}
+html[data-theme=livro] .g-legenda .lv-leg-lado{display:inline-flex;gap:16px}
+html[data-theme=livro] .g-legenda .lv-leg-lado b{display:inline-flex;align-items:center;gap:6px;font:400 13px/20px var(--g-sans);color:var(--g-tx2)}
+html[data-theme=livro] .g-legenda .lv-leg-lado i{display:inline-block;width:16px;height:2px;border-radius:1px;background:var(--lv-cor)}
+html[data-theme=livro] .g-demo-cap{border-radius:6px;font:500 13px/1 var(--g-pix)}
+html[data-theme=livro] .g-fio-det .g-fio-msg{min-height:36px;align-items:center}
+html[data-theme=livro] .g-fio-det .g-sec{font-family:var(--g-pix)}
+
+/* ---------- CEREBRO: mapa a esquerda, detalhe a direita, numeros em mono ---------- */
+html[data-theme=livro][data-g-new=cerebro] #g-cerebro{display:grid;grid-template-columns:minmax(0,1fr) 340px;gap:0 24px;align-items:start}
+html[data-theme=livro] #g-cerebro>*{grid-column:1/-1}
+html[data-theme=livro] #g-cerebro>.g-aberto{padding:14px 20px;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-anda);border-radius:8px}
+html[data-theme=livro] #g-cerebro>.g-quatro{margin-top:24px;padding-top:0;border-top:0;gap:16px 40px}
+html[data-theme=livro] #g-cerebro>.g-quatro .g-n24{font-size:28px;line-height:1;color:var(--g-tx)}
+html[data-theme=livro] #g-cerebro>.g-quatro .g-sec{font-size:15px}
+html[data-theme=livro] #g-cerebro>.g-col-head{grid-row:1}
+html[data-theme=livro] #g-cerebro>.g-aberto{grid-row:2}
+html[data-theme=livro] #g-cerebro>.g-quatro{grid-row:3}
+html[data-theme=livro] #g-cerebro>.g-cerebro-mapa{grid-column:1;grid-row:4;margin-top:24px;padding:8px;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px}
+html[data-theme=livro] #g-cerebro>.g-cb-legenda{grid-column:1;grid-row:5}
+html[data-theme=livro] #g-cerebro>.g-item-aberto{grid-column:2;grid-row:4;align-self:start;margin-top:24px;padding:16px 20px;border-top:0;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px;grid-template-columns:8px minmax(0,1fr);gap:12px;transition:box-shadow .3s ease}
+html[data-theme=livro] #g-cerebro>.g-item-aberto::before{content:"Detalhe";grid-column:1/-1;font:600 20px/1.2 var(--g-sans);color:var(--g-tx);margin-bottom:4px}
+html[data-theme=livro] #g-cerebro>.g-item-aberto>.g-sq{margin-top:8px;align-self:start}
+html[data-theme=livro] #g-cerebro>.g-item-aberto>.g-btn{grid-column:2;justify-self:start}
+html[data-theme=livro] #g-cerebro>.g-item-aberto .g-sec{font-size:13px;line-height:20px}
+html[data-theme=livro] #g-cerebro>.g-item-aberto .g-row-nome{white-space:normal}
+
+/* ---------- estado continuo ---------- */
+html[data-theme=livro] .g-no[data-work="1"]{animation:lv-pulso 1.8s ease-in-out infinite}
+@keyframes lv-pulso{0%,100%{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--lado-cor)}50%{box-shadow:inset 0 0 0 1px var(--lado-cor),inset 2px 0 0 var(--lado-cor)}}
+html[data-theme=livro] .g-no[data-precisa="1"] .g-no-face::after{border-radius:50%;animation:lv-respira 1.8s ease-in-out infinite}
+@keyframes lv-respira{0%,100%{opacity:1}50%{opacity:.35}}
+@keyframes lv-tick{0%{transform:translateY(-4px);color:var(--g-anda)}100%{transform:none}}
+@keyframes lv-rot{0%{fill:var(--g-tx);transform:translateY(-3px)}100%{transform:none}}
+@keyframes lv-ok-linha{0%{background:color-mix(in srgb,var(--g-anda) 28%,transparent)}100%{background:transparent}}
+
+/* ---------- efeitos de 1 vez (anim-livro.js): flash de 300 ms como ordem executada ---------- */
+html[data-theme=livro] .g-fx-rot{font:600 13px/1 var(--g-pix);padding:3px 6px;border-radius:4px;background:var(--g-s1);color:var(--g-tx);box-shadow:inset 0 0 0 1px var(--g-line);animation:lv-sobe 1.1s ease-out both;z-index:4;white-space:nowrap}
+html[data-theme=livro] .g-fx-rot.fx-rot-mais{color:var(--fx-cor,var(--g-tx));box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--fx-cor,var(--g-tx)) 50%,transparent)}
+html[data-theme=livro] .g-fx-rot.fx-rot-ok{color:var(--g-anda);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--g-anda) 50%,transparent)}
+html[data-theme=livro] .g-fx-rot.fx-rot-rosa{color:var(--g-rosa);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--g-rosa) 60%,transparent)}
+html[data-theme=livro] .g-fx-rot.fx-rot-ambar{color:var(--g-trava);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--g-trava) 60%,transparent)}
+html[data-theme=livro] .g-fx-rot.fx-rot-z{background:transparent;box-shadow:none;color:var(--g-tx3);font-size:14px;animation:lv-z 1.4s ease-out both}
+html[data-theme=livro] .g-fx-rot.fx-rot-acao{background:transparent;box-shadow:none;color:var(--fx-cor,var(--g-tx2));font-weight:500;animation:lv-sobe 1s ease-out both}
+html[data-theme=livro] .g-fx-rot.fx-noar{background:var(--g-anda);color:#0B0B0D;box-shadow:none;animation:lv-entra 1.6s ease both}
+@keyframes lv-sobe{0%{opacity:0;transform:translateY(6px)}20%{opacity:1;transform:none}80%{opacity:1}100%{opacity:0;transform:translateY(-8px)}}
+@keyframes lv-entra{0%{opacity:0;transform:translateX(-16px)}15%,85%{opacity:1;transform:none}100%{opacity:0}}
+@keyframes lv-z{0%{opacity:0;transform:translate(0,4px)}25%{opacity:1}100%{opacity:0;transform:translate(10px,-18px)}}
+html[data-theme=livro] .fx-fill{animation:lv-fill .3s ease-out}
+@keyframes lv-fill{0%{background:color-mix(in srgb,var(--lado-cor,var(--g-tx)) 26%,var(--g-s1));box-shadow:inset 0 0 0 1px var(--lado-cor,var(--g-tx)),inset 2px 0 0 var(--lado-cor,var(--g-tx))}100%{background:var(--g-s1)}}
+html[data-theme=livro] .fx-fill-ok{animation:lv-ok .3s ease-out}
+@keyframes lv-ok{0%{background:color-mix(in srgb,var(--g-anda) 30%,var(--g-s1));box-shadow:inset 0 0 0 1px var(--g-anda),inset 2px 0 0 var(--g-anda)}100%{background:var(--g-s1)}}
+html[data-theme=livro] .fx-troca .g-acao{animation:lv-fade .45s ease both}
+html[data-theme=livro] .fx-troca{animation:lv-borda .3s ease-out}
+@keyframes lv-fade{from{opacity:0;transform:scale(.6)}to{opacity:1;transform:none}}
+@keyframes lv-borda{0%{box-shadow:inset 0 0 0 1px var(--lado-cor),inset 2px 0 0 var(--lado-cor)}100%{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--lado-cor)}}
+html[data-theme=livro] .fx-acorda{animation:lv-acorda .7s ease both}
+@keyframes lv-acorda{0%{opacity:.45;box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--lado-cor)}40%{opacity:1;box-shadow:inset 0 0 0 1px var(--lado-cor),inset 2px 0 0 var(--lado-cor)}100%{opacity:1}}
+html[data-theme=livro] .fx-dorme{animation:lv-dorme .8s ease both}
+@keyframes lv-dorme{from{opacity:1}to{opacity:.55}}
+html[data-theme=livro] .fx-erro{animation:lv-erro .8s ease}
+@keyframes lv-erro{0%,50%{box-shadow:inset 0 0 0 1px var(--g-trava),inset 2px 0 0 var(--g-trava)}25%,75%,100%{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--lado-cor)}}
+html[data-theme=livro] .fx-pulsa{animation:lv-voce 1.1s ease-out}
+@keyframes lv-voce{0%{box-shadow:inset 0 0 0 1px var(--g-rosa),0 0 0 0 color-mix(in srgb,var(--g-rosa) 60%,transparent)}100%{box-shadow:inset 0 0 0 1px var(--g-rosa),0 0 0 14px transparent}}
+html[data-theme=livro] .fx-chega{animation:lv-chega .9s ease}
+@keyframes lv-chega{0%,60%{background:color-mix(in srgb,var(--g-rosa) 22%,transparent)}100%{background:transparent}}
+html[data-theme=livro][data-motion=off] .g-pl::before,html[data-theme=livro][data-motion=off] .g-odo>span,html[data-theme=livro][data-motion=off] .g-item,html[data-theme=livro][data-motion=off] .g-fio-l,html[data-theme=livro][data-motion=off] .g-fio-seta{animation:none!important;transition:none!important}
+
+/* ---------- larguras ---------- */
+@media (max-width:1100px){
+  html[data-theme=livro][data-g-new=cerebro] #g-cerebro{grid-template-columns:1fr}
+  html[data-theme=livro] #g-cerebro>.g-item-aberto,html[data-theme=livro] #g-cerebro>.g-cerebro-mapa,html[data-theme=livro] #g-cerebro>.g-cb-legenda{grid-column:1;grid-row:auto}
+  html[data-theme=livro] .g-pl::after{display:none}
+}
+@media (max-width:760px){
+  html[data-theme=livro] .g-cols{grid-template-columns:1fr}
+  html[data-theme=livro] .g-espera .g-item{grid-template-columns:24px minmax(0,1fr)}
+  html[data-theme=livro] .g-espera .g-item>div{grid-template-columns:1fr;gap:2px}
+  html[data-theme=livro] .g-espera .g-item .g-meta{justify-content:flex-start}
+  html[data-theme=livro] .g-row .g-row-body{grid-template-columns:1fr;gap:0}
+  html[data-theme=livro] .g-row .g-row-body .g-sec{text-align:left}
+}

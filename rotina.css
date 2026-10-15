@@ -1,0 +1,69 @@
+/* Cartao do ROTINA no Inicio (painel C1, 02/10; voltas e cards 04/10). Sem animacao (Motion off sempre respeitado).
+   Ordem de leitura: topo (ligado e proxima volta), cards para voce (o que precisa dele, em destaque) e o que cada volta fez. */
+.rotina-card { display: grid; gap: 14px; margin: 0 0 16px; padding: 16px 20px 18px; border-radius: 18px; border: 1px solid rgba(255, 95, 174, .30); background: linear-gradient(135deg, rgba(255, 95, 174, .07), rgba(115, 182, 255, .04)); color: inherit; }
+.rotina-card[hidden] { display: none; }
+html:not([data-painel-tab="home"]) .rotina-card { display: none; }
+.inf-topo { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+.inf-marca { display: inline-flex; align-items: center; gap: 6px; font-size: 13px; letter-spacing: .08em; }
+.inf-simbolo { font-size: 20px; line-height: 1; color: #ff5fae; }
+.inf-chip { font-size: 11px; padding: 2px 8px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .18); color: var(--muted, #a1a1aa); }
+.inf-chip.is-on { border-color: rgba(87, 214, 141, .6); color: #57d68d; }
+.inf-desde { font-size: 12px; color: var(--muted, #a1a1aa); }
+.inf-proxima { margin-left: auto; font-size: 12px; color: var(--muted, #a1a1aa); font-variant-numeric: tabular-nums; }
+.inf-proxima.is-alerta { color: #ffb74d; font-weight: 600; }
+.inf-bloco { display: grid; gap: 8px; min-width: 0; }
+.inf-bloco + .inf-bloco { border-top: 1px solid rgba(255, 255, 255, .08); padding-top: 12px; }
+.inf-bloco-topo { display: flex; align-items: center; justify-content: space-between; gap: 10px; flex-wrap: wrap; }
+.inf-bloco-titulo { margin: 0; font-size: 12px; font-weight: 650; letter-spacing: .06em; text-transform: uppercase; color: #cfcfd8; }
+.inf-cards-bloco.tem-cards .inf-bloco-titulo { color: #ff8eb9; }
+.inf-periodo { font: inherit; font-size: 13px; min-height: 36px; padding: 6px 30px 6px 10px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .18); background: #17171c; color: inherit; cursor: pointer; }
+.inf-periodo:focus-visible { outline: 2px solid #ff5fae; outline-offset: 2px; }
+.inf-vazio { margin: 0; font-size: 13px; color: var(--muted, #a1a1aa); }
+.inf-voltas-lista { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.inf-volta { display: grid; gap: 4px; padding: 10px 12px; border-radius: 10px; background: rgba(255, 255, 255, .035); min-width: 0; }
+.inf-volta-cab { display: flex; align-items: baseline; gap: 8px; flex-wrap: wrap; }
+.inf-volta-hora { font-size: 14px; font-variant-numeric: tabular-nums; }
+.inf-volta-res { font-size: 11px; padding: 1px 8px; border-radius: 999px; border: 1px solid rgba(255, 255, 255, .18); color: var(--muted, #a1a1aa); }
+.inf-volta-res.is-acelerou { border-color: rgba(87, 214, 141, .55); color: #57d68d; }
+.inf-volta-res.is-manteve { border-color: rgba(115, 182, 255, .55); color: #8fc2ff; }
+.inf-volta-nota { font-size: 11px; color: var(--muted, #a1a1aa); }
+.inf-volta-texto { margin: 0; font-size: 13px; line-height: 1.5; color: #e4e4ea; overflow-wrap: anywhere; display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
+.inf-volta-texto.is-aberto { display: block; -webkit-line-clamp: unset; overflow: visible; }
+.inf-link { justify-self: start; font: inherit; font-size: 12px; font-weight: 600; min-height: 32px; padding: 4px 0; border: 0; background: none; color: #ff8eb9; cursor: pointer; }
+.inf-link:focus-visible { outline: 2px solid #ff5fae; outline-offset: 2px; border-radius: 4px; }
+.inf-cards { list-style: none; margin: 0; padding: 0; display: grid; gap: 10px; }
+.inf-card { display: grid; gap: 6px; padding: 12px 14px; border-radius: 12px; background: rgba(255, 95, 174, .07); border: 1px solid rgba(255, 95, 174, .28); min-width: 0; }
+.inf-card.is-chat { background: rgba(255, 255, 255, .04); border-color: rgba(255, 255, 255, .14); }
+.inf-pergunta { margin: 0; font-size: 15px; font-weight: 600; line-height: 1.4; overflow-wrap: anywhere; }
+.inf-meta, .inf-nota { margin: 0; font-size: 12px; line-height: 1.45; color: var(--muted, #a1a1aa); }
+.inf-talvez { margin: 0; font-size: 12px; font-weight: 600; color: #ffb74d; }
+.inf-opcoes { display: flex; flex-wrap: wrap; gap: 8px; margin-top: 2px; }
+.inf-opcao { display: inline-flex; align-items: center; gap: 8px; font: inherit; font-size: 13px; min-height: 40px; padding: 8px 14px; border-radius: 10px; border: 1px solid rgba(255, 255, 255, .2); background: #1c1c22; color: inherit; cursor: pointer; text-align: left; }
+.inf-opcao.is-recomendada { background: #963959; border-color: #c66a8d; color: #fff; }
+.inf-opcao:disabled { opacity: .5; cursor: default; }
+.inf-opcao:focus-visible { outline: 2px solid #ff99bb; outline-offset: 3px; }
+.inf-selo { font-size: 10px; letter-spacing: .06em; text-transform: uppercase; opacity: .85; }
+.inf-aviso { margin: 0; font-size: 12px; font-weight: 600; }
+.inf-aviso.is-ok { color: #57d68d; }
+.inf-aviso.is-erro { color: #ffb74d; }
+.inf-aviso.is-info { color: var(--muted, #a1a1aa); }
+.inf-copia-visivel { margin: 0; padding: 8px 10px; border-radius: 8px; background: #0e0e12; font-size: 12px; user-select: all; overflow-wrap: anywhere; }
+.inf-copia { position: fixed; left: -9999px; top: 0; opacity: 0; }
+.inf-feitos { font-size: 12px; color: var(--muted, #a1a1aa); }
+.inf-feitos summary { cursor: pointer; min-height: 32px; line-height: 32px; width: max-content; max-width: 100%; }
+.inf-feito { margin: 4px 0 0; line-height: 1.45; overflow-wrap: anywhere; }
+@media (pointer: coarse) { .inf-opcao, .inf-periodo { min-height: 44px; } .inf-link, .inf-feitos summary { min-height: 44px; line-height: 44px; } }
+@media (max-width: 600px) {
+  .rotina-card { padding: 14px 15px 16px; }
+  .inf-proxima { margin-left: 0; flex-basis: 100%; }
+  .inf-opcoes { display: grid; }
+  .inf-opcao { width: 100%; justify-content: space-between; }
+  .inf-bloco-topo { align-items: stretch; }
+  .inf-periodo { width: 100%; }
+}
+/* r11: rotina sem leitura (copia sem a rotina ligada): o cartao explica em 3 passos, nada de pagina preta */
+.inf-guia-cartao { display: grid; gap: 16px; }
+.inf-guia-passos { list-style: none; margin: 0; padding: 0; display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; }
+.inf-guia-passo { display: grid; gap: 8px; align-content: start; padding: 16px; border: 1px solid rgba(255, 255, 255, .1); border-radius: 10px; background: rgba(255, 255, 255, .02); color: #e6e6ee; font-size: 14px; line-height: 1.45; }
+.inf-guia-n { font-family: var(--g-pixel, inherit); font-size: 22px; line-height: 1; color: #ff8eb9; }
+@media (max-width: 767px) { .inf-guia-passos { grid-template-columns: 1fr; } }

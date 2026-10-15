@@ -1,0 +1,41 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+  <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+  <title>Painel de agentes</title><link rel="icon" href="data:,">
+  <link rel="stylesheet" href="/automatico.css"><script defer src="/automatico.js"></script>
+<link rel="icon" href="/favicon.svg" type="image/svg+xml"></head>
+<body>
+ <div class="v2-shell">
+  <header class="v2-top"><a href="/" class="v2-brand">PAINEL <span>DE AGENTES</span></a><div class="v2-tools"><button id="v2-como" type="button">Como usar</button><span class="v2-local">Leitura local</span></div></header>
+  <main>
+   <div class="v2-heading"><div><p class="v2-eyebrow">SEU AMBIENTE</p><h1 id="v2-proximo">Suas sessões, em um lugar.</h1><p class="v2-intro">Claude Code e Codex. Primeiro, veja o que precisa de você.</p></div><p id="v2-leitura" role="status">Lendo as sessões locais.</p></div>
+   <section id="v2-comece" class="v2-guide" aria-labelledby="v2-guide-title">
+    <h2 id="v2-guide-title">Comece aqui</h2>
+    <ol><li>Olhe primeiro Esperando você: sessões que pararam e aguardam a sua resposta.</li><li>Depois Trabalhando agora: quem mexeu nos últimos 15 minutos e em que.</li><li>Clique num projeto para ver só as sessões dele. Todos os projetos volta para tudo.</li><li>Quer cards de decisão, entregas e fila como no vídeo? Passo 2: pasta metodo/, um sim por peça.</li></ol>
+    <p>Rotina: abra o painel, responda o que espera você, confira o que está andando e feche. Uns 2 minutos.</p>
+    <div class="v2-actions"><button id="v2-tour-start" type="button">Fazer o tour (1 min)</button><button id="v2-entendi" type="button">Já entendi</button><a href="/como-usar">Passo 2: método</a></div>
+   </section>
+   <div id="v2-agora" class="v2-now" hidden></div>
+   <nav id="v2-tabs" class="v2-nav" aria-label="Vistas do painel"><button type="button" data-v2-tab="visao" aria-pressed="true">Visão geral</button><button type="button" data-v2-tab="cards">Cards</button><button type="button" data-v2-tab="cronograma">Cronograma</button><button type="button" data-v2-tab="entregas">Entregas</button><button type="button" data-v2-tab="ideias">Ideias</button></nav>
+   <p id="v2-frase" class="v2-description">Quem está trabalhando, em que e quanto gastou hoje.</p>
+   <div id="v2-visao">
+    <section id="v2-wait-section" class="v2-section"><div class="v2-section-head"><h2>Esperando você</h2><p>Abra a sessão e responda</p></div><div id="v2-waiting" class="v2-sessions"></div></section>
+    <section id="v2-consumo" class="v2-metrics" aria-label="Sessões e consumo"></section>
+    <section id="v2-referencia" class="v2-reference" aria-label="Referência do consumo"></section>
+    <section class="v2-section"><div class="v2-section-head"><h2>Projetos</h2><p>Worktrees e subpastas no projeto principal</p></div><div id="v2-projetos" class="v2-projects"></div></section>
+    <section id="v2-work-section" class="v2-section"><div class="v2-section-head"><h2>Trabalhando agora</h2><p>Atividade nos últimos 15 minutos</p></div><div id="v2-working" class="v2-sessions"></div></section>
+    <section class="v2-section"><div class="v2-section-head"><h2>Outras sessões e ajudantes</h2><p>Mais recentes primeiro</p></div><div id="v2-sessoes" class="v2-sessions"></div></section>
+    <section class="v2-section"><div class="v2-section-head"><h2>Bots e coletores 24 h</h2><p>Batimento local</p></div><div id="v2-servicos" class="v2-sessions"></div></section>
+    <section class="v2-section"><div class="v2-section-head"><h2>Última atividade</h2><p>Horários locais; hoje em UTC</p></div><div id="v2-atividade"></div></section>
+    <section class="v2-section"><div class="v2-section-head"><h2>Seu estado</h2><p>Passo 2 opcional</p></div><div id="v2-estado" class="v2-state-grid"></div></section>
+    <section id="v2-avisos" class="v2-section" aria-label="Avisos e fontes"></section>
+   </div>
+   <section id="v2-aba" class="v2-section" hidden aria-live="polite"></section>
+  </main>
+  <footer>Funciona sozinho. Para ajustar nomes e papéis: config/sessoes.json.<br>Atividade vem dos registros locais. Para conferir a instalação: node checar.cjs.</footer>
+ </div>
+ <div id="v2-tour" class="v2-tour" role="dialog" aria-modal="false" aria-labelledby="v2-tour-title" hidden><p id="v2-tour-count"></p><h2 id="v2-tour-title"></h2><p id="v2-tour-text"></p><div class="v2-actions"><button id="v2-tour-back" type="button">Voltar</button><button id="v2-tour-next" type="button">Próximo</button><button id="v2-tour-skip" type="button">Pular</button></div></div>
+ <dialog id="v2-example"><h2>Exemplo somente leitura</h2><p>Dados inventados. A sua IA grava os seus dados no passo 2.</p><pre id="v2-example-text"></pre><button id="v2-example-close" type="button">Fechar exemplo</button></dialog>
+</body>
+</html>

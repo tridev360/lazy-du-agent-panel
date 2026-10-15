@@ -1,0 +1,68 @@
+/* Conselheiros: faixa da aba Decidir, dialogo (popup, questionario, prompt) e aviso de ideias no topo. Cores dos 3 temas. */
+html:not([data-g-tab="decidir"]) #cons-faixa{display:none}
+#cons-faixa{box-sizing:border-box;margin:12px 0 16px;padding:12px 14px;border:1px solid var(--g-line,#333);background:var(--g-s1,#1a1916);color:var(--g-tx,#eee);font-family:var(--g-sans,system-ui,sans-serif)}
+#cons-faixa *{box-sizing:border-box}
+.cons-cab{display:flex;flex-wrap:wrap;align-items:center;gap:8px 14px}
+.cons-titulo{margin:0;font:700 13px/1.2 var(--g-pix,ui-monospace,monospace);letter-spacing:.06em;text-transform:uppercase;color:var(--g-tx,#eee)}
+.cons-resumo{flex:1 1 220px;min-width:0;font-size:13px;line-height:1.4;color:var(--g-tx2,#aaa);overflow-wrap:anywhere}
+.cons-links{display:flex;flex-wrap:wrap;gap:4px 12px;margin-left:auto}
+.cons-link{background:none;border:0;padding:2px 0;color:var(--g-tx2,#aaa);font:inherit;font-size:12px;text-decoration:underline;text-underline-offset:3px;cursor:pointer}
+.cons-link:hover{color:var(--g-tx,#eee)}
+.cons-btn{border:1px solid var(--g-line,#333);background:transparent;color:var(--g-tx,#eee);font:600 13px/1 var(--g-sans,system-ui,sans-serif);padding:9px 14px;min-height:36px;cursor:pointer;border-radius:0}
+.cons-btn:hover{border-color:var(--g-dot,#555)}
+.cons-btn.is-forte{background:var(--g-rosa,#f6a);border-color:var(--g-rosa,#f6a);color:var(--g-bg,#111)}
+.cons-btn.is-quieto{border-color:transparent;color:var(--g-tx2,#aaa)}
+.cons-btn:focus-visible,.cons-link:focus-visible,.cons-opcao:focus-visible{outline:2px solid var(--g-rosa,#f6a);outline-offset:2px}
+.cons-lentes{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:8px;margin-top:10px}
+.cons-lente{display:flex;flex-wrap:wrap;align-items:center;gap:4px 8px;padding:9px 10px;border:1px solid var(--g-line,#333);border-left:4px solid var(--cons-cor,#999);background:var(--g-bg,#111);min-width:0}
+.cons-lente-nome{flex:1 1 auto;min-width:0;font-size:13px;font-weight:600}
+.cons-selo{font:700 11px/1 var(--g-pix,ui-monospace,monospace);padding:4px 6px;border:1px solid currentColor;letter-spacing:.04em}
+.cons-selo.is-pode{color:var(--g-anda,#6c6)}
+.cons-selo.is-confere{color:var(--g-codex,#6af)}
+.cons-selo.is-segura{color:var(--g-trava,#e66)}
+.cons-selo.is-sem{color:var(--g-tx3,#888)}
+.cons-quando{font-size:11px;color:var(--g-tx3,#888)}
+.cons-lente-txt{flex:1 1 100%;margin:2px 0 0;font-size:12px;line-height:1.4;color:var(--g-tx2,#aaa);overflow-wrap:anywhere}
+.cons-ideias{display:flex;flex-wrap:wrap;align-items:center;gap:8px 12px;margin-top:10px;font-size:13px;color:var(--g-tx,#eee)}
+/* aviso do topo: aparece em qualquer aba quando as ideias sem resposta passam do limite */
+#cons-lembrete{box-sizing:border-box;display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:8px 14px;padding:8px 16px;background:var(--g-s1,#1a1916);border-bottom:2px solid var(--g-rosa,#f6a);color:var(--g-tx,#eee);font:600 13px/1.4 var(--g-sans,system-ui,sans-serif)}
+#cons-lembrete[hidden]{display:none}
+.cons-lembrete-txt{min-width:0;overflow-wrap:anywhere;text-align:center}
+#cons-lembrete .cons-btn{padding:6px 12px;min-height:32px}
+/* dialogo */
+dialog.cons-dlg{height:auto;margin:auto;inset:0;box-sizing:border-box;width:min(560px,calc(100vw - 32px));max-height:calc(100vh - 32px);padding:0;border:1px solid var(--g-line,#333);border-top:3px solid var(--g-rosa,#f6a);background:var(--g-s1,#1a1916);color:var(--g-tx,#eee);font-family:var(--g-sans,system-ui,sans-serif)}
+.cons-dlg::backdrop{background:rgba(0,0,0,.55)}
+.cons-dlg *{box-sizing:border-box}
+.cons-corpo{padding:18px 20px 16px}
+.cons-h{margin:0 0 10px;font:700 18px/1.3 var(--g-sans,system-ui,sans-serif);color:var(--g-tx,#eee)}
+.cons-p{margin:0 0 8px;font-size:14px;line-height:1.5;color:var(--g-tx2,#aaa)}
+.cons-acoes{display:flex;flex-wrap:wrap;align-items:center;gap:8px;margin-top:14px}
+.cons-passo{margin:0 0 6px;font:600 11px/1 var(--g-pix,ui-monospace,monospace);letter-spacing:.06em;color:var(--g-tx3,#888)}
+.cons-pontos{display:flex;gap:4px;margin:0 0 12px}
+.cons-pontos span{width:22px;height:4px;background:var(--g-line,#333)}
+.cons-pontos span.is-feito{background:var(--g-tx3,#888)}
+.cons-pontos span.is-agora{background:var(--g-rosa,#f6a)}
+.cons-opcoes{display:grid;gap:8px}
+.cons-opcao{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;padding:10px 12px;border:1px solid var(--g-line,#333);border-left:4px solid var(--cons-cor,var(--g-line,#333));background:var(--g-bg,#111);color:var(--g-tx,#eee);font:500 14px/1.3 var(--g-sans,system-ui,sans-serif);text-align:left;cursor:pointer;border-radius:0}
+.cons-opcao::before{content:"";flex:none;width:14px;height:14px;border:2px solid var(--g-tx3,#888)}
+.cons-opcao[role="radio"]::before{border-radius:50%}
+.cons-opcao[aria-pressed="true"],.cons-opcao[aria-checked="true"]{border-color:var(--g-rosa,#f6a)}
+.cons-opcao[aria-pressed="true"]::before,.cons-opcao[aria-checked="true"]::before{background:var(--g-rosa,#f6a);border-color:var(--g-rosa,#f6a)}
+.cons-opcao:hover{border-color:var(--g-dot,#555)}
+.cons-aviso{min-height:1em;margin:8px 0 0;font-size:12px;color:var(--g-tx3,#888)}
+.cons-texto{display:block;width:100%;min-height:180px;max-height:40vh;margin:4px 0 0;padding:10px;resize:vertical;border:1px solid var(--g-line,#333);background:var(--g-bg,#111);color:var(--g-tx,#eee);font:12px/1.45 ui-monospace,Consolas,monospace}
+.cons-copiado{font-size:12px;color:var(--g-anda,#6c6)}
+@media (max-width:480px){
+  #cons-faixa{margin:8px 0 12px;padding:10px}
+  .cons-links{margin-left:0;width:100%}
+  .cons-lentes{grid-template-columns:1fr}
+  .cons-corpo{padding:14px 14px 12px}
+  .cons-h{font-size:16px}
+  .cons-acoes .cons-btn{flex:1 1 auto}
+  #cons-lembrete{justify-content:flex-start;padding:8px 12px}
+  .cons-lembrete-txt{text-align:left}
+}
+/* r11: Decidir abre direto no conteudo, como o painel de origem: sem a linha de numeros (Decididas, credito) no topo das vistas;
+   a faixa dos conselheiros fica no pe da Revisao, com um respiro do ultimo cartao. */
+html[data-g-tab="decidir"] .f2-numeros{display:none}
+#panel-revisao > #cons-faixa{margin:28px 0 8px}

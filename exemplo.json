@@ -1,0 +1,2121 @@
+{
+  "example": true,
+  "updated": "2035-06-11T12:00:00.000Z",
+  "tasks": [
+    {
+      "id": "demo-feature-1",
+      "title": "Sound pack",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Sound pack.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-2",
+      "title": "Mobile fix",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Mobile fix.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-3",
+      "title": "Quick search",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Quick search.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-4",
+      "title": "Dark theme",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Dark theme.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-5",
+      "title": "Calendar view",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Calendar view.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-6",
+      "title": "Audio controls",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Audio controls.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-7",
+      "title": "Compact cards",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Compact cards.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-8",
+      "title": "Keyboard shortcuts",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Keyboard shortcuts.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-9",
+      "title": "Status badges",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Status badges.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-10",
+      "title": "Empty state",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-06T12:00:00Z",
+      "log": "Example progress note for Empty state.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-11",
+      "title": "Photo gallery",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Photo gallery.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-12",
+      "title": "Help panel",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Help panel.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-13",
+      "title": "Saved filters",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Saved filters.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-14",
+      "title": "Color presets",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Color presets.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-15",
+      "title": "Progress ring",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Progress ring.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-16",
+      "title": "Welcome screen",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Welcome screen.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-17",
+      "title": "Card sorting",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Card sorting.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-18",
+      "title": "Loading shimmer",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Loading shimmer.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-19",
+      "title": "Offline notice",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Offline notice.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-20",
+      "title": "Focus mode",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Focus mode.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-21",
+      "title": "Notification style",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Notification style.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-22",
+      "title": "Language switch",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Language switch.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-23",
+      "title": "Tooltip cleanup",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Tooltip cleanup.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-24",
+      "title": "Table layout",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Table layout.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-25",
+      "title": "Weekly digest",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Weekly digest.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-26",
+      "title": "Animation settings",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Animation settings.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-27",
+      "title": "Music preview",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Music preview.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-28",
+      "title": "Icon refresh",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Icon refresh.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-29",
+      "title": "Board grouping",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Board grouping.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-30",
+      "title": "Form hints",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Form hints.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-31",
+      "title": "Archive view",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Archive view.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-32",
+      "title": "Button spacing",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Button spacing.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-33",
+      "title": "Image crop",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Image crop.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-34",
+      "title": "Timeline view",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Timeline view.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-35",
+      "title": "List density",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for List density.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-36",
+      "title": "Reading mode",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Reading mode.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-37",
+      "title": "Game tutorial",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Game tutorial.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-38",
+      "title": "Score display",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Score display.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-39",
+      "title": "Avatar frame",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Avatar frame.",
+      "details": "Fictional feature for panel demonstration."
+    },
+    {
+      "id": "demo-feature-40",
+      "title": "Navigation polish",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Navigation polish.",
+      "details": "Fictional feature for panel demonstration."
+    }
+  ],
+  "pipelineItems": [
+    {
+      "id": "demo-feature-1",
+      "title": "Sound pack",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Sound pack.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-1"
+      ]
+    },
+    {
+      "id": "demo-feature-2",
+      "title": "Mobile fix",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Mobile fix.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-2"
+      ]
+    },
+    {
+      "id": "demo-feature-3",
+      "title": "Quick search",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Quick search.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "andando",
+      "percent": 40,
+      "taskIds": [
+        "demo-feature-3"
+      ]
+    },
+    {
+      "id": "demo-feature-4",
+      "title": "Dark theme",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Dark theme.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 60,
+      "taskIds": [
+        "demo-feature-4"
+      ]
+    },
+    {
+      "id": "demo-feature-5",
+      "title": "Calendar view",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Calendar view.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 80,
+      "taskIds": [
+        "demo-feature-5"
+      ]
+    },
+    {
+      "id": "demo-feature-6",
+      "title": "Audio controls",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Audio controls.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 90,
+      "taskIds": [
+        "demo-feature-6"
+      ]
+    },
+    {
+      "id": "demo-feature-7",
+      "title": "Compact cards",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Compact cards.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "noar",
+      "percent": 100,
+      "taskIds": [
+        "demo-feature-7"
+      ]
+    },
+    {
+      "id": "demo-feature-8",
+      "title": "Keyboard shortcuts",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Keyboard shortcuts.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-8"
+      ]
+    },
+    {
+      "id": "demo-feature-9",
+      "title": "Status badges",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Status badges.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-9"
+      ]
+    },
+    {
+      "id": "demo-feature-10",
+      "title": "Empty state",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-06T12:00:00Z",
+      "log": "Example progress note for Empty state.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "andando",
+      "percent": 40,
+      "taskIds": [
+        "demo-feature-10"
+      ]
+    },
+    {
+      "id": "demo-feature-11",
+      "title": "Photo gallery",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Photo gallery.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 60,
+      "taskIds": [
+        "demo-feature-11"
+      ]
+    },
+    {
+      "id": "demo-feature-12",
+      "title": "Help panel",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Help panel.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 80,
+      "taskIds": [
+        "demo-feature-12"
+      ]
+    },
+    {
+      "id": "demo-feature-13",
+      "title": "Saved filters",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Saved filters.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 90,
+      "taskIds": [
+        "demo-feature-13"
+      ]
+    },
+    {
+      "id": "demo-feature-14",
+      "title": "Color presets",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Color presets.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "noar",
+      "percent": 100,
+      "taskIds": [
+        "demo-feature-14"
+      ]
+    },
+    {
+      "id": "demo-feature-15",
+      "title": "Progress ring",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Progress ring.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-15"
+      ]
+    },
+    {
+      "id": "demo-feature-16",
+      "title": "Welcome screen",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Welcome screen.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-16"
+      ]
+    },
+    {
+      "id": "demo-feature-17",
+      "title": "Card sorting",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Card sorting.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "andando",
+      "percent": 40,
+      "taskIds": [
+        "demo-feature-17"
+      ]
+    },
+    {
+      "id": "demo-feature-18",
+      "title": "Loading shimmer",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Loading shimmer.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 60,
+      "taskIds": [
+        "demo-feature-18"
+      ]
+    },
+    {
+      "id": "demo-feature-19",
+      "title": "Offline notice",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Offline notice.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 80,
+      "taskIds": [
+        "demo-feature-19"
+      ]
+    },
+    {
+      "id": "demo-feature-20",
+      "title": "Focus mode",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Focus mode.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 90,
+      "taskIds": [
+        "demo-feature-20"
+      ]
+    },
+    {
+      "id": "demo-feature-21",
+      "title": "Notification style",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Notification style.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "noar",
+      "percent": 100,
+      "taskIds": [
+        "demo-feature-21"
+      ]
+    },
+    {
+      "id": "demo-feature-22",
+      "title": "Language switch",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Language switch.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-22"
+      ]
+    },
+    {
+      "id": "demo-feature-23",
+      "title": "Tooltip cleanup",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Tooltip cleanup.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-23"
+      ]
+    },
+    {
+      "id": "demo-feature-24",
+      "title": "Table layout",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Table layout.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "andando",
+      "percent": 40,
+      "taskIds": [
+        "demo-feature-24"
+      ]
+    },
+    {
+      "id": "demo-feature-25",
+      "title": "Weekly digest",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Weekly digest.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 60,
+      "taskIds": [
+        "demo-feature-25"
+      ]
+    },
+    {
+      "id": "demo-feature-26",
+      "title": "Animation settings",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Animation settings.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 80,
+      "taskIds": [
+        "demo-feature-26"
+      ]
+    },
+    {
+      "id": "demo-feature-27",
+      "title": "Music preview",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Music preview.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 90,
+      "taskIds": [
+        "demo-feature-27"
+      ]
+    },
+    {
+      "id": "demo-feature-28",
+      "title": "Icon refresh",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Icon refresh.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "noar",
+      "percent": 100,
+      "taskIds": [
+        "demo-feature-28"
+      ]
+    },
+    {
+      "id": "demo-feature-29",
+      "title": "Board grouping",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Board grouping.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-29"
+      ]
+    },
+    {
+      "id": "demo-feature-30",
+      "title": "Form hints",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Form hints.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-30"
+      ]
+    },
+    {
+      "id": "demo-feature-31",
+      "title": "Archive view",
+      "owner": "CONTENT",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Archive view.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "andando",
+      "percent": 40,
+      "taskIds": [
+        "demo-feature-31"
+      ]
+    },
+    {
+      "id": "demo-feature-32",
+      "title": "Button spacing",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Button spacing.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 60,
+      "taskIds": [
+        "demo-feature-32"
+      ]
+    },
+    {
+      "id": "demo-feature-33",
+      "title": "Image crop",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Image crop.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 80,
+      "taskIds": [
+        "demo-feature-33"
+      ]
+    },
+    {
+      "id": "demo-feature-34",
+      "title": "Timeline view",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "liberado",
+        "percent": 90,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Timeline view.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 90,
+      "taskIds": [
+        "demo-feature-34"
+      ]
+    },
+    {
+      "id": "demo-feature-35",
+      "title": "List density",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "feito",
+        "percent": 100,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for List density.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "noar",
+      "percent": 100,
+      "taskIds": [
+        "demo-feature-35"
+      ]
+    },
+    {
+      "id": "demo-feature-36",
+      "title": "Reading mode",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Reading mode.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-36"
+      ]
+    },
+    {
+      "id": "demo-feature-37",
+      "title": "Game tutorial",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Game tutorial.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-37"
+      ]
+    },
+    {
+      "id": "demo-feature-38",
+      "title": "Score display",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Score display.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "andando",
+      "percent": 40,
+      "taskIds": [
+        "demo-feature-38"
+      ]
+    },
+    {
+      "id": "demo-feature-39",
+      "title": "Avatar frame",
+      "owner": "CONTENT",
+      "executor": "claude",
+      "actor": "CONTENT",
+      "phase": {
+        "key": "commit",
+        "percent": 60,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Avatar frame.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 60,
+      "taskIds": [
+        "demo-feature-39"
+      ]
+    },
+    {
+      "id": "demo-feature-40",
+      "title": "Navigation polish",
+      "owner": "GAMES",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "revisada",
+        "percent": 80,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Navigation polish.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 80,
+      "taskIds": [
+        "demo-feature-40"
+      ]
+    }
+  ],
+  "nextItems": [
+    {
+      "id": "demo-feature-1",
+      "title": "Sound pack",
+      "owner": "ATENDIMENTO",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "2035-06-14T18:00:00Z",
+      "deadlineAt": "2035-06-14T18:00:00Z",
+      "deadlineDay": "2035-06-14",
+      "needsOwner": true,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Sound pack.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-1"
+      ]
+    },
+    {
+      "id": "demo-feature-2",
+      "title": "Mobile fix",
+      "owner": "ASSISTENTE",
+      "executor": "claude",
+      "actor": "ASSISTENTE",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Mobile fix.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-2"
+      ]
+    },
+    {
+      "id": "demo-feature-8",
+      "title": "Keyboard shortcuts",
+      "owner": "GAMES",
+      "executor": "claude",
+      "actor": "GAMES",
+      "phase": {
+        "key": "nova",
+        "percent": 0,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Keyboard shortcuts.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 0,
+      "taskIds": [
+        "demo-feature-8"
+      ]
+    },
+    {
+      "id": "demo-feature-9",
+      "title": "Status badges",
+      "owner": "ATENDIMENTO",
+      "executor": "claude",
+      "actor": "ATENDIMENTO",
+      "phase": {
+        "key": "aberta",
+        "percent": 10,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-11T12:00:00.000Z",
+      "log": "Example progress note for Status badges.",
+      "details": "Fictional feature for panel demonstration.",
+      "source": "task",
+      "status": "livre",
+      "percent": 10,
+      "taskIds": [
+        "demo-feature-9"
+      ]
+    }
+  ],
+  "progress": {
+    "percent": 52.25,
+    "known": 40,
+    "total": 40
+  },
+  "cards": [
+    {
+      "id": "demo-choice-1",
+      "sessao": "ATENDIMENTO",
+      "pergunta": "Pick a sound pack",
+      "exemplo": true,
+      "blocked": false,
+      "taskIds": [
+        "demo-feature-1"
+      ],
+      "opcoes": [
+        {
+          "label": "Soft chime",
+          "descricao": "Example option"
+        },
+        {
+          "label": "Short click",
+          "descricao": "Example alternative"
+        }
+      ]
+    },
+    {
+      "id": "demo-choice-2",
+      "sessao": "CONTENT",
+      "pergunta": "Choose the gallery layout",
+      "exemplo": true,
+      "blocked": false,
+      "taskIds": [
+        "demo-feature-7"
+      ],
+      "opcoes": [
+        {
+          "label": "Wide cards",
+          "descricao": "Example option"
+        },
+        {
+          "label": "Compact grid",
+          "descricao": "Example alternative"
+        }
+      ]
+    },
+    {
+      "id": "demo-choice-3",
+      "sessao": "GAMES",
+      "pergunta": "Choose the tutorial style",
+      "exemplo": true,
+      "blocked": false,
+      "taskIds": [
+        "demo-feature-12"
+      ],
+      "opcoes": [
+        {
+          "label": "Guided steps",
+          "descricao": "Example option"
+        },
+        {
+          "label": "Quick tips",
+          "descricao": "Example alternative"
+        }
+      ]
+    }
+  ],
+  "needsCount": 5,
+  "needsTotal": 2,
+  "needsItems": [
+    {
+      "title": "Choose an icon style",
+      "detail": "Fictional style choice."
+    },
+    {
+      "title": "Review the welcome screen",
+      "detail": "Fictional screen preview."
+    }
+  ],
+  "credits": {
+    "claude": {
+      "source": "Example credit",
+      "updated": "2035-06-11T12:00:00.000Z",
+      "windows": [
+        {
+          "minutes": 10080,
+          "used": 36,
+          "reset": "2035-06-12T18:00:00Z"
+        }
+      ]
+    },
+    "codex": {
+      "source": "Example credit",
+      "updated": "2035-06-11T12:00:00.000Z",
+      "windows": [
+        {
+          "minutes": 300,
+          "used": 12,
+          "reset": "2035-06-11T16:00:00Z"
+        },
+        {
+          "minutes": 10080,
+          "used": 21,
+          "reset": "2035-06-15T18:00:00Z"
+        }
+      ],
+      "resetsAvailable": 2,
+      "resetsUpdated": "2035-06-11T12:00:00.000Z"
+    }
+  },
+  "stalledTasks": [
+    {
+      "id": "demo-feature-10",
+      "title": "Empty state",
+      "owner": "ASSISTENTE",
+      "executor": "codex",
+      "actor": "Codex",
+      "phase": {
+        "key": "andando",
+        "percent": 40,
+        "evidence": "Example recorded phase"
+      },
+      "deadline": "",
+      "deadlineAt": null,
+      "deadlineDay": null,
+      "needsOwner": false,
+      "lastLogAt": "2035-06-06T12:00:00Z",
+      "log": "Example progress note for Empty state.",
+      "details": "Fictional feature for panel demonstration."
+    }
+  ],
+  "readyBranches": [
+    {
+      "title": "Compact cards",
+      "task": "demo-feature-7",
+      "branch": "demo/compact-cards",
+      "commit": "abcdef12",
+      "tree": "abcdef34",
+      "tests": "Example checks complete",
+      "pending": "Example visual review"
+    }
+  ],
+  "states": [
+    {
+      "id": "ATENDIMENTO",
+      "updated": "2035-06-11T12:00:00.000Z",
+      "updatedAt": "2035-06-11T12:00:00.000Z",
+      "point": "Example session checkpoint."
+    },
+    {
+      "id": "ASSISTENTE",
+      "updated": "2035-06-11T12:00:00.000Z",
+      "updatedAt": "2035-06-11T12:00:00.000Z",
+      "point": "Example session checkpoint."
+    },
+    {
+      "id": "CONTENT",
+      "updated": "2035-06-11T12:00:00.000Z",
+      "updatedAt": "2035-06-11T12:00:00.000Z",
+      "point": "Example session checkpoint."
+    },
+    {
+      "id": "GAMES",
+      "updated": "2035-06-11T12:00:00.000Z",
+      "updatedAt": "2035-06-11T12:00:00.000Z",
+      "point": "Example session checkpoint."
+    }
+  ],
+  "decisions": [
+    "Example: soft colors selected",
+    "Example: compact layout selected"
+  ],
+  "live": "Example features are live in this fictional board.",
+  "codex": "Example progress only.",
+  "deadlines": [
+    {
+      "at": "2035-06-14T18:00:00Z",
+      "text": "Fictional preview deadline"
+    }
+  ],
+  "launches": {
+    "updated": "2035-06-11T12:00:00.000Z",
+    "items": [
+      {
+        "id": "demo-launch-1",
+        "dia": "2035-06-11",
+        "hora": "11:00",
+        "o_que": "Novo placar",
+        "sessao": "ATENDIMENTO",
+        "estado": "no ar",
+        "depende": "Nada",
+        "prazo_duro": false,
+        "deadlineAt": null
+      },
+      {
+        "id": "demo-launch-2",
+        "dia": "2035-06-11",
+        "hora": "15:00",
+        "o_que": "Melhorias no celular",
+        "sessao": "ATENDIMENTO",
+        "estado": "liberado",
+        "depende": "Revisão final",
+        "prazo_duro": false,
+        "deadlineAt": null
+      },
+      {
+        "id": "demo-launch-3",
+        "dia": "2035-06-12",
+        "hora": "até 18:00",
+        "o_que": "Alertas de novidades",
+        "sessao": "ASSISTENTE",
+        "estado": "falta card",
+        "depende": "Escolher o visual",
+        "prazo_duro": true,
+        "deadlineAt": "2035-06-12T21:00:00.000Z"
+      },
+      {
+        "id": "demo-launch-4",
+        "dia": "2035-06-13",
+        "hora": "durante o dia",
+        "o_que": "Pacote de sons",
+        "sessao": "CONTENT",
+        "estado": "em revisao",
+        "depende": "Conferir volume",
+        "prazo_duro": false,
+        "deadlineAt": null
+      },
+      {
+        "id": "demo-launch-5",
+        "dia": null,
+        "hora": "sem data",
+        "o_que": "Nova decoração",
+        "sessao": "GAMES",
+        "estado": "pausado",
+        "depende": "Escolher a arte",
+        "prazo_duro": false,
+        "deadlineAt": null
+      }
+    ],
+    "nextHard": {
+      "id": "demo-launch-3",
+      "dia": "2035-06-12",
+      "hora": "até 18:00",
+      "o_que": "Alertas de novidades",
+      "sessao": "ASSISTENTE",
+      "estado": "falta card",
+      "depende": "Escolher o visual",
+      "prazo_duro": true,
+      "deadlineAt": "2035-06-12T21:00:00.000Z"
+    }
+  }
+}

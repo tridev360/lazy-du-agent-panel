@@ -1,0 +1,32 @@
+{
+ "atualizadoEm": "2025-03-14T15:25:00.000Z",
+ "regra": "% = horas dos passos feitos / horas conhecidas. Passo com dependeDele = espera o dono.",
+ "entregas": [
+  {
+   "id": "busca-nova",
+   "projeto": "App de receitas",
+   "nome": "Busca que entende acento",
+   "dono": "backend",
+   "adianta": "A revisão pode rodar junto do teste de carga.",
+   "passos": [
+    { "nome": "Teste que falha com acento", "peso": 1, "feito": true },
+    { "nome": "Índice novo da busca", "peso": 3, "feito": true },
+    { "nome": "Revisão CONFERE no hash", "peso": 1, "feito": false },
+    { "nome": "Você decide se sobe", "peso": 0.2, "feito": false, "dependeDele": true, "card": "subir-busca-nova" }
+   ]
+  },
+  {
+   "id": "tela-login",
+   "projeto": "App de receitas",
+   "nome": "Tela de login",
+   "dono": "frontend",
+   "adianta": "",
+   "passos": [
+    { "nome": "Você escolhe o tipo de login", "peso": null, "feito": false, "dependeDele": true, "card": "escolher-login" },
+    { "nome": "Teste que falha", "peso": 1, "feito": false },
+    { "nome": "Tela no celular e no computador", "peso": 3, "feito": false },
+    { "nome": "Revisão de texto com print", "peso": 1, "feito": false }
+   ]
+  }
+ ]
+}

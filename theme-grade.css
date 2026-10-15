@@ -1,0 +1,47 @@
+/* theme-grade.css (08/10): tema GRADE, o PADRAO. Carvao quente, pixel exato, cor so quando alguem precisa de voce.
+   So cores, fontes e o jeito das animacoes (pixel/dither, passos discretos, sem brilho). A marcacao e comum (vistas.js).
+   Fontes: Silkscreen (pixel, 16/24/48 presos na grade de 8) + Geist. As fontes vem dentro do kit (letras/letras.css, woff2 local). */
+html[data-theme=grade]{
+  --g-bg:#11100E;--g-s1:#1A1916;--g-line:#2B2925;--g-dot:#46423B;--g-tx:#ECE8DF;--g-tx2:#A9A398;--g-tx3:#7D776D;
+  --g-off:#1F1E1A;--g-fundo-led:#0C0B0A;--g-btn-hover:#FFFFFF;--g-rosa:#FF5FAE;--g-claude:#F0964A;--g-codex:#6AA4F5;--g-anda:#6CCB8B;--g-trava:#E2AE4C;--g-dorme:#6B665D;
+  --g-pix:'Silkscreen',ui-monospace,monospace;--g-sans:'Geist',system-ui,'Segoe UI',sans-serif;
+  --g-p16:var(--g-px16,16px);--g-p24:var(--g-px24,24px);--g-p48:var(--g-px48,48px);
+  --g-fio-quente:#ECE8DF;--g-fio-morno:#C4BEB2;--g-fio-recente:#A9A398;--g-fio-frio:#5F5A51;
+  /* o painel antigo herda o carvao quente */
+  --bg:#11100E;--panel:#1A1916;--line:#2B2925;--muted:#A9A398;--ink:#ECE8DF;--pink:#FF5FAE;--cor-voce:#FF5FAE;--cor-claude:#F0964A;--cor-codex:#6AA4F5;
+}
+html[data-theme=grade] .g-mapa svg.g-fios{shape-rendering:crispEdges}
+html[data-theme=grade] .g-acao canvas,html[data-theme=grade] canvas.g-anim{image-rendering:pixelated}
+
+/* ---------- estado continuo nas caixas (inventario A3/A4/A9 e C, no idioma pixel) ---------- */
+/* trabalhando: o rosto ganha uma moldura de 1 px que liga e desliga em degrau (o "pulso" do Fluxo antigo, sem brilho) */
+html[data-theme=grade] .g-no[data-work="1"] .g-no-face{animation:gx-pulso 1.8s steps(1,end) infinite}
+@keyframes gx-pulso{0%{box-shadow:0 0 0 2px var(--g-bg),0 0 0 3px var(--lado-cor)}50%{box-shadow:none}}
+html[data-theme=grade] .g-no[data-precisa="1"] .g-no-face::after{animation:gx-pisca 1.8s steps(1,end) infinite}
+html[data-theme=grade] .g-no.is-voce[data-precisa="1"]{animation:gx-voce 3.6s steps(1,end) infinite}
+@keyframes gx-voce{0%,90%{box-shadow:inset 0 0 0 1px var(--g-rosa)}93%{box-shadow:inset 0 0 0 2px var(--g-rosa)}96%{box-shadow:inset 0 0 0 1px var(--g-rosa)}}
+@keyframes gx-pisca{0%{opacity:1}50%{opacity:0}}
+html[data-theme=grade] .g-no[data-estado=dormindo]{opacity:.8}
+html[data-theme=grade] .g-no:hover{box-shadow:inset 0 0 0 1px var(--g-dot)}
+html[data-theme=grade] .g-no.is-voce:hover{box-shadow:inset 0 0 0 2px var(--g-rosa)}
+
+/* ---------- efeitos de 1 vez (o motor poe a classe; tudo em degraus) ---------- */
+html[data-theme=grade] .fx-fala .g-no-face{animation:gx-fala .2s steps(2,end)}
+@keyframes gx-fala{0%{opacity:.2}100%{opacity:1}}
+html[data-theme=grade] .fx-engole .g-no-face{animation:gx-engole .36s steps(1,end)}
+@keyframes gx-engole{0%{transform:scale(.5)}33%{transform:scale(1.25);box-shadow:0 0 0 1px var(--g-tx)}66%{transform:scale(1);box-shadow:0 0 0 2px var(--g-bg),0 0 0 3px var(--g-tx)}100%{transform:none}}
+html[data-theme=grade] .fx-troca .g-acao{animation:gx-tranco .26s steps(1,end)}
+@keyframes gx-tranco{0%{transform:translateX(2px)}33%{transform:translateX(-2px)}66%{transform:translate(0,-2px)}100%{transform:none}}
+html[data-theme=grade] .fx-terminou .g-no-t{animation:gx-verde .7s steps(1,end)}
+@keyframes gx-verde{0%,40%{color:var(--g-anda)}20%,60%{color:var(--g-tx)}80%{color:var(--g-anda)}}
+html[data-theme=grade] .fx-acorda .g-no-face{animation:gx-acorda .6s steps(3,end) both}
+@keyframes gx-acorda{from{opacity:.25}to{opacity:1}}
+html[data-theme=grade] .fx-dorme .g-no-face{animation:gx-dorme .7s steps(3,end) both}
+@keyframes gx-dorme{from{opacity:1}to{opacity:.45}}
+html[data-theme=grade] .fx-treme{animation:gx-treme .42s steps(1,end)}
+@keyframes gx-treme{0%{transform:translateX(2px)}20%{transform:translateX(-2px)}40%{transform:translateX(2px)}60%{transform:translateX(-2px)}80%{transform:none}}
+html[data-theme=grade] .fx-pulsa{animation:gx-pulsa 1.1s steps(1,end)}
+@keyframes gx-pulsa{0%,50%{box-shadow:inset 0 0 0 3px var(--g-rosa)}25%,75%{box-shadow:inset 0 0 0 1px var(--g-rosa)}}
+html[data-theme=grade] .fx-chega,html[data-theme=grade] .fx-pisca3{animation:gx-pisca3 .9s steps(1,end)}
+@keyframes gx-pisca3{0%,33%,66%{opacity:1}16%,50%,83%{opacity:0}}
+html[data-theme=grade] .g-fx-rot.fx-rot-mais{color:var(--g-tx)}

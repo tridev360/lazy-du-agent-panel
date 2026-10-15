@@ -1,0 +1,83 @@
+/* CABECALHO (10/10): o par WEN + marcha no comeco da direita da barra e a barra em 2 linhas quando nao cabe.
+   So variaveis dos 3 temas (--g-*); fonte pixel da casa (--g-pix) nos 2 rotulos. Animacao so em transform e opacity;
+   Motion off e reduced motion = parado. 3 variantes por data-botoes (a, b, c); a recomendada e a "a". */
+#g-duo{display:flex;align-items:center;gap:8px;flex:none}
+#g-duo #gancho-acelerador{display:inline-flex;align-items:center}
+#g-duo #gancho-acelerador[hidden]{display:inline-flex}
+#g-duo .acel-controls{display:inline-flex}
+#g-duo .wen-trigger,#g-duo .acel-trigger{all:unset;box-sizing:border-box;position:relative;display:inline-flex;align-items:center;gap:8px;height:32px;padding:0 12px;cursor:pointer;white-space:nowrap;font:var(--g-p16,16px)/1 var(--g-pix,monospace);color:var(--g-tx);letter-spacing:0;overflow:hidden;transition:transform .12s ease,box-shadow .12s ease,background-color .12s ease}
+#g-duo .acel-trigger .acel-trigger-nome{font:inherit}
+#g-duo .acel-trigger-simbolo{font:var(--g-p16,16px)/1 var(--g-pix,monospace);font-size:20px}
+#g-duo .acel-niveis i{background:var(--g-line)}
+#g-duo .acel-niveis i.is-on{background:var(--g-rosa)}
+#g-duo .wen-trigger:focus-visible,#g-duo .acel-trigger:focus-visible{outline:2px solid var(--g-tx);outline-offset:2px}
+#g-duo .acel-trigger-duvida{border-color:var(--g-trava);color:var(--g-trava);font:600 11px/1 var(--g-sans,system-ui)}
+
+/* ---------- A: teclas pixel (recomendada). 2 teclas com sombra de pixel; a ROTINA ligada e a tecla rosa cheia com um brilho
+   que atravessa de tempos em tempos; apertar afunda a tecla (a sombra some). ---------- */
+#g-duo[data-botoes="a"] .wen-trigger,#g-duo[data-botoes="a"] .acel-trigger{border:1px solid var(--g-tx2);background:var(--g-bg);box-shadow:3px 3px 0 var(--g-line)}
+#g-duo[data-botoes="a"] .wen-trigger::before{content:"";width:8px;height:8px;background:var(--g-rosa);flex:none}
+#g-duo[data-botoes="a"] .wen-trigger:hover,#g-duo[data-botoes="a"] .acel-trigger:hover{transform:translate(-1px,-1px);box-shadow:4px 4px 0 var(--g-tx2)}
+#g-duo[data-botoes="a"] .wen-trigger:active,#g-duo[data-botoes="a"] .acel-trigger:active,#g-duo[data-botoes="a"] .wen-trigger.wen-pressing,#g-duo[data-botoes="a"] .acel-trigger.is-apertando{transform:translate(3px,3px);box-shadow:0 0 0 var(--g-line)}
+#g-duo[data-botoes="a"] .acel-trigger.is-viva{background:var(--g-rosa);border-color:var(--g-rosa);color:var(--g-bg);box-shadow:3px 3px 0 color-mix(in srgb,var(--g-rosa) 45%,var(--g-bg))}
+#g-duo[data-botoes="a"] .acel-trigger.is-viva:hover{box-shadow:4px 4px 0 color-mix(in srgb,var(--g-rosa) 60%,var(--g-bg))}
+#g-duo[data-botoes="a"] .acel-trigger.is-viva::after{content:"";position:absolute;top:-4px;bottom:-4px;left:0;width:10px;background:color-mix(in srgb,#fff 55%,transparent);transform:translateX(-24px) skewX(-18deg);animation:duo-brilho 4.5s steps(18) infinite}
+
+/* ---------- B: capsula dupla. Os 2 num controle so, divididos por 1 linha; embaixo da marcha uma faixa rosa com a luz correndo. ---------- */
+#g-duo[data-botoes="b"]{gap:0;box-shadow:inset 0 0 0 1px var(--g-tx2)}
+#g-duo[data-botoes="b"] .wen-trigger,#g-duo[data-botoes="b"] .acel-trigger{background:transparent}
+#g-duo[data-botoes="b"] #gancho-acelerador{box-shadow:inset 1px 0 0 var(--g-tx2)}
+#g-duo[data-botoes="b"] .wen-trigger:hover,#g-duo[data-botoes="b"] .acel-trigger:hover{background:var(--g-s1)}
+#g-duo[data-botoes="b"] .wen-trigger:active,#g-duo[data-botoes="b"] .acel-trigger:active{transform:translateY(1px)}
+#g-duo[data-botoes="b"] .acel-trigger.is-viva{color:var(--g-rosa);background:color-mix(in srgb,var(--g-rosa) 10%,transparent)}
+#g-duo[data-botoes="b"] .acel-trigger.is-viva::before{content:"";position:absolute;left:0;right:0;bottom:0;height:3px;background:var(--g-rosa)}
+#g-duo[data-botoes="b"] .acel-trigger.is-viva::after{content:"";position:absolute;bottom:0;left:0;width:18px;height:3px;background:#fff;transform:translateX(-20px);animation:duo-faixa 2.8s linear infinite}
+
+/* ---------- C: contorno vivo. Contorno fino; o WEN tem o cursor de terminal piscando; a ROTINA ligada tem um pixel rosa que
+   da a volta no botao (a borda viva da tela, em miniatura). ---------- */
+#g-duo[data-botoes="c"] .wen-trigger,#g-duo[data-botoes="c"] .acel-trigger{box-shadow:inset 0 0 0 1px var(--g-line);background:var(--g-s1)}
+#g-duo[data-botoes="c"] .wen-trigger::after{content:"";width:7px;height:12px;background:var(--g-tx);animation:duo-cursor 1.1s steps(1) infinite}
+#g-duo[data-botoes="c"] .wen-trigger:hover,#g-duo[data-botoes="c"] .acel-trigger:hover{box-shadow:inset 0 0 0 1px var(--g-tx2)}
+#g-duo[data-botoes="c"] .wen-trigger:active,#g-duo[data-botoes="c"] .acel-trigger:active{transform:scale(.96)}
+#g-duo[data-botoes="c"] .acel-trigger.is-viva{color:var(--g-rosa);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--g-rosa) 70%,transparent);overflow:visible}
+#g-duo[data-botoes="c"] .acel-trigger.is-viva::after{content:"";position:absolute;left:-2px;top:-2px;width:4px;height:4px;background:var(--g-rosa);animation:duo-orbita 3.2s linear infinite}
+
+@keyframes duo-brilho{0%,70%{transform:translateX(-24px) skewX(-18deg)}100%{transform:translateX(160px) skewX(-18deg)}}
+@keyframes duo-faixa{0%{transform:translateX(-20px)}100%{transform:translateX(160px)}}
+@keyframes duo-cursor{0%,50%{opacity:1}50.01%,100%{opacity:0}}
+@keyframes duo-orbita{0%{transform:translate(0,0)}35%{transform:translate(calc(var(--duo-w,128px) - 2px),0)}50%{transform:translate(calc(var(--duo-w,128px) - 2px),32px)}85%{transform:translate(0,32px)}100%{transform:translate(0,0)}}
+#g-duo[data-botoes="c"] #gancho-acelerador{--duo-w:128px}
+
+@media(prefers-reduced-motion:reduce){#g-duo *,#g-duo *::before,#g-duo *::after{animation:none!important;transition:none!important}}
+html[data-motion="off"] #g-duo *,html[data-motion="off"] #g-duo *::before,html[data-motion="off"] #g-duo *::after{animation:none!important;transition:none!important}
+
+/* ---------- barra em 2 linhas (medida pelo cabecalho-botoes.js): em cima a marca e os botoes; embaixo as abas (com rolagem
+   propria, nunca por baixo de nada) e o seletor de projeto no fim da linha ---------- */
+@media (min-width:761px){
+  html.g-bar-2l #g-bar{height:auto}
+  html.g-bar-2l #g-bar .g-wrap{height:auto;flex-wrap:wrap;row-gap:0;padding-top:8px}
+  html.g-bar-2l #g-bar .g-wrap::after{content:"";order:2;flex:0 0 100%;height:0}
+  html.g-bar-2l #g-bar .g-logo{order:0}
+  html.g-bar-2l #g-bar .g-right{order:1;margin-left:auto;height:40px}
+  html.g-bar-2l #g-bar .g-tabs{order:3;flex:1 1 0;min-width:0;height:40px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none}
+  html.g-bar-2l #g-bar .g-tabs::-webkit-scrollbar{display:none}
+  html.g-bar-2l #g-bar .g-tab{height:40px}
+  html.g-bar-2l #g-bar .pg-caixa{order:4;margin-left:0}
+}
+/* celular: a marcha vira so o simbolo (sem marcha escolhida o nome fica, menor); o par nunca empurra a pagina para o lado */
+@media (max-width:760px){
+  #g-duo{gap:6px}
+  #g-duo .wen-trigger,#g-duo .acel-trigger{padding:0 9px}
+}
+@media (max-width:480px){
+  #g-duo .acel-trigger:not(.sem-simbolo) .acel-trigger-nome{display:none}
+  #g-duo .acel-trigger.sem-simbolo{padding:0 7px}
+  #g-duo .acel-trigger.sem-simbolo .acel-trigger-nome{font-size:11px;letter-spacing:0}
+  #g-duo .acel-niveis{display:none}
+  #g-duo[data-botoes="a"] .wen-trigger::before{display:none}
+  #g-duo[data-botoes="c"] .wen-trigger::after{display:none}
+  #g-duo[data-botoes="c"] #gancho-acelerador{--duo-w:44px}
+}
+
+/* Esta copia mostra o pulso no Fluxo; o seletor de marcha nao grava no modo amigo. */
+

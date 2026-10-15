@@ -1,0 +1,228 @@
+/* blocos-folha.css (Fase 2, 08/10): estilo dos blocos proprios do tema FOLHA DO DIA (blocos-folha.js).
+   Toda regra comeca em html[data-theme=folha] (ou esconde nos outros temas): nos temas GRADE e LIVRO nada daqui vale.
+   4 tamanhos: 40/600 frase, 22/600 titulo de bloco, 16/400 texto, 13/500 rotulo e horario. Nada abaixo de 13. */
+html:not([data-theme=folha]) #fh-agora,html:not([data-theme=folha]) #fh-kbtn,html:not([data-theme=folha]) .fh-k-fundo,html:not([data-theme=folha]) .fh-k-lista,html:not([data-theme=folha]) #fh-lado{display:none!important}
+/* o AGORA da folha troca o da GRADE so neste tema; nas outras vistas ele some */
+html[data-theme=folha][data-g-new=agora] #g-agora{display:none!important}
+html[data-theme=folha]:not([data-g-new=agora]) #fh-agora{display:none!important}
+html[data-theme=folha] #fh-agora[hidden]{display:none!important}
+/* a caixa de sempre mora no Ctrl K (linha fina no pe do Agora e botao na barra) */
+html[data-theme=folha]:not(.fh-k-open) #g-dock{display:none!important}
+
+/* ponto de estado (8 px) */
+html[data-theme=folha] .fh-dot{display:inline-block;width:8px;height:8px;border-radius:50%;flex:none;background:var(--g-dorme)}
+html[data-theme=folha] .fh-dot.is-anda{background:var(--g-anda)}
+html[data-theme=folha] .fh-dot.is-travou{background:var(--g-trava)}
+html[data-theme=folha] .fh-dot.is-voce{background:var(--g-rosa)}
+html[data-theme=folha] .fh-dot.is-dorme{background:var(--g-dorme)}
+
+/* botoes e links */
+html[data-theme=folha] .fh-btn{font:500 13px/1 var(--g-sans);color:#0B0B0C;background:#EDEDEF;border:0;border-radius:8px;padding:10px 14px;cursor:pointer;white-space:nowrap;text-decoration:none;display:inline-block}
+html[data-theme=folha] .fh-btn:hover{background:#fff}
+html[data-theme=folha] .fh-link{font:500 13px/1.4 var(--g-sans);color:var(--g-tx2);background:none;border:0;padding:0;cursor:pointer;text-decoration:none}
+html[data-theme=folha] .fh-link:hover{color:var(--g-tx);text-decoration:underline;text-underline-offset:3px}
+html[data-theme=folha] .fh-view :focus-visible,html[data-theme=folha] .fh-lado :focus-visible,html[data-theme=folha] #fh-kbtn:focus-visible{outline:2px solid var(--g-tx);outline-offset:2px}
+html[data-theme=folha] .fh-kbd{font:500 13px/1 var(--g-sans);color:var(--g-tx2);border:1px solid rgba(237,237,239,.14);border-radius:6px;padding:6px 8px}
+html[data-theme=folha] #fh-kbtn{all:unset;box-sizing:border-box;display:inline-flex;align-items:center;height:28px;font:500 13px/1 var(--g-sans);color:var(--g-tx);border:1px solid rgba(237,237,239,.14);border-radius:6px;padding:0 9px;cursor:pointer;white-space:nowrap;flex:none}
+html[data-theme=folha] #fh-kbtn:hover{border-color:rgba(237,237,239,.3)}
+
+/* tipografia */
+html[data-theme=folha] .fh-view{font:400 16px/1.5 var(--g-sans);color:var(--g-tx);-webkit-font-smoothing:antialiased;font-feature-settings:'tnum' 1}
+html[data-theme=folha] .fh-frase{font:600 40px/1.15 var(--g-sans);letter-spacing:-.02em;margin:0;color:var(--g-tx)}
+html[data-theme=folha] .fh-h2{font:600 22px/1.25 var(--g-sans);letter-spacing:-.01em;margin:0 0 16px;display:flex;align-items:baseline;gap:16px;text-transform:none}
+html[data-theme=folha] .fh-h2 .fh-num{color:var(--g-tx2);font-weight:600;display:inline-block}
+html[data-theme=folha] .fh-rot{font:500 13px/1.4 var(--g-sans);color:var(--g-tx3)}
+html[data-theme=folha] .fh-sec{color:var(--g-tx2)}
+html[data-theme=folha] .fh-bloco{margin-top:64px}
+html[data-theme=folha] .fh-bloco-linha{margin-top:48px}
+html[data-theme=folha] .fh-depois{display:inline-block;margin-top:16px}
+
+/* AGORA: coluna de 720 */
+html[data-theme=folha] #fh-agora{max-width:720px;margin:0 auto;padding:40px 0 48px}
+html[data-theme=folha] .fh-topo{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:16px}
+html[data-theme=folha] .fh-aneis{display:flex;gap:24px}
+html[data-theme=folha] .fh-anel{display:flex;align-items:center;gap:8px;color:inherit}
+html[data-theme=folha] .fh-anel svg{width:32px;height:32px;flex:none;transform:rotate(-90deg)}
+html[data-theme=folha] .fh-anel .fh-trilho{stroke:rgba(237,237,239,.1)}
+html[data-theme=folha] .fh-anel .fh-arco{stroke:var(--g-tx);transition:stroke-dashoffset 400ms cubic-bezier(.2,.7,.2,1),stroke 300ms}
+html[data-theme=folha] .fh-anel.is-acende .fh-arco{stroke:var(--g-rosa)}
+html[data-theme=folha] .fh-anel.is-acende svg{animation:fh-anel-brilho 1s ease}
+@keyframes fh-anel-brilho{0%{filter:none}30%{filter:drop-shadow(0 0 6px rgba(255,46,126,.7))}100%{filter:none}}
+html[data-theme=folha] .fh-anel.is-sem .fh-arco{stroke:transparent}
+html[data-theme=folha] .fh-anel>span{display:flex;flex-direction:column;font:500 13px/1.3 var(--g-sans);color:var(--g-tx2);white-space:nowrap}
+html[data-theme=folha] .fh-anel>span b{font-weight:500;color:var(--g-tx3)}
+html[data-theme=folha][data-motion=off] .fh-anel .fh-arco{transition:none}
+html[data-theme=folha][data-motion=off] .fh-anel.is-acende svg{animation:none}
+
+html[data-theme=folha] .fh-passos-linha{margin-top:8px;min-height:24px}
+html[data-theme=folha] .fh-passos-bt{display:inline-flex;align-items:baseline;gap:8px;background:none;border:0;padding:0;cursor:pointer;font:400 16px/1.5 var(--g-sans);color:var(--g-tx2)}
+html[data-theme=folha] .fh-passos-bt .fh-seta{font:500 13px/1 var(--g-sans);font-style:normal;color:var(--g-tx3)}
+html[data-theme=folha] .fh-passos-bt:hover span{color:var(--g-tx)}
+html[data-theme=folha] .fh-passos{list-style:none;margin:12px 0 0;padding:0}
+html[data-theme=folha] .fh-passos[hidden]{display:none}
+html[data-theme=folha] .fh-passos li{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:0 16px;padding:8px 0;border-top:1px solid var(--g-line);font:400 15px/1.45 var(--g-sans);color:var(--g-tx2)}
+html[data-theme=folha] .fh-passos li:first-child{border-top:0}
+html[data-theme=folha] .fh-passos .fh-p-onde{font:500 13px/22px var(--g-sans);color:var(--g-tx3);white-space:nowrap}
+html[data-theme=folha] .fh-passos li{animation:fh-entra 300ms cubic-bezier(.2,.7,.2,1) both}
+
+html[data-theme=folha] .fh-lista{list-style:none;margin:32px 0 0;padding:0}
+html[data-theme=folha] .fh-item{display:grid;grid-template-columns:32px minmax(0,1fr) auto;gap:0 16px;align-items:start;padding:16px 0;border-top:1px solid var(--g-line)}
+html[data-theme=folha] .fh-item:first-child{border-top:0}
+html[data-theme=folha] .fh-item.is-acao{background:var(--g-s1);border-radius:12px;padding:20px;margin:0 -20px;border-top:0}
+html[data-theme=folha] .fh-item.is-acao+.fh-item{border-top:0}
+html[data-theme=folha] .fh-item.is-extra{display:none}
+html[data-theme=folha] .fh-n{font:500 13px/24px var(--g-sans);color:var(--g-tx3);font-variant-numeric:tabular-nums}
+html[data-theme=folha] .fh-item.is-acao .fh-n{color:var(--g-rosa)}
+html[data-theme=folha] .fh-item button.fh-o{display:block;width:100%;min-width:0;background:none;border:0;padding:0;margin:0;text-align:left;color:inherit;font:inherit;cursor:pointer}
+html[data-theme=folha] .fh-o strong{display:block;font:400 16px/1.5 var(--g-sans);color:var(--g-tx);overflow-wrap:anywhere}
+html[data-theme=folha] .fh-item button.fh-o:hover strong{text-decoration:underline;text-underline-offset:3px;text-decoration-color:rgba(237,237,239,.35)}
+html[data-theme=folha] .fh-o .fh-onde{display:block;margin-top:4px;font:500 13px/1.4 var(--g-sans);color:var(--g-tx2)}
+html[data-theme=folha] .fh-o .fh-onde i{font-style:normal;color:var(--g-tx3)}
+html[data-theme=folha] .fh-item .fh-btn{margin-top:2px}
+html[data-theme=folha] .fh-mais{display:flex;gap:24px;margin-top:16px;padding-left:48px}
+
+html[data-theme=folha] .fh-linha{display:flex;flex-wrap:wrap;align-items:center;gap:8px 32px;font:400 16px/1.5 var(--g-sans)}
+html[data-theme=folha] .fh-linha>*{display:inline-flex;align-items:center;gap:8px}
+html[data-theme=folha] .fh-linha button{font:inherit;color:inherit;background:none;border:0;padding:0;cursor:pointer}
+html[data-theme=folha] .fh-linha button:hover .fh-rotulo,html[data-theme=folha] .fh-linha button[aria-expanded=true] .fh-rotulo{color:var(--g-tx)}
+html[data-theme=folha] .fh-linha .fh-rotulo{color:var(--g-tx2)}
+html[data-theme=folha] .fh-contas{gap:12px!important}
+html[data-theme=folha] .fh-conta{display:inline-flex;align-items:center;gap:6px}
+html[data-theme=folha] .fh-conta.is-atual{color:var(--g-tx)}
+html[data-theme=folha] .fh-conta:not(.is-atual){color:var(--g-tx2)}
+html[data-theme=folha] .fh-abre{margin-top:16px;animation:fh-entra 300ms cubic-bezier(.2,.7,.2,1) both}
+html[data-theme=folha] .fh-abre[hidden]{display:none}
+html[data-theme=folha] .fh-abre p{margin:0 0 8px;color:var(--g-tx2)}
+
+html[data-theme=folha] .fh-dia,html[data-theme=folha] .fh-feito{list-style:none;margin:0;padding:0}
+html[data-theme=folha] .fh-dia li,html[data-theme=folha] .fh-feito li{display:grid;grid-template-columns:64px minmax(0,1fr);gap:16px;padding:12px 0;border-top:1px solid var(--g-line)}
+html[data-theme=folha] .fh-dia li:first-child,html[data-theme=folha] .fh-feito li:first-child{border-top:0;padding-top:0}
+html[data-theme=folha] .fh-dia time,html[data-theme=folha] .fh-feito time{font:500 13px/24px var(--g-sans);color:var(--g-tx3);font-variant-numeric:tabular-nums}
+html[data-theme=folha] .fh-dia .is-depois time{color:var(--g-tx2)}
+html[data-theme=folha] .fh-feito li{color:var(--g-tx2)}
+html[data-theme=folha] .fh-feito li span i{font-style:normal;color:var(--g-tx3)}
+html[data-theme=folha] .fh-feito li.is-novo{animation:fh-cai 500ms cubic-bezier(.2,.7,.2,1) both}
+html[data-theme=folha] .fh-feito li.is-novo span{animation:fh-verde 1.4s ease both}
+@keyframes fh-cai{from{opacity:0;transform:translateY(-16px)}to{opacity:1;transform:none}}
+@keyframes fh-verde{0%,40%{color:var(--g-anda)}100%{color:var(--g-tx2)}}
+@keyframes fh-entra{from{opacity:0;transform:translateY(-6px)}to{opacity:1;transform:none}}
+
+/* recompensa: a linha risca e desliza; o contador sobe */
+html[data-theme=folha] .fh-item.is-fechando strong{text-decoration:line-through;text-decoration-color:var(--g-tx2);color:var(--g-tx2);transition:color .2s}
+html[data-theme=folha] .fh-item.is-fechando{animation:fh-sai 400ms 200ms cubic-bezier(.4,0,.2,1) forwards}
+@keyframes fh-sai{to{opacity:0;transform:translateY(24px)}}
+html[data-theme=folha] .fh-conta-n.is-sobe{animation:fh-sobe-n 400ms cubic-bezier(.2,.7,.2,1)}
+@keyframes fh-sobe-n{from{transform:translateY(8px);opacity:.3;color:var(--g-anda)}to{transform:none;opacity:1}}
+html[data-theme=folha][data-motion=off] .fh-item.is-fechando,html[data-theme=folha][data-motion=off] .fh-feito li.is-novo,html[data-theme=folha][data-motion=off] .fh-feito li.is-novo span,html[data-theme=folha][data-motion=off] .fh-conta-n.is-sobe,html[data-theme=folha][data-motion=off] .fh-passos li,html[data-theme=folha][data-motion=off] .fh-abre{animation:none}
+
+/* tela vazia: a frase sozinha, mais ar */
+html[data-theme=folha] #fh-agora.is-vazia .fh-frase{margin-top:24px}
+html[data-theme=folha] .fh-vazia{list-style:none}
+html[data-theme=folha] .fh-vazia p{margin:16px 0 0;color:var(--g-tx2)}
+html[data-theme=folha] #fh-agora.is-vazia .fh-frase{animation:fh-entra 600ms cubic-bezier(.2,.7,.2,1) both}
+html[data-theme=folha][data-motion=off] #fh-agora.is-vazia .fh-frase{animation:none}
+
+/* pe do AGORA: a linha fina do compositor */
+html[data-theme=folha] .fh-pe{display:flex;align-items:center;gap:16px;width:100%;margin-top:64px;padding:16px 0;border:0;border-top:1px solid var(--g-line);background:none;color:var(--g-tx3);font:400 16px/1.5 var(--g-sans);text-align:left;cursor:text}
+html[data-theme=folha] .fh-pe:hover{color:var(--g-tx2)}
+html[data-theme=folha] .fh-pe b{font-weight:400;color:var(--g-tx2)}
+html[data-theme=folha] .fh-pe .fh-kbd{margin-left:auto}
+
+/* Projetos D (Painel de LED) no estilo da folha: sem caixa, Geist, nada abaixo de 13 */
+html[data-theme=folha] #fh-obra .opx{display:block!important;margin:0!important;padding:0!important;border:0!important;border-radius:0!important;background:none!important;font-family:var(--g-sans)!important}
+html[data-theme=folha] #fh-obra .opx-title,html[data-theme=folha] #fh-obra .opx-foot,html[data-theme=folha] #fh-obra .opx-trava,html[data-theme=folha] #fh-obra .opx-kicker{display:none!important}
+html[data-theme=folha] #fh-obra .opx-top{display:block!important;margin:0 0 16px!important}
+html[data-theme=folha] #fh-obra .opx-legend{display:flex!important;flex-wrap:wrap;gap:8px 16px!important;font:500 13px/1.4 var(--g-sans)!important;color:var(--g-tx2)!important}
+html[data-theme=folha] #fh-obra .opx-legend [data-k=vez]{color:var(--g-rosa)!important}
+html[data-theme=folha] #fh-obra .opx-key{width:8px!important;height:8px!important;border-radius:2px}
+html[data-theme=folha] #fh-obra .opx-mods{grid-template-columns:repeat(5,minmax(0,1fr))!important;gap:16px!important}
+html[data-theme=folha] #fh-obra .opx-mod{padding:8px!important;margin:0 -8px;gap:8px!important;justify-items:start!important;border-radius:8px!important;border-color:transparent!important;background:none!important}
+html[data-theme=folha] #fh-obra .opx [data-project]:hover,html[data-theme=folha] #fh-obra .opx [data-project][aria-expanded=true]{border-color:transparent!important;background:rgba(237,237,239,.04)!important}
+html[data-theme=folha] #fh-obra .opx-mod .opx-name,html[data-theme=folha] #fh-obra .opx-mod .opx-mono{text-align:left!important;white-space:normal!important;overflow:visible!important;text-overflow:clip!important}
+html[data-theme=folha] #fh-obra .opx-name{font:500 13px/1.35 var(--g-sans)!important;color:var(--g-tx)!important}
+html[data-theme=folha] #fh-obra .opx-mono,html[data-theme=folha] #fh-obra .opx-mono *{font:500 13px/1.35 var(--g-sans)!important}
+html[data-theme=folha] #fh-obra .opx-mono{color:var(--g-tx2)!important}
+html[data-theme=folha] #fh-obra .opx-n{color:var(--g-tx)!important}
+html[data-theme=folha] #fh-obra .opx-vezn{color:var(--g-rosa)!important}
+html[data-theme=folha] #fh-obra .opx-leds{background:#101012!important;box-shadow:none!important;padding:8px!important;border-radius:8px!important}
+html[data-theme=folha] #fh-obra .opx-led{box-shadow:none!important;border-radius:3px!important}
+html[data-theme=folha] #fh-obra .opx-led[data-cat=fila]{box-shadow:inset 0 0 0 1.5px #3a3a42!important}
+html[data-theme=folha] #fh-obra .opx-led[data-cat=ar]{box-shadow:0 0 6px rgba(61,214,140,.45)!important}
+html[data-theme=folha] #fh-obra .opx-led[data-cat=vez]{box-shadow:0 0 6px rgba(255,46,126,.5)!important}
+html[data-theme=folha] #fh-obra .opx-detail,html[data-theme=folha] #fh-obra .opx-detail *{font-family:var(--g-sans)!important}
+html[data-theme=folha] #fh-obra .opx-detail{margin-top:16px!important;font-size:13px!important}
+html[data-theme=folha] #fh-obra .opx-detail h4{font:600 22px/1.25 var(--g-sans)!important;margin:0!important}
+html[data-theme=folha] #fh-obra .opx-detail strong{font:400 16px/1.4 var(--g-sans)!important}
+html[data-theme=folha] #fh-obra .opx-notice{font:500 13px/1.4 var(--g-sans)!important}
+
+/* lateral do card */
+html[data-theme=folha] .fh-lado{position:fixed;top:0;right:0;bottom:0;width:min(440px,100vw);margin:0 0 0 auto;padding:0;border:0;background:var(--g-s1);color:var(--g-tx);max-height:none;height:100vh;box-sizing:border-box;overflow:auto}
+html[data-theme=folha] .fh-lado[open]{animation:fh-lado-entra 260ms cubic-bezier(.2,.7,.2,1)}
+@keyframes fh-lado-entra{from{transform:translateX(24px);opacity:0}to{transform:none;opacity:1}}
+html[data-theme=folha][data-motion=off] .fh-lado[open]{animation:none}
+html[data-theme=folha] .fh-lado::backdrop{background:rgba(0,0,0,.5)}
+html[data-theme=folha] .fh-lado-in{padding:32px;font:400 16px/1.55 var(--g-sans)}
+html[data-theme=folha] .fh-lado-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:32px}
+html[data-theme=folha] .fh-lado h2{font:600 22px/1.25 var(--g-sans);margin:0 0 8px;text-transform:none}
+html[data-theme=folha] .fh-lado .fh-rot{display:block;margin:32px 0 8px}
+html[data-theme=folha] .fh-lado-top .fh-rot{margin:0}
+html[data-theme=folha] .fh-lado p{margin:0 0 8px;white-space:pre-wrap;overflow-wrap:anywhere}
+html[data-theme=folha] .fh-lado .fh-op{padding:12px 0;border-top:1px solid var(--g-line)}
+html[data-theme=folha] .fh-lado .fh-op strong{display:flex;align-items:center;gap:8px;font:400 16px/1.5 var(--g-sans)}
+html[data-theme=folha] .fh-lado .fh-op span{display:block;color:var(--g-tx2);font:400 16px/1.5 var(--g-sans)}
+html[data-theme=folha] .fh-lado .fh-acoes{display:flex;gap:16px;align-items:center;margin-top:32px}
+html[data-theme=folha] .fh-x{font:500 13px/1 var(--g-sans);color:var(--g-tx2);background:none;border:0;cursor:pointer;padding:8px 0}
+html[data-theme=folha] .fh-x:hover{color:var(--g-tx)}
+
+/* Ctrl K: a caixa de sempre no centro, estilo Raycast, com "Ir para" embaixo */
+html[data-theme=folha] .fh-k-fundo{position:fixed;inset:0;z-index:70;background:rgba(0,0,0,.6);display:none}
+html[data-theme=folha].fh-k-open .fh-k-fundo{display:block;animation:fh-fade-in 160ms ease}
+@keyframes fh-fade-in{from{opacity:0}to{opacity:1}}
+html[data-theme=folha].fh-k-open #g-dock{display:block!important;position:fixed!important;z-index:72!important;top:16vh!important;bottom:auto!important;left:50%!important;transform:translateX(-50%);width:min(640px,calc(100vw - 32px))!important;margin:0!important;box-sizing:border-box;background:var(--g-s1)!important;border:0!important;border-radius:12px 12px 0 0;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+html[data-theme=folha].fh-k-open #g-dock .g-wrap{display:block!important;min-height:0!important;padding:16px 16px 8px!important;max-width:none!important;margin:0!important}
+html[data-theme=folha].fh-k-open #g-dock .g-slash,html[data-theme=folha].fh-k-open #g-dock .g-dock-dica{display:none!important}
+html[data-theme=folha].fh-k-open #g-dock #painel-caixa{display:block!important;margin:0!important;padding:0!important;border:0!important;background:none!important;box-shadow:none!important;width:auto!important}
+html[data-theme=folha].fh-k-open #g-dock .cx{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:8px!important;padding:0!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-head{display:flex!important;align-items:center;gap:8px}
+html[data-theme=folha].fh-k-open #g-dock .cx-to{font:500 13px/1 var(--g-sans)!important;color:var(--g-tx3)!important;text-transform:none!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-alvo{height:32px;border-radius:8px!important;border:1px solid rgba(237,237,239,.12)!important;background:none!important;font:500 13px var(--g-sans)!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-text{height:64px!important;min-height:64px!important;max-height:160px!important;border:0!important;background:none!important;font:400 18px/1.5 var(--g-sans)!important;color:var(--g-tx)!important;padding:4px 0!important;outline:0!important;box-shadow:none!important;overflow:auto!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-actions{display:flex!important;align-items:center;gap:8px;justify-content:flex-end}
+html[data-theme=folha].fh-k-open #g-dock .cx-tool{display:inline-flex!important;align-items:center;height:32px;border-radius:8px!important;border:1px solid rgba(237,237,239,.12)!important;background:none!important;color:var(--g-tx2)!important;font:500 13px var(--g-sans)!important;padding:0 12px!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-send{height:32px;border-radius:8px!important;background:#EDEDEF!important;color:#0B0B0C!important;border:0!important;font:500 13px var(--g-sans)!important;padding:0 14px!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-send:disabled{background:rgba(237,237,239,.1)!important;color:var(--g-tx3)!important}
+html[data-theme=folha].fh-k-open #g-dock .cx-note,html[data-theme=folha].fh-k-open #g-dock .cx-list,html[data-theme=folha].fh-k-open #g-dock .cx-thumbs{position:static!important;margin-top:8px;border-radius:8px!important}
+html[data-theme=folha] .fh-k-lista{position:fixed;z-index:72;left:50%;transform:translateX(-50%);width:min(640px,calc(100vw - 32px));margin:0;padding:8px;box-sizing:border-box;list-style:none;background:var(--g-s1);border-top:1px solid var(--g-line);border-radius:0 0 12px 12px;display:none;max-height:50vh;overflow:auto;box-shadow:0 24px 64px rgba(0,0,0,.5)}
+html[data-theme=folha].fh-k-open .fh-k-lista{display:block}
+html[data-theme=folha] .fh-k-lista li{display:flex;justify-content:space-between;align-items:center;gap:16px;padding:10px 12px;border-radius:8px;font:400 16px/1.4 var(--g-sans);color:var(--g-tx2);cursor:pointer}
+html[data-theme=folha] .fh-k-lista li b{font-weight:400;color:var(--g-tx)}
+html[data-theme=folha] .fh-k-lista li small{font:500 13px/1 var(--g-sans);color:var(--g-tx3)}
+html[data-theme=folha] .fh-k-lista li[aria-selected=true]{background:rgba(237,237,239,.07)}
+html[data-theme=folha] .fh-k-lista .fh-k-dica{cursor:default;color:var(--g-tx3);font:500 13px/1.4 var(--g-sans)}
+
+/* celular: gutter de 16 */
+@media (max-width:760px){
+  html[data-theme=folha] #fh-agora{padding:24px 0 32px}
+  html[data-theme=folha] .fh-topo{flex-direction:column;align-items:flex-start}
+  html[data-theme=folha] .fh-aneis{flex-wrap:wrap;gap:16px}
+  html[data-theme=folha] .fh-item.is-acao{margin:0}
+  html[data-theme=folha] .fh-mais{padding-left:0}
+  html[data-theme=folha] #fh-obra .opx-mods{grid-template-columns:repeat(2,minmax(0,1fr))!important}
+  html[data-theme=folha] .fh-passos li{grid-template-columns:24px minmax(0,1fr)}
+  html[data-theme=folha] .fh-passos .fh-p-onde{grid-column:2;white-space:normal}
+}
+
+/* CEREBRO: o mapa da folha por cima do comum (que fica embaixo, transparente, recebendo o mouse) */
+html[data-theme=folha] #g-cerebro .g-cerebro-mapa canvas.fh-cb{position:absolute;left:0;top:0;width:100%;height:560px;pointer-events:none}
+html[data-theme=folha] .fh-cb-legenda{display:flex;flex-wrap:wrap;gap:8px 20px;align-items:center;margin:8px 0 0;font:500 13px/1.5 var(--g-sans);color:var(--g-tx2)}
+html[data-theme=folha] .fh-cb-legenda span{display:inline-flex;align-items:center;gap:8px}
+html[data-theme=folha] .fh-cb-legenda i{width:8px;height:8px;border-radius:50%;display:inline-block}
+html[data-theme=folha] .fh-cb-legenda i.is-vivo{background:transparent;box-shadow:0 0 0 1.5px var(--g-anda)}
+html[data-theme=folha] .fh-cb-legenda .fh-cb-dica{color:var(--g-tx3);margin-left:auto}
+html[data-theme=folha] #g-cerebro .g-cerebro-mapa:not(.fh-cb-on)~.fh-cb-legenda{display:none}
+/* lateral: o CSS antigo pesa em p dentro de dialog */
+html[data-theme=folha] .fh-lado p{font:400 16px/1.55 var(--g-sans)}
+html[data-theme=folha] .fh-lado p.fh-sec{font-size:15px;color:var(--g-tx2)}
+html[data-theme=folha] #fh-agora.is-vazia .fh-lista{margin-top:16px}
+/* celular: sem teclado o atalho Ctrl K nao serve e a engrenagem precisa caber; a caixa de baixo continua */
+@media (max-width:480px){html[data-theme=folha] #fh-kbtn{display:none}}
