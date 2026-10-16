@@ -1,5 +1,13 @@
 # Changelog
 
+## 3.1.0
+
+- Book theme: a new Now screen with the talk ring, "you decide" cards, a conversation box and the activity feed. In the example it is a demo only: nothing is sent or saved. With your own data the old Now opens first; the "Tela V3" button switches.
+- Cleaner screen: the top bar and the view menu slide away and come back over the content when the mouse reaches the top edge. The "Barra de cima fixa" switch in settings, or the B key, keeps the bar fixed.
+- WEN automatic mode reads in the background every 5 min and no longer opens the window; the WEN button or the W key opens it.
+- Flow: clearer deadlines and empty states, focus order from each front, unread deadlines counted.
+- Book theme: the delivery calendar shows when the history was read, and a missing detail no longer prints "null".
+
 ## 3.0.0
 
 - New base, rebuilt view by view: Now, Flow, Ideas, Brain, Schedule, WEN and the Grid, Book and Sheet themes.

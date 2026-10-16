@@ -274,6 +274,38 @@
 
   // ---------- montagem do esqueleto ----------
   const els = {};
+  // ---------- TELA LIMPA ----------
+  // Padrao: a barra de cima e o menu das vistas saem da tela e voltam POR CIMA (sem empurrar nada) com o mouse na borda de cima.
+  // A chave "Barra de cima fixa" (engrenagem) ou a tecla B deixam a barra fixa como antes; fica guardado neste navegador. Nada sai do DOM.
+  const BARRA = 'painel-barra';
+  const barra = {
+    ler() { try { return root.localStorage && root.localStorage.getItem(BARRA) === 'fixa' ? 'fixa' : 'limpa'; } catch { return 'limpa'; } },
+    aplicar(modo) {
+      const m = modo === 'fixa' || modo === 'limpa' ? modo : barra.ler(), cl = html.classList;
+      if (m === 'limpa') cl.add('barra-limpa'); else if (cl.remove) cl.remove('barra-limpa');
+      if (els.barraChave) els.barraChave.setAttribute('aria-checked', String(m === 'fixa'));
+      return m;
+    },
+    trocar() {
+      const novo = html.classList.contains('barra-limpa') ? 'fixa' : 'limpa';
+      try { if (root.localStorage) root.localStorage.setItem(BARRA, novo); } catch { /* sem guarda: vale ate recarregar */ }
+      barra.aplicar(novo);
+      try { root.dispatchEvent(new Event('resize')); } catch { /* sem evento: a V3 mede no proximo resize */ }
+      return novo;
+    },
+    tecla(ev) {
+      const t = ev.target;
+      if (ev.ctrlKey || ev.altKey || ev.metaKey || (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || '')))) return false;
+      if (ev.key !== 'b' && ev.key !== 'B') return false;
+      ev.preventDefault(); barra.trocar(); return true;
+    }
+  };
+  try { barra.aplicar(); } catch { /* documento sem classList (teste): o montar aplica */ }
+  function chaveBarra() {
+    const ch = h('button', 'g-chave', 'Barra de cima fixa'); ch.type = 'button'; ch.id = 'g-barra-fixa'; ch.setAttribute('role', 'switch');
+    ch.title = 'Ligada: a barra de cima fica sempre na tela. Desligada: tela limpa, e a barra aparece com o mouse na borda de cima. A tecla B troca.';
+    ch.addEventListener('click', () => barra.trocar()); els.barraChave = ch; return ch;
+  }
   function montar() {
     html.classList.add('esq'); grade();
     const shell = doc.querySelector('.shell'), main = doc.querySelector('main'); if (!shell || !main) return false;
@@ -302,9 +334,15 @@
       const sum = settings.querySelector('summary'); if (sum) { sum.replaceChildren(icon('engrenagem', css('--g-tx2'))); sum.title = 'Ajustes'; }
       const wen = doc.querySelector('.wen-controls'), acel = doc.getElementById('gancho-acelerador');
       if (opts && wen) opts.append(wen); if (opts && acel) opts.append(acel);
+      if (opts) opts.append(chaveBarra());
       right.append(settings);
     }
     wrap.append(logo, tabs, right); bar.append(wrap); shell.before(bar);
+    // TELA LIMPA: a borda de cima que chama a barra (so aparece no modo limpo, pelo css) e a altura real da barra (o menu das vistas encosta embaixo)
+    const borda = h('div', ''); borda.id = 'g-borda'; borda.setAttribute('aria-hidden', 'true'); borda.dataset.dsOwned = 'grade'; bar.before(borda);
+    const medirBarra = () => html.style.setProperty('--barra-h', Math.round(bar.getBoundingClientRect().height) + 'px');
+    medirBarra(); if (root.ResizeObserver) new root.ResizeObserver(medirBarra).observe(bar);
+    barra.aplicar();
     // sub-vistas + as 3 telas novas no topo do main
     const sub = h('nav', 'g-sub'); sub.id = 'g-subnav'; sub.dataset.dsOwned = 'grade'; sub.setAttribute('aria-label', 'Vistas'); els.sub = sub;
     const agora = h('section', 'g-view'); agora.id = 'g-agora';
@@ -486,7 +524,7 @@
     const anda = h('section', 'g-col'), listA = h('ol', 'g-list');
     const rowsA = andaRows(a).filter(r => casaP({ titulo: r.nome, texto: String(r.nome || '') + ' ' + String(r.linha || '') }));
     if (filtra && k.anda !== null) k.anda = rowsA.length;
-    if (filtra) frag.append(h('p', 'g-sec pg-aviso', 'Vendo: ' + PG.nome(PG.atual()) + ' · ' + (pend.length + passosP.length) + ' esperando você, ' + rowsA.length + ' andando, ' + travP.length + ' travados neste projeto. Trocar em "Vendo:" na barra de cima.'));
+    if (filtra) frag.append(h('p', 'g-sec pg-aviso', 'Vendo: ' + PG.nome(PG.atual()) + ' · ' + (k.espera === null ? '?' : k.espera) + ' esperando você, ' + (k.anda === null ? '?' : k.anda) + ' andando, ' + (k.trava === null ? '?' : k.trava) + ' travados neste projeto. Trocar em "Vendo:" na barra de cima.'));
     for (const r of rowsA) listA.append(h('li', 'g-row', h('i', 'g-st is-anda'), h('i', 'g-sq ' + (r.side === 'codex' ? 'is-codex' : 'is-claude')), h('div', 'g-row-body', (() => { const n = h('div', 'g-row-nome g-nome', r.nome); n.dataset.lado = r.side === 'codex' ? 'codex' : 'claude'; return n; })(), h('p', 'g-sec', r.linha))));
     const conta = S.model && S.model.conta;
     anda.append(h('div', 'g-col-head', h('h2', 'g-h', 'ANDA'), h('span', 'g-num', k.anda === null ? '?' : String(k.anda))),
@@ -1147,6 +1185,7 @@
     const t = ev.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
     if (ev.key === 'Escape' && els.dock.contains(t)) { t.blur(); els.dock.classList.remove('is-aberto'); return; }
     if (typing || ev.ctrlKey || ev.metaKey || ev.altKey) return;
+    if ((ev.key === 'b' || ev.key === 'B') && !doc.querySelector('dialog[open]')) { barra.tecla(ev); return; }
     if (/^[1-7]$/.test(ev.key) && !doc.querySelector('dialog[open]')) { ev.preventDefault(); show(TABS[Number(ev.key) - 1].key); }
     else if (ev.key === '/') { const ta = doc.getElementById('cx-texto'); if (ta) { ev.preventDefault(); ta.focus(); } }
   }
@@ -1165,5 +1204,5 @@
     doc.fonts && doc.fonts.load('16px Silkscreen').then(() => { if (S.view === 'mapa') desenharCerebro(); }).catch(() => {});
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', () => setTimeout(start, 0), { once: true }); else setTimeout(start, 0);
-  root.PainelVistas = root.PainelGrade = Object.freeze({ _teste: Object.freeze({ linhasJuntadas, linhaNo }), show, primeiraMaiuscula, fluxoInfo: () => S.fluxoInfo || null, anda: () => ({ ...(S.model && S.model.conta || {}), n: contagens().anda, frase: 'Itens listados em Trabalhando agora', comprovado: true }), vpsSemLeitura, esperaProjeto: () => contagensProjeto(contagens()), estado: () => ({ tab: S.tab, view: S.view, contagens: contagens(), temFluxo: !!(S.model && S.model.fv), temCerebro: !!S.cerebro, temObra: !!S.obra }) });
+  root.PainelVistas = root.PainelGrade = Object.freeze({ _teste: Object.freeze({ linhasJuntadas, linhaNo }), show, barra, primeiraMaiuscula, fluxoInfo: () => S.fluxoInfo || null, anda: () => ({ ...(S.model && S.model.conta || {}), n: contagens().anda, frase: 'Itens listados em Trabalhando agora', comprovado: true }), vpsSemLeitura, esperaProjeto: () => contagensProjeto(contagens()), estado: () => ({ tab: S.tab, view: S.view, contagens: contagens(), temFluxo: !!(S.model && S.model.fv), temCerebro: !!S.cerebro, temObra: !!S.obra }) });
 })(window);

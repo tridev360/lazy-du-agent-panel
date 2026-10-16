@@ -90,7 +90,10 @@
       h('span', '', 'melhor dia ', h('b', '', melhor && melhor.n > 0 ? dm(melhor.ms) + ' · ' + melhor.n : '?')),
       h('span', '', 'sequência ', h('b', '', lido ? String(sequencia(s35)) : '?'), ' dias'),
       h('span', '', '14 dias ', h('b', '', lido && pts14.length ? String(pts14.reduce((a, b) => a + b.n, 0)) : '?')));
-    const fonte = h('p', 'lv-fonte', lido ? 'fechada = registro com PODE SUBIR, CONFERE, no ar, checagem verde, fechado ou commitado no estado' : 'sem leitura do git do estado (?)');
+    // a idade da leitura na frente (hora local do navegador em que o servidor leu o git)
+    const lidoT = lido && typeof S.dias.lidoEm === 'string' ? Date.parse(S.dias.lidoEm) : NaN;
+    const idade = Number.isFinite(lidoT) ? 'lido ' + new Date(lidoT).toTimeString().slice(0, 5) + ' · ' : '';
+    const fonte = h('p', 'lv-fonte', lido ? idade + 'fechada = registro com PODE SUBIR, CONFERE, no ar, checagem verde, fechado ou commitado no estado' : 'sem leitura do git do estado (?)');
     pl.append(h('div', 'lv-pl-top', num, lbl), spark, kv, fonte);
     // direita: 35 colunas x 16 pixels
     const px = h('div', 'lv-pix'), grid = h('div', 'lv-pix-grid'); grid.setAttribute('role', 'img');
@@ -118,7 +121,7 @@
   let toastTimer = 0;
   function toast(tag, texto, extra) {
     const t = els.toast; if (!t) return;
-    t.replaceChildren(h('b', '', tag), h('span', '', texto), extra ? h('em', '', extra) : null); t.hidden = false;
+    t.replaceChildren(...[h('b', '', tag), h('span', '', texto), extra ? h('em', '', extra) : null].filter(Boolean)); t.hidden = false; // sem o filtro o navegador escreve "null" quando nao ha extra
     marcar(t, 'is-entra', 320);
     clearTimeout(toastTimer); toastTimer = setTimeout(() => { t.hidden = true; }, 2600);
   }

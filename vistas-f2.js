@@ -382,7 +382,7 @@
     els.wenEstado = h('p', 'g-sec f2-wen-estado', '');
     const antigo = h('button', 'g-btn is-quieto', 'Abrir o WEN antigo'); antigo.type = 'button'; antigo.addEventListener('click', () => { p.hidden = true; doc.getElementById('wen-trigger')?.click(); });
     els.wenAuto = h('div', 'f2-wen-auto');
-    mais.append(h('h3', 'f2-wen-h', 'As 7 linhas do status'), els.wenLista, h('p', 'g-sec', 'Automatizar só aperta o WEN neste navegador a cada 5 min; não atualiza fonte nenhuma. Este WEN já lê as fontes vivas sozinho.'), els.wenAuto, els.wenEstado, antigo);
+    mais.append(h('h3', 'f2-wen-h', 'As 7 linhas do status'), els.wenLista, h('p', 'g-sec', 'Automatizar lê o WEN neste navegador a cada 5 min, em silêncio: a janela só abre no botão WEN ou na tecla W. Não atualiza fonte nenhuma; este WEN já lê as fontes vivas sozinho.'), els.wenAuto, els.wenEstado, antigo);
     mais.addEventListener('toggle', () => { if (mais.open) autoAqui(); });
     p.append(h('div', 'f2-wen-head', h('h2', 'g-h', 'WEN'), els.wenLido, fechar), els.wenTab, mais);
     doc.body.append(p); els.wen = p;
@@ -418,6 +418,12 @@
     const sec=h('section','f2-wen-bloco r9-wen-norte');sec.append(h('h3','f2-wen-h','Frentes e prioridades'));
     try{const r=await fetch('/api/pe-equipe/frentes-situacao',{cache:'no-store'}),j=await r.json();if(!j.ok)sec.append(h('p','g-sec','? '+j.motivo+'. Solução: '+j.solucao));else{for(const f of root.PainelFluxoTelaModelo.ordenarNorte(j.frentes)){const medido=f.medidoTexto(/^en/.test(html.lang)?'en':/^es/.test(html.lang)?'es':'pt');sec.append(h('p','g-sec',[f.nome,f.pctTexto,f.faltamTexto,medido,f.selos.situacao.texto].filter(Boolean).join(' · ')));}if(!j.frentes.length)sec.append(h('p','g-sec','none: nenhuma frente nesta leitura'));}}catch{sec.append(h('p','g-sec','? Frentes sem leitura. Confira sua pasta de estado.'));}
     if(els.wenTab){els.wenTab.querySelector('.r9-wen-norte')?.remove();els.wenTab.append(sec);}
+  }
+  // TELA LIMPA: a rodada automatica (AUTOMATIZAR) le o WEN em silencio e nunca abre a janela.
+  // Fechada fica fechada; aberta pela pessoa, so troca o dado. Quem abre e o botao WEN ou a tecla W (wen abaixo).
+  function wenAtualizar() {
+    if (!els.wen) montarWen();
+    return carregarWen().catch(() => null);
   }
   function wen(abrir) {
     const p = els.wen || montarWen();
@@ -543,5 +549,5 @@
     setInterval(adaptar, 3000); agenda(); lerNumeros(); setInterval(lerNumeros, 30000);
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', () => setTimeout(start, 40), { once: true }); else setTimeout(start, 40);
-  root.PainelF2 = Object.freeze({ wen, wenTabela, adaptar, numeros: () => NUM, mastigar: s => mastigar(String(s || '')).s, textoEm });
+  root.PainelF2 = Object.freeze({ wen, wenAtualizar, wenTabela, adaptar, numeros: () => NUM, mastigar: s => mastigar(String(s || '')).s, textoEm });
 })(window);

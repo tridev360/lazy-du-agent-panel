@@ -6,9 +6,9 @@
 (function(root){
   const PERIOD=5*60*1000,KEY='painel-wen-auto',PRESS_MS=180,OPEN_MS=260,CHANGED_MS=8000;
   const WORDS={
-    pt:{wen:'WEN',tip:'Abre o WEN em tabela (tecla W)',auto:'AUTOMATIZAR',autoOn:'Automático: o WEN aperta sozinho a cada 5 min',autoOff:'Automático desligado: só no clique',last:'lido',never:'sem leitura',read:'Lido às',close:'Fechar',source:'Fonte',line:'linha',changed:'mudou',changes:n=>n===1?'1 linha mudou':n+' linhas mudaram',error:'Não deu para ler o disco agora',auto5:'automático',labels:{noar:'No ar',rodando:'Rodando',travado:'Travado por',acelerar:'Dá para acelerar?',proximo:'Seu próximo passo',credito:'Crédito'}},
-    en:{wen:'WEN',tip:'Opens the WEN as a table (W key)',auto:'AUTOMATE',autoOn:'Automatic: WEN presses itself every 5 min',autoOff:'Automatic off: click only',last:'read',never:'no reading',read:'Read at',close:'Close',source:'Source',line:'line',changed:'changed',changes:n=>n===1?'1 line changed':n+' lines changed',error:'Could not read the disk now',auto5:'automatic',labels:{noar:'Live',rodando:'Running',travado:'Blocked by',acelerar:'Can it go faster?',proximo:'Your next step',credito:'Credit'}},
-    es:{wen:'WEN',tip:'Abre el WEN en tabla (tecla W)',auto:'AUTOMATIZAR',autoOn:'Automático: WEN se pulsa solo cada 5 min',autoOff:'Automático apagado: solo con clic',last:'leído',never:'sin lectura',read:'Leído a las',close:'Cerrar',source:'Fuente',line:'linea',changed:'cambió',changes:n=>n===1?'1 línea cambió':n+' líneas cambiaron',error:'No se pudo leer el disco ahora',auto5:'automático',labels:{noar:'En vivo',rodando:'En marcha',travado:'Bloqueado por',acelerar:'¿Se puede acelerar?',proximo:'Tu próximo paso',credito:'Crédito'}}
+    pt:{wen:'WEN',tip:'Abre o WEN em tabela (tecla W)',auto:'AUTOMATIZAR',autoOn:'Automático: o WEN lê sozinho a cada 5 min, sem abrir a janela',autoOff:'Automático desligado: só no clique',last:'lido',never:'sem leitura',read:'Lido às',close:'Fechar',source:'Fonte',line:'linha',changed:'mudou',changes:n=>n===1?'1 linha mudou':n+' linhas mudaram',error:'Não deu para ler o disco agora',auto5:'automático',labels:{noar:'No ar',rodando:'Rodando',travado:'Travado por',acelerar:'Dá para acelerar?',proximo:'Seu próximo passo',credito:'Crédito'}},
+    en:{wen:'WEN',tip:'Opens the WEN as a table (W key)',auto:'AUTOMATE',autoOn:'Automatic: WEN reads by itself every 5 min, without opening the window',autoOff:'Automatic off: click only',last:'read',never:'no reading',read:'Read at',close:'Close',source:'Source',line:'line',changed:'changed',changes:n=>n===1?'1 line changed':n+' lines changed',error:'Could not read the disk now',auto5:'automatic',labels:{noar:'Live',rodando:'Running',travado:'Blocked by',acelerar:'Can it go faster?',proximo:'Your next step',credito:'Credit'}},
+    es:{wen:'WEN',tip:'Abre el WEN en tabla (tecla W)',auto:'AUTOMATIZAR',autoOn:'Automático: WEN lee solo cada 5 min, sin abrir la ventana',autoOff:'Automático apagado: solo con clic',last:'leído',never:'sin lectura',read:'Leído a las',close:'Cerrar',source:'Fuente',line:'linea',changed:'cambió',changes:n=>n===1?'1 línea cambió':n+' líneas cambiaron',error:'No se pudo leer el disco ahora',auto5:'automático',labels:{noar:'En vivo',rodando:'En marcha',travado:'Bloqueado por',acelerar:'¿Se puede acelerar?',proximo:'Tu próximo paso',credito:'Crédito'}}
   };
   function readAuto(storage){try{return storage?.getItem(KEY)==='1';}catch{return false;}}
   function writeAuto(storage,on){try{storage?.setItem(KEY,on?'1':'0');return true;}catch{return false;}}
@@ -37,7 +37,8 @@
   }
   // A tabela do cabecalho: o mesmo PainelF2.wen que o placar chama. Clique da pessoa alterna (abre e fecha, como o placar);
   // a rodada automatica sempre abre. Sem a tabela na pagina devolve false e o botao cai na reserva (nunca fica morto).
-  function tableOpener(win){return source=>{const f2=win?.PainelF2||root.PainelF2;if(!f2||typeof f2.wen!=='function')return false;try{f2.wen(source==='auto'?true:undefined);return true;}catch{return false;}};}
+  // TELA LIMPA: a rodada automatica le o WEN em silencio e nunca abre a janela; so o clique (ou a tecla W) abre.
+  function tableOpener(win){return source=>{const f2=win?.PainelF2||root.PainelF2;if(!f2||typeof f2.wen!=='function')return false;try{if(source==='auto'){if(typeof f2.wenAtualizar==='function')f2.wenAtualizar();return true;}f2.wen(undefined);return true;}catch{return false;}};}
   function createWen({doc,win=root,fetchJson,storage,timers=root,snapshot=snapshotNow,openTable=tableOpener(win)}){
     const state={data:null,auto:false,timer:null,autoTick:false,presses:[],mounted:false};
     const els={};
@@ -84,8 +85,8 @@
       row._label=label;row._text=text;row._detail=detail;els.list.append(row);(els.rows||(els.rows={}))[key]=row;return row;
     }
     function render(data,{source='click',reduce=false}={}){
-      const w=words(),box=panel(),wasHidden=box.hidden;
-      if(!data?.lines){els.at.textContent=w.error;box.hidden=false;return;}
+      const w=words(),box=panel(),wasHidden=box.hidden,quieto=source==='auto'&&wasHidden; // rodada automatica com a janela fechada: guarda o dado e nao abre
+      if(!data?.lines){els.at.textContent=w.error;if(!quieto)box.hidden=false;return;}
       try{const current=typeof snapshot==='function'?snapshot():null;if(current)data={...data,lines:data.lines.map(line=>fixCredit(line,current))};}catch{}
       const changed=changedKeys(state.data,data);
       els.at.textContent=w.read+' '+(data.readAtBrt||'?')+(source==='auto'?' · '+w.auto5:'');
@@ -97,8 +98,7 @@
       }
       els.live.textContent=changed.length?w.changes(changed.length):'';
       if(els.last)els.last.textContent=w.last+' '+String(data.readAtBrt||'?').slice(0,5);
-      box.hidden=false;
-      if(!reduce)flash(box,wasHidden?'wen-opening':'wen-refresh',OPEN_MS);
+      if(!quieto){box.hidden=false;if(!reduce)flash(box,wasHidden?'wen-opening':'wen-refresh',OPEN_MS);}
       state.data=data;
     }
     // Ao lado da alavanca de marchas quando ela existir; antes disso, no cabecalho, ao lado do Comando.
