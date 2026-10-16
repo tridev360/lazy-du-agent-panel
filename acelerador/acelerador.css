@@ -182,7 +182,7 @@ html[data-motion="off"] .acel-controls *,html[data-motion="off"] .acel-gaveta,ht
 .acel-opcao.acel-opcao-rotina[aria-pressed="true"] { border-color: #ff5fae; box-shadow: 0 0 0 1px #ff5fae inset; }
 .acel-trigger.is-rotina { border-color: #ff5fae; box-shadow: 0 0 0 1px rgba(255, 95, 174, .45), 0 0 14px rgba(255, 95, 174, .25); }
 
-/* ---------- marcha viva (PECA 1), botao com o nome da marcha (PECA 5) e borda rosa viva (PECA 3) ----------
+/* ---------- marcha viva, botao com o nome da marcha e borda rosa viva ----------
    Cores dos 3 temas (--g-*) com reserva. A borda e os cometas so andam em transform e opacity; Motion off e reduced motion = parada. */
 .acel-trigger-simbolo{font:700 16px/1 var(--g-pix,inherit);letter-spacing:0}
 .acel-trigger-duvida{display:inline-grid;place-items:center;min-width:16px;height:16px;padding:0 3px;border:1px solid var(--g-trava,#f5a524);color:var(--g-trava,#f5a524);font:700 11px/1 var(--g-sans,inherit)}

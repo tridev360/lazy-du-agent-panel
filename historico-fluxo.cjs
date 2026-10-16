@@ -430,7 +430,7 @@ function criarHistorico(opcoes = {}) {
 
 module.exports = { criarHistorico, JANELAS, itensDaFila, etiquetasParaCoordenador, caixaDoNome };
 
-/* COMO O SERVIDOR CHAMA (servidor.cjs do painel; o Codex aplica, com reinicio da 3250):
+/* COMO O SERVIDOR CHAMA (servidor.cjs do painel):
    const { criarHistorico } = require('./historico-fluxo.cjs');
    const hist = criarHistorico({ claudeRoot, estadoRoot: root, cacheFile: require('./so-leitura.cjs').cacheLocal('cache-fluxo.json') });
    // cache fora de pasta com git (tem id de conversa e hora, nenhum texto); apagar o arquivo = a proxima leitura e completa

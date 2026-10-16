@@ -2,7 +2,7 @@
 // LIVRO V3: a tela Agora do tema LIVRO DE ORDENS no desenho V3 (anel FALAR no centro e o resto em volta).
 // Serve /livro-v3.js e /livro-v3.css e GET /api/livro-v3. Nesta copia a tela so mostra o exemplo:
 // com ?exemplo=1 ou na demonstracao (demo/rodar.sh) o dado e inventado aqui e nada do disco e lido;
-// fora disso a resposta e "fechado" (e a tela abre em "Agora de antes"). POST /api/livro-v3/fila nunca grava nada (409).
+// fora disso a resposta e "fechado" (e a tela abre em "Agora de antes"). POST /api/livro-v3/fila nunca grava nada; responde 409.
 // As horas vao como instante (ms) e o navegador escreve a hora local.
 // Gancho no servidor.cjs: const livroV3=require('./livro-v3-rota.cjs').create({root,port}); e, depois do blocos-livro,
 //   if(await livroV3.handle(req,url,{send,example:example||process.env.PAINEL_DEMO==='1'}))return;

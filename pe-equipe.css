@@ -1,4 +1,4 @@
-/* PAINEL PE + PAINEL-100: aba Equipe com as duas IAs, o fluxo animado e a linha do tempo por agente.
+/* Aba Equipe com as duas IAs, o fluxo animado e a linha do tempo por agente.
    Cores de quem e (tokens do painel em painel-v3.css, com reserva aqui): rosa = voce, laranja = lado do Claude, azul = lado do Codex.
    O estado (trabalhando, esperando, dormindo) vai no ponto e na palavra; o tipo da mensagem vai no traco do fio.
    Animacao so em transform e opacity (e o canvas das particulas); Movimento off e reduced-motion desligam. */

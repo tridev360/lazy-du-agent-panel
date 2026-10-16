@@ -57,7 +57,7 @@
     // 36 LEDs redondos em volta (o apagado fica visivel, como o painel de LED do LIVRO); a varredura so mexe na opacidade
     for (let i = 0; i < 36; i++) { const a = i / 36 * Math.PI * 2 - Math.PI / 2; const c = sv('circle', { class: 'a-led', cx: (100 + 78 * Math.cos(a)).toFixed(2), cy: (100 + 78 * Math.sin(a)).toFixed(2), r: 2.4 }); c.style.animationDelay = (i * 0.1).toFixed(1) + 's'; s.append(c); }
     s.append(sv('circle', { class: 'a-miolo', cx: 100, cy: 100, r: 54 }));
-    b.append(s, h('span', 'lv3-falar', h('i', ''), h('b', '', 'FALAR'), h('span', '', 'segure V')));
+    b.append(s, h('span', 'lv3-falar', h('i', ''), h('b', '', 'FALAR'), h('span', '', 'exemplo')));
     // so mostra como a voz fica: acende por 2 s e volta; nada e gravado nem enviado
     b.addEventListener('click', () => {
       if (b.dataset.estado === 'ouvindo') return;
@@ -83,7 +83,7 @@
     // coluna da esquerda: VOCE RESOLVE e o aviso das ideias
     const voce = bloco('voce', 'is-acao', [h('i', 'lv3-led is-rosa'), 'VOCÊ RESOLVE'], els.voceDir = h('span', 'lv3-dir', 'só o que espera você'));
     els.voce = h('div', 'lv3-lista'); voce.b.append(els.voce); els.voceB = voce.b;
-    const ideias = bloco('ideias', 'lv3-ideias', [els.novo = h('span', 'lv3-novo is-zero', 'lendo'), 'IDEALISTAS'], els.ideiasDir = h('span', 'lv3-dir', 'lendo...'));
+    const ideias = bloco('ideias', 'lv3-ideias', [els.novo = h('span', 'lv3-novo is-zero', 'lendo'), 'IDEIAS'], els.ideiasDir = h('span', 'lv3-dir', 'lendo...'));
     els.ideias = h('ul', ''); const abrir = btn('g-btn is-quieto', 'ABRIR IDEIAS ↗', () => { S.ideiasVistas = true; root.location.hash = '#g=decidir.ideias'; });
     const visto = btn('lv3-op', 'VISTO', () => { S.ideiasVistas = true; pintarIdeias(); }, 'Marca as ideias de agora como vistas nesta visita');
     ideias.b.append(els.ideias, h('div', 'lv3-ops', abrir, visto)); els.ideiasB = ideias.b;

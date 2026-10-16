@@ -1,5 +1,5 @@
 /* "Em que pe estamos" no topo do Inicio. Ordem de leitura: o que precisa de voce (destaque rosa),
-   no ar, rodando com hora, e o resto menor. Tokens dos cartoes da Home aprovada (r14). Nada cortado: o texto quebra linha. */
+   no ar, rodando com hora, e o resto menor. Tokens dos cartoes da Home. Nada cortado: o texto quebra linha. */
 .sala{margin:0 0 16px;border:1px solid #36363f;border-radius:20px;background:#141419;padding:18px 24px 16px;color:#fff}
 html:not([data-painel-tab="home"]) .sala{display:none}
 .sala-topo{display:flex;align-items:baseline;justify-content:space-between;gap:12px;flex-wrap:wrap;margin-bottom:12px}

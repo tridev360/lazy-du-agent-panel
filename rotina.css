@@ -1,4 +1,4 @@
-/* Cartao do ROTINA no Inicio (painel C1; voltas e cards). Sem animacao (Motion off sempre respeitado).
+/* Cartao do ROTINA no Inicio (voltas e cards). Sem animacao (Motion off sempre respeitado).
    Ordem de leitura: topo (ligado e proxima volta), cards para voce (o que precisa dele, em destaque) e o que cada volta fez. */
 .rotina-card { display: grid; gap: 14px; margin: 0 0 16px; padding: 16px 20px 18px; border-radius: 18px; border: 1px solid rgba(255, 95, 174, .30); background: linear-gradient(135deg, rgba(255, 95, 174, .07), rgba(115, 182, 255, .04)); color: inherit; }
 .rotina-card[hidden] { display: none; }

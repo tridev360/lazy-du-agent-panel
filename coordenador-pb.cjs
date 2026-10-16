@@ -2,9 +2,9 @@
 // feed de sessoes lado a lado e mensagem ao Codex ocupado.
 // Modulo para a Home nova: o servidor do painel chama handle() em 1 linha, como ja faz com o status-6-linhas.cjs.
 // So leitura do estado. A unica escrita e 1 linha por mensagem em estado/recados-do-painel.md, o mesmo arquivo e o
-// mesmo formato que o painel 3250 ja usa: o vigia acorda o Claude e ela responde ou repassa ao Codex pela fila.
+// mesmo formato que o painel de origem ja usa: o vigia acorda o Claude e ela responde ou repassa ao Codex pela fila.
 // Nada de mensagem direta a sessao: sem codex queue, sem claude -p, sem fork aberto daqui.
-// Reaproveita do painel 3250 (so leitura, require): leitor.cjs (readSafe), status-6-linhas.cjs (plain, short,
+// Reaproveita do painel de origem (so leitura, require): leitor.cjs (readSafe), status-6-linhas.cjs (plain, short,
 // operatorOf) e comandos.cjs (validate e redact: as mesmas travas de subir, chave, dinheiro e mensagem a pessoas).
 const fs = require('node:fs');
 const path = require('node:path');
@@ -29,7 +29,7 @@ const PRIVATE = /SIGILOS|_SECRETS|backup-privado|\bseed\b|\.env\b|private key|ch
 const MONEY = /\bR?\$\s?\d[\d.,]*|\b\d+(?:[.,]\d+)?\s*(?:ETH|WETH|USDC|USDT|USD|SOL|BRL|reais|d[oó]lares)\b/gi;
 const NONCE = crypto.randomBytes(24).toString('hex');
 
-// ---------- reaproveitamento do painel 3250 (so leitura) ----------
+// ---------- reaproveitamento do painel de origem (so leitura) ----------
 const loaded = new Map();
 function painelDirOf(root, options = {}) { return options.painelDir || path.join(root, 'casa', 'ferramentas', 'painel'); }
 function casa(dir) {
@@ -200,7 +200,7 @@ function feedCodexOf(text, now) {
   }
   return out.sort((a, b) => Date.parse(b.at) - Date.parse(a.at));
 }
-// estado/sessoes-claude.json: as sessoes da conta atual com titulo conhecido (como o comandos.cjs do 3250).
+// estado/sessoes-claude.json: as sessoes da conta atual com titulo conhecido (como o comandos.cjs do painel de origem).
 function claudeSessionsOf(text) {
   let parsed;
   try { parsed = JSON.parse(text); } catch { return []; }
@@ -265,7 +265,7 @@ function repliesOf(text, now) {
   return byId;
 }
 
-// ---------- dados ao vivo da 3250 (por proxy, opcional) ----------
+// ---------- dados ao vivo do painel de origem (por proxy, opcional) ----------
 function liveOf(state, now) {
   const result = { ok: false, threads: [], workingCodex: 0, busyThreads: new Set(), lastByThread: new Map(), claudeByTitle: new Map() };
   if (!state || typeof state !== 'object') return result;
@@ -365,7 +365,7 @@ function snapshot(root, options = {}) {
     dois: { key: 'dois', title: 'OS DOIS', sent: sentTo(toBoth), juntar: sentTo(toJoin) }
   };
 
-  // Feed de sessoes: as 2 COORDENADOR, as sessoes do Claude da conta atual e as conversas do Codex lidas da 3250.
+  // Feed de sessoes: as 2 COORDENADOR, as sessoes do Claude da conta atual e as conversas do Codex lidas do painel de origem.
   const sessions = [
     { key: 'codex:coordenador', family: 'codex', kind: 'coordenador', name: 'COORDENADOR do Codex', para: 'codex', state: codexState.state, lastAt: coordenador.codex.lastAt, reserved: false, falas: codexFalasOk.slice(0, 5), sent: coordenador.codex.sent.slice(0, 3), appLink: coordenador.codex.appLink, canSend: true, busy: codexState.busy },
     { key: 'claude:COORDENADOR', family: 'claude', kind: 'coordenador', name: 'Claude', para: 'claude', state: coordenador.claude.state, lastAt: claudeLast, reserved: false, falas: claudeFalas.slice(0, 5), sent: coordenador.claude.sent.slice(0, 3), appLink: null, canSend: true, busy: false }
@@ -427,7 +427,7 @@ function sendRecado() { return failure('off', 410); }
 
 // ---------- gancho do servidor (1 linha no servidor.cjs da Home) ----------
 const ASSETS = Object.freeze({ '/coordenador-pb.js': ['coordenador-pb.js', 'text/javascript'], '/coordenador-pb.css': ['coordenador-pb.css', 'text/css'] });
-// ctx: { root, send(status,data,type?), dir?, port, nonce?, example?, painelDir?, live?: () => estado da 3250 (objeto ou Promise) }
+// ctx: { root, send(status,data,type?), dir?, port, nonce?, example?, painelDir?, live?: () => estado do painel de origem (objeto ou Promise) }
 // Devolve true quando a rota e deste modulo (a resposta segue por ctx.send, mesmo assincrona).
 function handle(req, url, ctx) {
   const pathname = url.pathname, send = ctx.send, nonce = ctx.nonce || NONCE;

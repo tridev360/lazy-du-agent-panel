@@ -1,4 +1,4 @@
-/* ponte-tema-painel.js (para o PAINEL 3250, só acrescentar; o COORDENADOR aplica com print):
+/* ponte-tema-painel.js (só acrescenta ao painel):
    avisa o app Decidir (iframe da 3259) qual tema o painel está usando (grade, livro, folha) e repete quando ele troca.
    Como ligar: copiar para casa/ferramentas/painel/, servir o arquivo no servidor.cjs (igual ao ideias-app.css)
    e pôr <script src="/ponte-tema-painel.js" defer></script> depois do tema.js no index.html. Sem rede. */

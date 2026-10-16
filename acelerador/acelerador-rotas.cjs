@@ -176,7 +176,7 @@ function criarRotasAcelerador(op = {}) {
   if (!/\.json$/i.test(arquivo)) throw Error('o estado das fases e um arquivo .json');
   if (!op.localPessoal && /[\\/]estado(?:[\\/]|$)/i.test(arquivo)) throw Error('o acelerador nunca grava o json no estado');
   const recados = op.recados ? path.resolve(op.recados) : null;
-  // ROTINA (painel C1): so com o texto do dono (pt, en, es) e com o recados ligado
+  // ROTINA: so com o texto do dono (pt, en, es) e com o recados ligado
   const rotina = recados && op.rotina ? tres(op.rotina, 300) : null;
   if (recados && path.basename(recados) !== 'recados-do-painel.md') throw Error('recados so no recados-do-painel.md');
   // a pasta do estado (para a marcha viva) e a do recados; op.estado troca (teste)

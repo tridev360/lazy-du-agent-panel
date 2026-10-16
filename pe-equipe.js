@@ -142,7 +142,7 @@
   if (root) root.PaAnim = api;
 })(typeof window !== 'undefined' ? window : globalThis);
 /* ===== fim do pe-anim.js ===== */
-/* PAINEL PE + PAINEL-100: aba EQUIPE com as DUAS IAs.
+/* Aba EQUIPE com as DUAS IAs.
  * Uso: <div data-pe-equipe></div> na aba Equipe, com pe-equipe.css e este arquivo carregados.
  * Gancho: com window.PainelGanchos, registra 'equipe' com {render(snapshot, ctx), destroy()}.
  *   snapshot = o objeto do GET /api/estado; ctx (opcional) = {mount: elemento, lang: 'pt' | 'en' | 'es'}.

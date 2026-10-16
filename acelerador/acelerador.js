@@ -474,7 +474,7 @@
     gatilho.setAttribute('aria-haspopup', 'dialog');
     gatilho.setAttribute('aria-controls', 'acel-gaveta');
     gatilho.setAttribute('aria-expanded', 'false');
-    // PECA 5: o botao mostra a marcha ligada: o simbolo (o infinito ou o numero), o nome e, na ROTINA sem volta, um "?"
+    // O botao mostra a marcha ligada: o simbolo (o infinito ou o numero), o nome e, na ROTINA sem volta, um "?"
     const gSimbolo = el('span', 'acel-trigger-simbolo');
     gSimbolo.setAttribute('aria-hidden', 'true');
     const gNome = el('span', 'acel-trigger-nome');
@@ -552,7 +552,7 @@
     aviso.append(avisoTexto, avisoDesfazer);
     gaveta.append(corpo, aviso);
     doc.body.append(gaveta);
-    // PECA 3: a borda rosa viva em volta da tela inteira quando a ROTINA esta ligada (nao cobre nada, nao rouba clique)
+    // A borda rosa viva em volta da tela inteira quando a ROTINA esta ligada (nao cobre nada, nao rouba clique)
     const borda = el('div', 'acel-borda');
     borda.setAttribute('aria-hidden', 'true');
     // 4 cometas, um por lado, em fila: o brilho da a volta na tela (so transform e opacity; parado com Motion off)
@@ -774,7 +774,7 @@
       if (!s.vivo) return;
       const ativo = doc.activeElement && gaveta.contains(doc.activeElement) && doc.activeElement.dataset ? doc.activeElement.dataset.foco : null;
       renderGatilho(); renderMarcha(); renderMinutos(); renderLeitura(); renderProxima(); renderConquistas();
-      // PECA 3: borda so com a ROTINA escolhida E as voltas ligadas (lidas do disco); "?" ou desligada = sem borda
+      // Borda so com a ROTINA escolhida E as voltas ligadas (lidas do disco); "?" ou desligada = sem borda
       doc.documentElement.dataset.rotina = s.dados && bordaLigada(salva() ? { n: salva() } : null, s.dados.viva) ? 'on' : 'off';
       avisoDesfazer.textContent = w().desfazer;
       if (ativo && gaveta.open) focar(ativo);

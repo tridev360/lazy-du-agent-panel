@@ -117,7 +117,7 @@ html.ic #pe-equipe:empty{display:none}
 #pe-equipe header{height:auto;min-height:0;border-bottom:0;display:grid}
 .pe-tl header{height:auto;min-height:0;border-bottom:0}
 
-/* ---------- faixa de novidade (PAINEL-100): 1 linha no topo, no estilo dos cartoes; cor do lado de quem fez ou neutra ---------- */
+/* ---------- faixa de novidade: 1 linha no topo, no estilo dos cartoes; cor do lado de quem fez ou neutra ---------- */
 .faixa-nova{--faixa:var(--muted,#a6a6b2);display:flex;align-items:center;gap:8px 12px;flex-wrap:wrap;margin:12px 0 0;padding:8px 8px 8px 16px;border:1px solid #2c2c35;border-left:3px solid var(--faixa);border-radius:14px;background:var(--panel,#141419);color:#fff;font-size:13px;line-height:1.45}
 .faixa-nova[data-lado="claude"]{--faixa:var(--cor-claude,#ffac62)}
 .faixa-nova[data-lado="codex"]{--faixa:var(--cor-codex,#4f9dff)}

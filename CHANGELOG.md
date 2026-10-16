@@ -1,5 +1,10 @@
 # Changelog
 
+## 3.1.1
+
+- Book theme Now screen: the talk ring says "exemplo" instead of promising a key, the ideas block is called IDEIAS like its tab, and the helpers note wraps instead of being cut.
+- Cleaner served comments: no internal piece names in the files touched.
+
 ## 3.1.0
 
 - Book theme: a new Now screen with the talk ring, "you decide" cards, a conversation box and the activity feed. In the example it is a demo only: nothing is sent or saved. With your own data the old Now opens first; the "Tela V3" button switches.

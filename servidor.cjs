@@ -112,7 +112,7 @@ function createServer(root,sessionsRoot,options={}) {
   const state=example=>SIGILO.rodarComo(false,()=>{
     if(example)return {...require('./exemplo.cjs').snapshotExample(exampleAnswers),nonce:exampleNonce,dev:dev.snapshot()};
     if(readerWorker){
-      // PAINEL-100: o mesmo objeto enquanto nao chega leitura nova (o fluxo de eventos nem recalcula a assinatura de 4 MB)
+      // O mesmo objeto enquanto nao chega leitura nova (o fluxo de eventos nem recalcula a assinatura de 4 MB)
       const reads=typeof readerWorker.version==='function'?readerWorker.version():null,devNow=dev.snapshot(),devSig=JSON.stringify(devNow);
       if(reads!==null&&liveMemo&&liveMemo.reads===reads&&liveMemo.dev===devSig&&Date.now()-liveMemo.at<60000)return claude303(liveMemo.data);
       const raw=readerWorker.snapshot();if(metadataOnly&&(raw.metadataProof?.mode!=='scalar-metadata'||raw.metadataProof.policyId!==metadataProvider.policyId))throw Error('Metadata state unavailable');

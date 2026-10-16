@@ -1,4 +1,4 @@
-/* Modulo IA (proposta PAINEL-IA): base comum aos 3 conceitos.
+/* Modulo IA: base comum aos 3 conceitos.
    Tokens do painel; 1 destaque (o rosa) na acao principal e no progresso; espaco em 4/8/12/16/24/32/48;
    letra 12 (rotulo), 13 (texto para colar), 14 (texto), 22 (titulo), 40 (numero). So transform e opacity animam. */
 html.iac-on #ia-tips{display:none!important}
