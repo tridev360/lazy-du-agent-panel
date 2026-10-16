@@ -1,5 +1,5 @@
 'use strict';
-// Nucleo dos cards do painel (itens 72 e 100 da fila do Codex), sem HTTP.
+// Nucleo dos cards do painel, sem HTTP.
 // Le estado/cards/*.json so para ler; as unicas escritas no estado sao a resposta no proprio card (SO respondido
 // "<ISO> opcao N (pelo painel[, falta o ok no chat])" e respondidoEm "<ISO>", do Get-Date), depois do backup,
 // e 1 linha em estado/recados-do-painel.md para a sessao dona do card agir.
@@ -64,7 +64,7 @@ function sessaoReservada(c) {
   return RESERVADAS.some(r => new RegExp('\\b' + r + '\\b', 'i').test(s) || new RegExp('^' + r + '-', 'i').test(id));
 }
 // /api/estado, /api/pc-cards). Restrito e reservado: so a sessao, a hora e uma chave opaca no lugar do arquivo e do id.
-function paraTela(c) { const b = bloqueio(c); return b !== 'restrito' && (b !== 'reservado' || PESSOAS_F2.aberto()); } // fatia 10: reservado aparece so no modo dono; restrito nunca
+function paraTela(c) { const b = bloqueio(c); return b !== 'restrito' && (b !== 'reservado' || PESSOAS_F2.aberto()); } // reservado aparece so no modo dono; restrito nunca
 function chaveOpaca(nome) { return PESSOAS_F2.chaveOpaca(nome); }
 // ou o card que outro aponta em "substitui". Fechado sem resposta nao espera ninguem: sai do "Espera você" e da meta.
 const RX_FECHADO = /^\s*(?:substitu|anulad|encerrad|cancelad)/;

@@ -88,7 +88,7 @@ function itensDeProjetos(P, now = Date.now()) {
     const nome = curtoPalavra(f.nome, 140); if (!nome) continue;
     const ult = M.ms(f.ultimaAtualizacao), para = f.prazo && f.prazo.previsto ? M.ms(f.prazo.para) : NaN, prev = Number.isFinite(para);
     const hojeUlt = Number.isFinite(ult) && ult <= now + 120000 && brtDia(ult) === hojeDia;
-    // S3 (revisao 20ae0d9f): so a PREVISAO e hora a cumprir; a hora da ultima atualizacao vai marcada (horaFonte) e a tela nao poe "passou da hora" nem "hora fixa" nela
+    // so a PREVISAO e hora a cumprir; a hora da ultima atualizacao vai marcada (horaFonte) e a tela nao poe "passou da hora" nem "hora fixa" nela
     const prevHoje = prev && brtDia(para) === hojeDia;
     if (hojeUlt || prevHoje) {
       const at = prevHoje ? para : ult;
@@ -109,7 +109,7 @@ function lancamentosComProjetos(base, root, now = Date.now()) {
   let P = null; try { P = lerProjetos(root, now); } catch { P = null; }
   if (!P || !P.ok || P.velho) return { ...base, fonteAuto: { ok: false, motivo: P ? P.motivo : 'projetos.json sem leitura', solucao: SOLUCAO.projetos } };
   const a = itensDeProjetos(P, now);
-  // S2 (revisao 20ae0d9f): o gerador nao traz prazo duro. Enquanto nao houver fonte de verdade, o prazo duro da lista a mao segue na tela (botao e linha do tempo), com a idade da lista.
+  // o gerador nao traz prazo duro. Enquanto nao houver fonte de verdade, o prazo duro da lista a mao segue na tela (botao e linha do tempo), com a idade da lista.
   const duro = base && base.nextHard ? base.nextHard : null, idadeLista = base && base.updated ? M.idadeTexto(M.idadeDe(base.updated, now)) : null;
   const diaLista = base && base.updated ? String(M.dataTexto(base.updated) || '').split(',')[0] : null;
   const listaMao = duro ? { updated: base.updated || null, dataTexto: diaLista, idadeTexto: idadeLista } : null;

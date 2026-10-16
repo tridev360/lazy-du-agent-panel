@@ -1,4 +1,4 @@
-/* Cards do painel (itens 72 e 100). Tokens da Home com fallback; tudo dentro de .pcc. */
+/* Cards do painel. Tokens da Home com fallback; tudo dentro de .pcc. */
 .pcc{--pcc-panel:var(--panel,#141419);--pcc-line:var(--line,#303038);--pcc-ink:var(--ink,#fff);--pcc-muted:var(--muted,#a6a6b2);--pcc-pink:var(--pink,#ff2e7e);--pcc-claude:var(--orange,#ffac62);--pcc-codex:var(--blue,#4f9dff);--pcc-ok:var(--green,#54d16a);--pcc-soft:rgba(255,255,255,.035);--pcc-soft2:rgba(255,255,255,.07);--pcc-erro:#ff7a90;color:var(--pcc-ink);font:inherit;display:grid;gap:18px;min-width:0;outline:none}
 .pcc *,.pcc *::before,.pcc *::after{box-sizing:border-box}
 .pcc button{font:inherit;color:inherit}

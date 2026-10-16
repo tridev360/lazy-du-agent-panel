@@ -1,5 +1,5 @@
 'use strict';
-// Nucleo dos cards do painel (itens 72 e 100 da fila do Codex), sem HTTP.
+// Nucleo dos cards do painel, sem HTTP.
 // Le estado/cards/*.json so para ler; as unicas escritas no estado sao a resposta no proprio card (SO respondido
 // "<ISO> opcao N (pelo painel[, falta o ok no chat])" e respondidoEm "<ISO>", do relógio local), depois do backup,
 // pelo painel; o perigoso registra a intencao, encerra a insistencia e lembra o ok no chat de quem executa).

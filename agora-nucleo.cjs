@@ -41,7 +41,7 @@ function normal(raw,now=Date.now()){
  const F=require('./frescor.cjs'),mao=F.maoDoEstado(raw,now);
  s.mao=mao;s.semLeitura={};
  for(const k of ['travado','acelerar','noAr']){const m=mao[k];if(m.velho&&!s.unavailable.includes(k)){s.unavailable.push(k);s[k]=[];s.semLeitura[k]=F.fraseMaoVelha(m);}}
- // S4 (revisao 20ae0d9f): os passos a mao (voce) seguem na lista para a conta "Espera voce", mas a LINHA do WEN e do status-6 usa a mesma regra do Agora: velho ou sem hora = "?" com a solucao, known false
+ // os passos a mao (voce) seguem na lista para a conta "Espera voce", mas a LINHA do WEN e do status-6 usa a mesma regra do Agora: velho ou sem hora = "?" com a solucao, known false
  if(mao.voce.velho)s.semLeitura.voce=F.fraseMaoVelha(mao.voce);
  s.seloMao=seloDaMao(s);
  return s;

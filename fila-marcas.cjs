@@ -61,7 +61,7 @@ function markOf(line,{title=false,index=null,now=new Date()}={}) {
   let tag=null;
   const tagged=/^\[([^\]\r\n]{1,80})\]\s*/.exec(text);
   if(tagged){tag=tagged[1];text=text.slice(tagged[0].length);}
-  // [TAG183] dentro do bloco 184 fala do item 183: nao muda o 184 e a leitura nao reclassifica o 183 sozinha.
+  // marca com outro numero de 3 digitos dentro de um bloco fala daquele item: nao muda este bloco e a leitura nao reclassifica o outro sozinha.
   const numbers=tag ? (tag.match(/(?<!\d)\d{3}(?!\d)/g) || []).map(Number) : [];
   if(numbers.length && Number.isInteger(index) && !numbers.includes(index))return null;
   let found=keywordAt(text,title);

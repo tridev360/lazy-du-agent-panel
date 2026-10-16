@@ -1,5 +1,5 @@
 'use strict';
-// feed de sessoes lado a lado (item 103) e mensagem ao Codex ocupado (item 108, parte 4).
+// feed de sessoes lado a lado e mensagem ao Codex ocupado.
 // Modulo para a Home nova: o servidor do painel chama handle() em 1 linha, como ja faz com o status-6-linhas.cjs.
 // So leitura do estado. A unica escrita e 1 linha por mensagem em estado/recados-do-painel.md, o mesmo arquivo e o
 // mesmo formato que o painel 3250 ja usa: o vigia acorda o Claude e ela responde ou repassa ao Codex pela fila.

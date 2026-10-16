@@ -158,7 +158,7 @@
       }
       if (t !== null && sameDay(t, now)) ev.push({ t, texto: String(i.o_que || '?').replace(/\s*\d{1,2}:\d{2}\s*UTC\s*/i, ' ').trim(), extra: utc });
     }
-    // S5 (revisao 20ae0d9f): o Hoje tambem le a previsao do gerador de projetos (/api/cronograma, itens com horaFonte previsao)
+    // o Hoje tambem le a previsao do gerador de projetos (/api/cronograma, itens com horaFonte previsao)
     for (const i of S.crono && S.crono.lido !== false && Array.isArray(S.crono.hoje) ? S.crono.hoje : []) { if (i.horaFonte !== 'previsao') continue; const t = stamp(i.at); if (t !== null && sameDay(t, now)) ev.push({ t, texto: String(i.o_que || '?'), extra: '' }); }
     for (const r of (S.agora && S.agora.agora && S.agora.agora.rodando) || []) {
       const m = /desde (\d{1,2}):(\d{2})/.exec(r.quando || ''); if (!m) continue;

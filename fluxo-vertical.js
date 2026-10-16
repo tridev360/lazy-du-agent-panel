@@ -762,10 +762,12 @@
     };
     // "sem prazo" so quando todas as frentes da sessao dizem sem-prazo; faltamMin vazio em frente em dia ou atrasada e prazo nao lido
     const vistas = N.todas.map(vista), sessoes = new Map(), semTodas = ls => ls.length > 0 && ls.every(v => v.situacao && v.situacao.classe === 'sem-prazo');
-    const prazo = (s, ls) => fhNum(s.maiorPrazoMin) !== null ? 'maior prazo ' + MD.minutos(s.maiorPrazoMin) : semTodas(ls) ? 'sem prazo' : 'prazo sem leitura';
+    // o "maior" vale so para as frentes lidas: frente em dia ou atrasada sem faltamMin entra na conta "N sem leitura"
+    const semLer = k => N.todas.filter(l => fhChave(l.sessao) === k && fhNum(l.faltamMin) === null && l.situacao !== 'sem-prazo').reduce((t, l) => t + (l.grupo ? l.n : 1), 0);
+    const prazo = (s, ls, sl) => fhNum(s.maiorPrazoMin) !== null ? (sl ? 'maior prazo lido ' + MD.minutos(s.maiorPrazoMin) + ', ' + sl + ' sem leitura' : 'maior prazo ' + MD.minutos(s.maiorPrazoMin)) : semTodas(ls) ? 'sem prazo' : 'prazo sem leitura';
     for (const s of N.sessoes) {
-      const ls = vistas.filter(v => v.sessao === fhChave(s.chave)), pz = prazo(s, ls);
-      sessoes.set(fhChave(s.chave), { chave: fhChave(s.chave), nome: s.nome, total: s.total, atrasadas: s.atrasadas, prazoTexto: pz, prazoSolucao: pz === 'prazo sem leitura' ? 'Solução: peça ao seu Claude para gravar faltamMin em cada frente de estado/frentes-situacao.json' : null, resumo: s.total + (s.total === 1 ? ' frente, ' : ' frentes, ') + s.atrasadas + (s.atrasadas === 1 ? ' atrasada, ' : ' atrasadas, ') + pz, linhas: ls });
+      const ls = vistas.filter(v => v.sessao === fhChave(s.chave)), sl = semLer(fhChave(s.chave)), pz = prazo(s, ls, sl);
+      sessoes.set(fhChave(s.chave), { chave: fhChave(s.chave), nome: s.nome, total: s.total, atrasadas: s.atrasadas, prazoTexto: pz, prazoSolucao: / sem leitura$/.test(pz) ? 'Solução: peça ao seu Claude para gravar faltamMin em cada frente de estado/frentes-situacao.json' : null, resumo: s.total + (s.total === 1 ? ' frente, ' : ' frentes, ') + s.atrasadas + (s.atrasadas === 1 ? ' atrasada, ' : ' atrasadas, ') + pz, linhas: ls });
     }
     const com = vistas.filter(v => v.cards > 0), resp = vistas.filter(v => !(v.cards > 0) && v.esperaVoce);
     return { lido: true, motivo: null, solucao: null, sessoes, voce: { lido: true, cards: vistas.length && vistas.every(v => v.cards === null) ? null : com.reduce((s, v) => s + v.cards, 0), respostas: resp.length, semCards: vistas.filter(v => v.cards === null).length, itens: [...com.map(v => Object.assign({ tipo: 'card' }, v)), ...resp.map(v => Object.assign({ tipo: 'resposta' }, v))] } };
@@ -948,9 +950,12 @@
     const partes = lido && typeof MD.resumoNorte === 'function' ? String(MD.resumoNorte(n.resumo) || '').split(' · ').filter(Boolean) : [];
     const tot = partes.length ? P.h('div', 'fh-p6b-tot', ...partes.map(x => P.h('span', 'fh-p', x)), P.h('span', 'fh-p', 'lido ' + hm(n.atualizado))) : P.h('div', 'fh-p6b-tot is-q', 'total: ?');
     tot.title = partes.length ? 'Norte inteiro: ' + partes.join(', ') + ', lido ' + hm(n.atualizado) + '.' : 'Total do Norte sem leitura. ' + sol;
-    const lf = lido && Array.isArray(n.ordemFoco) ? n.ordemFoco.filter(o => o && Number.isInteger(o.posicao) && typeof o.foco === 'string') : null;
-    const focos = lf && lf.length ? P.h('div', 'fh-p6b-focos', ...lf.map(o => { const f = P.h('span', 'fh-foco', 'F' + o.posicao); f.dataset.foco = String(o.posicao); return P.h('span', 'fh-p fh-p6b-f', f, P.h('span', 'fh-p6b-fn', o.foco)); })) : P.h('div', 'fh-p6b-focos is-q', lf ? 'focos: nenhum' : 'focos: ?');
-    focos.title = lf && lf.length ? 'Ordem do seu foco: ' + lf.map(o => 'F' + o.posicao + ' ' + o.foco).join(', ') + '.' : lf ? 'Nenhum foco escrito nesta leitura do Norte' : 'Ordem do foco sem leitura. ' + sol;
+    // sem ordemFoco escrito, a ordem sai do foco de cada frente (1 por foco, o nome do foco ou o da primeira frente); "nenhum" so quando nenhuma frente tem foco
+    const escrita = lido && Array.isArray(n.ordemFoco) ? n.ordemFoco.filter(o => o && Number.isInteger(o.posicao) && typeof o.foco === 'string') : [], porFoco = new Map();
+    if (lido && !escrita.length) for (const f of Array.isArray(n.frentes) ? n.frentes : []) { if (!f || !Number.isInteger(f.foco) || f.foco < 1 || porFoco.has(f.foco)) continue; const nome = [f.focoNome, f.frente].find(x => typeof x === 'string' && x.trim()); porFoco.set(f.foco, nome ? String(nome).trim() : ''); }
+    const lf = !lido ? null : escrita.length ? escrita : [...porFoco].sort((a, b) => a[0] - b[0]).map(([posicao, foco]) => ({ posicao, foco })), dasFrentes = lido && !escrita.length;
+    const focos = lf && lf.length ? P.h('div', 'fh-p6b-focos', ...lf.map(o => { const f = P.h('span', 'fh-foco', 'F' + o.posicao); f.dataset.foco = String(o.posicao); return P.h('span', 'fh-p fh-p6b-f', f, o.foco ? P.h('span', 'fh-p6b-fn', o.foco) : null); })) : P.h('div', 'fh-p6b-focos is-q', lf ? 'focos: nenhum' : 'focos: ?');
+    focos.title = lf && lf.length ? (dasFrentes ? 'Ordem do seu foco, pelo foco de cada frente: ' : 'Ordem do seu foco: ') + lf.map(o => ('F' + o.posicao + ' ' + o.foco).trim()).join(', ') + '.' : lf ? 'Nenhuma frente com foco nesta leitura do Norte' : 'Ordem do foco sem leitura. ' + sol;
     const leg = P.h('div', 'fh-p6b-leg', ...[['aceso', 'trabalhando'], ['entregou', 'entregou'], ['dormindo', 'dormindo'], ['sem', 'sem leitura']].map(([c, t]) => P.h('span', 'fh-p6b-li', P.h('i', 'ft-px is-' + c), t)));
     const ss = P.h('div', 'fh-p6b-ss', ...[M.cC, ...M.sessoes, M.cX].filter(Boolean).map(it => {
       const enc = MD ? MD.encaixe((it.filhos || []).map(f => M.items.get(f)).filter(Boolean), { lido: it.agLido !== false, maxTira: it === M.cC ? 16 : undefined }) : { tira: [], mais: 0, trabalhando: null, total: null, texto: '?' };

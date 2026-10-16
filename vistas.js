@@ -812,6 +812,14 @@
     }
     return out;
   }
+  // cartao "Outras conversas do Claude": a 2a linha diz o estado; sem estado lido leva a solucao no title, como no Fluxo
+  const SEM_ESTADO_J = 'Sem estado lido', SEM_ESTADO_J_SOL = 'Solução: o painel lê de novo sozinho em 30 s';
+  function linhasJuntadas(gen) {
+    const cont = st => gen.filter(nd => nd.estado === st).length;
+    const resumoJ = [cont('trabalhando') ? cont('trabalhando') + ' andando' : null, cont('esperando') ? cont('esperando') + ' esperando' : null, cont('dormindo') ? cont('dormindo') + ' dormindo' : null, cont('terminou') ? cont('terminou') + ' terminaram' : null].filter(Boolean).join(' · ');
+    return [[gen.length + ' conversas sem nome de sessão', false], resumoJ ? [resumoJ, cont('trabalhando') > 0] : [SEM_ESTADO_J, false, SEM_ESTADO_J_SOL]];
+  }
+  function linhaNo(l, st) { const el = h('div', 'g-no-linha' + (l[1] ? ' is-quente' : ''), st, frase(l[0])); if (l[2]) el.title = l[2]; return el; }
   function desenharFluxo(mapa, fv, lista) {
     const W = Math.max(1000, mapa.clientWidth), wA = 184, wB = 196, voceW = 176, gapC = 48;
     const ML = 16, xC = Math.round((W - voceW) / 2), X = [ML, xC - gapC - wB, xC, xC + voceW + gapC, W - wA], WD = [wA, wB, voceW, wB, wA];
@@ -827,9 +835,7 @@
     if (juntou.size) {
       const ORD = { trabalhando: 0, esperando: 1, dormindo: 2, terminou: 3, 'sem-leitura': 4 };
       const melhor = gen.slice().sort((a, b) => (ORD[a.estado] ?? 9) - (ORD[b.estado] ?? 9))[0];
-      const cont = st => gen.filter(nd => nd.estado === st).length;
-      const resumoJ = [cont('trabalhando') ? cont('trabalhando') + ' andando' : null, cont('esperando') ? cont('esperando') + ' esperando' : null, cont('dormindo') ? cont('dormindo') + ' dormindo' : null, cont('terminou') ? cont('terminou') + ' terminaram' : null].filter(Boolean).join(' · ');
-      const jn = { id: 'f2:outras-claude', stage: 'sessoes', side: 'claude', estado: melhor.estado, work: gen.some(nd => nd.work), needsYou: gen.some(nd => nd.needsYou), plain: 'Outras conversas do Claude (' + gen.length + ')', title: null, lines: [[gen.length + ' conversas sem nome de sessão', false], [resumoJ || 'sem estado lido', cont('trabalhando') > 0]], juntou: [...juntou] };
+      const jn = { id: 'f2:outras-claude', stage: 'sessoes', side: 'claude', estado: melhor.estado, work: gen.some(nd => nd.work), needsYou: gen.some(nd => nd.needsYou), plain: 'Outras conversas do Claude (' + gen.length + ')', title: null, lines: linhasJuntadas(gen), juntou: [...juntou] };
       nodes = [...nodes.filter(nd => !juntou.has(nd.id)), jn]; all.push(jn); byId.set(jn.id, jn);
       for (const [id, f] of filhos) if (juntou.has(f.dono.id)) filhos.set(id, { ...f, dono: jn });
       for (let i = all.length - 1; i >= 0; i--) if (juntou.has(all[i].id)) all.splice(i, 1);
@@ -867,7 +873,7 @@
       const facebox = h('span', 'g-no-face', face);
       const linhasEl = h('div', 'g-no-linhas');
       const evU = voce && S.agora && S.agora.esperaVoce && S.agora.esperaVoce.rotulo ? S.agora.esperaVoce.rotulo : null;
-      [...(nd.lines || []).map(l => evU && /\bcards?\s+esperam?\b/i.test(l[0]) ? [evU, l[1]] : l).slice(0, filho ? 2 : 3), ...(X2.nota.has(nd.id) ? [[X2.nota.get(nd.id), false]] : [])].forEach((l, j) => { const st = j === 0 && !voce ? h('i', 'g-st' + (nd.estado === 'trabalhando' ? ' is-anda' : nd.estado === 'esperando' ? ' is-espera' : '')) : null; linhasEl.append(h('div', 'g-no-linha' + (l[1] ? ' is-quente' : ''), st, frase(l[0]))); });
+      [...(nd.lines || []).map(l => evU && /\bcards?\s+esperam?\b/i.test(l[0]) ? [evU, l[1]] : l).slice(0, filho ? 2 : 3), ...(X2.nota.has(nd.id) ? [[X2.nota.get(nd.id), false]] : [])].forEach((l, j) => { const st = j === 0 && !voce ? h('i', 'g-st' + (nd.estado === 'trabalhando' ? ' is-anda' : nd.estado === 'esperando' ? ' is-espera' : '')) : null; linhasEl.append(linhaNo(l, st)); });
       const acao = acaoDe(nd, caixas), sprite = h('span', 'g-acao'); sprite.setAttribute('aria-hidden', 'true');
       const nome = nomeDe(nd, filho);
       el.append(facebox, h('div', '', h('div', 'g-no-nome', h('span', 'g-no-t', nome), voce ? null : sprite), linhasEl));
@@ -1159,5 +1165,5 @@
     doc.fonts && doc.fonts.load('16px Silkscreen').then(() => { if (S.view === 'mapa') desenharCerebro(); }).catch(() => {});
   }
   if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', () => setTimeout(start, 0), { once: true }); else setTimeout(start, 0);
-  root.PainelVistas = root.PainelGrade = Object.freeze({ show, primeiraMaiuscula, fluxoInfo: () => S.fluxoInfo || null, anda: () => ({ ...(S.model && S.model.conta || {}), n: contagens().anda, frase: 'Itens listados em Trabalhando agora', comprovado: true }), vpsSemLeitura, esperaProjeto: () => contagensProjeto(contagens()), estado: () => ({ tab: S.tab, view: S.view, contagens: contagens(), temFluxo: !!(S.model && S.model.fv), temCerebro: !!S.cerebro, temObra: !!S.obra }) });
+  root.PainelVistas = root.PainelGrade = Object.freeze({ _teste: Object.freeze({ linhasJuntadas, linhaNo }), show, primeiraMaiuscula, fluxoInfo: () => S.fluxoInfo || null, anda: () => ({ ...(S.model && S.model.conta || {}), n: contagens().anda, frase: 'Itens listados em Trabalhando agora', comprovado: true }), vpsSemLeitura, esperaProjeto: () => contagensProjeto(contagens()), estado: () => ({ tab: S.tab, view: S.view, contagens: contagens(), temFluxo: !!(S.model && S.model.fv), temCerebro: !!S.cerebro, temObra: !!S.obra }) });
 })(window);

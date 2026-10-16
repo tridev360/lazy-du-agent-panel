@@ -36,7 +36,7 @@ function ler({ estado, now = Date.now(), dono = false } = {}) {
   const frentes = j.frentes.filter(f => f && typeof f === 'object' && !Array.isArray(f)).slice(0, MAX_FRENTES).map(f => { const { soDono, ...resto } = f; const linha = { ...resto, frente: limpa(f.frente) }; if (dono === true && soDono && typeof soDono === 'object' && !Array.isArray(soDono)) linha.soDono = soDono; return linha; }); // soDono (nome real da frente, se um dia a fonte trouxer) so sai no modo dono
   return {
     ok: true, motivo: null, solucao: null, atualizado: j.atualizado, idadeMin, versao: typeof j.versao === 'string' ? j.versao : null, chavesLidas: j.chavesLidas === true,
-    ordemFoco: Array.isArray(j.ordemFoco) ? j.ordemFoco : [], frentes, resumo: j.resumo && typeof j.resumo === 'object' ? j.resumo : null, fonte: 'estado/frentes-situacao.json'
+    ordemFoco: Array.isArray(j.ordemFoco) ? j.ordemFoco : null, frentes, resumo: j.resumo && typeof j.resumo === 'object' ? j.resumo : null, fonte: 'estado/frentes-situacao.json'
   };
 }
 

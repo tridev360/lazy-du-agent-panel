@@ -1,4 +1,4 @@
-/* Cards do painel (itens 72 e 100): o dono responde o card com 1 clique; passo a passo com copiar e "feito".
+/* Cards do painel: o dono responde o card com 1 clique; passo a passo com copiar e "feito".
    Uso na Home: <div data-pc-cards data-api="/api/pc-cards"></div> com este arquivo e pc-cards.css carregados
    (monta sozinho), ou PainelPcCards.montar(elemento, { api, titulo: false, pedidos: false }).
    Card perigoso responde aqui com o aviso de que vale so com o ok no chat; restrito, repetido e sem opcao ficam no chat. */

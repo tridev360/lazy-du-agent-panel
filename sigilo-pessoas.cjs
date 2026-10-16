@@ -92,7 +92,7 @@ const comecoDeFrase = antes => {
 const RX_DISCORD_RAPIDO = /discord|servidor|server/i;
 const RX_DISCORD_DELE = /\b(discord|servidor|server)\s+(?:dele|dela|deles|delas)\b/gi;
 
-// EXTRA (revisao 20ae0d9f): endereco base58 (rede e parecidos) de 32 a 44 caracteres, com letra maiuscula, minuscula e numero (hash hex nao tem maiuscula), vira "carteira oculta"
+// endereco base58 (rede e parecidos) de 32 a 44 caracteres, com letra maiuscula, minuscula e numero (hash hex nao tem maiuscula), vira "carteira oculta"
 const RX_ENDERECO_B58 = /(?<![1-9A-HJ-NP-Za-km-z])[1-9A-HJ-NP-Za-km-z]{32,44}(?![1-9A-HJ-NP-Za-km-z])/g;
 function carteiraOculta(v) { return v.length < 32 ? v : v.replace(RX_ENDERECO_B58, m => /\d/.test(m) && /[a-z]/.test(m) && /[A-Z]/.test(m) ? 'carteira oculta' : m); }
 function mascarar(v) {

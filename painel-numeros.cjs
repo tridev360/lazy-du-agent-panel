@@ -193,7 +193,7 @@ function lancamentos(root, now = Date.now()) {
   };
 }
 
-// S5 (revisao 20ae0d9f): o resumo da aba Lancamentos le o mesmo resultado do gerador que a lista (launchesOf), nao so o LANCAMENTO.md
+// o resumo da aba Lancamentos le o mesmo resultado do gerador que a lista (launchesOf), nao so o LANCAMENTO.md
 function autoLanc(root, now) {
   try { const L = require('./leitor.cjs').launchesOf(root, new Date(now)), fa = L && L.fonteAuto; if (!fa) return null; return fa.ok ? { ok: true, n: L.items.length, idadeTexto: fa.idadeTexto, geradoEm: fa.geradoEm, semPrevisao: fa.semPrevisao } : { ok: false, motivo: fa.motivo, solucao: fa.solucao }; } catch { return null; }
 }
@@ -209,7 +209,7 @@ function cronograma(root, now = Date.now()) {
   const item = x => { const t = M.titulo(x && x.o_que, 120); return { chave: String(x.id || ''), titulo: t, motivo: t ? null : 'assunto reservado ou sem texto', quem: M.nomeSessao(x.quem), estado: M.frase(x.estado, 30), hora: M.frase(x.hora, 20), automatico: x.automatico === true }; };
   const deHoje = lista.filter(x => x && typeof x === 'object' && (Number.isFinite(M.ms(x.concluidoEm)) ? dia(M.ms(x.concluidoEm)) === hoje : Number.isFinite(escrito) && dia(escrito) === hoje)).map(item);
   const antigos = lista.length - deHoje.length;
-  // S5 (revisao 20ae0d9f): o Hoje tambem conta os itens do gerador de projetos (a mesma lista da aba Cronograma)
+  // o Hoje tambem conta os itens do gerador de projetos (a mesma lista da aba Cronograma)
   let autoC = null;
   try { const P = F.lerProjetos(root, now); if (P.ok && !P.velho) { const a = F.itensDeProjetos(P, now); for (const x of a.hoje) deHoje.push({ chave: x.id, titulo: x.o_que, motivo: null, quem: M.nomeSessao(x.quem) || x.quem, estado: x.estado, hora: x.hora, automatico: true }); autoC = { ok: true, n: a.hoje.length, geradoEm: P.geradoEm, idadeTexto: P.idadeTexto }; } else autoC = { ok: false, motivo: P.motivo, solucao: P.solucao }; } catch { autoC = { ok: false, motivo: 'projetos.json sem leitura', solucao: F.SOLUCAO.projetos }; }
   // itens da semana marcados para hoje tambem sao do Hoje

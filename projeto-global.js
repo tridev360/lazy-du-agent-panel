@@ -1,4 +1,4 @@
-/* projeto-global.js (fatia 11). SELETOR DE PROJETO GLOBAL na barra de cima, ao lado das abas.
+/* projeto-global.js. SELETOR DE PROJETO GLOBAL na barra de cima, ao lado das abas.
    O projeto selecionado filtra as vistas do painel.
    O botao antigo (projetos.js, PainelProjetos) filtrava o estado do painel antigo; este volta com os ids do ideias.cjs (projeto-de.cjs)
    e vale para todas as abas: "Todos" (padrao) ou 1 projeto. A escolha fica guardada neste navegador (localStorage, com try/catch).

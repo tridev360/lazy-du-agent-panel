@@ -1,5 +1,5 @@
 'use strict';
-// Rotas HTTP do modulo de cards (itens 72 e 100). O integrador monta assim, no servidor da Home:
+// Rotas HTTP do modulo de cards. O integrador monta assim, no servidor da Home:
 //   const cards = require('<esta pasta>/cards-rotas.cjs').criarRotasCards({ porta: 3296, cardsDir, dadosDir });
 //   ... no handler:  if (cards.handle(req, res)) return;
 // Rotas: GET /api/pc-cards/lista · POST /api/pc-cards/responder · POST /api/pc-cards/passo
