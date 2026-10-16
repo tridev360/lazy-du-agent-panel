@@ -344,7 +344,7 @@
     if (it.ponta) meta.append(selo(P, PONTA_T[it.ponta] || 'Ponta', 'is-ponta is-' + it.ponta, 'Onde a cadeia de comandos para agora'));
     if (it.projeto && (it.tipo === 'ajudante' || it.tipo === 'codex' || it.tipo === 'sessao')) meta.append(selo(P, projNome(it.projeto), 'is-proj' + (projAtivo() !== 'todos' && it.projeto === projAtivo() ? ' is-ativo' : ''), 'Projeto: ' + projNome(it.projeto) + ' (pela pasta de trabalho, depois pelo título e pela sessão)'));
     if (it.donoAberto) meta.append(selo(P, 'reservado · aberto só neste PC', 'is-dono', 'Assunto reservado: aparece porque o modo dono está ligado neste PC'));
-    el.append(P.h('span', 'g-no-face', face), P.h('div', 'fv-corpo', P.h('div', 'fv-nome', P.h('span', 'g-no-t', it.nome), it.tipo === 'voce' ? null : sprite), P.h('p', 'fv-frase', it.frase), meta.childNodes.length ? meta : null));
+    el.append(P.h('span', 'g-no-face', face), P.h('div', 'fv-corpo', P.h('div', 'fv-nome', P.h('span', 'g-no-t', it.tipo === 'sessao' && it.sessao !== 'COORDENADOR' ? nomeBreve(it.nome) : it.nome), it.tipo === 'voce' ? null : sprite), P.h('p', 'fv-frase', it.frase), meta.childNodes.length ? meta : null));
     { const pls = linhasPartes(P.h, it, 'fv'), fr = el.querySelector('.fv-frase'); if (pls && pls.length && fr) { fr.replaceChildren(...pls); fr.classList.add('is-partes'); } seloEmDois(P.h, el); }
     el.dataset.id = it.id; el.dataset.lado = it.lado; el.dataset.estado = it.estado || ''; el.dataset.work = it.work ? '1' : '0'; if (it.projeto) el.dataset.projeto = it.projeto;
     if (projAtivo() !== 'todos' && !soProjeto() && it.projeto && it.projeto !== projAtivo() && (it.tipo === 'ajudante' || it.tipo === 'codex')) el.classList.add('is-fora-proj');
@@ -391,12 +391,43 @@
     box.append(P.h('div', 'fv-as-col', pl), P.h('div', 'fv-col fv-c-claude', M.cC ? card(P, M.cC) : null), P.h('div', 'fv-col fv-c-codex', M.cX ? card(P, M.cX) : null));
     return box;
   }
+  // Colunas so para as sessoes principais (as de sempre e qualquer uma trabalhando ou esperando voce agora). Rotinas agendadas e
+  // sessoes em pausa viram 1 coluna compacta "Rotinas e em pausa (N)", 1 linha cada, que abre ao clicar. Nada some: cada linha abre o detalhe.
+  function nomeBreve(nome) {
+    let t = String(nome || '').split(':')[0].replace(/\s+/g, ' ').trim();
+    t = t.replace(/^(terminar|fazer|concluir|revisar|ajustar)\s+(o|a|os|as)\s+/i, '');
+    return t ? t.charAt(0).toUpperCase() + t.slice(1) : String(nome || '?');
+  }
+  function dividir(sessoes, agora) {
+    const principais = [], rotinas = [], t = Number.isFinite(agora) ? agora : Date.now();
+    for (const s of sessoes) {
+      const idadeMin = Number.isFinite(s.quando) && s.quando > 0 ? Math.max(0, (t - s.quando) / 60000) : NaN;
+      const principal = ORDEM.includes(s.sessao) || s.work || s.precisa || (Number.isFinite(idadeMin) && idadeMin <= 20);
+      (principal ? principais : rotinas).push(s);
+    }
+    return { principais, rotinas };
+  }
+  function colunaRotinas(P, rotinas) {
+    const col = P.h('div', 'fv-col fv-rotinas'), aberto = ST.rotinasAberto === true;
+    const bt = P.h('button', 'fv-mais fv-rot-bt', 'Rotinas e em pausa (' + rotinas.length + ')' + (aberto ? ' · fechar' : ' · ver')); bt.type = 'button'; bt.setAttribute('aria-expanded', String(aberto));
+    const lista = P.h('div', 'fv-rot-lista'); lista.hidden = !aberto;
+    for (const s of rotinas) {
+      const min = Number.isFinite(s.quando) && s.quando > 0 ? Math.max(0, Math.round((Date.now() - s.quando) / 60000)) : NaN;
+      const ha = !Number.isFinite(min) ? '?' : min < 60 ? min + ' min' : min < 2880 ? Math.round(min / 60) + ' h' : Math.round(min / 1440) + ' d';
+      const estado = s.estado === 'trabalhando' ? 'trabalhando' : s.estado === 'terminou' ? 'entregou' : s.estado === 'dormindo' ? 'dormindo' : 'sem leitura';
+      const r = P.h('button', 'fv-rot', P.h('span', 'fv-rot-n', nomeBreve(s.nome)), P.h('span', 'fv-rot-e', estado === 'trabalhando' ? 'trabalhando' : estado + ' há ' + ha));
+      r.type = 'button'; r.dataset.id = s.id; r.title = s.nome + ' · abre o detalhe'; r.addEventListener('click', () => abrir(s.id)); lista.append(r);
+    }
+    bt.addEventListener('click', () => { ST.rotinasAberto = lista.hidden; lista.hidden = !lista.hidden; bt.setAttribute('aria-expanded', String(!lista.hidden)); bt.textContent = 'Rotinas e em pausa (' + rotinas.length + ')' + (lista.hidden ? ' · ver' : ' · fechar'); });
+    col.append(bt, lista); return col;
+  }
   function desenhoA(P, M) {
     const mapa = P.h('div', 'fv-mapa fv-a'), max = estreito() ? 3 : 4;
     mapa.append(P.h('div', 'fv-nivel fv-n0', card(P, M.voce)));
     mapa.append(nivelCoord(P, M, max, 'fv-nivel fv-n1'));
-    const n2 = P.h('div', 'fv-nivel fv-n2 fv-cols'); n2.style.setProperty('--fv-n', Math.min(M.sessoes.length, 5));
-    for (const s of M.sessoes) n2.append(P.h('div', 'fv-col', card(P, s), pilha(P, M, s, max)));
+    const D = dividir(M.sessoes), n2 = P.h('div', 'fv-nivel fv-n2 fv-cols'); n2.style.setProperty('--fv-n', Math.min(D.principais.length + (D.rotinas.length ? 1 : 0), 6));
+    for (const s of D.principais) n2.append(P.h('div', 'fv-col', card(P, s), pilha(P, M, s, max)));
+    if (D.rotinas.length) n2.append(colunaRotinas(P, D.rotinas));
     mapa.append(n2); return mapa;
   }
   function desenhoC(P, M) {
@@ -861,7 +892,7 @@
     }
     if (M.voce && M.voce.el) { M.voce.el.append(fhVoce(P, mod)); if (FH.aberto === 'V') marca(M.voce.el); }
     if (!larga) return;
-    { const n2 = mapa.querySelector('.fv-n2'); if (n2 && n2.style && M.sessoes.length > 5) n2.style.setProperty('--fv-n', String(M.sessoes.length)); }
+    { const n2 = mapa.querySelector('.fv-n2'); if (n2 && n2.style && n2.children.length > 6) n2.style.setProperty('--fv-n', String(n2.children.length)); }
     for (const it of [M.voce, M.cC, M.cX, ...M.sessoes]) {
       if (!it || !it.el) continue;
       const meta = it.el.querySelector('.fv-meta'), nome = it.el.querySelector('.fv-nome'), est = it.el.querySelector('.fv-estado');
@@ -1048,7 +1079,7 @@
   doc.addEventListener('keydown', e => { if (e.key === 'Escape' && ST.lista) { fecharListas(); return; } if (e.key === 'Escape' && ST.sel && ST.P) { ST.sel = null; ST.P.repintar(); } });
   // a lista aberta pelo clique/toque fecha ao clicar fora dela
   doc.addEventListener('click', e => { if (ST.lista && !(e && e.target && e.target.closest && e.target.closest('.fv-num.tem-lista'))) fecharListas(); });
-  root.PainelFluxoV = Object.freeze({ _teste: Object.freeze({ modelo, cabecalho, ag: j => { ST.ag = j; } }), pintar, pronto: () => !!ST.M, CORTE, modo: modoDaLargura, forcar: m => { ST.forca = m === 'a' || m === 'c' ? m : null; if (ST.P) ST.P.repintar(); },
+  root.PainelFluxoV = Object.freeze({ _teste: Object.freeze({ dividir, nomeBreve, modelo, cabecalho, ag: j => { ST.ag = j; } }), pintar, pronto: () => !!ST.M, CORTE, modo: modoDaLargura, forcar: m => { ST.forca = m === 'a' || m === 'c' ? m : null; if (ST.P) ST.P.repintar(); },
     dados: () => { const M = ST.M; if (!M) return null; return { itens: [...M.items.values()].map(i => ({ id: i.id.replace(/[0-9a-f]{8}-[0-9a-f-]{27}/g, '#'), tipo: i.tipo, nivel: i.nivel, nome: i.nome, frase: i.frase, envia: i.envia, recebe: i.recebe, ponta: i.ponta || null })),
       ligacoes: [...M.links.values()].map(L => ({ pai: nomeCurto(M, L.pai), filho: nomeCurto(M, L.filho), estilo: L.estilo, desce: L.nDesce, sobe: L.nSobe })), cadeias: M.cadeias.map(c => c.ids.map(id => nomeCurto(M, id)).join(' > ') + ' [' + c.estado + ']'), resumo: M.resumo, agentesLidos: !!ST.ag }; } });
 })(window);

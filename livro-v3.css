@@ -256,3 +256,9 @@ html[data-theme=livro] #lv3 .lv3-cn.is-alto .lv3-barra i{background:var(--g-trav
 html[data-theme=livro]:not([data-motion=on]) #lv3 .a-gira1,html[data-theme=livro]:not([data-motion=on]) #lv3 .a-gira2,html[data-theme=livro]:not([data-motion=on]) #lv3 .a-varre{animation:none}
 }
 html[data-theme=livro][data-motion=off] #lv3 *{animation:none!important;transition:none!important}
+/* listas da doca em linhas inteiras; o que nao cabe vira "+N" (livro-v3.js, caber) */
+html[data-theme=livro] #lv3 .lv3-lista [hidden]{display:none!important}
+html[data-theme=livro] #lv3 .lv3-mais{margin:2px 0 0;font:500 12px/16px var(--g-pix);color:var(--g-tx2)}
+html[data-theme=livro] #lv3 .lv3-sm{height:auto;min-height:20px;align-items:flex-start;padding:2px 0;white-space:normal;overflow:visible}
+html[data-theme=livro] #lv3 .lv3-sm i{margin-top:5px}
+html[data-theme=livro] #lv3 .lv3-sm span{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere;line-height:16px}

@@ -5,6 +5,11 @@
 - Book theme Now screen: the talk ring turns in layers, the conversation tabs take the color of who answers (Claude or ideas), the top line lists what is "pronto hoje", and deliveries, the week and the dock show how long ago they were read.
 - Two new example blocks: live automation (the last action of an example purchase robot and today's count) and accounts (four Claude accounts, Codex and research, each with its read age or "sem leitura"). Like the rest of this screen they only show in the example; with your own data the previous Now opens first.
 - One 5 s timer drives the screen, and it does nothing while the tab is hidden.
+- Book theme Now screen, dock: the lists show whole lines only, and what does not fit becomes "+N".
+- Clean top bar: with a project picked and the bar hidden, a small "Vendo:" badge at the top says which project is on; the Book theme Now screen says it still shows every project; a thin line at the top shows where to call the bar, which opens after a short pause of the mouse; B is listed in the shortcuts and next to "Esc fecha". The fixed bar switch only shows with a mouse.
+- Example mode: the day score no longer reads your own history.
+- The automatic WEN round now reads in silence: the WEN button no longer flashes as pressed and the window never opens by itself. Holding B or W no longer repeats.
+- Flow: scheduled routines and paused sessions go into one compact column ("Rotinas e em pausa") that opens on click; columns keep at least 170 px and names no longer break letter by letter.
 
 ## 3.1.1
 

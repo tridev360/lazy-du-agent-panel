@@ -436,7 +436,7 @@
     const t = ev.target, typing = t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName));
     if (ev.key === 'Escape' && els.wen && !els.wen.hidden) { els.wen.hidden = true; return; }
     if (typing || ev.ctrlKey || ev.metaKey || ev.altKey || doc.querySelector('dialog[open]')) return;
-    if (ev.key === 'w' || ev.key === 'W') { ev.preventDefault(); wen(); }
+    if (ev.key === 'w' || ev.key === 'W') { ev.preventDefault(); if (!ev.repeat) wen(); } // tecla segurada: so a 1a vale
   }
 
   // ---------- NUMEROS UNICOS (/api/painel-numeros, ajudante de dados): a mesma conta em toda vista ----------

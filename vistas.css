@@ -418,6 +418,8 @@ html.esq,html.esq body{overflow-x:clip}
    saem da tela e voltam POR CIMA do conteudo (nada embaixo se mexe) com o mouse na borda de cima, com o foco do teclado ou com
    um menu da barra aberto. A chave "Barra de cima fixa" da engrenagem ou a tecla B deixam a barra como antes (vistas.js). */
 #g-borda{display:none}
+/* chave da barra fixa: so faz sentido com mouse; no toque a barra ja fica como antes */
+#g-barra-fixa.g-chave{display:none}
 .g-chave{all:unset;box-sizing:border-box;cursor:pointer;display:flex;align-items:center;gap:8px;min-height:32px;font:13px/1.3 var(--g-sans,system-ui,sans-serif);color:var(--g-tx2,inherit)}
 .g-chave::before{content:"";flex:none;width:26px;height:14px;box-sizing:border-box;border:1px solid currentColor;background:linear-gradient(currentColor,currentColor) 2px 50%/8px 8px no-repeat}
 .g-chave[aria-checked=true]{color:var(--g-tx,inherit)}
@@ -430,7 +432,12 @@ html.esq,html.esq body{overflow-x:clip}
   html.esq.barra-limpa #g-subnav{position:fixed;left:0;right:0;top:calc(var(--barra-desce,0px) + var(--barra-h,48px));z-index:39;margin:0;padding:0 max(48px,calc((100% - 1600px) / 2 + 48px));box-sizing:border-box;background:var(--g-bg);transform:translateY(calc(-100% - var(--barra-h,48px) - var(--barra-desce,0px)));transition:transform .2s ease-in .35s}
   html.esq.barra-limpa #g-borda{display:block;position:fixed;left:0;right:0;top:var(--barra-desce,0px);height:10px;z-index:38}
   html.esq.barra-limpa main{padding-top:16px}
-  html.esq.barra-limpa body:has(#g-bar:hover,#g-borda:hover,#g-subnav:hover,#g-bar :focus-visible,#g-subnav :focus-visible,#g-bar details[open],#g-bar .pg-lista:not([hidden]))>#g-bar,html.esq.barra-limpa body:has(#g-bar:hover,#g-borda:hover,#g-subnav:hover,#g-bar :focus-visible,#g-subnav :focus-visible,#g-bar details[open],#g-bar .pg-lista:not([hidden])) #g-subnav{transform:none;transition:transform .16s ease-out 0s}
+  /* o risco fino no topo: mostra onde chamar a barra e acende com o mouse perto */
+  #g-barra-fixa.g-chave{display:flex}
+  html.esq.barra-limpa #g-borda::after{content:"";position:absolute;left:50%;top:0;width:96px;height:2px;margin-left:-48px;background:var(--g-tx3);opacity:.45;transition:opacity .15s ease-out,background-color .15s ease-out}
+  html.esq.barra-limpa #g-borda:hover::after{opacity:1;background:var(--g-rosa)}
+  html.esq.barra-limpa[data-motion=off] #g-borda::after{transition:none}
+  html.esq.barra-limpa body:has(#g-bar:hover,#g-borda:hover,#g-subnav:hover,#g-bar :focus-visible,#g-subnav :focus-visible,#g-bar details[open],#g-bar .pg-lista:not([hidden]))>#g-bar,html.esq.barra-limpa body:has(#g-bar:hover,#g-borda:hover,#g-subnav:hover,#g-bar :focus-visible,#g-subnav :focus-visible,#g-bar details[open],#g-bar .pg-lista:not([hidden])) #g-subnav{transform:none;transition:transform .16s ease-out .2s}
   html.esq.barra-limpa[data-motion=off] body>#g-bar,html.esq.barra-limpa[data-motion=off] #g-subnav{transition:none!important}
   @media (max-width:1280px){html.esq.barra-limpa #g-subnav{padding:0 32px}}
   @media (max-width:760px){html.esq.barra-limpa #g-subnav{padding:0 16px}}

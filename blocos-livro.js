@@ -15,6 +15,7 @@
   'use strict';
   const doc = root.document, html = doc.documentElement, SVGNS = 'http://www.w3.org/2000/svg';
   const ativo = () => html.dataset.theme === 'livro';
+  const EXEMPLO = /[?&]exemplo=1\b/.test(root.location.search || ''); // pagina de exemplo: o placar nao mostra a contagem real do git
   const parado = () => html.dataset.motion === 'off';
   const S = { dias: null, hojeAntes: null, fluxoRef: null, fita: [], timerDias: 0, montado: false };
   const els = {};
@@ -109,7 +110,7 @@
   }
   async function lerDias(doLaco) {
     if (!ativo() || (doLaco === true && doc.hidden)) return;
-    let j = null; S.lendoDias = (S.lendoDias || 0) + 1; try { j = await getJSON('/api/livro/dias'); S.erroDias = null; } catch (e) { S.erroDias = String(e && e.message || e); /* fica a leitura anterior */ }
+    let j = null; S.lendoDias = (S.lendoDias || 0) + 1; try { j = await getJSON('/api/livro/dias' + (EXEMPLO ? '?exemplo=1' : '')); S.erroDias = null; } catch (e) { S.erroDias = String(e && e.message || e); /* fica a leitura anterior */ }
     if (j) S.dias = j;
     const hojeN = S.dias && S.dias.lido ? (S.dias.dias || {})[S.dias.hoje] || 0 : null;
     pintarPlacar();

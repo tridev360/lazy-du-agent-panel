@@ -38,7 +38,7 @@
   }
 
   // ---------- o controle: "Vendo: Escritorio · trocar" ----------
-  let caixa = null, botao = null, lista = null;
+  let caixa = null, botao = null, lista = null, selo = null;
   function h(tag, cls, txt) { const n = doc.createElement(tag); if (cls) n.className = cls; if (txt !== undefined) n.textContent = txt; return n; }
   function montar() {
     if (caixa && caixa.isConnected) return true;
@@ -57,10 +57,25 @@
     botao.replaceChildren(h('span', 'pg-rot', 'Vendo:'), h('b', 'pg-nome', nome(atual)), h('span', 'pg-trocar', '· trocar'));
     botao.title = 'Projeto que o painel mostra em todas as abas (fica guardado neste navegador)';
     botao.dataset.todos = atual === 'todos' ? '1' : '0';
+    pintarSelo();
     lista.replaceChildren(...[{ id: 'todos', nome: 'Todos' }, ...PD.PROJETOS].map(p => {
       const b = h('button', 'pg-op', nome(p.id)); b.type = 'button'; b.setAttribute('role', 'option'); b.dataset.projeto = p.id;
       b.setAttribute('aria-selected', String(p.id === atual)); b.addEventListener('click', () => escolher(p.id)); return b;
     }));
+  }
+  // Selo do filtro: com a barra de cima escondida (tela limpa) o "Vendo:" some junto com ela; este selo pequeno, fora da barra,
+  // diz qual projeto esta valendo. So aparece com projeto escolhido e barra escondida (css); nao pega o mouse, a barra segue abrindo no topo.
+  function pintarSelo() {
+    if (!selo) return;
+    selo.replaceChildren(h('span', 'pg-selo-rot', 'Vendo:'), h('b', 'pg-selo-nome', nome(atual)));
+    selo.title = 'Projeto que o painel mostra em todas as abas. Trocar em "Vendo:" na barra de cima (mouse no topo ou tecla B).';
+    selo.dataset.todos = atual === 'todos' ? '1' : '0';
+  }
+  function montarSelo() {
+    if (selo && selo.isConnected) return;
+    if (!doc.body) return;
+    selo = h('div', 'pg-selo'); selo.id = 'pg-selo'; selo.setAttribute('role', 'status'); selo.dataset.dsOwned = 'projeto';
+    doc.body.append(selo); pintarSelo();
   }
   function abrir() { if (!lista) return; aberto = true; lista.hidden = false; botao.setAttribute('aria-expanded', 'true'); const s = lista.querySelector('[aria-selected="true"]'); if (s) s.focus(); }
   function fechar() { if (!lista) return; aberto = false; lista.hidden = true; botao.setAttribute('aria-expanded', 'false'); }
@@ -110,17 +125,24 @@
   }
 
   // ---------- aviso nas vistas que ainda mostram todos os projetos ----------
-  const VISTAS_SEM_FILTRO = { council: 'Conselho', radar: 'Radar', tips: 'Hábitos', journey: 'História', finances: 'Finanças', brain: 'Mapa do cérebro', 'mapa-antigo': 'Mapa antigo' };
+  const VISTAS_SEM_FILTRO = { v3: 'Agora (tela V3)', council: 'Conselho', radar: 'Radar', tips: 'Hábitos', journey: 'História', finances: 'Finanças', brain: 'Mapa do cérebro', 'mapa-antigo': 'Mapa antigo' };
   function aviso() {
     avisoFila();
     let a = doc.getElementById('pg-aviso');
-    const alvo = html.dataset.gNew === 'cerebro' ? 'brain' : html.dataset.gOld || '';
+    // a tela V3 do LIVRO (Agora padrao desse tema) ainda nao separa por projeto: avisa em vez de parecer filtrada
+    const v3 = html.dataset.theme === 'livro' && html.dataset.gNew === 'agora' && html.dataset.lv3 !== 'antes' && !!doc.getElementById('lv3');
+    const alvo = v3 ? 'v3' : html.dataset.gNew === 'cerebro' ? 'brain' : html.dataset.gOld || '';
     const sem = atual !== 'todos' && Object.hasOwn(VISTAS_SEM_FILTRO, alvo);
-    if (!sem) { if (a) a.hidden = true; return; }
+    const antes = !!(a && !a.hidden);
+    if (!sem) { if (a) a.hidden = true; if (antes) medirDeNovo(); return; }
     if (!a) { a = h('p', 'pg-aviso'); a.id = 'pg-aviso'; a.setAttribute('role', 'status'); const sub = doc.getElementById('g-subnav'); if (sub) sub.after(a); else return; }
     a.hidden = false;
-    a.textContent = VISTAS_SEM_FILTRO[alvo] + ': esta vista ainda mostra todos os projetos (sem separação por projeto na fonte). Vendo: ' + nome(atual) + '.';
+    const txt = VISTAS_SEM_FILTRO[alvo] + ': esta vista ainda mostra todos os projetos (sem separação por projeto na fonte). Vendo: ' + nome(atual) + '.';
+    if (a.textContent !== txt) a.textContent = txt;
+    if (!antes) medirDeNovo();
   }
+  // a faixa de aviso muda a altura do que vem embaixo (a tela V3 mede a propria altura pela janela): pede a medida de novo, so quando o aviso nasce ou some
+  function medirDeNovo() { try { root.dispatchEvent(new Event('resize')); } catch (e) { /* navegador antigo: mede no proximo resize */ } }
   // Fila: a faixa "Trabalhos registrados / Itens de checklist / Ramos prontos" (upgrade.js) conta o painel inteiro; com 1 projeto
   // escolhido, 1 linha logo abaixo dela diz isso. div (nao p): o upgrade.js embrulha p longo num "Ver mais". So mexe quando muda.
   function avisoFila() {
@@ -135,9 +157,9 @@
 
   let tentativas = 0;
   function iniciar() {
-    const ok = montar(); ligarLegado(); acertarIdeias();
+    const ok = montar(); montarSelo(); ligarLegado(); acertarIdeias();
     if (!ok && tentativas++ < 60) { setTimeout(iniciar, 250); return; }
-    try { new MutationObserver(aviso).observe(html, { attributes: true, attributeFilter: ['data-g-new', 'data-g-old', 'data-projeto'] }); } catch (e) { setInterval(aviso, 1000); }
+    try { new MutationObserver(aviso).observe(html, { attributes: true, attributeFilter: ['data-g-new', 'data-g-old', 'data-projeto', 'data-theme', 'data-lv3'] }); } catch (e) { setInterval(aviso, 1000); }
     aviso();
     // a faixa da Fila nasce e renasce com a leitura: confere a cada 1,5 s so no DOM (nada de rede)
     avisoFila(); setInterval(avisoFila, 1500);

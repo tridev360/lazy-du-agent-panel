@@ -297,7 +297,8 @@
       const t = ev.target;
       if (ev.ctrlKey || ev.altKey || ev.metaKey || (t && (t.isContentEditable || /^(INPUT|TEXTAREA|SELECT)$/.test(t.tagName || '')))) return false;
       if (ev.key !== 'b' && ev.key !== 'B') return false;
-      ev.preventDefault(); barra.trocar(); return true;
+      ev.preventDefault(); if (ev.repeat) return true; // tecla segurada: so a 1a vale (nada de rajada de trocas e de resize)
+      barra.trocar(); return true;
     }
   };
   try { barra.aplicar(); } catch { /* documento sem classList (teste): o montar aplica */ }
@@ -353,7 +354,7 @@
     main.prepend(sub, agora, fluxo, cerebro, aprendizados); Object.assign(els, { agora, fluxo, cerebro });
     // linha de comando no pe: a caixa "Para COORDENADOR" de sempre, em 1 linha; "/" abre
     const dock = h('div', ''); dock.id = 'g-dock'; const dw = h('div', 'g-wrap'); const slash = h('span', 'g-slash', '/'); slash.title = 'Tecla /';
-    dw.append(slash, h('span', 'g-dock-dica', 'Esc fecha')); dock.append(dw); dock.dataset.dsOwned = 'grade'; doc.body.append(dock); els.dock = dock; els.dockWrap = dw; acoplar();
+    dw.append(slash, h('span', 'g-dock-dica', 'Esc fecha'), h('span', 'g-dock-dica', 'B barra de cima')); dock.append(dw); dock.dataset.dsOwned = 'grade'; doc.body.append(dock); els.dock = dock; els.dockWrap = dw; acoplar();
     dock.addEventListener('focusin', () => dock.classList.add('is-aberto'));
     dock.addEventListener('focusout', () => setTimeout(() => { if (!dock.contains(doc.activeElement)) dock.classList.remove('is-aberto'); }, 0));
     // dialogo de decidir: os cards de sempre (respondem pelo caminho de sempre)
@@ -524,7 +525,7 @@
     const anda = h('section', 'g-col'), listA = h('ol', 'g-list');
     const rowsA = andaRows(a).filter(r => casaP({ titulo: r.nome, texto: String(r.nome || '') + ' ' + String(r.linha || '') }));
     if (filtra && k.anda !== null) k.anda = rowsA.length;
-    if (filtra) frag.append(h('p', 'g-sec pg-aviso', 'Vendo: ' + PG.nome(PG.atual()) + ' · ' + (k.espera === null ? '?' : k.espera) + ' esperando você, ' + (k.anda === null ? '?' : k.anda) + ' andando, ' + (k.trava === null ? '?' : k.trava) + ' travados neste projeto. Trocar em "Vendo:" na barra de cima.'));
+    if (filtra) frag.append(h('p', 'g-sec pg-aviso', 'Vendo: ' + PG.nome(PG.atual()) + ' · ' + (k.espera === null ? '?' : k.espera) + ' esperando você, ' + (k.anda === null ? '?' : k.anda) + ' andando, ' + (k.trava === null ? '?' : k.trava) + ' travados neste projeto. Trocar em "Vendo:" na barra de cima (mouse no topo ou tecla B).'));
     for (const r of rowsA) listA.append(h('li', 'g-row', h('i', 'g-st is-anda'), h('i', 'g-sq ' + (r.side === 'codex' ? 'is-codex' : 'is-claude')), h('div', 'g-row-body', (() => { const n = h('div', 'g-row-nome g-nome', r.nome); n.dataset.lado = r.side === 'codex' ? 'codex' : 'claude'; return n; })(), h('p', 'g-sec', r.linha))));
     const conta = S.model && S.model.conta;
     anda.append(h('div', 'g-col-head', h('h2', 'g-h', 'ANDA'), h('span', 'g-num', k.anda === null ? '?' : String(k.anda))),

@@ -1,8 +1,8 @@
 'use strict';
 // WEN: botao que abre o WEN EM TABELA (o mesmo do cabecalho: PainelF2.wen, dialogo #f2-wen) e o AUTOMATIZAR ao lado.
-// UM jeito so. A rodada automatica (a cada 5 min) aperta o MESMO botao pelo MESMO caminho do clique
-// (button.click()) e abre o mesmo WEN novo. O status em 6 linhas (GET /api/status-6) fica so de reserva: quando a pagina
-// nao tem a tabela, ou quando outro codigo aperta este botao (o "Abrir o WEN antigo" de dentro do WEN novo).
+// Um jeito so: a rodada automatica (a cada 5 min) passa pelo MESMO botao e pelo MESMO caminho do clique (button.click()), mas
+// le o WEN em silencio: nao abre a janela e nao aperta o botao. Quem abre e o clique da pessoa ou a tecla W. O status em 6 linhas
+// (GET /api/status-6) fica so de reserva: quando a pagina nao tem a tabela, ou quando outro codigo aperta este botao (o "Abrir o WEN antigo" de dentro do WEN novo).
 (function(root){
   const PERIOD=5*60*1000,KEY='painel-wen-auto',PRESS_MS=180,OPEN_MS=260,CHANGED_MS=8000;
   const WORDS={
@@ -36,8 +36,7 @@
     return {...line,text,known:!text.includes('?'),detail:{...line.detail,sources:[{file:'créditos canônicos do painel',note:text}]}};
   }
   // A tabela do cabecalho: o mesmo PainelF2.wen que o placar chama. Clique da pessoa alterna (abre e fecha, como o placar);
-  // a rodada automatica sempre abre. Sem a tabela na pagina devolve false e o botao cai na reserva (nunca fica morto).
-  // TELA LIMPA: a rodada automatica le o WEN em silencio e nunca abre a janela; so o clique (ou a tecla W) abre.
+  // a rodada automatica so atualiza o dado, em silencio, e nunca abre a janela. Sem a tabela na pagina devolve false e o botao cai na reserva (nunca fica morto).
   function tableOpener(win){return source=>{const f2=win?.PainelF2||root.PainelF2;if(!f2||typeof f2.wen!=='function')return false;try{if(source==='auto'){if(typeof f2.wenAtualizar==='function')f2.wenAtualizar();return true;}f2.wen(undefined);return true;}catch{return false;}};}
   function createWen({doc,win=root,fetchJson,storage,timers=root,snapshot=snapshotNow,openTable=tableOpener(win)}){
     const state={data:null,auto:false,timer:null,autoTick:false,presses:[],mounted:false};
@@ -48,10 +47,10 @@
     function flash(node,name,ms){if(!node)return;node.classList.add(name);timers.setTimeout(()=>node.classList.remove(name),ms);}
     // O mesmo manipulador para o clique da pessoa e para a rodada automatica.
     async function press(source,old=false){
-      const reduce=reducedMotion(win,doc),button=els.button;
-      if(!reduce)flash(button,'wen-pressing',PRESS_MS);
-      if(!old&&openTable&&openTable(source)===true){state.presses.push({source,animated:!reduce,alvo:'tabela'});return null;}
-      state.presses.push({source,animated:!reduce,alvo:'antigo'});
+      const reduce=reducedMotion(win,doc),button=els.button,anima=!reduce&&source!=='auto'; // a rodada automatica nao aperta o botao: sem janela, o aperto nao diz nada
+      if(anima)flash(button,'wen-pressing',PRESS_MS);
+      if(!old&&openTable&&openTable(source)===true){state.presses.push({source,animated:anima,alvo:'tabela'});return null;}
+      state.presses.push({source,animated:anima,alvo:'antigo'});
       button.setAttribute('aria-busy','true');
       let data=null;try{data=await fetchJson();}catch{data=null;}
       button.setAttribute('aria-busy','false');

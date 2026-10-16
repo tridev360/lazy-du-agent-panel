@@ -29,3 +29,11 @@
   .pg-lista{left:0;right:auto;width:100%;box-sizing:border-box}
 }
 #pg-aviso-fila{margin:8px 0 12px}
+/* Selo do filtro (tela limpa): com a barra de cima escondida, diz qual projeto esta valendo. Fica na faixa livre do topo, nao pega o mouse. */
+.pg-selo{display:none}
+@media (hover:hover) and (pointer:fine){
+  html.esq.barra-limpa:not([data-projeto=todos]) .pg-selo{display:flex;position:fixed;top:calc(var(--barra-desce,0px) + 1px);right:max(48px,calc((100% - 1600px) / 2 + 48px));z-index:37;align-items:center;gap:5px;height:14px;padding:0 8px;box-sizing:border-box;border-left:2px solid var(--g-rosa);background:var(--g-bg);color:var(--g-tx2);font:500 11px/14px var(--g-sans,system-ui);white-space:nowrap;pointer-events:none}
+  .pg-selo .pg-selo-nome{max-width:220px;overflow:hidden;text-overflow:ellipsis;color:var(--g-tx);font-weight:600}
+  @media (max-width:1280px){html.esq.barra-limpa:not([data-projeto=todos]) .pg-selo{right:32px}}
+  @media (max-width:760px){html.esq.barra-limpa:not([data-projeto=todos]) .pg-selo{right:16px}}
+}

@@ -196,7 +196,21 @@
     if (sobra > 0) html.style.setProperty('--lv3-h', Math.max(560, alt - sobra) + 'px');
     if (els.conv) els.conv.scrollTop = els.conv.scrollHeight;
     if (S.prontoChave) { S.prontoChave = null; pintarPronto(); } // a largura mudou: as tags cabem de novo
+    ajustarListas(); // a altura das listas da doca mudou: as linhas que cabem inteiras sao outras
   }
+  // listas da doca em linhas inteiras: o que nao cabe sai e vira "+N frentes" / "+N itens" (nunca uma linha cortada pela borda da lista)
+  function caber(lista, linha, un) {
+    if (!lista) return;
+    for (const m of lista.querySelectorAll('.lv3-mais')) m.remove();
+    const rows = [...lista.querySelectorAll(linha)]; for (const r of rows) r.hidden = false;
+    if (!rows.length || !lista.clientHeight || lista.scrollHeight <= lista.clientHeight + 1) return;
+    const mais = h('p', 'lv3-mais', ''); lista.append(mais);
+    for (let n = 1; n <= rows.length; n++) {
+      rows[rows.length - n].hidden = true; mais.textContent = '+' + n + ' ' + (n === 1 ? un[0] : un[1]);
+      if (lista.scrollHeight <= lista.clientHeight + 1) break;
+    }
+  }
+  function ajustarListas() { if (!els.lv || !ativa()) return; caber(els.frentes, '.lv3-fr', ['frente', 'frentes']); caber(els.semana, '.lv3-sm', ['item', 'itens']); }
 
   // ---------- pintura ----------
   function vazio(texto, marca) { return h('p', 'lv3-vazio', marca ? h('b', '', marca) : null, texto); }
@@ -338,6 +352,7 @@
     if (!semDado(els.frentes, els.frB)) {
       els.frB.classList.toggle('is-erro', !!f.erro);
       els.frentes.replaceChildren(...(itens.length ? itens.map(linhaFrente) : [vazio(f.erro ? 'Leitura falhou: ' + f.erro : 'Nenhuma frente aberta.', f.erro ? null : 'none')]));
+      caber(els.frentes, '.lv3-fr', ['frente', 'frentes']);
     }
     // PRONTO HOJE: as tags no topo e o medidor do centro (a lista do dia fica no balao dos dois)
     pintarPronto();
@@ -386,6 +401,7 @@
     if (!ok) { els.seDatas.textContent = SEM; els.semana.replaceChildren(vazio(sem && sem.erro ? 'Leitura falhou: ' + sem.erro : 'Semana sem leitura.')); return; }
     els.seDatas.textContent = val(sem.datas);
     els.semana.replaceChildren(...(itens.length ? itens.map(x => { const st = String(x && x.estado || ''); const r = h('div', 'lv3-sm', h('i', /pronto/.test(st) ? 'is-pronto' : /anda|fazendo|obra/.test(st) ? 'is-anda' : ''), h('span', '', val(x && x.texto))); r.title = (x && x.texto) || ''; return r; }) : [vazio('Nada na semana.', 'none')]));
+    caber(els.semana, '.lv3-sm', ['item', 'itens']);
   }
   // CONTAS: Claude A a D pela regra da troca de conta (a ultima leitura vale ate o reset da semana; passou do reset, a conta que
   // nao e a atual zerou e a atual fica sem leitura; a atual com leitura de mais de 2 h fica sem leitura com a idade), Codex e pesquisa
