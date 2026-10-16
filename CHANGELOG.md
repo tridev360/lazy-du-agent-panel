@@ -1,5 +1,11 @@
 # Changelog
 
+## 3.2.0
+
+- Book theme Now screen: the talk ring turns in layers, the conversation tabs take the color of who answers (Claude or ideas), the top line lists what is "pronto hoje", and deliveries, the week and the dock show how long ago they were read.
+- Two new example blocks: live automation (the last action of an example purchase robot and today's count) and accounts (four Claude accounts, Codex and research, each with its read age or "sem leitura"). Like the rest of this screen they only show in the example; with your own data the previous Now opens first.
+- One 5 s timer drives the screen, and it does nothing while the tab is hidden.
+
 ## 3.1.1
 
 - Book theme Now screen: the talk ring says "exemplo" instead of promising a key, the ideas block is called IDEIAS like its tab, and the helpers note wraps instead of being cut.

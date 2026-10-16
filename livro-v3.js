@@ -4,7 +4,10 @@
    Leitura: so GET /api/livro-v3 (VOCE RESOLVE, frentes, entregas, projetos, pronto hoje, ajudantes, ideias, contas, semana,
    feed, conversa e recado). Esta tela e so demonstracao: o anel FALAR, as respostas, o recado e o ENVIAR so mostram o aviso
    NADA e nada sai do navegador. Fora do exemplo a resposta vem "fechado" e a tela abre em "Agora de antes".
-   Horas pelo relogio local do navegador. Texto entra sempre como texto (nada de HTML montado de string). */
+   Horas pelo relogio local do navegador. Texto entra sempre como texto (nada de HTML montado de string).
+   Agora: AUTOMACAO AO VIVO na coluna da direita, tags de PRONTO HOJE no topo, CONTAS em 6 linhas (Claude A a D pela regra
+   do reset, Codex e pesquisa) com idade, doca com LED, quantos e idade, abas com a cor de cada IA, 1 temporizador so (laco de
+   5 s, parado com a aba escondida) e o anel girando em camadas (o compositor gira; nada pinta o SVG a cada quadro). */
 (function (root) {
   'use strict';
   const doc = root.document, html = doc.documentElement;
@@ -15,7 +18,8 @@
   const SEM = 'sem leitura';
   const DIGITE = 'Exemplo: escreva e veja o aviso (nada é enviado)';
   const ABAS = [['CLAUDE', 'CLAUDE', 'voz'], ['IDEIAS', 'IDEIAS', 'ideias'], ['Atendimento', 'ATENDIMENTO', 'recado'], ['Cortes', 'CORTES', 'recado'], ['Loja', 'LOJA', 'recado']];
-  const S = { dados: null, erroDados: false, aba: 'CLAUDE', ideiasVistas: false, vozLigada: false, primeira: true };
+  const S = { dados: null, erroDados: false, aba: 'CLAUDE', ideiasVistas: false, vozLigada: false, primeira: true, lidoEm: null, proximo: 0, idade: {}, autoLido: null, prontoChave: null };
+  const RITMO_MS = 30000, DUAS_HORAS = 2 * 3600000;
   const els = {};
 
   // ---------- utilidades ----------
@@ -37,6 +41,9 @@
   const hora = ms => { if (!Number.isFinite(ms)) return SEM; const x = new Date(ms); return dois(x.getHours()) + ':' + dois(x.getMinutes()); };
   function haMin(m) { if (!Number.isFinite(m)) return SEM; if (m < 1) return 'agora'; if (m < 60) return 'há ' + m + ' min'; const hr = Math.round(m / 60); return hr < 48 ? 'há ' + hr + ' h' : 'há ' + Math.round(hr / 24) + ' dias'; }
   const haTxt = ms => (Number.isFinite(ms) ? haMin(Math.max(0, Math.round((Date.now() - ms) / 60000))) : SEM);
+  function haCurto(ms) { if (!Number.isFinite(ms)) return SEM; const m = Math.max(0, Math.round((Date.now() - ms) / 60000)); return m < 1 ? 'agora' : m < 60 ? 'há ' + m + ' min' : m < 2880 ? 'há ' + Math.round(m / 60) + ' h' : 'há ' + Math.round(m / 1440) + ' d'; }
+  function emCurto(ms) { if (!Number.isFinite(ms)) return SEM; const m = Math.max(0, Math.round((ms - Date.now()) / 60000)); return m < 1 ? 'agora' : m < 60 ? 'em ' + m + ' min' : m < 2880 ? 'em ' + Math.round(m / 60) + ' h' : 'em ' + Math.round(m / 1440) + ' d'; }
+  function haSeg(s) { return !Number.isFinite(s) ? SEM : 'lido há ' + (s < 120 ? Math.round(s) + ' s' : s < 7200 ? Math.round(s / 60) + ' min' : Math.round(s / 3600) + ' h'); }
   const ativa = () => html.dataset.theme === 'livro' && html.dataset.gNew === 'agora' && html.dataset.lv3 !== 'antes';
   function guardar(k, v) { try { root.localStorage.setItem(k, v); } catch { /* so nesta visita */ } }
   function lerGuardado(k) { try { return root.localStorage.getItem(k); } catch { return null; } }
@@ -52,12 +59,17 @@
   function anel() {
     const b = h('button', 'lv3-anel'); b.type = 'button'; b.dataset.lv3Bloco = 'anel'; b.dataset.estado = 'parado';
     b.setAttribute('aria-label', 'Falar com o Claude'); b.title = NADA;
-    const s = sv('svg', { viewBox: '0 0 200 200', 'aria-hidden': 'true' });
-    s.append(sv('circle', { class: 'a-trilho', cx: 100, cy: 100, r: 96 }), sv('circle', { class: 'a-arco2', cx: 100, cy: 100, r: 88 }), sv('circle', { class: 'a-arco', cx: 100, cy: 100, r: 66 }));
-    // 36 LEDs redondos em volta (o apagado fica visivel, como o painel de LED do LIVRO); a varredura so mexe na opacidade
-    for (let i = 0; i < 36; i++) { const a = i / 36 * Math.PI * 2 - Math.PI / 2; const c = sv('circle', { class: 'a-led', cx: (100 + 78 * Math.cos(a)).toFixed(2), cy: (100 + 78 * Math.sin(a)).toFixed(2), r: 2.4 }); c.style.animationDelay = (i * 0.1).toFixed(1) + 's'; s.append(c); }
-    s.append(sv('circle', { class: 'a-miolo', cx: 100, cy: 100, r: 54 }));
-    b.append(s, h('span', 'lv3-falar', h('i', ''), h('b', '', 'FALAR'), h('span', '', 'exemplo')));
+    // camadas: a de baixo fica parada (trilho, 36 LEDs apagados e o miolo); os 2 arcos e a varredura dos LEDs giram em camadas
+    // HTML proprias (o compositor gira a camada pronta). A varredura anda em 36 passos de 10 graus: cada passo cai em cima de um LED.
+    const svg = () => sv('svg', { viewBox: '0 0 200 200', 'aria-hidden': 'true' });
+    const led = (i, cls, op) => { const a = i / 36 * Math.PI * 2 - Math.PI / 2; const c = sv('circle', { class: cls, cx: (100 + 78 * Math.cos(a)).toFixed(2), cy: (100 + 78 * Math.sin(a)).toFixed(2), r: 2.4 }); if (op !== undefined) c.setAttribute('opacity', op.toFixed(2)); return c; };
+    const base = svg(); base.append(sv('circle', { class: 'a-trilho', cx: 100, cy: 100, r: 96 }));
+    for (let i = 0; i < 36; i++) base.append(led(i, 'a-led'));
+    base.append(sv('circle', { class: 'a-miolo', cx: 100, cy: 100, r: 54 }));
+    const camada = (cls, ...filhos) => { const c = h('span', 'a-camada ' + cls), s = svg(); s.append(...filhos); c.append(s); return c; };
+    const varre = []; for (let k = 0; k < 12; k++) varre.push(led(36 - k, 'a-led-on', 1 - k / 12)); // cabeca acesa e a cauda apagando
+    const g2 = camada('a-gira2', sv('circle', { class: 'a-arco2', cx: 100, cy: 100, r: 88 })), g1 = camada('a-gira1', sv('circle', { class: 'a-arco', cx: 100, cy: 100, r: 66 })), gv = camada('a-varre', ...varre);
+    b.append(base, g2, gv, g1, h('span', 'lv3-falar', h('i', ''), h('b', '', 'FALAR'), h('span', '', 'exemplo')));
     // so mostra como a voz fica: acende por 2 s e volta; nada e gravado nem enviado
     b.addEventListener('click', () => {
       if (b.dataset.estado === 'ouvindo') return;
@@ -76,6 +88,10 @@
     const topo = h('div', 'lv3-topo');
     const cont = (cls, rot) => { const b = h('b', '', '...'); const c = h('span', 'lv3-cont ' + cls, b, rot); topo.append(c); return b; };
     els.seus = cont('is-seus', 'seus'); els.frentesN = cont('', 'frentes'); els.cardsN = cont('', 'cards');
+    // PRONTO HOJE: as tags do que fechou hoje, na linha do topo; o que nao cabe vira "+N" e a lista inteira fica no balao
+    els.prontoN = h('b', '', '...');
+    els.pronto = h('div', 'lv3-pronto', h('span', 'lv3-pronto-rot', h('i', 'lv3-led is-ok'), 'PRONTO HOJE ', els.prontoN), els.prontoTags = h('span', 'lv3-pronto-tags'));
+    els.pronto.dataset.lv3Bloco = 'pronto'; topo.append(els.pronto);
     els.lido = h('span', 'lv3-lido', 'lendo...'); topo.append(els.lido);
     const fluxo = h('a', 'g-btn is-quieto', 'FLUXO · 2ª TELA ↗'); fluxo.href = (root.location.pathname || '/') + (root.location.search || '') + '#g=equipe.fluxo&tela=cheia'; fluxo.target = '_blank'; fluxo.rel = 'noopener'; fluxo.title = 'Abre só o Fluxo, sem menu, numa janela nova para deixar na segunda tela'; fluxo.dataset.lv3Bloco = 'fluxo';
     topo.append(h('span', 'lv3-acoes', fluxo));
@@ -105,7 +121,8 @@
     const conversa = bloco('conversa', 'lv3-conversa', [els.convLed, 'CONVERSA · CLAUDE E IDEIAS'], h('span', 'lv3-dir', 'exemplo'));
     els.conv = h('div', 'lv3-lista'); els.conv.setAttribute('role', 'log'); els.conv.setAttribute('aria-live', 'polite');
     const tabs = h('div', 'lv3-tabs'); tabs.setAttribute('role', 'tablist'); tabs.setAttribute('aria-label', 'Para quem'); tabs.dataset.lv3Bloco = 'recado';
-    els.tabs = ABAS.map(([chave, rot, tipo]) => { const b = btn('lv3-tab' + (tipo === 'ideias' ? ' is-id' : ''), rot, () => trocarAba(chave)); b.setAttribute('role', 'tab'); b.dataset.aba = chave; tabs.append(b); return b; });
+    // cada aba com a cor de quem responde: Claude, as ideias e as sessoes (a cor fica na variavel --ia do CSS)
+    els.tabs = ABAS.map(([chave, rot, tipo]) => { const b = btn('lv3-tab' + (tipo === 'ideias' ? ' is-id' : tipo === 'recado' ? ' is-ses' : ' is-cl'), rot, () => trocarAba(chave)); b.setAttribute('role', 'tab'); b.dataset.aba = chave; tabs.append(b); return b; });
     els.input = h('input', ''); els.input.type = 'text'; els.input.maxLength = 1000; els.input.setAttribute('aria-label', 'Escrever');
     els.input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); enviar(); } });
     els.enviar = btn('g-btn', 'ENVIAR', enviar);
@@ -113,24 +130,31 @@
     conversa.b.append(els.conv, tabs, h('div', 'lv3-entrada', els.input, els.enviar), els.aviso); els.convB = conversa.b;
     const cen = h('div', 'lv3-col is-cen', nucleo, conversa.b);
 
-    // direita: feed do Claude e o Codex no exemplo
+    // direita: feed do Claude, AUTOMACAO AO VIVO (o robo de compras do exemplo) e a faixa do Codex (1 linha)
     const feed = bloco('feed', '', [els.feedLed = h('i', 'lv3-led'), 'FEED · CLAUDE'], els.feedDir = h('span', 'lv3-dir', 'lendo...'));
     els.feed = h('div', 'lv3-lista'); feed.b.append(els.feed); els.feedB = feed.b;
+    const au = bloco('automacao', 'lv3-automacao', [els.auLed = h('i', 'lv3-led'), 'AUTOMAÇÃO AO VIVO'], els.auDir = h('span', 'lv3-dir', 'lendo...'));
+    const kv = rot => { const v = h('b', '', '...'); return [h('span', '', rot), v]; };
+    const [k1, v1] = kv('ÚLTIMA TX'), [k2, v2] = kv('HORA'), [k3, v3] = kv('DEMORA'), [k4, v4] = kv('RESULTADO');
+    els.au = { lado: v1, hora: v2, demora: v3, resultado: v4, tx: h('b', '', '...'), vendas: h('span', '', 'vendas: ...'), mede: h('span', '', '...') };
+    au.b.append(h('div', 'lv3-bt', h('div', 'lv3-tx', k1, v1, k2, v2, k3, v3, k4, v4), h('div', 'lv3-dia', els.au.tx, h('span', '', 'TX HOJE'), els.au.vendas), h('p', 'lv3-mede', h('i', '', 'A AUTOMAÇÃO MEDE AGORA: '), els.au.mede)));
+    els.auB = au.b;
     const codex = h('section', 'lv3-breve'); codex.dataset.lv3Bloco = 'codex';
-    codex.append(h('div', 'lv3-sec', h('i', 'lv3-led'), 'CODEX', h('span', 'lv3-dir', h('span', 'lv3-tag', 'EXEMPLO'))), h('p', '', 'No exemplo, o Codex aparece no feed quando revisa algo.'));
-    const dir = h('div', 'lv3-col is-dir', feed.b, codex);
+    codex.append(h('div', 'lv3-sec', h('i', 'lv3-led'), 'CODEX', h('span', 'lv3-breve-p', 'No exemplo, o Codex aparece no feed quando revisa algo.'), h('span', 'lv3-dir', h('span', 'lv3-tag', 'EXEMPLO'))));
+    const dir = h('div', 'lv3-col is-dir', feed.b, au.b, codex);
 
-    // doca: frentes, entregas (com a Fila), esta semana, contas e projetos
-    const fr = bloco('frentes', '', [h('i', 'lv3-led is-vivo'), 'FRENTES'], els.frDir = h('span', 'lv3-dir', 'lendo...'));
+    // doca: frentes, entregas (com a Fila), esta semana, contas e projetos; cada uma com LED da leitura, quantos e a idade do dado
+    const cab = (nome, rot) => { const led = h('i', 'lv3-led'), n = h('b', 'lv3-n', ''); els['led_' + nome] = led; els['n_' + nome] = n; return [led, rot, n]; };
+    const fr = bloco('frentes', '', cab('frentes', 'FRENTES'), els.frDir = h('span', 'lv3-dir', 'lendo...'));
     els.frentes = h('div', 'lv3-lista'); fr.b.append(els.frentes); els.frB = fr.b;
-    const fila = h('a', 'lv3-dir lv3-link', 'Fila ↗'); fila.href = '#g=fila.fila'; fila.title = 'Abre a aba Fila com todas as entregas';
-    const en = bloco('entregas', '', ['ENTREGAS'], fila);
-    els.entregas = h('div', 'lv3-lista'); en.b.append(h('div', 'lv3-sub', 'MAIS PERTO DE SAIR'), els.entregas); els.enB = en.b;
-    const se = bloco('semana', '', ['ESTA SEMANA'], els.seDir = h('span', 'lv3-dir', 'lendo...'));
-    els.semana = h('div', 'lv3-lista'); se.b.append(els.semana); els.seB = se.b;
-    const co = bloco('contas', '', ['CONTAS'], els.coDir = h('span', 'lv3-dir', 'lendo...'));
-    els.contas = h('div', 'lv3-lista'); co.b.append(els.contas); els.coB = co.b;
-    const pj = bloco('projetos', '', ['PROJETOS'], els.pjDir = h('span', 'lv3-dir', 'lendo...'));
+    const fila = h('a', 'lv3-link lv3-fila', 'Fila ↗'); fila.href = '#g=fila.fila'; fila.title = 'Abre a aba Fila com todas as entregas';
+    const en = bloco('entregas', '', cab('entregas', 'ENTREGAS'), els.enDir = h('span', 'lv3-dir', 'lendo...'));
+    els.entregas = h('div', 'lv3-lista'); en.b.append(h('div', 'lv3-sub lv3-sub-fila', h('span', '', 'MAIS PERTO DE SAIR'), fila), els.entregas); els.enB = en.b;
+    const se = bloco('semana', '', cab('semana', 'ESTA SEMANA'), els.seDir = h('span', 'lv3-dir', 'lendo...'));
+    els.semana = h('div', 'lv3-lista'); els.seDatas = h('div', 'lv3-sub', '...'); se.b.append(els.seDatas, els.semana); els.seB = se.b;
+    const co = bloco('contas', '', cab('contas', 'CONTAS'), els.coDir = h('span', 'lv3-dir', 'lendo...'));
+    els.contas = h('div', 'lv3-lista lv3-cns'); co.b.append(els.contas); els.coB = co.b;
+    const pj = bloco('projetos', '', cab('projetos', 'PROJETOS'), els.pjDir = h('span', 'lv3-dir', 'lendo...'));
     els.projetos = h('div', 'lv3-lista lv3-pjs'); pj.b.append(els.projetos); els.pjB = pj.b;
     pj.b.title = '1 LED = 1 item · verde no ar, rosa com você, roxo em obra, apagado na fila';
 
@@ -162,12 +186,16 @@
     const folga = Math.max(0, alt - 640);
     html.style.setProperty('--lv3-doca', Math.round(150 + Math.min(70, folga * 0.3)) + 'px');
     html.style.setProperty('--lv3-nucleo', Math.round(168 + Math.min(40, folga * 0.2)) + 'px');
-    html.style.setProperty('--lv3-anel', Math.round(156 + Math.min(40, folga * 0.2)) + 'px');
+    // o anel cresce com a altura, mas nunca passa de 34% da largura do centro (os medidores ao lado nao cortam o titulo)
+    const cen = els.anel && els.anel.parentElement ? els.anel.parentElement.getBoundingClientRect().width : 0, anelAlt = Math.round(156 + Math.min(40, folga * 0.2));
+    html.style.setProperty('--lv3-anel', (cen ? Math.min(anelAlt, Math.max(150, Math.round(cen * 0.34))) : anelAlt) + 'px');
     html.style.setProperty('--lv3-ideias', Math.round(112 + Math.min(30, folga * 0.15)) + 'px');
+    html.style.setProperty('--lv3-auto', Math.round(122 + Math.min(24, folga * 0.1)) + 'px');
     // o que a pagina ainda rolar (o placar embaixo e a margem da casca do painel) sai da altura, 1 vez por medida
     const sobra = doc.documentElement.scrollHeight - root.innerHeight;
     if (sobra > 0) html.style.setProperty('--lv3-h', Math.max(560, alt - sobra) + 'px');
     if (els.conv) els.conv.scrollTop = els.conv.scrollHeight;
+    if (S.prontoChave) { S.prontoChave = null; pintarPronto(); } // a largura mudou: as tags cabem de novo
   }
 
   // ---------- pintura ----------
@@ -242,25 +270,88 @@
     g.n.textContent = b.erro ? b.erro : val(b.nota) + ' · lido ' + (Number.isFinite(b.lidoHaS) ? 'há ' + b.lidoHaS + ' s' : SEM);
     els.ajudLed.className = 'lv3-led ' + (b.erro ? 'is-erro' : Number.isFinite(b.lidoHaS) && b.lidoHaS < 180 ? 'is-vivo' : '');
   }
+  // AUTOMACAO AO VIVO: ultima transacao (lado, hora, demora, resultado), as de hoje, vendas e o que ela mede agora
+  function pintarAutomacao() {
+    const d = dado(), b = d ? d.automacao || null : null, t = (b && b.ultimaTx) || {}, v = els.au;
+    const poe = (el, x, cor) => { const s = val(x); if (el.textContent !== s) el.textContent = s; el.className = s === SEM ? 'is-q' : cor && s !== 'none' ? 'is-c' : ''; };
+    poe(v.lado, b ? t.lado : null, true); poe(v.hora, b && Number.isFinite(t.ms) ? hora(t.ms) : null); poe(v.demora, b ? t.demora : null); poe(v.resultado, b ? t.resultado : null);
+    poe(v.tx, b && Number.isFinite(b.txHoje) ? b.txHoje : null, true);
+    v.vendas.textContent = 'vendas: ' + val(b ? b.vendasHoje : null);
+    v.mede.textContent = b ? (b.erro || val(b.mede)) : S.dados && S.dados.fechado ? 'só no exemplo' : SEM;
+    els.auB.classList.toggle('is-erro', !!S.erroDados || !!(b && b.erro));
+    S.autoLido = b && !b.erro && Number.isFinite(b.lidoHaS) ? { s: b.lidoHaS, em: Date.now() } : null;
+    pintarIdadeAuto();
+  }
+  function pintarIdadeAuto() {
+    const L = S.autoLido, s = L ? L.s + (Date.now() - L.em) / 1000 : NaN, txt = haSeg(s), d = dado(), b = d ? d.automacao : null;
+    if (els.auDir.textContent !== txt) els.auDir.textContent = txt;
+    const led = 'lv3-led' + (b && b.erro ? ' is-erro' : Number.isFinite(s) && s < 180 ? ' is-vivo' : '');
+    if (els.auLed.className !== led) els.auLed.className = led;
+  }
+  // PRONTO HOJE: as tags no topo; o que nao cabe na linha vira "+N" e a lista inteira fica no balao
+  function pintarPronto() {
+    const d = dado(), p = d ? d.prontoHoje || { itens: [] } : null;
+    const itens = p && !p.erro && Array.isArray(p.itens) ? p.itens : [];
+    els.prontoN.textContent = !p || p.erro ? SEM : String(itens.length);
+    const chave = JSON.stringify([itens, p ? p.erro || p.nota || '' : S.dados && S.dados.fechado ? 'fechado' : SEM]);
+    if (chave === S.prontoChave) return;
+    S.prontoChave = chave;
+    els.pronto.title = itens.length ? itens.map(x => '✓ ' + x).join('\n') : '';
+    if (!itens.length) { els.prontoTags.replaceChildren(h('span', 'lv3-pronto-v', !p ? (S.dados && S.dados.fechado ? 'só no exemplo' : SEM) : p.erro ? p.erro : p.nota || 'none')); return; }
+    const chips = itens.map(x => { const c = h('span', 'lv3-chip', '✓ ' + x); c.title = x; return c; }), mais = h('span', 'lv3-chip is-mais', '');
+    mais.hidden = true; els.prontoTags.replaceChildren(...chips, mais);
+    if (!ativa()) { S.prontoChave = null; return; } // escondida nao mede: mede de novo quando a V3 aparecer
+    const fim = () => els.prontoTags.getBoundingClientRect().right + 1;
+    if (chips[chips.length - 1].getBoundingClientRect().right <= fim()) return;
+    mais.hidden = false;
+    for (let n = 1; n <= chips.length; n++) {
+      chips[chips.length - n].hidden = true; mais.textContent = '+' + n; mais.title = itens.slice(itens.length - n).join('\n');
+      if (mais.getBoundingClientRect().right <= fim()) break;
+    }
+  }
+  // cabecalho de cada bloco da doca: LED da leitura (verde lida, cinza sem leitura, vermelho falhou), quantos e a idade do dado
+  function cabeca(nome, estado, n) {
+    const led = 'lv3-led' + (estado === 'ok' ? ' is-ok' : estado === 'erro' ? ' is-erro' : ''), b = els['n_' + nome];
+    if (els['led_' + nome].className !== led) els['led_' + nome].className = led;
+    const s = n === null || n === undefined ? '' : String(n); if (b.textContent !== s) b.textContent = s;
+  }
+  function idade(nome, ms, titulo, velho) { S.idade[nome] = Number.isFinite(ms) ? { ms, titulo, velho: !!velho } : { txt: SEM }; }
+  function pintarIdades() {
+    for (const [nome, el] of [['frentes', els.frDir], ['entregas', els.enDir], ['semana', els.seDir], ['contas', els.coDir], ['projetos', els.pjDir]]) {
+      const x = S.idade[nome] || { txt: SEM }, txt = x.txt || haCurto(x.ms);
+      if (el.textContent !== txt) { el.textContent = txt; el.title = x.txt ? '' : (x.titulo || 'Idade do dado') + ': ' + hora(x.ms); }
+      el.classList.toggle('is-velho', !!x.velho);
+    }
+    pintarIdadeAuto();
+  }
+  function linhaFrente(x) {
+    const pct = Number.isFinite(x.pct) ? Math.max(0, Math.min(100, x.pct)) : null, barra = h('span', 'lv3-barra', h('i', ''));
+    barra.querySelector('i').style.width = (pct === null ? 0 : pct) + '%';
+    const r = h('div', 'lv3-fr' + (x.atencao ? ' is-atencao' : ''), h('span', 'nm', val(x.nome)), h('span', 'pc', pct === null ? SEM : pct + '%'), barra, h('span', 'ft', val(x.faltam)));
+    r.title = x.nomeInteiro || x.nome || ''; return r;
+  }
   function pintarDoca() {
-    // FRENTES
+    // FRENTES: o nome inteiro em ate 2 linhas; quantas, LED e a idade do dado no cabecalho
+    const d = dado(), f = d ? d.frentes || { itens: [] } : null, itens = f ? f.itens : [];
+    if (!f) { cabeca('frentes', S.erroDados ? 'erro' : '', null); idade('frentes', NaN); }
+    else { cabeca('frentes', f.erro ? 'erro' : 'ok', f.erro ? null : itens.length); if (f.erro) S.idade.frentes = { txt: f.erro }; else idade('frentes', Number.isFinite(f.dadoHaMin) ? (S.lidoEm || Date.now()) - f.dadoHaMin * 60000 : NaN, 'Idade do dado', f.dadoHaMin > 120); }
     if (!semDado(els.frentes, els.frB)) {
-      const f = S.dados.frentes || { itens: [] };
       els.frB.classList.toggle('is-erro', !!f.erro);
-      els.frDir.textContent = f.erro ? f.erro : 'dado ' + (Number.isFinite(f.dadoHaMin) ? 'de há ' + f.dadoHaMin + ' min' : SEM);
-      const itens = f.itens;
-      els.frentes.replaceChildren(...(itens.length ? itens.map(x => { const r = h('div', 'lv3-fr' + (x.atencao ? ' is-atencao' : ''), h('span', 'nm', val(x.nome)), h('span', 'pc', Number.isFinite(x.pct) ? x.pct + '%' : SEM), h('span', 'lv3-barra', h('i', '')), h('span', 'ft', val(x.faltam))); r.title = x.nomeInteiro || x.nome || ''; r.querySelector('.lv3-barra i').style.width = (Number.isFinite(x.pct) ? x.pct : 0) + '%'; return r; }) : [vazio(f.erro ? 'Leitura falhou: ' + f.erro : 'Nenhuma frente aberta.', f.erro ? null : 'none')]));
-    } else els.frDir.textContent = SEM;
-    // PRONTO HOJE: no medidor do centro; a lista do dia fica no balao do medidor
-    const d = dado(), p = d ? d.prontoHoje || { itens: [] } : null, g = els.gPronto;
+      els.frentes.replaceChildren(...(itens.length ? itens.map(linhaFrente) : [vazio(f.erro ? 'Leitura falhou: ' + f.erro : 'Nenhuma frente aberta.', f.erro ? null : 'none')]));
+    }
+    // PRONTO HOJE: as tags no topo e o medidor do centro (a lista do dia fica no balao dos dois)
+    pintarPronto();
+    const p = d ? d.prontoHoje || { itens: [] } : null, g = els.gPronto;
     if (!p) { g.v.textContent = SEM; g.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; g.g.title = ''; }
     else { g.v.textContent = p.erro ? SEM : String(p.itens.length); g.n.textContent = p.erro ? p.erro : p.itens.length ? 'entregas fechadas hoje' : (p.nota || 'none'); g.g.title = p.itens.join('\n'); }
-    pintarEntregas(); pintarProjetos();
+    pintarEntregas(); pintarProjetos(); pintarIdades();
   }
   // ENTREGAS: as mais perto de sair e a primeira que espera voce
   function pintarEntregas() {
+    const d = dado(), e = d && d.doca ? d.doca.entregas : null;
+    cabeca('entregas', !d ? (S.erroDados ? 'erro' : '') : e && e.lido ? 'ok' : 'erro', e && e.lido && Number.isFinite(e.abertas) ? e.abertas : null);
+    if (e && e.lido) idade('entregas', Number.isFinite(e.atualizadoMs) ? e.atualizadoMs : S.lidoEm, 'Idade do dado', e.velho); else idade('entregas', NaN);
     if (semDado(els.entregas, els.enB)) return;
-    const e = S.dados.doca && S.dados.doca.entregas;
     els.enB.classList.toggle('is-erro', !!(e && !e.lido));
     if (!e || !e.lido) { els.entregas.replaceChildren(vazio('Entregas sem leitura.')); return; }
     els.entregas.replaceChildren(...(e.itens.length ? e.itens.map(x => {
@@ -272,11 +363,12 @@
   }
   // PROJETOS: painel de LED da Agora de sempre em miniatura (1 LED = 1 item, a mesma regra de cor)
   function pintarProjetos() {
-    if (semDado(els.projetos, els.pjB)) { els.pjDir.textContent = SEM; return; }
-    const p = S.dados.doca && S.dados.doca.projetos;
+    const d = dado(), p = d && d.doca ? d.doca.projetos : null;
+    cabeca('projetos', !d ? (S.erroDados ? 'erro' : '') : p && p.lido ? 'ok' : 'erro', p && p.lido ? p.itens.length : null);
+    if (p && p.lido) idade('projetos', S.lidoEm, 'Lido pelo painel'); else idade('projetos', NaN);
+    if (semDado(els.projetos, els.pjB)) return;
     els.pjB.classList.toggle('is-erro', !!(p && !p.lido));
-    if (!p || !p.lido) { els.pjDir.textContent = SEM; els.projetos.replaceChildren(vazio('Projetos sem leitura.')); return; }
-    els.pjDir.textContent = p.itens.length ? 'no ar' : 'none';
+    if (!p || !p.lido) { els.projetos.replaceChildren(vazio('Projetos sem leitura.')); return; }
     els.projetos.replaceChildren(...(p.itens.length ? p.itens.map(x => {
       const g = h('div', 'lv3-leds');
       if (x.leds) for (const c of x.leds.slice(0, 48)) g.append(h('i', 'is-' + c));
@@ -285,21 +377,52 @@
     }) : [vazio('Nenhum projeto na lista.', 'none')]));
   }
   function pintarSemana() {
-    if (semDado(els.semana, els.seB)) { els.seDir.textContent = SEM; return; }
-    const sem = S.dados.semana;
-    if (!sem || sem.erro) { els.seDir.textContent = SEM; els.semana.replaceChildren(vazio(sem && sem.erro ? 'Leitura falhou: ' + sem.erro : 'Semana sem leitura.')); return; }
-    els.seDir.textContent = val(sem.datas);
-    const itens = Array.isArray(sem.itens) ? sem.itens : [];
+    const d = dado(), sem = d ? d.semana : null, itens = sem && Array.isArray(sem.itens) ? sem.itens : [];
+    const ok = !!(sem && !sem.erro);
+    cabeca('semana', !d ? (S.erroDados ? 'erro' : '') : ok ? 'ok' : 'erro', ok ? itens.filter(x => /pronto/.test(String(x && x.estado || ''))).length + '/' + itens.length : null);
+    if (ok) idade('semana', Number.isFinite(sem.atualizadoMs) ? sem.atualizadoMs : S.lidoEm, 'Idade do dado'); else idade('semana', NaN);
+    pintarIdades();
+    if (semDado(els.semana, els.seB)) { els.seDatas.textContent = SEM; return; }
+    if (!ok) { els.seDatas.textContent = SEM; els.semana.replaceChildren(vazio(sem && sem.erro ? 'Leitura falhou: ' + sem.erro : 'Semana sem leitura.')); return; }
+    els.seDatas.textContent = val(sem.datas);
     els.semana.replaceChildren(...(itens.length ? itens.map(x => { const st = String(x && x.estado || ''); const r = h('div', 'lv3-sm', h('i', /pronto/.test(st) ? 'is-pronto' : /anda|fazendo|obra/.test(st) ? 'is-anda' : ''), h('span', '', val(x && x.texto))); r.title = (x && x.texto) || ''; return r; }) : [vazio('Nada na semana.', 'none')]));
   }
+  // CONTAS: Claude A a D pela regra da troca de conta (a ultima leitura vale ate o reset da semana; passou do reset, a conta que
+  // nao e a atual zerou e a atual fica sem leitura; a atual com leitura de mais de 2 h fica sem leitura com a idade), Codex e pesquisa
+  function contaClaude(x, agora) {
+    const lido = x.lidoMs, zera = x.zeraMs, passou = Number.isFinite(zera) && zera <= agora;
+    const titulo = 'Conta ' + x.conta + (x.atual ? ', a atual' : '') + ': leitura ' + haCurto(lido) + (Number.isFinite(zera) ? ' · reset da semana ' + (passou ? 'já passou' : emCurto(zera)) : '');
+    if (!Number.isFinite(lido)) return { pct: null, idade: SEM, titulo };
+    if (passou) return { pct: x.atual ? null : 0, idade: 'zerou', titulo };
+    if (x.atual && agora - lido > DUAS_HORAS) return { pct: null, idade: haCurto(lido), titulo };
+    return { pct: Number.isFinite(x.semana) ? x.semana : null, idade: haCurto(lido), titulo };
+  }
   function pintarContas() {
-    const fora = semDado(els.contas, els.coB), c = fora ? null : S.dados.contas, lista = c && Array.isArray(c.itens) ? c.itens : null;
-    if (!lista || !lista.length) { els.coDir.textContent = SEM; if (!fora) els.contas.replaceChildren(vazio('Contas sem leitura.')); els.gConta.v.textContent = SEM; els.gConta.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; return; }
-    els.coDir.textContent = 'semana';
-    els.contas.replaceChildren(...lista.map(x => { const p = Number.isFinite(x.semana) ? x.semana : null; const r = h('div', 'lv3-cn' + (x.atual ? ' is-atual' : '') + (p !== null && p >= 80 ? ' is-alto' : ''), h('span', '', val(x.conta)), h('span', 'lv3-barra', h('i', '')), h('b', '', p === null ? SEM : p + '%')); r.querySelector('.lv3-barra i').style.width = (p || 0) + '%'; return r; }));
-    const atual = lista.find(x => x.atual);
-    els.gConta.v.textContent = atual ? atual.conta + ' ' + (Number.isFinite(atual.semana) ? atual.semana + '%' : SEM) : SEM;
-    els.gConta.n.textContent = 'próxima: ' + val(c.proxima);
+    const agora = Date.now(), d = dado(), c = d ? d.contas : null, lista = c && Array.isArray(c.contas) ? c.contas : null;
+    const g = els.gConta;
+    if (semDado(els.contas, els.coB)) { cabeca('contas', S.erroDados ? 'erro' : '', null); idade('contas', NaN); g.v.textContent = SEM; g.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; return; }
+    const base = lista && lista.length ? lista : ['A', 'B', 'C', 'D'].map(conta => ({ conta, lidoMs: null }));
+    const linhas = base.map(x => { const r = contaClaude(x, agora); return { k: x.conta, cls: (x.atual ? 'is-atual' : '') + (r.pct !== null && r.pct >= 80 ? ' is-alto' : ''), pct: r.pct, v: r.pct === null ? SEM : r.pct + '%', id: r.idade, t: r.titulo }; });
+    const cx = d.codex || null, cl = cx ? cx.lidoMs : NaN, cz = cx ? cx.zeraMs : NaN, cPassou = Number.isFinite(cz) && cz <= agora;
+    const cxPct = !cx || !Number.isFinite(cl) || cPassou || agora - cl > DUAS_HORAS || !Number.isFinite(cx.semana) ? null : cx.semana;
+    linhas.push({ k: 'CODEX', cls: 'is-cx' + (cxPct !== null && cxPct >= 80 ? ' is-alto' : ''), pct: cxPct, v: cxPct === null ? SEM : cxPct + '%', id: !cx || !Number.isFinite(cl) ? SEM : cPassou ? 'zerou' : haCurto(cl), t: 'Codex, uso da semana: leitura ' + haCurto(cl) });
+    const pq = d.pesquisa || null;
+    if (pq) linhas.push({ k: 'PESQUISA', cls: 'is-pq', md: pq.agora ? 'pesquisando agora' : 'semana ' + val(pq.semana), v: val(pq.hoje) + ' hoje', id: haCurto(pq.lidoMs), t: 'Pesquisas do exemplo: hoje e na semana' });
+    else linhas.push({ k: 'PESQUISA', cls: 'is-pq', md: SEM, v: SEM, id: SEM, t: 'Pesquisa sem leitura' });
+    const lidos = base.map(x => x.lidoMs).filter(Number.isFinite), atual = base.find(x => x.atual);
+    cabeca('contas', !lista || !lista.length || (c && c.erro) ? 'erro' : 'ok', null);
+    if (lidos.length) idade('contas', Math.max(...lidos), 'Leitura de uso mais nova'); else idade('contas', NaN);
+    const ra = atual ? contaClaude(atual, agora) : null;
+    g.v.textContent = atual ? atual.conta + ' ' + (ra.pct === null ? SEM : ra.pct + '%') : SEM;
+    g.n.textContent = 'próxima: ' + val(c && c.proxima);
+    els.coB.classList.toggle('is-erro', !lista || !lista.length || !!(c && c.erro));
+    els.contas.replaceChildren(...linhas.map(x => {
+      let meio;
+      if (x.md !== undefined) meio = h('span', 'md', x.md);
+      else { meio = h('span', 'lv3-barra', h('i', '')); meio.querySelector('i').style.width = (x.pct === null ? 0 : x.pct) + '%'; }
+      const r = h('div', 'lv3-cn ' + x.cls, h('span', 'k', x.k), meio, h('b', '', x.v), h('span', 'id', x.id)); r.title = x.t; return r;
+    }));
+    pintarIdades();
   }
   function pintarIdeias() {
     const d = dado(), ide = d ? d.ideias : null, lista = ide && Array.isArray(ide.itens) ? ide.itens : null;
@@ -359,10 +482,17 @@
   // ---------- leitura ----------
   async function lerDados() {
     if (!ativa()) return;
-    try { S.dados = await getJSON(API); S.erroDados = false; } catch { S.erroDados = true; }
+    S.proximo = Date.now() + RITMO_MS;
+    try { S.dados = await getJSON(API); S.erroDados = false; S.lidoEm = Date.now(); } catch { S.erroDados = true; }
     // fora do exemplo esta tela nao toma a Agora: na 1a leitura fechada abre em "Agora de antes" (o botao volta a V3)
     if (S.primeira && !S.erroDados) { S.primeira = false; if (S.dados && S.dados.fechado && html.dataset.lv3 !== 'antes') { html.dataset.lv3 = 'antes'; pintarTroca(); } }
-    pintarTopo(); pintarVoce(); pintarFeed(); pintarAjudantes(); pintarDoca(); pintarSemana(); pintarContas(); pintarIdeias(); pintarConversa();
+    pintarTopo(); pintarVoce(); pintarFeed(); pintarAutomacao(); pintarAjudantes(); pintarDoca(); pintarSemana(); pintarContas(); pintarIdeias(); pintarConversa();
+  }
+  // 1 temporizador so: a cada 5 s le o que venceu (a leitura vale 30 s) e atualiza as idades; com a aba escondida ou fora da V3 nao faz nada
+  function laco() {
+    if (doc.hidden || !ativa()) return;
+    if (Date.now() >= S.proximo) lerDados();
+    else { pintarTopo(); pintarIdades(); }
   }
 
   function iniciar() {
@@ -376,10 +506,10 @@
     // a barra de cima, o menu das vistas, o placar e a caixa de baixo mudam de altura quando pintam: a V3 mede de novo so nessas horas
     if (root.ResizeObserver) { const ro = new ResizeObserver(() => { clearTimeout(t); t = setTimeout(medir, 60); }); S.ro = ro; for (const id of ['g-bar', 'g-subnav', 'g-dock', 'lv-placar']) { const n = doc.getElementById(id); if (n) { ro.observe(n); if (id === 'lv-placar') S.roPlacar = true; } } }
     olhar();
-    setInterval(lerDados, 30000);
-    setInterval(() => { if (ativa()) pintarTopo(); }, 10000);
+    setInterval(laco, 5000);
+    doc.addEventListener('visibilitychange', () => { if (!doc.hidden) laco(); }); // a aba voltou: le na hora o que venceu escondido
     return true;
   }
-  function esperar() { if (iniciar()) return; let n = 0; const t = setInterval(() => { if (iniciar() || ++n > 80) clearInterval(t); }, 250); }
-  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', esperar, { once: true }); else esperar();
+  function esperar(n) { if (iniciar() || n > 80) return; setTimeout(() => esperar(n + 1), 250); }
+  if (doc.readyState === 'loading') doc.addEventListener('DOMContentLoaded', () => esperar(0), { once: true }); else esperar(0);
 })(window);

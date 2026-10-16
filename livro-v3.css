@@ -1,8 +1,10 @@
 /* livro-v3.css: a tela Agora do tema LIVRO DE ORDENS no desenho V3. Anel FALAR no centro com a conversa (Claude, ideias
-   e recado por sessao); em volta VOCE RESOLVE, idealistas, ajudantes, feed do Claude e o Codex; embaixo a doca
+   e recado por sessao); em volta VOCE RESOLVE, ideias, ajudantes, feed do Claude, automacao ao vivo e o Codex; embaixo a doca
    (frentes, entregas, esta semana, contas, projetos) e, embaixo dela, o placar do dia do LIVRO em versao baixa. Cores, fontes e movimento do LIVRO: as variaveis do theme-livro.css, Inter e
    JetBrains Mono, blocos com borda fina e canto de 8 px, LED redondo que respira, FILL verde de 300 ms. So existe no LIVRO.
-   Tudo tem tamanho fixo pela altura da janela (--lv3-h): lista longa rola dentro do bloco, nenhum bloco cresce sozinho. */
+   Tudo tem tamanho fixo pela altura da janela (--lv3-h): lista longa rola dentro do bloco, nenhum bloco cresce sozinho.
+   Agora: AUTOMACAO AO VIVO na coluna da direita, tags de PRONTO HOJE no topo, CONTAS em 6 linhas com idade, doca com LED,
+   quantos e idade, nomes das FRENTES em 2 linhas, abas com a cor de cada IA; o anel gira em camadas (so o compositor anda). */
 html:not([data-theme=livro]) #lv3{display:none!important}
 html:not([data-theme=livro]) #lv3-troca{display:none!important}
 html[data-theme=livro]:not([data-g-new=agora]) #lv3,html[data-theme=livro][data-lv3=antes] #lv3{display:none!important}
@@ -37,7 +39,12 @@ html[data-theme=livro] #lv3 .lv3-cont{display:inline-flex;align-items:baseline;g
 html[data-theme=livro] #lv3 .lv3-cont b{font:500 18px/1 var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx);display:inline-block}
 html[data-theme=livro] #lv3 .lv3-cont.is-seus b{color:var(--g-rosa)}
 html[data-theme=livro] #lv3 .lv3-cont b.is-tick{animation:lv-tick .3s ease-out both}
-html[data-theme=livro] #lv3 .lv3-lido{font:400 13px/1 var(--g-pix);color:var(--g-tx3);overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-pronto{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:10px;height:28px;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-pronto-rot{flex:none;display:inline-flex;align-items:center;gap:6px;font:500 12px/1 var(--g-pix);letter-spacing:.06em;color:var(--g-tx2)}
+html[data-theme=livro] #lv3 .lv3-pronto-rot b{font:500 16px/1 var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-anda)}
+html[data-theme=livro] #lv3 .lv3-pronto-tags{flex:1 1 0;min-width:0;display:flex;align-items:center;gap:6px;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-pronto-v{font:400 12px/1 var(--g-sans);color:var(--g-tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-lido{flex:none;font:400 13px/1 var(--g-pix);color:var(--g-tx3);overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-lido.is-erro{color:#EF4444}
 html[data-theme=livro] #lv3 .lv3-topo .lv3-acoes{margin-left:auto;display:flex;gap:8px}
 html[data-theme=livro] #lv3 a.g-btn,html[data-theme=livro] #lv3 button.g-btn{height:26px;padding:0 12px;border-radius:6px;font:600 12px/1 var(--g-sans);text-decoration:none}
@@ -47,7 +54,7 @@ html[data-theme=livro] #lv3 .lv3-meio{display:grid;grid-template-columns:minmax(
 html[data-theme=livro] #lv3 .lv3-col{display:grid;gap:12px;min-height:0;min-width:0}
 html[data-theme=livro] #lv3 .lv3-col.is-esq{grid-template-rows:minmax(0,1fr) var(--lv3-ideias,112px)}
 html[data-theme=livro] #lv3 .lv3-col.is-cen{grid-template-rows:var(--lv3-nucleo,172px) minmax(0,1fr)}
-html[data-theme=livro] #lv3 .lv3-col.is-dir{grid-template-rows:minmax(0,1fr) 76px}
+html[data-theme=livro] #lv3 .lv3-col.is-dir{grid-template-rows:minmax(0,1fr) var(--lv3-auto,122px) 30px}
 
 /* bloco do livro: fundo s1, borda fina, canto de 8 px; leitura falhou = borda vermelha */
 html[data-theme=livro] #lv3 .lv3-bloco{display:flex;flex-direction:column;min-height:0;min-width:0;overflow:hidden;background:var(--g-s1);box-shadow:inset 0 0 0 1px var(--g-line);border-radius:8px;padding:10px 14px}
@@ -60,6 +67,8 @@ html[data-theme=livro] #lv3 .lv3-led{flex:none;width:6px;height:6px;border-radiu
 html[data-theme=livro] #lv3 .lv3-led.is-vivo{background:var(--g-anda);animation:lv-respira 1.8s ease-in-out infinite}
 html[data-theme=livro] #lv3 .lv3-led.is-rosa{background:var(--g-rosa);animation:lv-respira 1.8s ease-in-out infinite}
 html[data-theme=livro] #lv3 .lv3-led.is-erro{background:#EF4444}
+html[data-theme=livro] #lv3 .lv3-led.is-ok{background:var(--g-anda)}
+html[data-theme=livro] #lv3 .lv3-sec .lv3-dir.is-velho{color:var(--g-trava)}
 html[data-theme=livro] #lv3 .lv3-lista{flex:1;min-height:0;overflow-y:auto;overflow-x:hidden;scrollbar-width:thin;scrollbar-color:#2E2E35 transparent;margin:0 -6px 0 0;padding:0 6px 0 0}
 html[data-theme=livro] #lv3 .lv3-vazio{margin:2px 0;font:400 13px/1.4 var(--g-sans);color:var(--g-tx3)}
 html[data-theme=livro] #lv3 .lv3-vazio b{font:500 13px/1 var(--g-pix);color:var(--g-tx2);margin-right:6px}
@@ -100,14 +109,19 @@ html[data-theme=livro] #lv3 .lv3-anel{all:unset;cursor:pointer;position:relative
 html[data-theme=livro] #lv3 .lv3-anel:focus-visible{outline:1px solid var(--g-tx);outline-offset:4px}
 html[data-theme=livro] #lv3 .lv3-anel svg{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
 html[data-theme=livro] #lv3 .lv3-anel .a-trilho{fill:none;stroke:var(--g-line);stroke-width:1}
-html[data-theme=livro] #lv3 .lv3-anel .a-arco{fill:none;stroke:var(--g-rosa);stroke-width:2;stroke-linecap:round;stroke-dasharray:70 340;transform-origin:100px 100px;animation:lv3-gira 9s linear infinite}
-html[data-theme=livro] #lv3 .lv3-anel .a-arco2{fill:none;stroke:var(--g-tx3);stroke-width:1;stroke-dasharray:2 6;transform-origin:100px 100px;animation:lv3-gira 24s linear infinite reverse}
+html[data-theme=livro] #lv3 .lv3-anel .a-arco{fill:none;stroke:var(--g-rosa);stroke-width:2;stroke-linecap:round;stroke-dasharray:70 340}
+html[data-theme=livro] #lv3 .lv3-anel .a-arco2{fill:none;stroke:var(--g-tx3);stroke-width:1;stroke-dasharray:2 6}
 html[data-theme=livro] #lv3 .lv3-anel .a-miolo{fill:color-mix(in srgb,var(--g-rosa) 6%,var(--g-bg));stroke:#2E2E35;stroke-width:1;transition:fill .3s ease,stroke .3s ease}
-html[data-theme=livro] #lv3 .lv3-anel .a-led{fill:#2E2E35;animation:lv3-varre 3.6s ease-in-out infinite}
+html[data-theme=livro] #lv3 .lv3-anel .a-led{fill:#2E2E35}
+html[data-theme=livro] #lv3 .lv3-anel .a-led-on{fill:var(--g-rosa)}
+html[data-theme=livro] #lv3 .lv3-anel .a-camada{position:absolute;inset:0;display:block;pointer-events:none;will-change:transform}
+html[data-theme=livro] #lv3 .lv3-anel .a-gira1{animation:lv3-gira 9s linear infinite}
+html[data-theme=livro] #lv3 .lv3-anel .a-gira2{animation:lv3-gira 24s linear infinite reverse}
+html[data-theme=livro] #lv3 .lv3-anel .a-varre{animation:lv3-gira 3.6s steps(36) infinite}
 html[data-theme=livro] #lv3 .lv3-anel:hover .a-miolo{stroke:var(--g-rosa)}
-html[data-theme=livro] #lv3 .lv3-anel[data-estado=ouvindo] .a-led{fill:var(--g-rosa);animation:lv-respira .9s ease-in-out infinite}
+html[data-theme=livro] #lv3 .lv3-anel[data-estado=ouvindo] .a-led{fill:color-mix(in srgb,var(--g-rosa) 55%,#2E2E35)}
 html[data-theme=livro] #lv3 .lv3-anel[data-estado=ouvindo] .a-miolo{fill:color-mix(in srgb,var(--g-rosa) 22%,var(--g-bg));stroke:var(--g-rosa)}
-html[data-theme=livro] #lv3 .lv3-anel[data-estado=enviando] .a-led,html[data-theme=livro] #lv3 .lv3-anel[data-estado=revisando] .a-led{fill:var(--g-claude)}
+html[data-theme=livro] #lv3 .lv3-anel[data-estado=enviando] .a-led,html[data-theme=livro] #lv3 .lv3-anel[data-estado=revisando] .a-led,html[data-theme=livro] #lv3 .lv3-anel[data-estado=enviando] .a-led-on,html[data-theme=livro] #lv3 .lv3-anel[data-estado=revisando] .a-led-on{fill:var(--g-claude)}
 html[data-theme=livro] #lv3 .lv3-anel[data-estado=erro] .a-miolo{stroke:var(--g-trava)}
 html[data-theme=livro] #lv3 .lv3-falar{position:relative;z-index:1;display:grid;justify-items:center;gap:4px;pointer-events:none;text-align:center}
 html[data-theme=livro] #lv3 .lv3-falar b{font:600 16px/1 var(--g-pix);letter-spacing:.24em;margin-right:-.24em;color:var(--g-tx)}
@@ -122,8 +136,9 @@ html[data-theme=livro] #lv3 .lv3-gg{min-width:0;min-height:0;overflow:hidden;bor
 html[data-theme=livro] #lv3 .lv3-gg>span{display:flex;align-items:center;gap:6px;font:500 11px/1 var(--g-pix);letter-spacing:.04em;color:var(--g-tx3);white-space:nowrap;overflow:hidden}
 html[data-theme=livro] #lv3 .lv3-gg>b{font:500 17px/1 var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-gg>small{font:400 11px/1.2 var(--g-sans);color:var(--g-tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-html[data-theme=livro] #lv3 .lv3-gg.is-ajud{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-anda)}
+/* a nota do AJUDANTES quebra em 2 linhas em vez de cortar o "lido ha" */
 html[data-theme=livro] #lv3 .lv3-gg.is-ajud>small{white-space:normal;display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical}
+html[data-theme=livro] #lv3 .lv3-gg.is-ajud{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-anda)}
 html[data-theme=livro] #lv3 .lv3-gg.is-ideia{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 #C084FC}
 
 /* ---------- CONVERSA: Claude, ideias e recado por sessao ---------- */
@@ -137,11 +152,12 @@ html[data-theme=livro] #lv3 .lv3-ms.is-entra{animation:lv3-entra .3s ease-out bo
 html[data-theme=livro] #lv3 .lv3-ms .lv3-st{display:block;margin-top:2px;font:400 11px/1.3 var(--g-sans);color:var(--g-tx3)}
 html[data-theme=livro] #lv3 .lv3-ms .lv3-st.is-espera{color:var(--g-trava)}
 html[data-theme=livro] #lv3 .lv3-tabs{display:flex;gap:4px;flex:none;margin:8px 0 6px;overflow:hidden}
-html[data-theme=livro] #lv3 .lv3-tab{all:unset;cursor:pointer;flex:1 1 auto;min-width:0;height:24px;padding:0 6px;display:grid;place-items:center;border-radius:6px;font:500 11px/1 var(--g-pix);letter-spacing:.03em;color:var(--g-tx2);box-shadow:inset 0 0 0 1px var(--g-line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-html[data-theme=livro] #lv3 .lv3-tab:hover{color:var(--g-tx)}
-html[data-theme=livro] #lv3 .lv3-tab[aria-selected=true]{color:var(--g-bg);background:var(--g-tx);box-shadow:none}
-html[data-theme=livro] #lv3 .lv3-tab.is-id[aria-selected=true]{background:#C084FC}
-html[data-theme=livro] #lv3 .lv3-tab[disabled]{cursor:default;color:var(--g-tx3);box-shadow:inset 0 0 0 1px var(--g-line);background:transparent;opacity:.7}
+/* cada aba com a cor de quem responde (--ia): Claude, as ideias e as sessoes */
+html[data-theme=livro] #lv3 .lv3-tab{--ia:var(--g-claude);all:unset;cursor:pointer;flex:1 1 auto;min-width:0;height:24px;padding:0 6px;display:grid;place-items:center;border-radius:6px;font:500 11px/1 var(--g-pix);letter-spacing:.03em;color:var(--ia);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ia) 40%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-tab.is-id{--ia:#C084FC}
+html[data-theme=livro] #lv3 .lv3-tab:hover{box-shadow:inset 0 0 0 1px var(--ia)}
+html[data-theme=livro] #lv3 .lv3-tab[aria-selected=true]{color:var(--g-bg);background:var(--ia);box-shadow:none}
+html[data-theme=livro] #lv3 .lv3-tab[disabled]{cursor:default;color:var(--ia);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ia) 40%,transparent);background:transparent;opacity:.55}
 html[data-theme=livro] #lv3 .lv3-tab:focus-visible{outline:1px solid var(--g-tx);outline-offset:1px}
 html[data-theme=livro] #lv3 .lv3-entrada{display:flex;gap:8px;flex:none;align-items:center}
 html[data-theme=livro] #lv3 .lv3-entrada input{flex:1;min-width:0;height:30px;border:0;border-radius:6px;box-shadow:inset 0 0 0 1px var(--g-line);background:var(--g-bg);color:var(--g-tx);font:400 13px var(--g-sans);padding:0 10px;outline:0}
@@ -159,16 +175,34 @@ html[data-theme=livro] #lv3 .lv3-fd .h{font:400 12px/18px var(--g-pix);color:var
 html[data-theme=livro] #lv3 .lv3-fd .w{font:500 11px/18px var(--g-pix);letter-spacing:.04em;color:var(--g-claude)}
 html[data-theme=livro] #lv3 .lv3-fd .w.is-outro{color:var(--g-rosa)}
 html[data-theme=livro] #lv3 .lv3-fd p{grid-column:2;margin:0;font:400 13px/1.4 var(--g-sans);color:var(--g-tx);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
-html[data-theme=livro] #lv3 .lv3-breve{border-radius:8px;padding:10px 14px;box-shadow:inset 0 0 0 1px var(--g-line);background:repeating-linear-gradient(135deg,transparent 0 8px,color-mix(in srgb,var(--g-codex) 4%,transparent) 8px 9px);display:grid;align-content:center;gap:6px;min-height:0;overflow:hidden}
-html[data-theme=livro] #lv3 .lv3-breve .lv3-sec{margin:0}
+/* AUTOMACAO AO VIVO: ultima transacao, as de hoje e o que ela mede agora */
+html[data-theme=livro] #lv3 .lv3-automacao{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-anda)}
+html[data-theme=livro] #lv3 .lv3-bt{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 84px;grid-template-rows:auto minmax(0,1fr);gap:6px 12px;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-tx{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);gap:4px 8px;align-items:baseline;align-content:start;min-width:0}
+html[data-theme=livro] #lv3 .lv3-tx span{font:500 10px/16px var(--g-pix);letter-spacing:.04em;color:var(--g-tx3);white-space:nowrap}
+html[data-theme=livro] #lv3 .lv3-tx b{min-width:0;font:500 12px/16px var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-bt b.is-c{color:var(--g-anda)}
+html[data-theme=livro] #lv3 .lv3-bt b.is-q{color:var(--g-trava)}
+html[data-theme=livro] #lv3 .lv3-dia{grid-column:2;grid-row:1 / span 2;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:4px;min-height:0;overflow:hidden;padding-left:12px;box-shadow:inset 1px 0 0 var(--g-line);font:500 10px/1 var(--g-pix);letter-spacing:.08em;color:var(--g-tx3);text-align:center}
+html[data-theme=livro] #lv3 .lv3-dia b{font:600 26px/1 var(--g-pix);font-variant-numeric:tabular-nums;color:var(--g-tx)}
+html[data-theme=livro] #lv3 .lv3-dia span+span{font:400 11px/1.2 var(--g-sans);letter-spacing:0;color:var(--g-tx2);white-space:nowrap}
+html[data-theme=livro] #lv3 .lv3-mede{grid-column:1;grid-row:2;align-self:start;margin:0;padding-top:6px;box-shadow:inset 0 1px 0 var(--g-line);font:400 12px/16px var(--g-sans);color:var(--g-tx);display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-mede i{font:500 10px/16px var(--g-pix);font-style:normal;letter-spacing:.08em;color:var(--g-tx3)}
+/* faixa do Codex: 1 linha no pe da coluna da direita */
+html[data-theme=livro] #lv3 .lv3-breve{border-radius:8px;padding:0 14px;box-shadow:inset 0 0 0 1px var(--g-line);background:repeating-linear-gradient(135deg,transparent 0 8px,color-mix(in srgb,var(--g-codex) 4%,transparent) 8px 9px);display:flex;align-items:center;min-height:0;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-breve .lv3-sec{margin:0;flex:1;min-width:0}
+html[data-theme=livro] #lv3 .lv3-breve .lv3-dir{flex:none}
+html[data-theme=livro] #lv3 .lv3-breve .lv3-breve-p{flex:0 1 auto;min-width:0;font:400 12px/1 var(--g-sans);letter-spacing:0;color:var(--g-tx3);overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-breve .lv3-tag{color:var(--g-codex);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--g-codex) 45%,transparent)}
 html[data-theme=livro] #lv3 .lv3-breve p{margin:0;font:400 12px/1.35 var(--g-sans);color:var(--g-tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 
 /* ---------- doca: frentes, entregas, esta semana, contas, projetos ---------- */
-html[data-theme=livro] #lv3 .lv3-doca{display:grid;grid-template-columns:minmax(0,1.3fr) minmax(0,1fr) minmax(0,.9fr) minmax(0,.8fr) minmax(0,.9fr);gap:12px;min-height:0}
+html[data-theme=livro] #lv3 .lv3-doca{display:grid;grid-template-columns:minmax(0,1.7fr) minmax(0,1.1fr) minmax(0,1fr) minmax(0,1.05fr) minmax(0,.85fr);gap:12px;min-height:0}
+html[data-theme=livro] #lv3 .lv3-sub-fila{display:flex;align-items:center;gap:8px}
+html[data-theme=livro] #lv3 a.lv3-fila{flex:none;margin-left:auto;font:400 12px/1 var(--g-sans);letter-spacing:0}
 html[data-theme=livro] #lv3 a.lv3-link{color:var(--g-tx2);text-decoration:none}
 html[data-theme=livro] #lv3 a.lv3-link:hover,html[data-theme=livro] #lv3 a.lv3-link:focus-visible{color:var(--g-tx)}
-html[data-theme=livro] #lv3 .lv3-sub{font:500 11px/1 var(--g-pix);letter-spacing:.06em;color:var(--g-tx3);margin:0 0 6px}
+html[data-theme=livro] #lv3 .lv3-sub{flex:none;font:500 11px/1 var(--g-pix);letter-spacing:.06em;color:var(--g-tx3);margin:0 0 6px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-en{display:grid;grid-template-columns:minmax(0,1fr) 40px;gap:2px 10px;align-items:center;margin:0 0 6px;font:400 13px/18px var(--g-sans)}
 html[data-theme=livro] #lv3 .lv3-en .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-en .pc{font:500 12px/1 var(--g-pix);text-align:right;color:var(--g-tx)}
@@ -186,32 +220,39 @@ html[data-theme=livro] #lv3 .lv3-leds i.is-ar{background:var(--g-anda)}
 html[data-theme=livro] #lv3 .lv3-leds i.is-vez{background:var(--g-rosa)}
 html[data-theme=livro] #lv3 .lv3-leds i.is-obra{background:var(--g-claude)}
 html[data-theme=livro] #lv3 .lv3-leds i.is-incerto{background:var(--g-tx3)}
-html[data-theme=livro] #lv3 .lv3-fr{display:grid;grid-template-columns:minmax(0,1fr) 40px 72px 64px;gap:10px;align-items:center;height:20px;font:400 13px/20px var(--g-sans)}
-html[data-theme=livro] #lv3 .lv3-fr .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-fr{display:grid;grid-template-columns:minmax(0,1fr) 34px 50px 64px;gap:8px;align-items:center;min-height:22px;padding:3px 0;border-top:1px solid color-mix(in srgb,var(--g-line) 70%,transparent);font:400 13px/16px var(--g-sans)}
+html[data-theme=livro] #lv3 .lv3-fr:first-child{border-top:0;padding-top:0}
+html[data-theme=livro] #lv3 .lv3-fr .nm{display:-webkit-box;-webkit-line-clamp:2;-webkit-box-orient:vertical;overflow:hidden;overflow-wrap:anywhere}
 html[data-theme=livro] #lv3 .lv3-fr .pc{font:500 12px/1 var(--g-pix);text-align:right;color:var(--g-tx)}
 html[data-theme=livro] #lv3 .lv3-fr .ft{font:400 12px/1 var(--g-pix);text-align:right;color:var(--g-tx3);white-space:nowrap;overflow:hidden}
 html[data-theme=livro] #lv3 .lv3-fr.is-atencao .ft{color:var(--g-trava)}
 html[data-theme=livro] #lv3 .lv3-barra{height:4px;border-radius:2px;background:var(--g-line);overflow:hidden}
 html[data-theme=livro] #lv3 .lv3-barra i{display:block;height:100%;border-radius:2px;background:var(--g-anda)}
 html[data-theme=livro] #lv3 .lv3-fr.is-atencao .lv3-barra i{background:var(--g-trava)}
-html[data-theme=livro] #lv3 .lv3-chips{display:flex;flex-wrap:wrap;gap:6px;align-content:flex-start}
-html[data-theme=livro] #lv3 .lv3-chip{max-width:100%;font:400 12px/1 var(--g-sans);color:var(--g-tx);padding:5px 8px;border-radius:6px;box-shadow:inset 0 0 0 1px var(--g-line);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
-html[data-theme=livro] #lv3 .lv3-chip::before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--g-anda);margin-right:6px;vertical-align:1px}
+html[data-theme=livro] #lv3 .lv3-chip{flex:none;display:inline-block;max-width:220px;height:22px;padding:0 8px;border-radius:6px;font:400 12px/22px var(--g-sans);color:var(--g-tx);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--g-anda) 40%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-chip[hidden]{display:none}
+html[data-theme=livro] #lv3 .lv3-chip.is-mais{color:var(--g-tx2);box-shadow:inset 0 0 0 1px #2E2E35;font-family:var(--g-pix)}
 html[data-theme=livro] #lv3 .lv3-sm{display:flex;align-items:center;gap:8px;height:20px;font:400 13px/20px var(--g-sans);white-space:nowrap;overflow:hidden}
 html[data-theme=livro] #lv3 .lv3-sm span{overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-sm i{flex:none;width:6px;height:6px;border-radius:50%;background:var(--g-tx3)}
 html[data-theme=livro] #lv3 .lv3-sm i.is-pronto{background:var(--g-anda)}
 html[data-theme=livro] #lv3 .lv3-sm i.is-anda{background:var(--g-claude)}
-html[data-theme=livro] #lv3 .lv3-cn{display:grid;grid-template-columns:28px minmax(0,1fr) 40px;gap:10px;align-items:center;height:20px;font:500 12px/1 var(--g-pix);color:var(--g-tx2)}
-html[data-theme=livro] #lv3 .lv3-cn b{font-weight:500;text-align:right;color:var(--g-tx)}
-html[data-theme=livro] #lv3 .lv3-cn.is-atual span{color:var(--g-rosa)}
+html[data-theme=livro] #lv3 .lv3-cns{display:grid;align-content:start;gap:2px}
+html[data-theme=livro] #lv3 .lv3-cn{display:grid;grid-template-columns:60px minmax(0,1fr) 60px 50px;gap:5px;align-items:center;height:16px;font:500 11px/1 var(--g-pix);color:var(--g-tx2)}
+html[data-theme=livro] #lv3 .lv3-cn .k{white-space:nowrap;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-cn .md,html[data-theme=livro] #lv3 .lv3-cn .id{font:400 11px/1 var(--g-sans);color:var(--g-tx3);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-cn .id{text-align:right}
+html[data-theme=livro] #lv3 .lv3-cn b{font:500 12px/1 var(--g-pix);text-align:right;color:var(--g-tx);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+html[data-theme=livro] #lv3 .lv3-cn.is-atual .k{color:var(--g-rosa)}
+html[data-theme=livro] #lv3 .lv3-cn.is-cx .k{color:var(--g-codex)}
+html[data-theme=livro] #lv3 .lv3-cn.is-pq .k{color:#C084FC}
+html[data-theme=livro] #lv3 .lv3-cn.is-cx .lv3-barra i{background:var(--g-codex)}
 html[data-theme=livro] #lv3 .lv3-cn .lv3-barra i{background:var(--g-tx2)}
 html[data-theme=livro] #lv3 .lv3-cn.is-alto .lv3-barra i{background:var(--g-trava)}
 
 @keyframes lv3-gira{to{transform:rotate(360deg)}}
-@keyframes lv3-varre{0%,100%{opacity:.35}50%{opacity:1}}
 @keyframes lv3-entra{0%{opacity:0;transform:translateY(4px)}100%{opacity:1;transform:none}}
 @media (prefers-reduced-motion:reduce){
-html[data-theme=livro]:not([data-motion=on]) #lv3 .a-arco,html[data-theme=livro]:not([data-motion=on]) #lv3 .a-arco2,html[data-theme=livro]:not([data-motion=on]) #lv3 .a-led{animation:none}
+html[data-theme=livro]:not([data-motion=on]) #lv3 .a-gira1,html[data-theme=livro]:not([data-motion=on]) #lv3 .a-gira2,html[data-theme=livro]:not([data-motion=on]) #lv3 .a-varre{animation:none}
 }
 html[data-theme=livro][data-motion=off] #lv3 *{animation:none!important;transition:none!important}

@@ -34,7 +34,7 @@ function exemplo(agora) {
     ].map(([nome, pct, faltam, atencao]) => ({ nome, nomeInteiro: nome, pct, faltam, atencao: !!atencao })) },
     // doca: entregas mais perto de sair e projetos em LED (1 LED = 1 item)
     doca: {
-      entregas: { lido: true, itens: [
+      entregas: { lido: true, abertas: 7, atualizadoMs: ms(25), velho: false, itens: [
         { nome: 'Página do drop no celular', pct: 90, estado: 'quase', passo: null },
         { nome: 'Checkout do Projeto A', pct: 75, estado: 'obra', passo: null },
         { nome: 'Vídeo de cortes da semana', pct: 98, estado: 'voce', passo: 'escolher a trilha' }
@@ -44,15 +44,25 @@ function exemplo(agora) {
         ['Projeto C', 'ar obra vez fila fila fila'], ['Loja', 'ar ar ar ar obra fila']
       ].map(([nome, l]) => { const leds = l.split(' '); return { nome, leds, ar: leds.filter(x => x === 'ar').length, total: leds.length, vez: leds.filter(x => x === 'vez').length }; }) }
     },
-    prontoHoje: { erro: null, nota: null, itens: ['Guia da aba Caixa', 'Landing revisada no celular', 'Teste do recado', 'Print da Fila'] },
+    prontoHoje: { erro: null, nota: null, itens: ['Guia da aba Caixa', 'Landing revisada no celular', 'Teste do recado', 'Print da Fila', 'Tradução do guia'] },
+    // automacao ao vivo: a ultima transacao do robo de compras do exemplo, as de hoje e o que ele mede agora
+    automacao: { erro: null, lidoHaS: 8, ultimaTx: { lado: 'compra', ms: ms(14), demora: '1,2 s', resultado: 'ok' }, txHoje: 7, vendasHoje: 'none', mede: 'Exemplo: tempo de resposta das compras da Loja' },
     ajudantes: { erro: null, agora: 3, nota: 'Atendimento 2 · Loja 1', lidoHaS: 8 },
     ideias: { erro: null, hoje: 5, semana: 18, novas: 2, itens: [
       { haMin: 12, titulo: 'Abrir a Fila somente quando ela for usada', de: 'Atendimento', estado: 'nova' },
       { haMin: 50, titulo: 'Uma vitrine simples para cada loja', de: 'Loja', estado: 'nova' },
       { haMin: 190, titulo: 'Resumo do dia em 3 linhas', de: 'Claude', estado: 'no Conselho' }
     ] },
-    contas: { erro: null, itens: [{ conta: 'A', semana: 42, atual: true }, { conta: 'B', semana: 67 }, { conta: 'C', semana: 85 }, { conta: 'D', semana: 12 }], proxima: 'D' },
-    semana: { erro: null, datas, itens: [
+    // contas do Claude: a atual, uma lida ha 2 dias, uma que passou do reset da semana e uma sem leitura; Codex e pesquisa com idade
+    contas: { erro: null, atual: 'A', proxima: 'B', contas: [
+      { conta: 'A', atual: true, semana: 62, lidoMs: ms(3), zeraMs: ms(-4 * 1440) },
+      { conta: 'B', atual: false, semana: 35, lidoMs: ms(2 * 1440), zeraMs: ms(-2 * 1440) },
+      { conta: 'C', atual: false, semana: 85, lidoMs: ms(6 * 1440), zeraMs: ms(300) },
+      { conta: 'D', atual: false, semana: null, lidoMs: null, zeraMs: null }
+    ] },
+    codex: { semana: 41, lidoMs: ms(4), zeraMs: ms(-5 * 1440) },
+    pesquisa: { lidoMs: ms(1), agora: false, hoje: 2, semana: 9 },
+    semana: { erro: null, datas, atualizadoMs: ms(180), itens: [
       { texto: 'Landing revisada no celular', estado: 'pronto' }, { texto: 'Checkout do Projeto A no ar', estado: 'anda' }, { texto: 'Vídeo de cortes da semana', estado: 'anda' },
       { texto: 'Drop de sexta na Loja', estado: 'falta' }, { texto: 'Guia em pt, en e es', estado: 'pronto' }
     ] },
