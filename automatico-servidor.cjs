@@ -63,8 +63,8 @@ function createServer(root, options = {}) {
   const stateEnabled = options.stateEnabled === undefined ? !!root || fs.existsSync(path.join(__dirname,'estado-local')) : options.stateEnabled;
   root = path.resolve(root || path.join(__dirname, 'estado-local'));
   const home = options.home || process.env.PAINEL_HOME || require('node:os').homedir();
-  let cached = null, legacy = null;
-  const r10=require('./r10-servicos.cjs').create({root,port,soLeitura:require('./so-leitura.cjs').ativo});
+  let cached = null, legacy = null, monitores = null;
+  const r10=require('./r10-servicos.cjs').create({root,port,soLeitura:require('./so-leitura.cjs').ativo,descobertas:()=>((cached&&cached.sessions)||[]).map(s=>s&&s.id)});
   const r9=require('./r9-rotas.cjs').create({root,port,soLeitura:require('./so-leitura.cjs').ativo});
   const worker = new (require('node:worker_threads').Worker)(path.join(__dirname,'descoberta-worker.cjs'), {workerData:{home,now:options.now,configDir:options.configDir||(path.resolve(home)===path.join(__dirname,'demo','home')?path.join(__dirname,'demo','config'):undefined),homes:options.homes,sourcesDir:options.sourcesDir,claudeHome:options.claudeHome,codexHome:options.codexHome}});
   let readyResolve, readyReject;
@@ -73,7 +73,7 @@ function createServer(root, options = {}) {
   worker.on('message',msg=>{if(msg.data){cached=msg.data;readyResolve();}else if(!cached)readyReject(Error(msg.error));});
   worker.on('error',readyReject);
   const enabled = () => options.stateEnabled === false ? false : stateEnabled || fs.existsSync(root);
-  const scan = () => ({...cached,limits:{...(cached&&cached.limits),claude:claudeLimite(root)},state:stateSources(root,enabled())});
+  const scan = () => comAtalho({...cached,limits:{...(cached&&cached.limits),claude:claudeLimite(root)},state:stateSources(root,enabled())});
   function oldServer() {
     if (!legacy) {
       const sessions = path.join(home, '.codex/sessions'), claudeRoot = path.join(home, '.claude/projects');
@@ -94,6 +94,17 @@ function createServer(root, options = {}) {
     if (!hosts.has(req.headers.host)) return send(403, { error: 'Acesso local obrigatorio' });
     if (/^\/lofi\.js(?:\?|$)/.test(req.url)) return send(403, { error: 'Rádio desabilitado' });
     let url; try { if (!req.url.startsWith('/') || req.url.startsWith('//')) throw Error(); url = new URL(req.url, 'http://127.0.0.1:' + port); } catch { return send(400, { error: 'Endereco invalido' }); }
+    if (req.method === 'GET' && url.pathname === '/api/monitores') {
+      const M = require('./monitores.cjs'), site = req.headers['sec-fetch-site'];
+      // pedido de outro site (uma imagem ou fetch de qualquer pagina aberta) nao liga as checagens
+      if (site && !['same-origin', 'none'].includes(site)) return send(403, { error: 'Acesso local obrigatorio' });
+      // exemplo e demo (raiz da demo ou PAINEL_DEMO=1): so o ficticio, sem ler a config nem executar nada
+      if (url.searchParams.get('exemplo') === '1' || process.env.PAINEL_DEMO === '1' || path.resolve(root) === path.resolve(__dirname, 'demo', 'estado')) return send(200, M.exemplo());
+      if (!monitores) monitores = M.create({ root });
+      const estado = monitores.snapshot();
+      monitores.start();
+      return send(200, estado);
+    }
     if(require('./r10-servicos.cjs').match(url)){await r10.handle(req,url,{send});return;}
     const tab = ROUTES[url.pathname];
     if (req.method === 'POST' && url.pathname === '/api/conselho/conversa') return send(200,{ok:false,rows:[],motivo:'Conversa desligada nesta cópia. Responda na sessão do seu Claude.'});
@@ -133,7 +144,13 @@ function createServer(root, options = {}) {
     } catch { return send(200, { ok: false, lido: false, valor: null, solucao: 'Confira os arquivos locais e atualize o painel.' }); }
   });
   server.readerReady = ready;
-  server.on('close', () => { worker.terminate(); legacy?.close(); });
+  server.on('close', () => { worker.terminate(); monitores?.close(); legacy?.close(); });
   return server;
 }
-module.exports = { createServer, stateSources, bridge, claudeLimite, provedorMetadados, rotinaDemo };
+// Atalho de quem espera voce: link do app Claude ou do Codex, ou o comando de retomar (link-sessao.cjs). So para sessao esperando.
+function comAtalho(snapshot, app) {
+  if (!snapshot || !Array.isArray(snapshot.sessions) || !snapshot.sessions.some(s => s && s.state === 'waiting')) return snapshot;
+  const L = require('./link-sessao.cjs'); let apps = app; try { apps = apps || require('./sessoes-app.cjs').readSessions(); } catch { apps = null; }
+  return { ...snapshot, sessions: snapshot.sessions.map(s => s && s.state === 'waiting' ? { ...s, atalho: L.atalho(s, apps) } : s) };
+}
+module.exports = { createServer, stateSources, bridge, claudeLimite, provedorMetadados, rotinaDemo, comAtalho };

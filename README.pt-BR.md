@@ -27,11 +27,29 @@ Quer ver antes? `npm run example` (ou `npm run example:win`) abre um estado fict
 - WEN: uma linha por frente, com progresso, minutos que faltam e quem trabalha agora.
 - Temas Grade, Livro e Folha. A animação respeita o movimento reduzido.
 
+## Pedidos ao orquestrador e atalho da sessão
+
+- Em Esperando você, cada sessão traz um atalho: "Abrir sessão ↗" abre a conversa no app Claude ou no Codex; sessão só no terminal ganha "Copiar comando" (`claude --resume <id>`).
+- Pedidos começam desligados e ficam na tela completa (http://127.0.0.1:3257/painel-estado, que precisa da pasta de estado do passo 2 em `metodo/`). Em Recursos pessoais, clique em Ligar pedidos: o que você manda pelo painel, para uma sessão ou para o orquestrador (a sessão que coordena as outras por você), vira uma linha em `estado/pedidos-sessoes.jsonl`. O painel não fala com a sessão sozinho.
+- Para o orquestrador ler a fila: na sessão do Claude Code que coordena, peça para rodar `bash ferramentas/escuta-pedidos.sh` com a ferramenta Monitor (no Windows, pelo Git Bash). Cada pedido novo chega como uma linha `PEDIDO: {...}`, inclusive os endereçados a uma sessão. Na primeira vez a escuta começa do fim da fila (pedidos antigos não chegam); depois continua de onde parou, inclusive os pedidos feitos com ela desligada, e cada pedido chega uma vez só. Se a sua pasta de estado não for `estado-local`, rode com o mesmo `PAINEL_ROOT`.
+- Só você deve escrever nessa fila: o texto de cada pedido vira instrução para o agente que coordena (risco de injeção de prompt). Não deixe outro programa ou pessoa gravar linhas em `estado/pedidos-sessoes.jsonl` e peça ao agente para confirmar no chat dele antes de algo arriscado. A escuta só passa linhas no formato que o painel grava e nunca reescreve a fila.
+- Para a resposta aparecer no painel, com a voz ligada (Ligar voz, em Recursos pessoais), o orquestrador grava uma linha `{"ts":"<hora ISO>","texto":"..."}` em `estado/voz-respostas.jsonl`. Para responder dentro da aba de uma sessão, acrescente `"sessao":"<id do pedido>"`.
+
+## Monitores
+
+Crie `config/monitores.json` a partir de `config/monitores.exemplo.json`, ou escolha outro caminho com `PAINEL_MONITORES`. O arquivo fica fora do git (`.gitignore`). Cada item tem `id` (a-z, 0-9 e hífen), `nome` curto e `tipo`:
+
+- `http`: GET de `url` ou `urlEnv`, com `esperar` opcional (padrão 200 a 399) e `timeoutMs` (padrão 5000, máximo 15000). URL com chave só por `urlEnv`, que contém o nome da variável de ambiente. URLs literais com credenciais, parâmetros de segredo ou trecho do caminho com cara de chave são recusadas. Redirecionamento só é seguido para o mesmo host e porta, ou de http na porta 80 para https na porta 443 do mesmo host. A tela mostra apenas o host ou o nome da variável.
+- `comando`: executável em `comando` e lista de textos em `args`, sem shell. Só o código de saída é usado; a saída é descartada. `timeoutMs`: padrão 10000, máximo 30000; no tempo esgotado o comando e o que ele abriu são encerrados (no Windows, processos deixados em segundo plano por um script do Git Bash podem continuar rodando). No Windows, arquivos `.cmd` e `.bat` não rodam (Node 20.12.2 ou mais novo).
+- `batimento`: `arquivo` relativo a `PAINEL_ROOT` (a pasta de estado escolhida) ou absoluto; lê só a data de modificação. `maxIdadeSegundos`: padrão 300.
+
+`intervaloSegundos` tem mínimo de 60 s. As checagens começam quando a tela simples ou a Agora do tema Livro pede os monitores, seguem uma por vez enquanto o painel estiver aberto e releem a configuração quando sua data de modificação muda. A demo e o exemplo nunca leem esse arquivo. Nada configurado = a seção some na tela simples; o tema Livro mostra "Nenhum monitor configurado". Sem leitura aparece "?". Um monitor que caiu também aparece em "Esperando você". Configurar HTTP ou um comando autoriza essas checagens, inclusive conexões ao destino escolhido.
+
 ## Privacidade
 
 - A leitura das sessões é só de metadados: campos escalares conhecidos dos registros. Mensagens e saídas de ferramentas são descartadas; arquivos privados, atalhos, `.credentials.json` e `auth.json` não são abertos.
 - Conversas, voz, música e o registro de pesquisa começam desligados e só ligam por escolha sua.
-- Nada sai do seu computador, com duas exceções que você liga: Perguntar (usa seu Codex), em Decidir > Conselho, roda o seu Codex instalado, só leitura, com o texto da ideia, e só quando você clica; a rádio lofi carrega o YouTube só se você puser rádios em `estado/lofi.json` e apertar o play.
+- Nada sai do seu computador, com exceções que você liga: Perguntar (usa seu Codex), em Decidir > Conselho, roda o seu Codex instalado, só leitura, com o texto da ideia, e só quando você clica; a rádio lofi carrega o YouTube só se você puser rádios em `estado/lofi.json` e apertar o play; os monitores configurados fazem checagens HTTP ou executam comandos, que podem conectar aos destinos escolhidos.
 - Os nomes que você listar em `config/nomes-ocultar.json` são mascarados em toda resposta.
 
 ## Ajustes opcionais
@@ -43,6 +61,7 @@ Quer ver antes? `npm run example` (ou `npm run example:win`) abre um estado fict
 | CLAUDE_CONFIG_DIR | .claude da home | pasta real de configuração do Claude, com projects/ |
 | CODEX_HOME | .codex da home | pasta real do Codex, com sessions/ |
 | PAINEL_ROOT | estado-local, se existir | outra pasta de estado |
+| PAINEL_MONITORES | config/monitores.json | outro arquivo de monitores |
 | PAINEL_PORT | 3257 | porta local, também `--port 3261` |
 | PAINEL_SO_LEITURA | desligado | 1 desliga toda gravação no estado |
 

@@ -420,7 +420,7 @@ const MESSAGES = Object.freeze({
   example: 'Envio desligado no modo exemplo.',
   unavailable: 'Envio indisponível agora: a regra de envio do painel não foi lida.',
   write: 'Não foi possível salvar. Tente de novo.',
-  off: 'Envio pelo painel desligado nesta versão. Escreva direto no chat da sessão.'
+  off: 'Esta barra não envia. Use a CONVERSA do tema Livro.'
 });
 function failure(code, statusCode) { return { ok: false, error: code, message: MESSAGES[code], statusCode }; }
 function sendRecado() { return failure('off', 410); }

@@ -1,5 +1,12 @@
 # Changelog
 
+## 3.3.0
+
+- Book theme Now screen with your own data: "you decide" (cards and sessions waiting for you), fronts, deliveries, the week, projects, Claude and Codex usage, the feed, ideas and the conversation now read your state folder and the session discovery. A missing source shows "?" with the fix. With your own data this screen opens first in the Book theme; "Agora de antes" still switches. The example stays a demo and sends nothing.
+- Monitors: optional config/monitores.json with http, command and heartbeat file checks, one at a time, at most once every 60 s. A URL with a key only through urlEnv (the variable name); the value is never shown or saved, and a literal URL with credentials, a secret parameter or a key-like path segment is refused. Commands run without a shell, their output is discarded and a timeout stops them. The file stays out of git, and the demo and the example never read it. A monitor that is down also shows at the top of "Esperando você" on the simple screen and first in the MONITORES block of the Book theme.
+- Requests to the coordinator: the conversation and the request queue can target the coordinator (the session that coordinates the others for you), besides each session. ferramentas/escuta-pedidos.sh prints each new request once as "PEDIDO:" for the Monitor tool of Claude Code; the README has the steps. Only you should write to that queue: each line becomes an instruction for the agent.
+- Session shortcut: a session waiting for you gets "Abrir sessão ↗" (Claude app or Codex link) or, when it only runs in the terminal, "Copiar comando" (claude --resume).
+
 ## 3.2.0
 
 - Book theme Now screen: the talk ring turns in layers, the conversation tabs take the color of who answers (Claude or ideas), the top line lists what is "pronto hoje", and deliveries, the week and the dock show how long ago they were read.

@@ -25,3 +25,4 @@ config/painel.json
 config/sessoes.json
 config/projetos.json
 config/servicos.json
+config/monitores.json

@@ -16,7 +16,7 @@ function validPort(port){if(!Number.isInteger(port)||port<1||port>65535)throw Er
 function createServer(root,sessionsRoot,options={}) {
   if(options.automatic===true)return require('./automatico-servidor.cjs').createServer(root,options);
   const port=validPort(options.port===undefined?3257:options.port);
-  const r10=require('./r10-servicos.cjs').create({root,port,soLeitura:SO_LEITURA});
+  const r10=require('./r10-servicos.cjs').create({root,port,soLeitura:SO_LEITURA,descobertas:()=>{try{return (state(false).sessions||[]).map(s=>s&&s.id);}catch{return [];}}});
   const metadataOnly=options.metadataOnly===true;
   const metadataProvider=metadataOnly?(options.metadataProvider||require('./pe-metadata-reader.cjs').createMetadataReader(options.metadataReaderConfig)):null;
   const nonce=randomBytes(24).toString('hex'),exampleNonce=randomBytes(24).toString('hex');
@@ -25,7 +25,8 @@ function createServer(root,sessionsRoot,options={}) {
   const fluxo=require('./fluxo-rotas.cjs').create({root});
   const radar=require('./radar-rotas.cjs').create({root});
   const r9=require('./r9-rotas.cjs').create({root,port,soLeitura:SO_LEITURA});
-  const livroV3=require('./livro-v3-rota.cjs').create({root,port}); // LIVRO V3: a Agora do LIVRO com o anel FALAR; nesta copia so o exemplo
+  const livroV3=require('./livro-v3-rota.cjs').create({root,port}); // LIVRO V3: estado e descoberta
+  let monitores=null; // monitores.cjs: o mesmo da entrada simples; a demo e o ?exemplo=1 recebem so os ficticios
   const cerebro=require('./cerebro-fonte.cjs').create({root:options.brainRoot||root,metadataProvider:{snapshot:()=>metadataProvider?currentMetadata():state(false)}});
   const exampleAnswers=new Map();
   const assets={'/agente.png':['agente-320.png','image/png'],'/agente-original.png':['agente.png','image/png'],'/marca.png':['marca.png','image/png'],'/':['index.html','text/html'], '/painel.css':['painel.css','text/css'], '/painel.js':['painel.js','text/javascript'], '/painel-v3.css':['painel-v3.css','text/css'], '/painel-v3.js':['painel-v3.js','text/javascript'], '/dev.js':['dev.js','text/javascript'], '/mapa.css':['mapa.css','text/css'], '/mapa.js':['mapa.js','text/javascript'], '/comandos.css':['comandos.css','text/css'], '/comandos.js':['comandos.js','text/javascript'], '/equipe.css':['equipe.css','text/css'], '/equipe.js':['equipe.js','text/javascript'], '/detalhes.css':['detalhes.css','text/css'], '/detalhes.js':['detalhes.js','text/javascript'], '/projetos.css':['projetos.css','text/css'], '/projetos.js':['projetos.js','text/javascript'], '/tips.css':['tips.css','text/css'], '/tips.js':['tips.js','text/javascript'], '/favicon.svg':['favicon.svg','image/svg+xml']};
@@ -147,7 +148,8 @@ function createServer(root,sessionsRoot,options={}) {
     if(radar.handle(req,url,{send,example}))return;
     if(fluxo.handle(req,url,{send,example}))return;
     if(require('./blocos-livro-rota.cjs').handle(req,url,{send,root,example}))return;
-    if(await livroV3.handle(req,url,{send,example:example||process.env.PAINEL_DEMO==='1'}))return; // LIVRO V3: exemplo no ?exemplo=1 e na demo; fora disso fechado; a fila nunca grava
+    if(req.method==='GET'&&url.pathname==='/api/monitores'){const M=require('./monitores.cjs'),site=req.headers['sec-fetch-site'];if(site&&!['same-origin','none'].includes(site))return send(403,{error:'Acesso local obrigatorio'});if(example||process.env.PAINEL_DEMO==='1')return send(200,M.exemplo());if(!monitores)monitores=M.create({root});const m=monitores.snapshot();monitores.start();return send(200,m);}
+    if(await livroV3.handle(req,url,{send,example:example||process.env.PAINEL_DEMO==='1',snapshot:()=>state(false),cardsDataDir:options.cardsDataDir}))return;
     if(require('./blocos-folha-rota.cjs').handle(req,url,{send,root,example,dir:__dirname}))return; // FOLHA: blocos proprios (so GET)
     if(require('./entregas-rota.cjs').handle(req,url,{send,root,example}))return;
     if(await r9.handle(req,url,{send,example}))return;
@@ -248,7 +250,7 @@ function createServer(root,sessionsRoot,options={}) {
   const close=server.close.bind(server);
   server.readerReady=readerWorker?.ready||Promise.resolve();
   server.close=(...args)=>{metadataProvider?.close();readerWorker?.close();dev.close();liveStream?.close();exampleStream?.close();return close(...args);};
-  server.on('close',()=>{claude303.close?.();agora300.close();});
+  server.on('close',()=>{claude303.close?.();agora300.close();monitores?.close();});
   return server;
 }
 function cliOptions(args,env=process.env){

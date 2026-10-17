@@ -21,3 +21,11 @@
 .v2-shell h1,.v2-shell h2,dialog h2{font-family:'Silkscreen',ui-monospace,Consolas,monospace;font-weight:400;text-transform:uppercase;letter-spacing:.04em}
 
 #v2-proximo{text-transform:none;overflow-wrap:anywhere;max-width:100%}
+.v2-atalho{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px}
+.v2-atalho .v2-link,.v2-atalho .v2-copiar{font:inherit;font-size:.85em;padding:4px 10px;border:1px solid currentColor;border-radius:4px;background:transparent;color:inherit;text-decoration:none;cursor:pointer}
+
+/* Monitores */
+.v2-monitor{display:flex;align-items:center;gap:14px;flex-wrap:wrap;padding:14px 0;border-bottom:1px solid #46423B}
+.v2-monitor strong{flex:1;min-width:140px}.v2-monitor small{color:#b8b4ad}.v2-monitor-status{border-radius:6px;padding:3px 9px}
+.v2-monitor-status.is-ok{color:#9ddeaa;background:#203b29}.v2-monitor-status.is-caiu{color:#ffaaa2;background:#492925}.v2-monitor-status.is-sem{color:#c2c2c2;background:#363636}
+.v2-monitor-alert{border-color:#bc645d}.v2-monitor-alert h3{color:#ffaaa2}

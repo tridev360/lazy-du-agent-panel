@@ -1,10 +1,4 @@
-/* livro-v3.css: a tela Agora do tema LIVRO DE ORDENS no desenho V3. Anel FALAR no centro com a conversa (Claude, ideias
-   e recado por sessao); em volta VOCE RESOLVE, ideias, ajudantes, feed do Claude, automacao ao vivo e o Codex; embaixo a doca
-   (frentes, entregas, esta semana, contas, projetos) e, embaixo dela, o placar do dia do LIVRO em versao baixa. Cores, fontes e movimento do LIVRO: as variaveis do theme-livro.css, Inter e
-   JetBrains Mono, blocos com borda fina e canto de 8 px, LED redondo que respira, FILL verde de 300 ms. So existe no LIVRO.
-   Tudo tem tamanho fixo pela altura da janela (--lv3-h): lista longa rola dentro do bloco, nenhum bloco cresce sozinho.
-   Agora: AUTOMACAO AO VIVO na coluna da direita, tags de PRONTO HOJE no topo, CONTAS em 6 linhas com idade, doca com LED,
-   quantos e idade, nomes das FRENTES em 2 linhas, abas com a cor de cada IA; o anel gira em camadas (so o compositor anda). */
+/* LIVRO V3: voz, conversa, monitores e doca. Listas rolam dentro dos blocos. */
 html:not([data-theme=livro]) #lv3{display:none!important}
 html:not([data-theme=livro]) #lv3-troca{display:none!important}
 html[data-theme=livro]:not([data-g-new=agora]) #lv3,html[data-theme=livro][data-lv3=antes] #lv3{display:none!important}
@@ -151,7 +145,7 @@ html[data-theme=livro] #lv3 .lv3-ms.is-id{box-shadow:inset 0 0 0 1px var(--g-lin
 html[data-theme=livro] #lv3 .lv3-ms.is-entra{animation:lv3-entra .3s ease-out both}
 html[data-theme=livro] #lv3 .lv3-ms .lv3-st{display:block;margin-top:2px;font:400 11px/1.3 var(--g-sans);color:var(--g-tx3)}
 html[data-theme=livro] #lv3 .lv3-ms .lv3-st.is-espera{color:var(--g-trava)}
-html[data-theme=livro] #lv3 .lv3-tabs{display:flex;gap:4px;flex:none;margin:8px 0 6px;overflow:hidden}
+html[data-theme=livro] #lv3 .lv3-tabs{display:flex;gap:4px;flex:none;margin:8px 0 6px;overflow-x:auto}
 /* cada aba com a cor de quem responde (--ia): Claude, as ideias e as sessoes */
 html[data-theme=livro] #lv3 .lv3-tab{--ia:var(--g-claude);all:unset;cursor:pointer;flex:1 1 auto;min-width:0;height:24px;padding:0 6px;display:grid;place-items:center;border-radius:6px;font:500 11px/1 var(--g-pix);letter-spacing:.03em;color:var(--ia);box-shadow:inset 0 0 0 1px color-mix(in srgb,var(--ia) 40%,transparent);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-tab.is-id{--ia:#C084FC}
@@ -177,6 +171,11 @@ html[data-theme=livro] #lv3 .lv3-fd .w.is-outro{color:var(--g-rosa)}
 html[data-theme=livro] #lv3 .lv3-fd p{grid-column:2;margin:0;font:400 13px/1.4 var(--g-sans);color:var(--g-tx);display:-webkit-box;-webkit-line-clamp:3;-webkit-box-orient:vertical;overflow:hidden}
 /* AUTOMACAO AO VIVO: ultima transacao, as de hoje e o que ela mede agora */
 html[data-theme=livro] #lv3 .lv3-automacao{box-shadow:inset 0 0 0 1px var(--g-line),inset 2px 0 0 var(--g-anda)}
+html[data-theme=livro] #lv3 .lv3-monitor{display:grid;grid-template-columns:8px minmax(0,1fr) auto;align-items:center;gap:4px 8px;padding:5px 0;font-size:11px}
+html[data-theme=livro] #lv3 .lv3-monitor small{grid-column:2/-1;color:var(--g-tx3)}
+html[data-theme=livro] #lv3 .lv3-monitor b{overflow-wrap:anywhere}
+html[data-theme=livro] #lv3 .lv3-cn.is-real{height:auto;min-height:36px;grid-template-columns:52px minmax(0,1fr) auto}
+html[data-theme=livro] #lv3 .lv3-cn.is-real .id{grid-column:1/-1;text-align:left;white-space:normal;line-height:1.3}
 html[data-theme=livro] #lv3 .lv3-bt{flex:1;min-height:0;display:grid;grid-template-columns:minmax(0,1fr) 84px;grid-template-rows:auto minmax(0,1fr);gap:6px 12px;overflow:hidden}
 html[data-theme=livro] #lv3 .lv3-tx{display:grid;grid-template-columns:auto minmax(0,1fr) auto minmax(0,1fr);gap:4px 8px;align-items:baseline;align-content:start;min-width:0}
 html[data-theme=livro] #lv3 .lv3-tx span{font:500 10px/16px var(--g-pix);letter-spacing:.04em;color:var(--g-tx3);white-space:nowrap}
@@ -214,6 +213,7 @@ html[data-theme=livro] #lv3 .lv3-en.is-obra .lv3-barra i{background:var(--g-clau
 html[data-theme=livro] #lv3 .lv3-pj{display:grid;grid-template-columns:auto minmax(0,1fr) auto;gap:8px;align-items:center;margin:0 0 6px;font:500 12px/16px var(--g-pix);color:var(--g-tx2)}
 html[data-theme=livro] #lv3 .lv3-pj .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
 html[data-theme=livro] #lv3 .lv3-pj b{font-weight:500;color:var(--g-tx)}
+html[data-theme=livro] #lv3 .lv3-pj small{grid-column:1/-1}
 html[data-theme=livro] #lv3 .lv3-leds{display:grid;grid-template-columns:repeat(8,5px);grid-auto-rows:5px;gap:2px;max-height:26px;overflow:hidden}
 html[data-theme=livro] #lv3 .lv3-leds i{display:block;width:5px;height:5px;border-radius:50%;background:var(--g-line)}
 html[data-theme=livro] #lv3 .lv3-leds i.is-ar{background:var(--g-anda)}

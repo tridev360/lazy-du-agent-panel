@@ -1,14 +1,8 @@
 'use strict';
-// LIVRO V3: a tela Agora do tema LIVRO DE ORDENS no desenho V3 (anel FALAR no centro e o resto em volta).
-// Serve /livro-v3.js e /livro-v3.css e GET /api/livro-v3. Nesta copia a tela so mostra o exemplo:
-// com ?exemplo=1 ou na demonstracao (demo/rodar.sh) o dado e inventado aqui e nada do disco e lido;
-// fora disso a resposta e "fechado" (e a tela abre em "Agora de antes"). POST /api/livro-v3/fila nunca grava nada; responde 409.
-// As horas vao como instante (ms) e o navegador escreve a hora local.
-// Gancho no servidor.cjs: const livroV3=require('./livro-v3-rota.cjs').create({root,port}); e, depois do blocos-livro,
-//   if(await livroV3.handle(req,url,{send,example:example||process.env.PAINEL_DEMO==='1'}))return;
+// LIVRO V3: leitura do estado e dos metadados da entrada.
+// O exemplo e isolado. A fila antiga responde 409 e nunca grava.
 const fs = require('node:fs'), path = require('node:path');
 const ASSETS = { '/livro-v3.js': ['livro-v3.js', 'text/javascript'], '/livro-v3.css': ['livro-v3.css', 'text/css'] };
-const FECHADO = 'Esta tela mostra só o exemplo. Para os seus dados, use Agora de antes no menu. Para ver o exemplo, rode a demonstração: bash demo/rodar.sh.';
 // a mesma frase do card perigoso no exemplo e na tela (livro-v3.js tem a mesma constante)
 const PERIGO = 'Perigoso: só vale com prova; responda no chat da sessão.';
 const MESES = ['jan', 'fev', 'mar', 'abr', 'mai', 'jun', 'jul', 'ago', 'set', 'out', 'nov', 'dez'];
@@ -23,7 +17,7 @@ function exemplo(agora) {
     topo: { seus: 4, frentes: 9, cards: 3 },
     voceResolve: { erro: null, itens: [
       { tipo: 'card', cardId: 'EXEMPLO-1', titulo: 'Qual das 3 artes vira o fundo da aba Ideias?', detalhe: 'Claude · há 12 min', perigoso: false, modo: 'opcoes', opcoes: [{ rotulo: 'Arte 2, escura', indice: 1, recomendada: true }, { rotulo: 'Arte 1', indice: 0, recomendada: false }, { rotulo: 'Arte 3', indice: 2, recomendada: false }], passos: [], idadeMin: 12 },
-      { tipo: 'passo', titulo: 'Conferir o print novo da página do drop', detalhe: 'passo seu no chat da Loja · há 40 min', perigoso: false, passos: [], semBloco: 'sem bloco: o passo está no chat da sessão', idadeMin: 40 },
+      { tipo: 'passo', titulo: 'Conferir o print novo da página do drop', detalhe: 'passo seu no chat da Loja · há 40 min', perigoso: false, passos: [], semBloco: 'sem bloco: o passo está no chat da sessão', linkSessao: 'claude://claude.ai/epitaxy/local_00000000-0000-4000-8000-000000000000', idadeMin: 40 },
       { tipo: 'card', cardId: 'EXEMPLO-2', titulo: 'Qual trilha entra no vídeo de cortes da semana?', detalhe: 'Cortes · há 1 h', perigoso: false, modo: 'opcoes', opcoes: [{ rotulo: 'Trilha B, mais rápida', indice: 1, recomendada: true }, { rotulo: 'Trilha A', indice: 0, recomendada: false }], passos: [], idadeMin: 60 },
       { tipo: 'card', cardId: 'EXEMPLO-3', titulo: 'Card que só vale com prova', detalhe: 'Atendimento · há 2 h · ' + PERIGO, perigoso: true, modo: 'chat', opcoes: [], passos: [], idadeMin: 120 }
     ] },
@@ -76,9 +70,9 @@ function exemplo(agora) {
     ].map(([min, quem, texto]) => ({ ms: ms(min), quem, texto })) },
     conversa: [
       { eu: true, rotulo: 'VOCÊ · VOZ', ms: ms(9), texto: 'Como está a aba Ideias?' },
-      { eu: false, rotulo: 'CLAUDE ·', ms: ms(9), texto: 'Fundo novo em teste; falta 1 card seu sobre a arte.' },
+      { eu: false, rotulo: 'ORQUESTRADOR ·', ms: ms(9), texto: 'Fundo novo em teste; falta 1 card seu sobre a arte.' },
       { eu: true, rotulo: 'VOCÊ · TEXTO', ms: ms(3), texto: 'E o vídeo de cortes da semana?' },
-      { eu: false, rotulo: 'CLAUDE ·', ms: ms(2), texto: 'A trilha B ficou melhor; espera o seu card.' }
+      { eu: false, rotulo: 'ORQUESTRADOR ·', ms: ms(2), texto: 'A trilha B ficou melhor; espera o seu card.' }
     ],
     recado: { erro: null, sessoes: [['Atendimento', 'ATENDIMENTO', 6], ['Cortes', 'CORTES', 35], ['Loja', 'LOJA', null]]
       .map(([chave, rotulo, min]) => ({ chave, rotulo, ultimoMs: min === null ? null : ms(min) })),
@@ -89,8 +83,8 @@ function exemplo(agora) {
   };
 }
 
-function create({ relogio = Date.now } = {}) {
-  async function handle(req, url, { send, example = false }) {
+function create({ root = process.env.PAINEL_ROOT, relogio = Date.now } = {}) {
+  async function handle(req, url, { send, example = false, snapshot, app, cardsDataDir }) {
     const asset = ASSETS[url.pathname];
     if (asset) {
       if (req.method !== 'GET' && req.method !== 'HEAD') { req.resume(); send(405, { ok: false, error: 'Somente leitura' }); return true; }
@@ -105,7 +99,9 @@ function create({ relogio = Date.now } = {}) {
     }
     if (url.pathname !== '/api/livro-v3') return false;
     if (req.method !== 'GET' && req.method !== 'HEAD') { req.resume(); send(405, { ok: false, error: 'Somente leitura' }); return true; }
-    send(200, example ? exemplo(relogio()) : { ok: false, fechado: true, falta: FECHADO });
+    let dados = null;
+    if (!example) { try { dados = typeof snapshot === 'function' ? await snapshot() : snapshot; } catch { /* sem leitura */ } }
+    send(200, example ? exemplo(relogio()) : require('./livro-v3-dados.cjs').montar({ root, snapshot: dados, app, cardsDataDir, agora: relogio() }));
     return true;
   }
   return { handle };

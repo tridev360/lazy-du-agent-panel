@@ -1,13 +1,5 @@
-/* livro-v3.js: a tela Agora do tema LIVRO DE ORDENS no desenho V3 (voz no centro, anel FALAR).
-   So existe no LIVRO (o CSS esconde fora dele); GRADE e FOLHA nao mudam. Botao "Agora de antes" no menu das vistas volta a
-   Agora de sempre (nada some: o resto da Agora do LIVRO segue la; o placar do dia fica embaixo da V3).
-   Leitura: so GET /api/livro-v3 (VOCE RESOLVE, frentes, entregas, projetos, pronto hoje, ajudantes, ideias, contas, semana,
-   feed, conversa e recado). Esta tela e so demonstracao: o anel FALAR, as respostas, o recado e o ENVIAR so mostram o aviso
-   NADA e nada sai do navegador. Fora do exemplo a resposta vem "fechado" e a tela abre em "Agora de antes".
-   Horas pelo relogio local do navegador. Texto entra sempre como texto (nada de HTML montado de string).
-   Agora: AUTOMACAO AO VIVO na coluna da direita, tags de PRONTO HOJE no topo, CONTAS em 6 linhas (Claude A a D pela regra
-   do reset, Codex e pesquisa) com idade, doca com LED, quantos e idade, abas com a cor de cada IA, 1 temporizador so (laco de
-   5 s, parado com a aba escondida) e o anel girando em camadas (o compositor gira; nada pinta o SVG a cada quadro). */
+/* LIVRO V3: estado local, pedidos e voz. O exemplo nunca envia.
+   Texto por nos do DOM. Horas pelo navegador. */
 (function (root) {
   'use strict';
   const doc = root.document, html = doc.documentElement;
@@ -17,10 +9,17 @@
   const PERIGO = 'Perigoso: só vale com prova; responda no chat da sessão.';
   const SEM = 'sem leitura';
   const DIGITE = 'Exemplo: escreva e veja o aviso (nada é enviado)';
-  const ABAS = [['CLAUDE', 'CLAUDE', 'voz'], ['IDEIAS', 'IDEIAS', 'ideias'], ['Atendimento', 'ATENDIMENTO', 'recado'], ['Cortes', 'CORTES', 'recado'], ['Loja', 'LOJA', 'recado']];
-  const S = { dados: null, erroDados: false, aba: 'CLAUDE', ideiasVistas: false, vozLigada: false, primeira: true, lidoEm: null, proximo: 0, idade: {}, autoLido: null, prontoChave: null };
+  const ABAS = [['CLAUDE', 'ORQUESTRADOR', 'voz'], ['IDEIAS', 'IDEIAS', 'ideias'], ['Atendimento', 'ATENDIMENTO', 'recado'], ['Cortes', 'CORTES', 'recado'], ['Loja', 'LOJA', 'recado']];
+  const S = { dados: null, erroDados: false, aba: 'CLAUDE', ideiasVistas: false, vozLigada: false, primeira: true, lidoEm: null, proximo: 0, idade: {}, prontoChave: null };
   const RITMO_MS = 30000, DUAS_HORAS = 2 * 3600000;
   const els = {};
+  const demonstracao = () => EXEMPLO || !!(S.dados && S.dados.exemplo);
+  const abas = () => demonstracao() ? ABAS : [['ORQUESTRADOR', 'ORQUESTRADOR', 'voz'], ...((S.dados && S.dados.recado && S.dados.recado.sessoes) || []).map(x => [x.chave, x.rotulo, 'sessao'])];
+  const UUID = '[a-f\\d]{8}-[a-f\\d]{4}-[a-f\\d]{4}-[a-f\\d]{4}-[a-f\\d]{12}';
+  const LINK = new RegExp('^(?:claude://claude\\.ai/epitaxy/local_' + UUID + '|codex://threads/' + UUID + ')$', 'i');
+  const COMANDO = new RegExp('^claude --resume ' + UUID + '$', 'i');
+  const linkValido = v => typeof v === 'string' && LINK.test(v);
+  const comandoValido = v => typeof v === 'string' && COMANDO.test(v);
 
   // ---------- utilidades ----------
   function h(tag, cls, ...kids) {
@@ -43,7 +42,6 @@
   const haTxt = ms => (Number.isFinite(ms) ? haMin(Math.max(0, Math.round((Date.now() - ms) / 60000))) : SEM);
   function haCurto(ms) { if (!Number.isFinite(ms)) return SEM; const m = Math.max(0, Math.round((Date.now() - ms) / 60000)); return m < 1 ? 'agora' : m < 60 ? 'há ' + m + ' min' : m < 2880 ? 'há ' + Math.round(m / 60) + ' h' : 'há ' + Math.round(m / 1440) + ' d'; }
   function emCurto(ms) { if (!Number.isFinite(ms)) return SEM; const m = Math.max(0, Math.round((ms - Date.now()) / 60000)); return m < 1 ? 'agora' : m < 60 ? 'em ' + m + ' min' : m < 2880 ? 'em ' + Math.round(m / 60) + ' h' : 'em ' + Math.round(m / 1440) + ' d'; }
-  function haSeg(s) { return !Number.isFinite(s) ? SEM : 'lido há ' + (s < 120 ? Math.round(s) + ' s' : s < 7200 ? Math.round(s / 60) + ' min' : Math.round(s / 3600) + ' h'); }
   const ativa = () => html.dataset.theme === 'livro' && html.dataset.gNew === 'agora' && html.dataset.lv3 !== 'antes';
   function guardar(k, v) { try { root.localStorage.setItem(k, v); } catch { /* so nesta visita */ } }
   function lerGuardado(k) { try { return root.localStorage.getItem(k); } catch { return null; } }
@@ -58,7 +56,7 @@
   }
   function anel() {
     const b = h('button', 'lv3-anel'); b.type = 'button'; b.dataset.lv3Bloco = 'anel'; b.dataset.estado = 'parado';
-    b.setAttribute('aria-label', 'Falar com o Claude'); b.title = NADA;
+    b.setAttribute('aria-label', 'Falar'); b.title = EXEMPLO ? NADA : 'Clique para falar. Clique de novo para revisar.';
     // camadas: a de baixo fica parada (trilho, 36 LEDs apagados e o miolo); os 2 arcos e a varredura dos LEDs giram em camadas
     // HTML proprias (o compositor gira a camada pronta). A varredura anda em 36 passos de 10 graus: cada passo cai em cima de um LED.
     const svg = () => sv('svg', { viewBox: '0 0 200 200', 'aria-hidden': 'true' });
@@ -70,8 +68,17 @@
     const varre = []; for (let k = 0; k < 12; k++) varre.push(led(36 - k, 'a-led-on', 1 - k / 12)); // cabeca acesa e a cauda apagando
     const g2 = camada('a-gira2', sv('circle', { class: 'a-arco2', cx: 100, cy: 100, r: 88 })), g1 = camada('a-gira1', sv('circle', { class: 'a-arco', cx: 100, cy: 100, r: 66 })), gv = camada('a-varre', ...varre);
     b.append(base, g2, gv, g1, h('span', 'lv3-falar', h('i', ''), h('b', '', 'FALAR'), h('span', '', 'exemplo')));
-    // so mostra como a voz fica: acende por 2 s e volta; nada e gravado nem enviado
+    // O exemplo apenas acende o anel.
     b.addEventListener('click', () => {
+      if (!demonstracao()) {
+        if (!S.config || !S.config.recursos || !S.config.recursos.voz) { aviso('Ligue Voz em Recursos pessoais', 'erro'); return; }
+        const voz = root.PainelVoz;
+        if (!voz || !voz.startHold || !voz.endHold) { aviso('Voz sem leitura. Atualize o painel.', 'erro'); return; }
+        if (b.dataset.estado === 'ouvindo') { voz.endHold(); b.dataset.estado = 'parado'; els.vozSt.textContent = 'Confira a fala na caixa de voz.'; }
+        else if (voz.startHold()) { b.dataset.estado = 'ouvindo'; els.vozSt.textContent = 'Ouvindo. Clique para revisar.'; }
+        else aviso('Abra a caixa de voz e confira o microfone.', 'erro');
+        return;
+      }
       if (b.dataset.estado === 'ouvindo') return;
       b.dataset.estado = 'ouvindo'; els.vozSt.textContent = 'Ouvindo... (exemplo)'; els.convLed.className = 'lv3-led is-rosa';
       aviso(NADA, 'erro');
@@ -110,19 +117,19 @@
     els.vozSt = h('span', 'lv3-vozst', 'Pronto para falar.');
     els.convLed = h('i', 'lv3-led');
     els.anel = anel();
-    const liga = btn('g-btn is-quieto', 'LIGAR VOZ', () => { S.vozLigada = !S.vozLigada; liga.textContent = S.vozLigada ? 'DESLIGAR VOZ' : 'LIGAR VOZ'; els.convLed.className = 'lv3-led' + (S.vozLigada ? ' is-vivo' : ''); aviso(NADA, 'erro'); }, 'Exemplo: só muda o botão');
-    const conv = btn('g-btn is-quieto', 'CONVERSA', () => { trocarAba('CLAUDE'); els.input.focus(); }, 'Vai para a conversa com o Claude');
+    const liga = btn('g-btn is-quieto', 'LIGAR VOZ', () => { if (!demonstracao()) { if (!S.config?.recursos?.voz) aviso('Ligue Voz em Recursos pessoais', 'erro'); else doc.getElementById('voz-conversa')?.click(); return; } S.vozLigada = !S.vozLigada; liga.textContent = S.vozLigada ? 'DESLIGAR VOZ' : 'LIGAR VOZ'; els.convLed.className = 'lv3-led' + (S.vozLigada ? ' is-vivo' : ''); aviso(NADA, 'erro'); }, 'Abrir voz');
+    const conv = btn('g-btn is-quieto', 'CONVERSA', () => { trocarAba(demonstracao() ? 'CLAUDE' : 'ORQUESTRADOR'); els.input.focus(); }, 'Vai para a conversa');
     els.liga = liga;
     const g1 = gauge('is-ajud', ''), g2 = gauge('', 'PRONTO HOJE'), g3 = gauge('is-ideia', 'IDEIAS · NOVAS HOJE'), g4 = gauge('', 'CONTA ATUAL');
     els.ajudLed = h('i', 'lv3-led'); g1.r.append(els.ajudLed, 'AJUDANTES · AGORA'); g1.g.dataset.lv3Bloco = 'ajudantes';
     Object.assign(els, { gAjud: g1, gPronto: g2, gIdeia: g3, gConta: g4 });
     const lado = h('div', 'lv3-lado', h('div', 'lv3-voz', liga, conv, els.vozSt), h('div', 'lv3-gauges', g1.g, g2.g, g3.g, g4.g));
     nucleo.append(els.anel, lado);
-    const conversa = bloco('conversa', 'lv3-conversa', [els.convLed, 'CONVERSA · CLAUDE E IDEIAS'], h('span', 'lv3-dir', 'exemplo'));
+    const conversa = bloco('conversa', 'lv3-conversa', [els.convLed, 'CONVERSA'], els.convDir = h('span', 'lv3-dir', 'lendo...'));
     els.conv = h('div', 'lv3-lista'); els.conv.setAttribute('role', 'log'); els.conv.setAttribute('aria-live', 'polite');
     const tabs = h('div', 'lv3-tabs'); tabs.setAttribute('role', 'tablist'); tabs.setAttribute('aria-label', 'Para quem'); tabs.dataset.lv3Bloco = 'recado';
     // cada aba com a cor de quem responde: Claude, as ideias e as sessoes (a cor fica na variavel --ia do CSS)
-    els.tabs = ABAS.map(([chave, rot, tipo]) => { const b = btn('lv3-tab' + (tipo === 'ideias' ? ' is-id' : tipo === 'recado' ? ' is-ses' : ' is-cl'), rot, () => trocarAba(chave)); b.setAttribute('role', 'tab'); b.dataset.aba = chave; tabs.append(b); return b; });
+    els.tabBox = tabs;
     els.input = h('input', ''); els.input.type = 'text'; els.input.maxLength = 1000; els.input.setAttribute('aria-label', 'Escrever');
     els.input.addEventListener('keydown', e => { if (e.key === 'Enter' && !e.shiftKey && !e.isComposing) { e.preventDefault(); enviar(); } });
     els.enviar = btn('g-btn', 'ENVIAR', enviar);
@@ -130,17 +137,15 @@
     conversa.b.append(els.conv, tabs, h('div', 'lv3-entrada', els.input, els.enviar), els.aviso); els.convB = conversa.b;
     const cen = h('div', 'lv3-col is-cen', nucleo, conversa.b);
 
-    // direita: feed do Claude, AUTOMACAO AO VIVO (o robo de compras do exemplo) e a faixa do Codex (1 linha)
-    const feed = bloco('feed', '', [els.feedLed = h('i', 'lv3-led'), 'FEED · CLAUDE'], els.feedDir = h('span', 'lv3-dir', 'lendo...'));
+    // Feed e monitores.
+    const feed = bloco('feed', '', [els.feedLed = h('i', 'lv3-led'), 'FEED'], els.feedDir = h('span', 'lv3-dir', 'lendo...'));
     els.feed = h('div', 'lv3-lista'); feed.b.append(els.feed); els.feedB = feed.b;
-    const au = bloco('automacao', 'lv3-automacao', [els.auLed = h('i', 'lv3-led'), 'AUTOMAÇÃO AO VIVO'], els.auDir = h('span', 'lv3-dir', 'lendo...'));
-    const kv = rot => { const v = h('b', '', '...'); return [h('span', '', rot), v]; };
-    const [k1, v1] = kv('ÚLTIMA TX'), [k2, v2] = kv('HORA'), [k3, v3] = kv('DEMORA'), [k4, v4] = kv('RESULTADO');
-    els.au = { lado: v1, hora: v2, demora: v3, resultado: v4, tx: h('b', '', '...'), vendas: h('span', '', 'vendas: ...'), mede: h('span', '', '...') };
-    au.b.append(h('div', 'lv3-bt', h('div', 'lv3-tx', k1, v1, k2, v2, k3, v3, k4, v4), h('div', 'lv3-dia', els.au.tx, h('span', '', 'TX HOJE'), els.au.vendas), h('p', 'lv3-mede', h('i', '', 'A AUTOMAÇÃO MEDE AGORA: '), els.au.mede)));
+    const au = bloco('automacao', 'lv3-automacao', [els.auLed = h('i', 'lv3-led'), 'MONITORES'], els.auDir = h('span', 'lv3-dir', 'lendo...'));
+    els.monitores = h('div', 'lv3-lista lv3-monitores'); au.b.append(els.monitores);
     els.auB = au.b;
     const codex = h('section', 'lv3-breve'); codex.dataset.lv3Bloco = 'codex';
     codex.append(h('div', 'lv3-sec', h('i', 'lv3-led'), 'CODEX', h('span', 'lv3-breve-p', 'No exemplo, o Codex aparece no feed quando revisa algo.'), h('span', 'lv3-dir', h('span', 'lv3-tag', 'EXEMPLO'))));
+    els.codexNota = codex;
     const dir = h('div', 'lv3-col is-dir', feed.b, au.b, codex);
 
     // doca: frentes, entregas (com a Fila), esta semana, contas e projetos; cada uma com LED da leitura, quantos e a idade do dado
@@ -235,6 +240,8 @@
     if (S.erroDados) { lista.replaceChildren(vazio('Leitura falhou. O painel tenta de novo em meio minuto.')); return true; }
     if (!d) { lista.replaceChildren(vazio('Lendo...')); return true; }
     if (d.fechado) { lista.replaceChildren(vazio(d.falta || 'Esta tela mostra só o exemplo. Para os seus dados, use Agora de antes no menu.')); return true; }
+    const nome = bloco.dataset.lv3Bloco, b = nome === 'voce' ? d.voceResolve : nome === 'projetos' || nome === 'entregas' ? d.doca && d.doca[nome] : d[nome];
+    if (b && b.erro && b.solucao && (!b.itens || !b.itens.length)) { lista.replaceChildren(vazio(SEM + ' · ' + b.solucao, '?')); return true; }
     return false;
   }
   function pintarVoce() {
@@ -244,6 +251,7 @@
     els.voceDir.textContent = v.erro ? v.erro : 'só o que espera você · ' + v.itens.length;
     if (!v.itens.length) { els.voce.replaceChildren(vazio(v.erro ? 'Leitura falhou: ' + v.erro : 'Nada espera você agora.', v.erro ? null : 'none')); return; }
     els.voce.replaceChildren(...v.itens.map(itemVoce));
+    if (v.erro && v.solucao) els.voce.append(vazio(SEM + ' · ' + v.solucao, '?'));
   }
   function itemVoce(it) {
     const card = it.tipo === 'card', perigo = it.perigoso === true;
@@ -251,18 +259,32 @@
     const det = perigo ? String(it.detalhe || '').split(' · ').filter(x => !/^perigoso\b/i.test(x)).join(' · ') : it.detalhe; // a frase do perigoso sai so na nota
     const row = h('article', 'lv3-item', h('div', 'lv3-hd', tag, h('span', '', val(det))), h('p', 'lv3-q', val(it.titulo)));
     row.title = it.titulo || '';
-    if (card && it.modo === 'opcoes') {
+    if (card && !perigo && it.modo === 'opcoes') {
       const ops = h('div', 'lv3-ops');
-      for (const o of it.opcoes || []) ops.append(btn('lv3-op' + (o.recomendada ? ' is-rec' : ''), (o.recomendada ? '★ ' : '') + o.rotulo, () => responder(o, row, ops), o.recomendada ? 'Recomendada' : ''));
+      for (const o of it.opcoes || []) ops.append(btn('lv3-op' + (o.recomendada ? ' is-rec' : ''), (o.recomendada ? '★ ' : '') + o.rotulo, () => responder(it, o, row, ops), o.recomendada ? 'Recomendada' : ''));
       row.append(ops);
-    } else if (card && it.modo === 'chat') {
+    } else if (card && (perigo || it.modo === 'chat')) {
       row.append(h('p', 'lv3-nota' + (perigo ? ' is-perigo' : ''), perigo ? PERIGO : 'Detalhe no chat da sessão.'));
     }
     if (!card && it.semBloco) row.append(h('p', 'lv3-nota', it.semBloco));
+    if (linkValido(it.linkSessao)) { const a = h('a', 'lv3-op', 'ABRIR SESSÃO ↗'); a.href = it.linkSessao; if (demonstracao()) a.addEventListener('click', e => { e.preventDefault(); aviso('Exemplo: na sua máquina este botão abre a sessão no app.', 'ok'); }); row.append(a); }
+    else if (comandoValido(it.comandoRetomar)) { const b = btn('lv3-op', 'COPIAR COMANDO', async () => { try { await root.navigator.clipboard.writeText(it.comandoRetomar); b.textContent = 'copiado'; } catch { aviso('Não consegui copiar. Tente de novo.', 'erro'); } }); row.append(b); }
     return row;
   }
-  // a escolha so aparece na tela: a linha some devagar e repete o aviso
-  function responder(o, row, ops) {
+  // Resposta pela rota dos cards; exemplo apenas avisa.
+  async function responder(it, o, row, ops) {
+    if (it.perigoso || S.respondendo) return;
+    if (!demonstracao()) {
+      S.respondendo = true;
+      try {
+        const c = await getJSON('/api/pc-cards/lista');
+        if (!c.ok || !c.token) throw Error();
+        await postJSON('/api/pc-cards/responder', { arquivo: it.arquivo, versao: it.versao, opcao: o.indice }, 'x-pc-cards-token', c.token);
+        ops.replaceWith(h('p', 'lv3-nota is-ok', 'Resposta registrada.')); aviso('Resposta registrada.', 'ok');
+      } catch { aviso('Não consegui responder. Atualize os cards e tente de novo.', 'erro'); }
+      finally { S.respondendo = false; }
+      return;
+    }
     row.classList.add('is-saindo');
     ops.replaceWith(h('p', 'lv3-nota is-ok', 'Escolhida: ' + o.rotulo + '. ' + NADA));
     aviso(NADA, 'ok');
@@ -273,7 +295,7 @@
     els.feedB.classList.toggle('is-erro', !!f.erro);
     els.feedLed.className = 'lv3-led ' + (f.erro ? 'is-erro' : f.itens.length ? 'is-vivo' : '');
     els.feedDir.textContent = f.erro || f.nota || 'ao vivo';
-    if (!f.itens.length) { els.feed.replaceChildren(vazio(f.erro ? 'Leitura falhou: ' + f.erro : 'Nenhuma fala do Claude ainda.', f.erro ? null : 'none')); return; }
+    if (!f.itens.length) { els.feed.replaceChildren(vazio(f.erro ? 'Leitura falhou: ' + f.erro : 'Nenhuma atividade ainda.', f.erro ? null : 'none')); return; }
     els.feed.replaceChildren(...f.itens.map(x => h('div', 'lv3-fd', h('span', 'h', hora(x.ms)), h('span', 'w' + (x.quem === 'CODEX' ? ' is-outro' : ''), val(x.quem)), h('p', '', val(x.texto)))));
   }
   function pintarAjudantes() {
@@ -281,26 +303,22 @@
     if (!d) { g.v.textContent = SEM; g.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; els.ajudLed.className = 'lv3-led'; return; }
     const b = d.ajudantes || {};
     g.v.textContent = val(b.agora);
-    g.n.textContent = b.erro ? b.erro : val(b.nota) + ' · lido ' + (Number.isFinite(b.lidoHaS) ? 'há ' + b.lidoHaS + ' s' : SEM);
+    g.n.textContent = b.erro ? b.erro + (b.solucao ? ' · ' + b.solucao : '') : val(b.nota) + ' · lido ' + (Number.isFinite(b.lidoHaS) ? 'há ' + b.lidoHaS + ' s' : SEM);
     els.ajudLed.className = 'lv3-led ' + (b.erro ? 'is-erro' : Number.isFinite(b.lidoHaS) && b.lidoHaS < 180 ? 'is-vivo' : '');
   }
-  // AUTOMACAO AO VIVO: ultima transacao (lado, hora, demora, resultado), as de hoje, vendas e o que ela mede agora
+  // Monitor ausente tem orientacao de configuracao. Caido primeiro, depois sem leitura, depois ok (a lista rola dentro do bloco).
   function pintarAutomacao() {
-    const d = dado(), b = d ? d.automacao || null : null, t = (b && b.ultimaTx) || {}, v = els.au;
-    const poe = (el, x, cor) => { const s = val(x); if (el.textContent !== s) el.textContent = s; el.className = s === SEM ? 'is-q' : cor && s !== 'none' ? 'is-c' : ''; };
-    poe(v.lado, b ? t.lado : null, true); poe(v.hora, b && Number.isFinite(t.ms) ? hora(t.ms) : null); poe(v.demora, b ? t.demora : null); poe(v.resultado, b ? t.resultado : null);
-    poe(v.tx, b && Number.isFinite(b.txHoje) ? b.txHoje : null, true);
-    v.vendas.textContent = 'vendas: ' + val(b ? b.vendasHoje : null);
-    v.mede.textContent = b ? (b.erro || val(b.mede)) : S.dados && S.dados.fechado ? 'só no exemplo' : SEM;
-    els.auB.classList.toggle('is-erro', !!S.erroDados || !!(b && b.erro));
-    S.autoLido = b && !b.erro && Number.isFinite(b.lidoHaS) ? { s: b.lidoHaS, em: Date.now() } : null;
-    pintarIdadeAuto();
-  }
-  function pintarIdadeAuto() {
-    const L = S.autoLido, s = L ? L.s + (Date.now() - L.em) / 1000 : NaN, txt = haSeg(s), d = dado(), b = d ? d.automacao : null;
-    if (els.auDir.textContent !== txt) els.auDir.textContent = txt;
-    const led = 'lv3-led' + (b && b.erro ? ' is-erro' : Number.isFinite(s) && s < 180 ? ' is-vivo' : '');
-    if (els.auLed.className !== led) els.auLed.className = led;
+    const m = S.erroDados ? null : S.monitores, peso = x => x && x.status === 'caiu' ? 0 : x && x.status === 'ok' ? 2 : 1;
+    const rows = m && m.ok && m.configurado && Array.isArray(m.monitores) ? m.monitores.map((x, i) => [x, i]).sort((a, b) => peso(a[0]) - peso(b[0]) || a[1] - b[1]).map(p => p[0]) : [];
+    els.monitores.replaceChildren(...(rows.length ? rows.map(x => {
+      const estado = ['ok', 'caiu'].includes(x.status) ? x.status : 'sem leitura';
+      const desde = typeof x.desde === 'number' ? x.desde : Date.parse(x.desde || '');
+      const lido = typeof x.lidoEm === 'number' ? x.lidoEm : Date.parse(x.lidoEm || '');
+      const quando = estado === 'caiu' ? (Number.isFinite(desde) ? 'caiu ' + haTxt(desde) : 'caiu') : estado === 'ok' ? 'ok' + (Number.isFinite(lido) ? ' · lido ' + haCurto(lido) : '') : Number.isFinite(lido) ? '? · lido ' + haCurto(lido) : 'sem leitura';
+      return h('div', 'lv3-monitor', h('i', 'lv3-led' + (estado === 'ok' ? ' is-ok' : estado === 'caiu' ? ' is-erro' : '')), h('b', '', x.nome), h('span', '', quando), x.motivo ? h('small', '', x.motivo) : null);
+    }) : m && m.ok ? [vazio('Nenhum monitor configurado', 'none'), h('p', 'lv3-nota', 'Veja Monitores no README.')] : [vazio('sem leitura · Atualize o painel.', '?')]));
+    els.auDir.textContent = demonstracao() ? 'exemplo' : 'local';
+    els.auLed.className = 'lv3-led' + (rows.length ? rows.some(x => x.status === 'caiu') ? ' is-erro' : ' is-ok' : '');
   }
   // PRONTO HOJE: as tags no topo; o que nao cabe na linha vira "+N" e a lista inteira fica no balao
   function pintarPronto() {
@@ -311,7 +329,7 @@
     if (chave === S.prontoChave) return;
     S.prontoChave = chave;
     els.pronto.title = itens.length ? itens.map(x => '✓ ' + x).join('\n') : '';
-    if (!itens.length) { els.prontoTags.replaceChildren(h('span', 'lv3-pronto-v', !p ? (S.dados && S.dados.fechado ? 'só no exemplo' : SEM) : p.erro ? p.erro : p.nota || 'none')); return; }
+    if (!itens.length) { els.prontoTags.replaceChildren(h('span', 'lv3-pronto-v', !p ? (S.dados && S.dados.fechado ? 'só no exemplo' : SEM) : p.erro ? p.erro + (p.solucao ? ' · ' + p.solucao : '') : p.nota || 'none')); return; }
     const chips = itens.map(x => { const c = h('span', 'lv3-chip', '✓ ' + x); c.title = x; return c; }), mais = h('span', 'lv3-chip is-mais', '');
     mais.hidden = true; els.prontoTags.replaceChildren(...chips, mais);
     if (!ativa()) { S.prontoChave = null; return; } // escondida nao mede: mede de novo quando a V3 aparecer
@@ -336,7 +354,6 @@
       if (el.textContent !== txt) { el.textContent = txt; el.title = x.txt ? '' : (x.titulo || 'Idade do dado') + ': ' + hora(x.ms); }
       el.classList.toggle('is-velho', !!x.velho);
     }
-    pintarIdadeAuto();
   }
   function linhaFrente(x) {
     const pct = Number.isFinite(x.pct) ? Math.max(0, Math.min(100, x.pct)) : null, barra = h('span', 'lv3-barra', h('i', ''));
@@ -358,7 +375,7 @@
     pintarPronto();
     const p = d ? d.prontoHoje || { itens: [] } : null, g = els.gPronto;
     if (!p) { g.v.textContent = SEM; g.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; g.g.title = ''; }
-    else { g.v.textContent = p.erro ? SEM : String(p.itens.length); g.n.textContent = p.erro ? p.erro : p.itens.length ? 'entregas fechadas hoje' : (p.nota || 'none'); g.g.title = p.itens.join('\n'); }
+    else { g.v.textContent = p.erro ? SEM : String(p.itens.length); g.n.textContent = p.erro ? p.erro + (p.solucao ? ' · ' + p.solucao : '') : p.itens.length ? 'entregas fechadas hoje' : (p.nota || 'none'); g.g.title = p.itens.join('\n'); }
     pintarEntregas(); pintarProjetos(); pintarIdades();
   }
   // ENTREGAS: as mais perto de sair e a primeira que espera voce
@@ -388,7 +405,8 @@
       const g = h('div', 'lv3-leds');
       if (x.leds) for (const c of x.leds.slice(0, 48)) g.append(h('i', 'is-' + c));
       const r = h('div', 'lv3-pj', g, h('span', 'nm', val(x.nome)), h('b', '', x.leds ? x.ar + '/' + x.total : SEM));
-      r.title = val(x.nome) + ': ' + (x.leds ? x.ar + ' de ' + x.total + ' no ar' + (x.vez ? ' · ' + x.vez + ' com você' : '') : 'falta lista de itens'); return r;
+      r.title = val(x.nome) + ': ' + (x.leds ? x.ar + ' de ' + x.total + ' no ar' + (x.vez ? ' · ' + x.vez + ' com você' : '') : 'falta lista de itens');
+      if (!x.leds && x.solucao) r.append(h('small', 'lv3-nota', x.solucao)); return r;
     }) : [vazio('Nenhum projeto na lista.', 'none')]));
   }
   function pintarSemana() {
@@ -416,6 +434,15 @@
   function pintarContas() {
     const agora = Date.now(), d = dado(), c = d ? d.contas : null, lista = c && Array.isArray(c.contas) ? c.contas : null;
     const g = els.gConta;
+    if (d && !d.exemplo) {
+      const rows = lista || [];
+      els.contas.replaceChildren(...rows.map(x => h('div', 'lv3-cn is-real', h('span', 'k', x.conta), h('span', 'md', 'tokens hoje'), h('b', '', val(x.tokensHoje)), h('span', 'id', Number.isFinite(x.semana) ? 'crédito ' + x.semana + '% · ' + haTxt(x.lidoMs) : 'crédito sem leitura · ' + (x.solucao || 'Confira o uso.')))));
+      cabeca('contas', 'ok', null); idade('contas', Math.max(...rows.map(x => x.lidoMs).filter(Number.isFinite)));
+      // so a 1a conta fica grande; as outras vao na linha de baixo
+      const fmt = x => x.conta + ' ' + (Number.isFinite(x.semana) ? x.semana + '%' : '?');
+      g.v.textContent = rows.length ? fmt(rows[0]) : '?';
+      g.n.textContent = [...rows.slice(1).map(fmt), 'semana'].join(' · '); pintarIdades(); return;
+    }
     if (semDado(els.contas, els.coB)) { cabeca('contas', S.erroDados ? 'erro' : '', null); idade('contas', NaN); g.v.textContent = SEM; g.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; return; }
     const base = lista && lista.length ? lista : ['A', 'B', 'C', 'D'].map(conta => ({ conta, lidoMs: null }));
     const linhas = base.map(x => { const r = contaClaude(x, agora); return { k: x.conta, cls: (x.atual ? 'is-atual' : '') + (r.pct !== null && r.pct >= 80 ? ' is-alto' : ''), pct: r.pct, v: r.pct === null ? SEM : r.pct + '%', id: r.idade, t: r.titulo }; });
@@ -441,12 +468,12 @@
     pintarIdades();
   }
   function pintarIdeias() {
-    const d = dado(), ide = d ? d.ideias : null, lista = ide && Array.isArray(ide.itens) ? ide.itens : null;
+    const d = dado(), ide = d ? d.ideias : null, lista = ide && !ide.erro && Array.isArray(ide.itens) ? ide.itens : null;
     els.ideiasB.classList.toggle('is-erro', !!S.erroDados);
     const g = els.gIdeia;
     if (!lista) {
       els.novo.textContent = SEM; els.novo.className = 'lv3-novo is-zero'; els.ideiasDir.textContent = SEM;
-      els.ideias.replaceChildren(h('li', '', h('span', '', S.dados && S.dados.fechado ? 'Ideias: só no exemplo.' : 'Ideias sem leitura.')));
+      els.ideias.replaceChildren(h('li', '', h('span', '', S.dados && S.dados.fechado ? 'Ideias: só no exemplo.' : 'Ideias sem leitura.' + (ide && ide.solucao ? ' ' + ide.solucao : ''))));
       g.v.textContent = SEM; g.n.textContent = S.dados && S.dados.fechado ? 'só no exemplo' : SEM; return;
     }
     g.v.textContent = Number.isFinite(ide.hoje) ? ide.hoje + ' hoje' : SEM; g.n.textContent = 'semana ' + val(ide.semana);
@@ -458,20 +485,23 @@
     if (S.aba === 'IDEIAS') pintarConversa();
   }
 
-  // ---------- conversa: Claude, ideias e recado por sessao (nada e enviado) ----------
+  // Conversa e destinos.
   function trocarAba(chave, quieto) {
     S.aba = chave;
     for (const b of els.tabs || []) b.setAttribute('aria-selected', String(b.dataset.aba === chave));
-    els.input.placeholder = DIGITE;
+    els.input.placeholder = demonstracao() ? DIGITE : 'Escreva seu pedido';
     if (!quieto) aviso('');
     pintarConversa();
   }
   function msg(cls, quem, texto, st, stCls) { const m = h('div', 'lv3-ms ' + cls, h('i', '', quem), texto); if (st) m.append(h('span', 'lv3-st' + (stCls ? ' ' + stCls : ''), st)); return m; }
   function pintarConversa() {
-    const aba = ABAS.find(a => a[0] === S.aba) || [], tipo = aba[2], d = dado();
+    const aba = abas().find(a => a[0] === S.aba) || [], tipo = aba[2], d = dado();
     let linhas = [];
     if (!d) linhas = [vazio(S.dados && S.dados.fechado ? (S.dados.falta || 'Esta tela mostra só o exemplo.') : S.erroDados ? 'Leitura falhou. O painel tenta de novo em meio minuto.' : 'Lendo...')];
-    else if (tipo === 'voz') {
+    else if (!demonstracao()) {
+      linhas = (d.conversa || []).filter(x => S.aba === 'ORQUESTRADOR' ? !x.sessao : x.sessao === S.aba).map(m => msg(m.eu ? 'is-eu' : 'is-ja', val(m.rotulo) + ' ' + hora(m.ms), m.texto));
+      if (!linhas.length) linhas = [vazio(d.conversaLeitura && !d.conversaLeitura.lido ? 'sem leitura · ' + d.conversaLeitura.solucao : 'Nenhum pedido nesta conversa.', d.conversaLeitura && !d.conversaLeitura.lido ? '?' : 'none')];
+    } else if (tipo === 'voz') {
       linhas = (Array.isArray(d.conversa) ? d.conversa : []).map(m => msg(m.eu ? 'is-eu' : 'is-ja', val(m.rotulo) + ' ' + hora(m.ms), m.texto));
       if (!linhas.length) linhas = [vazio('Exemplo: a conversa com o Claude aparece aqui.', 'none')];
     } else if (tipo === 'ideias') {
@@ -490,9 +520,45 @@
     els.conv.scrollTop = els.conv.scrollHeight; root.requestAnimationFrame(() => { els.conv.scrollTop = els.conv.scrollHeight; });
   }
   function aviso(t, tipo) { if (!els.aviso) return; els.aviso.textContent = t || ''; els.aviso.className = 'lv3-aviso' + (tipo ? ' is-' + tipo : ''); }
-  function enviar() {
+  async function postJSON(url, body, header, token) {
+    const r = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json', [header]: token }, body: JSON.stringify(body) });
+    const j = await r.json(); if (!r.ok || !j.ok) throw Error(); return j;
+  }
+  async function enviar() {
     if (!String(els.input.value || '').trim()) return;
+    if (!demonstracao()) {
+      if (S.enviando) return;
+      const texto = String(els.input.value).trim(), destino = S.aba;
+      S.enviando = true; els.enviar.disabled = true;
+      try {
+        const c = await getJSON('/api/r10/config'); S.config = c;
+        if (!c.ok || !c.recursos || !c.recursos.pedidos) { aviso('Ligue Pedidos em Recursos pessoais para enviar', 'erro'); return; }
+        if (!c.token || !abas().some(x => x[0] === destino)) throw Error();
+        const body = { texto, confirmado: true, ...(destino === 'ORQUESTRADOR' ? { para: 'orquestrador' } : { sessao: destino }) };
+        await postJSON('/api/comando', body, 'x-r10-token', c.token);
+        if (String(els.input.value).trim() === texto) els.input.value = ''; aviso('Pedido na fila. O orquestrador lê se a escuta estiver ligada (veja o README).', 'ok');
+      } catch { aviso('Não consegui enviar. Tente de novo.', 'erro'); }
+      finally { S.enviando = false; els.enviar.disabled = false; }
+      return;
+    }
     aviso(NADA, 'erro');
+  }
+
+  function atualizarAbas() {
+    const aa = abas(), key = JSON.stringify(aa);
+    if (key !== S.abasChave) {
+      S.abasChave = key; els.tabBox.replaceChildren();
+      els.tabs = aa.map(([chave, rot, tipo]) => { const b = btn('lv3-tab' + (tipo === 'ideias' ? ' is-id' : tipo === 'sessao' || tipo === 'recado' ? ' is-ses' : ' is-cl'), rot, () => trocarAba(chave)); b.setAttribute('role', 'tab'); b.dataset.aba = chave; els.tabBox.append(b); return b; });
+      if (!aa.some(a => a[0] === S.aba)) S.aba = aa[0][0];
+    }
+    trocarAba(S.aba, true);
+    els.convDir.textContent = demonstracao() ? 'exemplo' : 'pedidos e respostas';
+    els.anel.querySelector('.lv3-falar').children[2].textContent = demonstracao() ? 'exemplo' : 'voz';
+    els.codexNota.hidden = !demonstracao();
+    if (!demonstracao()) {
+      els.liga.textContent = 'ABRIR VOZ'; els.vozSt.textContent = S.config?.recursos?.voz ? 'Pronto para falar.' : 'Voz desligada';
+      if (S.config?.ok && !S.config.recursos?.pedidos) aviso('Ligue Pedidos em Recursos pessoais para enviar', 'erro');
+    }
   }
 
   // ---------- leitura ----------
@@ -500,7 +566,14 @@
     if (!ativa()) return;
     S.proximo = Date.now() + RITMO_MS;
     try { S.dados = await getJSON(API); S.erroDados = false; S.lidoEm = Date.now(); } catch { S.erroDados = true; }
-    // fora do exemplo esta tela nao toma a Agora: na 1a leitura fechada abre em "Agora de antes" (o botao volta a V3)
+    if (!S.erroDados && !S.dados.fechado) {
+      const results = await Promise.allSettled([getJSON('/api/monitores' + (demonstracao() ? '?exemplo=1' : '')), ...(demonstracao() ? [] : [getJSON('/api/r10/config')])]);
+      const mon = results[0]; S.monitores = mon.status === 'fulfilled' && mon.value.ok && typeof mon.value.configurado === 'boolean' ? mon.value : null;
+      if (!S.monitores && demonstracao()) S.monitores = { ok: true, configurado: true, monitores: [{ id: 'robo', nome: 'Robô de compras', status: 'ok' }, { id: 'api', nome: 'API de exemplo', status: 'ok' }, { id: 'servidor', nome: 'Servidor de testes', status: 'caiu', desde: Date.now() - 180000 }] };
+      if (results[1]) { S.config = results[1].status === 'fulfilled' ? results[1].value : null; if (S.config?.ok) root.PainelRecursos = { ...root.PainelRecursos, ...S.config.recursos, token: S.config.token }; }
+    }
+    atualizarAbas();
+    // Compatibilidade com resposta de versao anterior.
     if (S.primeira && !S.erroDados) { S.primeira = false; if (S.dados && S.dados.fechado && html.dataset.lv3 !== 'antes') { html.dataset.lv3 = 'antes'; pintarTroca(); } }
     pintarTopo(); pintarVoce(); pintarFeed(); pintarAutomacao(); pintarAjudantes(); pintarDoca(); pintarSemana(); pintarContas(); pintarIdeias(); pintarConversa();
   }

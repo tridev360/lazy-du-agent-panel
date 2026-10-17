@@ -1,0 +1,8 @@
+{
+  "intervaloSegundos": 60,
+  "monitores": [
+    { "id": "http-exemplo", "nome": "Site de exemplo", "tipo": "http", "urlEnv": "STATUS_URL", "esperar": 200, "timeoutMs": 5000 },
+    { "id": "comando-exemplo", "nome": "Servidor de testes", "tipo": "comando", "comando": "ssh", "args": ["-o", "BatchMode=yes", "servidor.example", "uptime"], "timeoutMs": 10000 },
+    { "id": "batimento-exemplo", "nome": "Robô de compras", "tipo": "batimento", "arquivo": "compras.pulso", "maxIdadeSegundos": 300 }
+  ]
+}
